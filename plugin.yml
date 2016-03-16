@@ -1,0 +1,24 @@
+name: Civilizations
+main: com.kylantraynor.civilizations.Civilizations
+version: 0.1
+softdepend: [dynmap, TitleManager, Towny]
+commands:
+  civilizationsanswer:
+    description: Used to answer questions.
+    permission: civilizations.answer
+  civilizations:
+    description: Access all Civilizations related commands.
+    permission: civilizations.civilizations
+    aliases: [civ]
+  camp:
+    description: Access all Camp commands.
+    permission: civilizations.camp
+  selection:
+    description: Access all commands related to the current selection.
+    permission: civilizations.selection
+  group:
+    description: Access all group commands.
+    permission: civilizations.group
+  townytown:
+    description: Access all towny import related commands.
+    permission: civilizations.towny
