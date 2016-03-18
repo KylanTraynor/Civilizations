@@ -1,13 +1,16 @@
 package com.kylantraynor.civilizations.protection;
 
 public enum PermissionType {
-	PLACE,
 	BREAK,
+	CLAIM,
+	DEGRADATION,
+	EXPLOSION,
 	FIRE,
 	FIRESPREAD,
-	EXPLOSION,
-	DEGRADATION,
+	INVITE,
+	KICK,
 	MOBSPAWNING,
-	CLAIM,
-	INVITE
+	PLACE,
+	UNCLAIM,
+	UPGRADE
 }
