@@ -1,17 +1,18 @@
 package com.kylantraynor.civilizations.protection;
 
-public class Rank {
+public class Rank extends PermissionTarget{
 	private String name = "";
-	private String inherit = "";
+	private Rank parent;
 	
-	public Rank(String name, String inherit){
+	public Rank(String name, Rank parent){
+		super(PermissionTarget.Type.RANK);
 		this.name = name;
-		this.inherit = name;
+		this.parent = parent;
 	}
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
-
-	public String getInherit() { return inherit; }
-	public void setInherit(String inherit) { this.inherit = inherit; }
+	
+	public Rank getParent(){ return parent; }
+	public void setParent(Rank parent) { this.parent = parent; }
 }

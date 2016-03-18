@@ -12,12 +12,12 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 public class Permission {
 	Group protectedEntity;
 	private Map<PermissionType, Boolean> types = new HashMap<PermissionType, Boolean>();
-	PermissionTarget targetType;
+	PermissionTarget target;
 	String targetId = "";
 	
 	public Permission(Group protectedEntity, PermissionTarget target, String id, Map<PermissionType, Boolean> types){
 		this.protectedEntity = protectedEntity;
-		this.targetType = target;
+		this.target = target;
 		this.targetId = id;
 		if(types != null) this.setTypes(types);
 	}
@@ -34,10 +34,10 @@ public class Permission {
 		return true;
 	}
 	
-	public PermissionTarget getTargetType(){return targetType;}
+	public PermissionTarget getTargetType(){return target;}
 	public String getTargetId(){return targetId;}
 	public boolean isTarget(PermissionTarget targetType, String id){
-		if(this.targetType == targetType){
+		if(this.target == targetType){
 			if(this.targetId == null && id == null){
 				return true;
 			} else {
@@ -46,9 +46,8 @@ public class Permission {
 			}
 		} else {return false;}
 	}
-	public boolean setTarget(PermissionTarget targetType, String id){
-		this.targetType = targetType;
-		this.targetId = id;
+	public boolean setTarget(PermissionTarget target){
+		this.target = target;
 		return true;
 	}
 	
@@ -60,7 +59,7 @@ public class Permission {
 	}
 	
 	public boolean isTargetMatching(Object o){
-		switch(this.targetType){
+		switch(this.target.getType()){
 		case MEMBERS:
 			// Permission checking if a player is part of the settlement
 			if(o instanceof Player){
@@ -124,6 +123,14 @@ public class Permission {
 
 	public void setTypes(Map<PermissionType, Boolean> types) {
 		this.types = types;
+	}
+
+	public boolean contains(PermissionType type) {
+		return types.containsKey(type);
+	}
+
+	public boolean get(PermissionType type) {
+		return types.get(type);
 	}
 	
 	

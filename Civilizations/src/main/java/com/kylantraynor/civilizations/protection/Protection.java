@@ -18,13 +18,13 @@ public class Protection {
 	private Group group;
 	Protection parent;
 	List<Shape> shapes;
-	List<Permission> permissions;
+	PermissionSet permissionSet;
 	List<Rank> ranks;
 	
 	public Protection(Group g){
 		setGroup(g);
 		shapes = new ArrayList<Shape>();
-		permissions = new ArrayList<Permission>();
+		permissionSet = new PermissionSet();
 		ranks = new ArrayList<Rank>();
 	}
 	
@@ -32,7 +32,7 @@ public class Protection {
 		setGroup(g);
 		this.parent = parent;
 		shapes = new ArrayList<Shape>();
-		permissions = new ArrayList<Permission>();
+		permissionSet = new PermissionSet();
 		ranks = new ArrayList<Rank>();
 	}
 	
@@ -137,13 +137,15 @@ public class Protection {
 		}
 	}
 	
-	public boolean addPermission(Permission perm){
-		if(hasPermission(perm.getTargetType(), perm.getTargetId())){
-			return false;
-		} else {
-			permissions.add(perm);
-			return true;
-		}
+	/**
+	 * Adds the given Permissions to the protection's set.
+	 * @param target of the permissions
+	 * @param permission
+	 * @return true
+	 */
+	public boolean addPermission(PermissionTarget target, Permission permission){
+		setPermission(target, permission);
+		return true;
 	}
 	
 	public boolean addRank(Rank rank){
@@ -155,36 +157,43 @@ public class Protection {
 		}
 		return true;
 	}
-	
-	public void setPermission(Permission perm){
-		Permission p = getPermission(perm.getTargetType(), perm.getTargetId());
-		if(p != null){permissions.remove(p);}
-		permissions.add(perm);
+	/**
+	 * Sets the permissions for the given target.
+	 * @param target
+	 * @param permission
+	 */
+	public void setPermission(PermissionTarget target, Permission permission){
+		permissionSet.add(target, permission);
 	}
-	
-	public boolean hasPermission(PermissionTarget target, String id){
-		for(Permission p : permissions){
-			if(p.isTarget(target, id)) return true;
+	/**
+	 * Checks if this Protection has Permissions for the given target.
+	 * @param target
+	 * @return true if Permissions were found, false otherwise.
+	 */
+	public boolean hasPermissions(PermissionTarget target){
+		if(permissionSet.hasTarget(target)){
+			return true;
 		}
-		if(parent != null) return parent.hasPermission(target, id);
+		if(parent != null) return parent.hasPermissions(target);
 		return false;
 	}
-	
-	public Permission getPermission(PermissionTarget target, String id){
-		for(Permission p : permissions){
-			if(p.isTarget(target, id)) return p;
-		}
-		return null;
+	/**
+	 * Gets the Permissions for the given target.
+	 * @param target
+	 * @return Permission
+	 */
+	public Permission getPermissions(PermissionTarget target){
+		return permissionSet.get(target);
 	}
 	
-	public boolean getType(PermissionType type, PermissionTarget target, String id){
-		Permission p = getPermission(target, id);
-		if(p != null){
-			if(p.getTypes().containsKey(type)){
-				return p.getTypes().get(type);
+	public boolean getPermission(PermissionType type, PermissionTarget target){
+		Permission perm = getPermissions(target);
+		if(perm != null){
+			if(perm.contains(type)){
+				return perm.get(type);
 			}
 		}
-		if(target != PermissionTarget.SERVER){return false;} else {return true;}
+		if(target.getType() != PermissionTarget.Type.SERVER) {return false;} else {return true;}
 	}
 	
 	public boolean isInside(Location location){
