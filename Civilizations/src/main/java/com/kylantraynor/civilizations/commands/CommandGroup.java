@@ -18,7 +18,7 @@ public class CommandGroup implements CommandExecutor {
 		Integer id = null;
 		try{
 			id = Integer.parseInt(args[0]);
-		} catch (NumberFormatException e){}
+		} catch (NumberFormatException e){ id = null;}
 		Civilizations.log("INFO", "Group ID: " + id);
 		if(id != null && args.length >= 2){
 			Group g = Group.get(id);
@@ -26,7 +26,9 @@ public class CommandGroup implements CommandExecutor {
 			Civilizations.log("INFO", "Group: " + g.getName());
 			switch(args[1].toUpperCase()){
 			case "INFO":
-				
+				if(sender instanceof Player){
+					g.getInteractiveInfoPanel((Player)sender);
+				}
 				break;
 			case "MEMBERS":
 				if(sender instanceof Player){

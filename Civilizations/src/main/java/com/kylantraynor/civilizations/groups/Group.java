@@ -2,7 +2,10 @@ package com.kylantraynor.civilizations.groups;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -97,7 +100,7 @@ public class Group {
 	}
 	/**
 	 * Gets the protection of this group.
-	 * @return�Protection
+	 * @return¨Protection
 	 */
 	public Protection getProtection() {return protection;}
 	/**
@@ -284,6 +287,23 @@ public class Group {
 	 */
 	public void setCreationDate(Instant creationDate) {this.creationDate = creationDate;}
 	/**
+	 * Gets an interactive info panel of this group.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage("────────── " + getName().toUpperCase() + " ──────────").color(ChatColor.GOLD);
+		DateFormat format = new SimpleDateFormat("MMMM, dd of yyyy");
+		if(creationDate != null){
+			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
+				then(format.format(creationDate)).color(ChatColor.GOLD);
+		}
+		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
+		return fm;
+	}
+	/**
 	 * Gets an interactive list of the members of this group.
 	 * @return FancyMessage
 	 */
@@ -297,7 +317,7 @@ public class Group {
 	 */
 	public FancyMessage getInteractiveMembersList(int page){
 		if(page < 1) page = 1;
-		FancyMessage fm = new FancyMessage("========== MEMBERS ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage("────────── MEMBERS ──────────").color(ChatColor.GOLD);
 		for(int i = 8 * (page - 1); i < getMembers().size() && i < 8 * (page); i+=1){
 			OfflinePlayer p = Civilizations.currentInstance.getServer().getOfflinePlayer(getMembers().get(i));
 			fm.then("\n" + p.getName());
@@ -308,22 +328,22 @@ public class Group {
 			}
 			fm.command("/p " + p.getName());
 		}
-		fm.then("\n<- Previous");
+		fm.then("\n<─ Previous");
 		if(page > 1){
 			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then(" - ").color(ChatColor.GRAY);
+		fm.then(" ─ ").color(ChatColor.GRAY);
 		fm.then("" + page).color(ChatColor.GOLD);
-		fm.then(" - ").color(ChatColor.GRAY);
-		fm.then("Next ->");
+		fm.then(" ─ ").color(ChatColor.GRAY);
+		fm.then("Next ─>");
 		if(page < getMembers().size() / 8){
 			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
 		return fm;
 	}
 	/**

@@ -93,11 +93,12 @@ public class Camp extends Settlement{
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.
-	 * @param p
+	 * @param player Context
 	 * @return FancyMessage
 	 */
-	public FancyMessage getCampFancyInfo(Player p) {
-		FancyMessage fm = new FancyMessage("============ CAMP ============")
+	@Override
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage("──────────── CAMP ────────────")
 			.color(ChatColor.GOLD)
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
 			.then("" + ChronoUnit.HOURS.between(Instant.now(), getExpireOn()) + " hours").color(ChatColor.GOLD)
@@ -106,7 +107,7 @@ public class Camp extends Settlement{
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
 			.command("/group " + this.getId() + " members")
 			.then("\nActions: ").color(ChatColor.GRAY);
-		if(this.isMember(p)){
+		if(this.isMember(player)){
 			fm.then("\nClear").color(ChatColor.GOLD).tooltip("Clear camp").command("/camp clear");
 			fm.then(" - ").color(ChatColor.GRAY);
 			fm.then("Leave").color(ChatColor.GOLD).tooltip("Leave the camp").command("/camp leave");
@@ -130,7 +131,7 @@ public class Camp extends Settlement{
 				fm.color(ChatColor.RED).tooltip("One member needs to be online to join the camp.");
 			}
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
 		return fm;
 	} 
 	/**

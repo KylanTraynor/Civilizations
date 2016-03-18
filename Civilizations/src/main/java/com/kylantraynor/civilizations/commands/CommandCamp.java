@@ -119,7 +119,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
-					c.getCampFancyInfo(p).send(p);
+					c.getInteractiveInfoPanel(p).send(p);
 				}
 			}
 			break;
