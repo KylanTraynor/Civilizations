@@ -38,6 +38,13 @@
       	</repository>
 	</repositories>
 	<dependencies>
+		<!-- Fanciful -->
+		<dependency>
+			<groupId>mkremins.fanciful</groupId>
+			<artifactId>Fanciful</artifactId>
+			<scope>system</scope>
+			<systemPath>C:\Users\Baptiste\Documents\PluginsLibrary\mkremins\Fanciful\Fanciful.jar</systemPath>
+		</dependency>
 		<!-- Towny -->
 		<dependency>
 			<groupId>com.palmergames</groupId>
@@ -94,6 +101,11 @@
 				<groupId>com.palmergames</groupId>
 				<artifactId>Towny</artifactId>
 				<version>0.91.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>mkremins.fanciful</groupId>
+				<artifactId>Fanciful</artifactId>
+				<version>1.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

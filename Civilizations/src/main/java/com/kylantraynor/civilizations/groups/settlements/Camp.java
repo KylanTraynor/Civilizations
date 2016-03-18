@@ -23,6 +23,7 @@ import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Camp extends Settlement{
@@ -87,8 +88,8 @@ public class Camp extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		p.setPermission(new Permission(this, PermissionTarget.MEMBERS, null, resPerm));
-		p.setPermission(new Permission(this, PermissionTarget.SERVER, null, serverPerm));
+		p.setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
+		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(this, serverPerm));
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.

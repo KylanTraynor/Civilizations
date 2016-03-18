@@ -21,7 +21,9 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.PlayerTarget;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.TargetType;
 
 public class Group {
 	
@@ -363,17 +365,17 @@ public class Group {
 			if(player.isOp()) return true;
 			if(this.isMember(player)){
 				// Do things for resident
-				result = getProtection().getType(perm, PermissionTarget.MEMBERS, null);
+				result = getProtection().getPermission(perm, new PermissionTarget(TargetType.MEMBERS));
 			} else {
 				// Do things for outsiders
-				result = getProtection().getType(perm, PermissionTarget.OUTSIDERS, null);
+				result = getProtection().getPermission(perm, new PermissionTarget(TargetType.OUTSIDERS));
 			}
-			Permission p = getProtection().getPermission(PermissionTarget.PLAYER, player.getUniqueId().toString());
-			if(p != null && p.hasType(perm)){
-				result = p.getTypes().get(perm);
+			Permission p = getProtection().getPermissions(new PlayerTarget(player));
+			if(p != null && p.contains(perm)){
+				result = p.get(perm);
 			}
 		} else {
-			result = getProtection().getType(perm, PermissionTarget.SERVER, null);
+			result = getProtection().getPermission(perm, new PermissionTarget(TargetType.SERVER));
 		}
 		return result;
 	}

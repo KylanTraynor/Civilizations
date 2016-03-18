@@ -13,12 +13,9 @@ public class Permission {
 	Group protectedEntity;
 	private Map<PermissionType, Boolean> types = new HashMap<PermissionType, Boolean>();
 	PermissionTarget target;
-	String targetId = "";
 	
-	public Permission(Group protectedEntity, PermissionTarget target, String id, Map<PermissionType, Boolean> types){
+	public Permission(Group protectedEntity, Map<PermissionType, Boolean> types){
 		this.protectedEntity = protectedEntity;
-		this.target = target;
-		this.targetId = id;
 		if(types != null) this.setTypes(types);
 	}
 	
@@ -35,15 +32,9 @@ public class Permission {
 	}
 	
 	public PermissionTarget getTargetType(){return target;}
-	public String getTargetId(){return targetId;}
 	public boolean isTarget(PermissionTarget targetType, String id){
 		if(this.target == targetType){
-			if(this.targetId == null && id == null){
-				return true;
-			} else {
-				if(this.targetId.equals(id)){return true;
-				} else { return false;}
-			}
+			return true;
 		} else {return false;}
 	}
 	public boolean setTarget(PermissionTarget target){
@@ -105,9 +96,7 @@ public class Permission {
 		case SERVER:
 			return true;
 		case RANK:
-			if(o instanceof Player){
-				return protectedEntity.hasRank(targetId, (Player) o);
-			}
+			return true;
 		default:
 		}
 		return false;

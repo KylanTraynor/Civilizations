@@ -7,7 +7,7 @@ public class PlayerTarget extends PermissionTarget{
 	OfflinePlayer player;
 
 	public PlayerTarget(OfflinePlayer p) {
-		super(PermissionTarget.Type.PLAYER);
+		super(TargetType.PLAYER);
 		this.player = p;
 	}
 }

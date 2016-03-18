@@ -5,7 +5,7 @@ public class Rank extends PermissionTarget{
 	private Rank parent;
 	
 	public Rank(String name, Rank parent){
-		super(PermissionTarget.Type.RANK);
+		super(TargetType.RANK);
 		this.name = name;
 		this.parent = parent;
 	}

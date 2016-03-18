@@ -143,8 +143,8 @@ public class Protection {
 	 * @param permission
 	 * @return true
 	 */
-	public boolean addPermission(PermissionTarget target, Permission permission){
-		setPermission(target, permission);
+	public boolean addPermissions(PermissionTarget target, Permission permission){
+		setPermissions(target, permission);
 		return true;
 	}
 	
@@ -162,7 +162,7 @@ public class Protection {
 	 * @param target
 	 * @param permission
 	 */
-	public void setPermission(PermissionTarget target, Permission permission){
+	public void setPermissions(PermissionTarget target, Permission permission){
 		permissionSet.add(target, permission);
 	}
 	/**
@@ -193,7 +193,7 @@ public class Protection {
 				return perm.get(type);
 			}
 		}
-		if(target.getType() != PermissionTarget.Type.SERVER) {return false;} else {return true;}
+		if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
 	}
 	
 	public boolean isInside(Location location){
