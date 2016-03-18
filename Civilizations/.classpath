@@ -27,7 +27,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Baptiste/Downloads/Towny_Advanced/Towny-0.91.0.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Fanciful"/>
 	<classpathentry kind="output" path="target/classes"/>
