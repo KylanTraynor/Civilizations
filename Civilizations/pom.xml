@@ -43,7 +43,7 @@
 			<groupId>com.palmergames</groupId>
 			<artifactId>Towny</artifactId>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/repo/com/palmergames/Towny/0.91.0.0/Towny-0.91.0.0.jar</systemPath>
+			<systemPath>C:\Users\Baptiste\Documents\PluginsLibrary\com.palmergames\Towny\Towny-0.91.0.0.jar</systemPath>
 		</dependency>
   		<!-- Dynmap -->
   		<dependency>
