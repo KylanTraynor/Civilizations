@@ -42,12 +42,8 @@
 		</repository>
 		<repository>
          	<id>localrepository</id>
-         	<url>c:/Users/Baptiste/.m2/repository/</url>
+         	<url>file:C:/Users/Baptiste/.m2/repository/</url>
       	</repository>
-		<repository>
-			<id>everything</id>
-			<url>http://repo.citizensnpcs.co</url>
-		</repository>
 	</repositories>
 	<dependencies>
 		<!-- Citizens -->
