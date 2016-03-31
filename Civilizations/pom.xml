@@ -20,6 +20,14 @@
    </build>
 
    <repositories>
+   		<repository>
+    		<id>central</id>
+    		<url>http://repo1.maven.org/maven2/</url>
+  		</repository>
+  		<repository>
+  			<id>towny</id>
+  			<url>http://maven.elmakers.com/repository/</url>
+  		</repository>
 		<repository>
 			<id>dynmap-repo</id>
 			<url>http://repo.mikeprimm.com/</url>
@@ -36,21 +44,22 @@
          	<id>localrepository</id>
          	<url>file://${basedir}/repo</url>
       	</repository>
+		<repository>
+			<id>everything</id>
+			<url>http://repo.citizensnpcs.co</url>
+		</repository>
 	</repositories>
 	<dependencies>
-		<!-- Fanciful -->
+		<!-- Citizens -->
 		<dependency>
-			<groupId>mkremins.fanciful</groupId>
-			<artifactId>Fanciful</artifactId>
-			<scope>system</scope>
-			<systemPath>C:\Users\Baptiste\Documents\PluginsLibrary\mkremins\Fanciful\Fanciful.jar</systemPath>
+			<groupId>net.citizensnpcs</groupId>
+			<artifactId>citizensapi</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Towny -->
 		<dependency>
-			<groupId>com.palmergames</groupId>
+			<groupId>com.palmergames.bukkit</groupId>
 			<artifactId>Towny</artifactId>
-			<scope>system</scope>
-			<systemPath>C:\Users\Baptiste\Documents\PluginsLibrary\com.palmergames\Towny\Towny-0.91.0.0.jar</systemPath>
 		</dependency>
   		<!-- Dynmap -->
   		<dependency>
@@ -74,6 +83,7 @@
             <artifactId>bukkit</artifactId>
             <scope>provided</scope>
     	</dependency>
+    	<!-- Fanciful -->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -98,14 +108,14 @@
 				<version>1.9</version>
 			</dependency>
 			<dependency>
-				<groupId>com.palmergames</groupId>
-				<artifactId>Towny</artifactId>
-				<version>0.91.0.0</version>
+				<groupId>net.citizensnpcs</groupId>
+				<artifactId>citizensapi</artifactId>
+				<version>LATEST</version>
 			</dependency>
 			<dependency>
-				<groupId>mkremins.fanciful</groupId>
-				<artifactId>Fanciful</artifactId>
-				<version>1.0</version>
+				<groupId>com.palmergames.bukkit</groupId>
+				<artifactId>Towny</artifactId>
+				<version>0.89.2.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
