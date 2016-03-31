@@ -24,10 +24,6 @@
     		<id>central</id>
     		<url>http://repo1.maven.org/maven2/</url>
   		</repository>
-  		<repository>
-  			<id>towny</id>
-  			<url>http://maven.elmakers.com/repository/</url>
-  		</repository>
 		<repository>
 			<id>dynmap-repo</id>
 			<url>http://repo.mikeprimm.com/</url>
@@ -53,7 +49,7 @@
 		</dependency>
 		<!-- Towny -->
 		<dependency>
-			<groupId>com.palmergames.bukkit</groupId>
+			<groupId>com.palmergames</groupId>
 			<artifactId>Towny</artifactId>
 		</dependency>
   		<!-- Dynmap -->
@@ -103,14 +99,14 @@
 				<version>1.9</version>
 			</dependency>
 			<dependency>
-				<groupId>com.palmergames.bukkit</groupId>
-				<artifactId>Towny</artifactId>
-				<version>0.89.2.0</version>
-			</dependency>
-			<dependency>
 				<groupId>net.citizensnpc</groupId>
 				<artifactId>citizensapi</artifactId>
 				<version>2.0.17-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.palmergames</groupId>
+				<artifactId>Towny</artifactId>
+				<version>0.91.0.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
