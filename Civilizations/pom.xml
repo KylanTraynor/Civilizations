@@ -42,7 +42,7 @@
 		</repository>
 		<repository>
          	<id>localrepository</id>
-         	<url>file://${basedir}/repo</url>
+         	<url>c:/Users/Baptiste/.m2/repository/</url>
       	</repository>
 		<repository>
 			<id>everything</id>
@@ -52,9 +52,8 @@
 	<dependencies>
 		<!-- Citizens -->
 		<dependency>
-			<groupId>net.citizensnpcs</groupId>
+			<groupId>net.citizensnpc</groupId>
 			<artifactId>citizensapi</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<!-- Towny -->
 		<dependency>
@@ -108,14 +107,14 @@
 				<version>1.9</version>
 			</dependency>
 			<dependency>
-				<groupId>net.citizensnpcs</groupId>
-				<artifactId>citizensapi</artifactId>
-				<version>LATEST</version>
-			</dependency>
-			<dependency>
 				<groupId>com.palmergames.bukkit</groupId>
 				<artifactId>Towny</artifactId>
 				<version>0.89.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>net.citizensnpc</groupId>
+				<artifactId>citizensapi</artifactId>
+				<version>2.0.17-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
