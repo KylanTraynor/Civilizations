@@ -1,12 +1,18 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -52,5 +58,22 @@ public class TownyHook {
 				}
 			}
 		}
+	}
+
+	private static Map<Resident, UUID> residentCache = new HashMap<Resident, UUID>();
+	
+	public static OfflinePlayer getPlayer(Resident res){
+		if(residentCache.containsKey(res)){
+			return Bukkit.getServer().getOfflinePlayer(residentCache.get(res));
+		} else {
+			OfflinePlayer p = Bukkit.getServer().getOfflinePlayer((res.getName()));
+			if(p != null){
+				residentCache.put(res, p.getUniqueId());
+				return p;
+			} else {
+				Civilizations.log("WARNING", "Couldn't find player for resident " + res.getName() + ".");
+			}
+		}
+		return null;
 	}
 }

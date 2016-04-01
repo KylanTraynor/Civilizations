@@ -29,7 +29,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 public class TownyTown extends Settlement{
-	public static HashMap<Resident, UUID> residentCache = new HashMap<Resident, UUID>();
 	
 	static TownyTown get(String string) {
 		for(TownyTown t : getTownyTownList()){
@@ -155,6 +154,7 @@ public class TownyTown extends Settlement{
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
 		getProtection().setPermissions(new Rank("Mayor", null), new Permission(this, mayorPerm));
+		getProtection().getRank("Mayor").addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
 		getProtection().setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(this, allyPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(this, outsiderPerm));
@@ -191,16 +191,9 @@ public class TownyTown extends Settlement{
 	public List<UUID> getMembers(){
 		List<UUID> list = new ArrayList<UUID>();
 		for(Resident r : this.townyTown.getResidents()){
-			if(residentCache.containsKey(r)){
-				list.add(residentCache.get(r));
-			} else {
-				OfflinePlayer p = Bukkit.getServer().getOfflinePlayer((r.getName()));
-				if(p != null){
-					residentCache.put(r, p.getUniqueId());
-					list.add(p.getUniqueId());
-				} else {
-					Civilizations.log("WARNING", "Couldn't find player for resident " + r.getName() + ".");
-				}
+			OfflinePlayer p = TownyHook.getPlayer(r);
+			if(p != null){
+				list.add(p.getUniqueId());
 			}
 		}
 		return list;
