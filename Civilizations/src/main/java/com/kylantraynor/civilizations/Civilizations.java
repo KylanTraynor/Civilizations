@@ -277,7 +277,8 @@ public class Civilizations extends JavaPlugin{
 					log("WARNING", "Invalid file configuration.");
 				}
 				f.delete();
-				Camp.load(yaml);
+				Camp c = Camp.load(yaml);
+				c.setDefaultPermissions();
 			}
 		}
 	}
