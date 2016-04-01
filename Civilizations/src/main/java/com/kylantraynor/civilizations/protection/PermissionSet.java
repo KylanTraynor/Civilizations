@@ -77,27 +77,25 @@ public class PermissionSet {
 					}
 				}
 			}
-			switch(e.getKey().getType()){
-			case PLAYER:
-				PlayerTarget pt = (PlayerTarget) e.getKey();
-				fm.then("PLAYER: " + pt.getPlayer().getName() + ": " + e.getValue().toString() + "\n");
-				break;
-			case RANK:
-				break;
-			default:
-				fm.then(e.getKey().getType().toString() + ": " + e.getValue().toString() + "\n");
-				break;
-			}
 		}
 		for(Entry<PermissionType, List<PermissionTarget>> e : permissionTypes.entrySet()){
 			StringBuilder sb = new StringBuilder();
-			for(PermissionTarget pt : e.getValue()){
-				if(pt.getType() == TargetType.PLAYER){
-					sb.append("" + ((PlayerTarget)pt).getPlayer().getName().toString() + ", ");
-				} else if (pt.getType() == TargetType.RANK){
-					sb.append("" + pt.getType().toString() + ", ");
+			for(int i = 0; i < e.getValue().size(); i++){
+				if(e.getValue().get(i).getType() == TargetType.PLAYER){
+					sb.append("" + ((PlayerTarget)e.getValue().get(i)).getPlayer().getName().toString());
+					if(i < e.getValue().size() - 1){
+						sb.append(", ");
+					}
+				} else if (e.getValue().get(i).getType() == TargetType.RANK){
+					sb.append("" + e.getValue().get(i).getType().toString());
+					if(i < e.getValue().size() - 1){
+						sb.append(", ");
+					}
 				} else {
-					sb.append("" + pt.getType().toString() + ", ");
+					sb.append("" + e.getValue().get(i).getType().toString());
+					if(i < e.getValue().size() - 1){
+						sb.append(", ");
+					}
 				}
 			}
 			fm.then(e.getKey().toString() + " ").tooltip(sb.toString());
