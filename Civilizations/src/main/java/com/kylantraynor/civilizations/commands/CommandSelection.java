@@ -21,6 +21,12 @@ public class CommandSelection implements CommandExecutor{
 					sender.sendMessage(ChatColor.RED + "You have no protection selected.");
 				}
 				break;
+			case "PERMISSIONS":
+				if(Civilizations.getSelectedProtections().containsKey(sender)){
+					Civilizations.getSelectedProtections().get(sender).getGroup().getProtection().getPermissionSet().getFancyMessage().send(sender);;
+				} else {
+					sender.sendMessage(ChatColor.RED + "You have no protection selected.");
+				}
 			}
 		}
 		return true;

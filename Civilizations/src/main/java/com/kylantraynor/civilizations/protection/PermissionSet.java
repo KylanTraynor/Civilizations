@@ -1,10 +1,14 @@
 package com.kylantraynor.civilizations.protection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
+
+import mkremins.fanciful.FancyMessage;
 
 public class PermissionSet {
 	
@@ -56,5 +60,48 @@ public class PermissionSet {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public FancyMessage getFancyMessage(){
+		FancyMessage fm = new FancyMessage("PERMISSIONS:\n").color(ChatColor.GOLD);
+		Map<PermissionType, List<PermissionTarget>> permissionTypes = new HashMap<PermissionType, List<PermissionTarget>>();
+		for(Entry<PermissionTarget, Permission> e : permissions.entrySet()){
+			for(Entry<PermissionType, Boolean> e1 : e.getValue().getTypes().entrySet()){
+				if(e1.getValue()){
+					if(permissionTypes.containsKey(e1.getKey())){
+						permissionTypes.get(e1.getKey()).add(e.getKey());
+					} else {
+						List<PermissionTarget> l = new ArrayList<PermissionTarget>();
+						l.add(e.getKey());
+						permissionTypes.put(e1.getKey(), l);
+					}
+				}
+			}
+			switch(e.getKey().getType()){
+			case PLAYER:
+				PlayerTarget pt = (PlayerTarget) e.getKey();
+				fm.then("PLAYER: " + pt.getPlayer().getName() + ": " + e.getValue().toString() + "\n");
+				break;
+			case RANK:
+				break;
+			default:
+				fm.then(e.getKey().getType().toString() + ": " + e.getValue().toString() + "\n");
+				break;
+			}
+		}
+		for(Entry<PermissionType, List<PermissionTarget>> e : permissionTypes.entrySet()){
+			StringBuilder sb = new StringBuilder();
+			for(PermissionTarget pt : e.getValue()){
+				if(pt.getType() == TargetType.PLAYER){
+					sb.append("" + ((PlayerTarget)pt).getPlayer().getName().toString() + ", ");
+				} else if (pt.getType() == TargetType.RANK){
+					sb.append("" + pt.getType().toString() + ", ");
+				} else {
+					sb.append("" + pt.getType().toString() + ", ");
+				}
+			}
+			fm.then(e.getKey().toString() + " ").tooltip(sb.toString());
+		}
+		return fm;
 	}
 }

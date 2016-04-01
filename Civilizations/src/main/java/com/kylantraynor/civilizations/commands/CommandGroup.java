@@ -44,6 +44,12 @@ public class CommandGroup implements CommandExecutor {
 					}
 				}
 				break;
+			case "PERMISSIONS":
+				if(sender instanceof Player){
+					g.getProtection().getPermissionSet().getFancyMessage().send(sender);
+				} else {
+					sender.sendMessage(g.getProtection().getPermissionSet().toString());
+				}
 			}
 		}
 		return true;

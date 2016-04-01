@@ -1,10 +1,12 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.commands.CommandGroup;
+import com.kylantraynor.civilizations.groups.settlements.Camp;
 
 public class CommandTownyTown extends CommandGroup{
 
@@ -26,6 +28,12 @@ public class CommandTownyTown extends CommandGroup{
 					} else {
 						t.getInteractiveMembersList().send(p);
 					}
+				}
+				break;
+			case "PERMISSIONS":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					p.chat("/group " + t.getId() + " permissions");
 				}
 				break;
 			}

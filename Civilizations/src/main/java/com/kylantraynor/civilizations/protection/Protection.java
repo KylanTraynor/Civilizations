@@ -18,7 +18,7 @@ public class Protection {
 	private Group group;
 	Protection parent;
 	List<Shape> shapes;
-	PermissionSet permissionSet;
+	private PermissionSet permissionSet;
 	List<Rank> ranks;
 	
 	public Protection(Group g){
@@ -202,4 +202,7 @@ public class Protection {
 
 	public Group getGroup() { return group; }
 	public void setGroup(Group group) { this.group = group; }
+	public PermissionSet getPermissionSet(){
+		return permissionSet;
+	}
 }
