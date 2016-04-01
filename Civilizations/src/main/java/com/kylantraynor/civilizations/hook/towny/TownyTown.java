@@ -18,6 +18,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -124,10 +125,19 @@ public class TownyTown extends Settlement{
 	 * Imports permissions from Towny.
 	 */
 	private void importTownPermissions() {
+		Map<PermissionType, Boolean> mayorPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
+		
+		mayorPerm.put(PermissionType.PLACE, true);
+		mayorPerm.put(PermissionType.BREAK, true);
+		mayorPerm.put(PermissionType.INVITE, true);
+		mayorPerm.put(PermissionType.KICK, true);
+		mayorPerm.put(PermissionType.CLAIM, true);
+		mayorPerm.put(PermissionType.UNCLAIM, true);
+		mayorPerm.put(PermissionType.UPGRADE, true);
 		
 		resPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().residentBuild);
 		resPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().residentDestroy);
@@ -144,6 +154,7 @@ public class TownyTown extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
+		getProtection().setPermissions(new Rank("Mayor", null), new Permission(this, mayorPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(this, allyPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(this, outsiderPerm));

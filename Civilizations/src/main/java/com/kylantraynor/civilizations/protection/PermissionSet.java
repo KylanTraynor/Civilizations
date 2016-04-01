@@ -87,7 +87,7 @@ public class PermissionSet {
 						sb.append(", ");
 					}
 				} else if (e.getValue().get(i).getType() == TargetType.RANK){
-					sb.append("" + e.getValue().get(i).getType().toString());
+					sb.append("" + ((Rank) e.getValue().get(i)).getName().toString());
 					if(i < e.getValue().size() - 1){
 						sb.append(", ");
 					}

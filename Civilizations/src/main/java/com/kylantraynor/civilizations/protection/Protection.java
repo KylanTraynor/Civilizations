@@ -150,9 +150,18 @@ public class Protection {
 			return false;
 		}
 		for(Rank r : ranks){
-			if(r.getName().equals(rank.getName())) return false;
+			if(r.getName().equalsIgnoreCase(rank.getName())) return false;
 		}
 		return true;
+	}
+	
+	public Rank getRank(String name){
+		for(Rank r : ranks){
+			if(r.getName().equalsIgnoreCase(name)){
+				return r;
+			}
+		}
+		return null;
 	}
 	/**
 	 * Sets the permissions for the given target.
@@ -160,6 +169,10 @@ public class Protection {
 	 * @param permission
 	 */
 	public void setPermissions(PermissionTarget target, Permission permission){
+		if(target instanceof Rank){
+			addRank((Rank) target);
+			target = getRank(((Rank) target).getName());
+		}
 		permissionSet.add(target, permission);
 	}
 	/**
