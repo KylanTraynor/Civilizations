@@ -2,6 +2,9 @@ package com.kylantraynor.civilizations.protection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -122,5 +125,16 @@ public class Permission {
 		return types.get(type);
 	}
 	
-	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		for(Entry<PermissionType, Boolean> e : types.entrySet()){
+			if(e.getValue()){
+				sb.append(" " + ChatColor.GREEN + e.getKey().toString() + "");
+			} else {
+				sb.append(" " + ChatColor.RED + e.getKey().toString() + "");
+			}
+		}
+		return sb.toString();
+	}
 }

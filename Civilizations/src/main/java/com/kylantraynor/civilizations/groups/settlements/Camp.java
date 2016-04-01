@@ -98,7 +98,7 @@ public class Camp extends Settlement{
 	 */
 	@Override
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("──────────── CAMP ────────────")
+		FancyMessage fm = new FancyMessage("============ CAMP ============")
 			.color(ChatColor.GOLD)
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
 			.then("" + ChronoUnit.HOURS.between(Instant.now(), getExpireOn()) + " hours").color(ChatColor.GOLD)
@@ -131,7 +131,7 @@ public class Camp extends Settlement{
 				fm.color(ChatColor.RED).tooltip("One member needs to be online to join the camp.");
 			}
 		}
-		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
+		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	} 
 	/**

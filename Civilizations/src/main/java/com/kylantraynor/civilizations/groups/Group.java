@@ -292,7 +292,7 @@ public class Group {
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("────────── " + getName().toUpperCase() + " ──────────").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
 		DateFormat format = new SimpleDateFormat("MMMM, dd of yyyy");
 		if(creationDate != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
@@ -300,7 +300,7 @@ public class Group {
 		}
 		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
-		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
+		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	}
 	/**
@@ -317,7 +317,7 @@ public class Group {
 	 */
 	public FancyMessage getInteractiveMembersList(int page){
 		if(page < 1) page = 1;
-		FancyMessage fm = new FancyMessage("────────── MEMBERS ──────────").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage("========== MEMBERS ==========").color(ChatColor.GOLD);
 		for(int i = 8 * (page - 1); i < getMembers().size() && i < 8 * (page); i+=1){
 			OfflinePlayer p = Civilizations.currentInstance.getServer().getOfflinePlayer(getMembers().get(i));
 			fm.then("\n" + p.getName());
@@ -328,22 +328,22 @@ public class Group {
 			}
 			fm.command("/p " + p.getName());
 		}
-		fm.then("\n<─ Previous");
+		fm.then("\n<- Previous");
 		if(page > 1){
 			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then(" ─ ").color(ChatColor.GRAY);
+		fm.then(" - ").color(ChatColor.GRAY);
 		fm.then("" + page).color(ChatColor.GOLD);
-		fm.then(" ─ ").color(ChatColor.GRAY);
-		fm.then("Next ─>");
+		fm.then(" - ").color(ChatColor.GRAY);
+		fm.then("Next ->");
 		if(page < getMembers().size() / 8){
 			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then("\n──────────────────────────────").color(ChatColor.GOLD);
+		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	}
 	/**

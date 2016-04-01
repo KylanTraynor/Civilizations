@@ -45,11 +45,7 @@ public class Protection {
 
 					@Override
 					public void run() {
-						for(Block b : s.getBlockSurface()){
-							if(b.getLocation().distance(p.getLocation()) <= 50 && !walkThroughBlock(b)){
-								p.sendBlockChange(b.getLocation(), Material.GOLD_BLOCK, (byte) 0);
-							}
-						}
+						s.show(p);
 					}
 					
 				});
@@ -74,11 +70,7 @@ public class Protection {
 
 					@Override
 					public void run() {
-						for(Block b : s.getBlockSurface()){
-							if(b.getLocation().distance(p.getLocation()) <= 50 && !walkThroughBlock(b)){
-								p.sendBlockChange(b.getLocation(), Material.GLOWSTONE, (byte) 0);
-							}
-						}
+						s.show(p);
 					}
 					
 				});
@@ -107,22 +99,27 @@ public class Protection {
 
 					@Override
 					public void run() {
-						for(Block b : s.getBlockSurface()){
-							if(b.getLocation().distance(p.getLocation()) <= 255){
-								p.sendBlockChange(b.getLocation(), b.getType(), b.getData());
-							}
-						}
+						s.hide(p);
 					}
 					
 				});
 			}
 		}
 	}
-	
+	/**
+	 * Adds the given shape to the protection.
+	 * @param shape
+	 * @return
+	 */
 	public int add(Shape shape){
 		return add(shape, true);
 	}
-	
+	/**
+	 * Adds the given shape to the protection, and optionnally checks how many blocks have been added.
+	 * @param shape
+	 * @param check
+	 * @return
+	 */
 	public int add(Shape shape, boolean check){
 		if(check){
 			int i = 0;

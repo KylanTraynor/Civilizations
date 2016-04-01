@@ -13,4 +13,5 @@ public enum PlotType {
 	BANK, //A private place to do banking
 	WOODCUTTER, //A public of private place to craft wooden materials with a higher efficiency
 	BLACKSMITH, //A public of private place for smithing with a higher efficiency
+	CONSTRUCTIONSITE //A restricted area where a building is automatically built or destroyed
 }
