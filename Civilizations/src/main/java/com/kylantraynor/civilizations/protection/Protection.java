@@ -153,6 +153,7 @@ public class Protection {
 		for(Rank r : ranks){
 			if(r.getName().equalsIgnoreCase(rank.getName())) return false;
 		}
+		ranks.add(rank);
 		return true;
 	}
 	
