@@ -125,6 +125,7 @@ public class TownyTown extends Settlement{
 	 */
 	private void importTownPermissions() {
 		Map<PermissionType, Boolean> mayorPerm = new HashMap<PermissionType, Boolean>();
+		Map<PermissionType, Boolean> assistantPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
@@ -137,6 +138,8 @@ public class TownyTown extends Settlement{
 		mayorPerm.put(PermissionType.CLAIM, true);
 		mayorPerm.put(PermissionType.UNCLAIM, true);
 		mayorPerm.put(PermissionType.UPGRADE, true);
+		
+		assistantPerm.put(PermissionType.UPGRADE, false);
 		
 		resPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().residentBuild);
 		resPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().residentDestroy);
@@ -154,7 +157,11 @@ public class TownyTown extends Settlement{
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
 		getProtection().setPermissions(new Rank("Mayor", null), new Permission(this, mayorPerm));
+		getProtection().setPermissions(new Rank("Assistant", getProtection().getRank("Mayor")), new Permission(this, assistantPerm));
 		getProtection().getRank("Mayor").addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
+		for(Resident r : townyTown.getAssistants()){
+			getProtection().getRank("Assistant").addPlayer(TownyHook.getPlayer(r));
+		}
 		getProtection().setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(this, allyPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(this, outsiderPerm));
