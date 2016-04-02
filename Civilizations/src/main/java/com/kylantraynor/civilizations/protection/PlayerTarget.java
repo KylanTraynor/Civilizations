@@ -25,4 +25,12 @@ public class PlayerTarget extends PermissionTarget{
 	public OfflinePlayer getPlayer(){
 		return Bukkit.getOfflinePlayer(this.uuid);
 	}
+	@Override
+	public boolean equals(Object pt){
+		if(!(pt instanceof PlayerTarget)) return false;
+		if(((PlayerTarget) pt).getUniqueId().equals(this.getUniqueId())){
+			return true;
+		}
+		return false;
+	}
 }

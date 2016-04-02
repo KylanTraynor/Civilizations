@@ -22,7 +22,9 @@ public class Rank extends PermissionTarget{
 	
 	public Rank getParent(){ return parent; }
 	public void setParent(Rank parent) { this.parent = parent; }
-	
+	public boolean includes(OfflinePlayer player){
+		return players.contains(player.getUniqueId());
+	}
 	public void addPlayer(OfflinePlayer player){
 		if(players.contains(player.getUniqueId())){
 			

@@ -382,18 +382,7 @@ public class Group {
 	public boolean hasPermission(PermissionType perm, Block block, Player player) {
 		boolean result = false;
 		if(player != null){
-			if(player.isOp()) return true;
-			if(this.isMember(player)){
-				// Do things for resident
-				result = getProtection().getPermission(perm, new PermissionTarget(TargetType.MEMBERS));
-			} else {
-				// Do things for outsiders
-				result = getProtection().getPermission(perm, new PermissionTarget(TargetType.OUTSIDERS));
-			}
-			Permission p = getProtection().getPermissions(new PlayerTarget(player));
-			if(p != null && p.contains(perm)){
-				result = p.get(perm);
-			}
+			return getProtection().hasPermission(player, perm);
 		} else {
 			result = getProtection().getPermission(perm, new PermissionTarget(TargetType.SERVER));
 		}
@@ -406,7 +395,6 @@ public class Group {
 	 * @return
 	 */
 	public boolean hasRank(String targetId, Player player) {
-		// TODO Auto-generated method stub
-		return false;
+		return getProtection().getRank(targetId).includes(player);
 	}
 }

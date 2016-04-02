@@ -82,19 +82,19 @@ public class PermissionSet {
 			StringBuilder sb = new StringBuilder();
 			for(int i = 0; i < e.getValue().size(); i++){
 				if(e.getValue().get(i).getType() == TargetType.PLAYER){
-					sb.append("" + ((PlayerTarget)e.getValue().get(i)).getPlayer().getName().toString());
+					sb.append("" + ChatColor.GREEN + ((PlayerTarget)e.getValue().get(i)).getPlayer().getName().toString());
 					if(i < e.getValue().size() - 1){
-						sb.append(", ");
+						sb.append("\n");
 					}
 				} else if (e.getValue().get(i).getType() == TargetType.RANK){
-					sb.append("" + ((Rank) e.getValue().get(i)).getName().toString());
+					sb.append("" + ChatColor.GOLD + ((Rank) e.getValue().get(i)).getName().toString());
 					if(i < e.getValue().size() - 1){
-						sb.append(", ");
+						sb.append("\n");
 					}
 				} else {
 					sb.append("" + e.getValue().get(i).getType().toString());
 					if(i < e.getValue().size() - 1){
-						sb.append(", ");
+						sb.append("\n");
 					}
 				}
 			}

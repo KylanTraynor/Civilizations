@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -163,6 +164,13 @@ public class Protection {
 		}
 		return null;
 	}
+	
+	public Rank getRank(OfflinePlayer player){
+		for(Rank r : ranks){
+			if(r.includes(player)) return r;
+		}
+		return null;
+	}
 	/**
 	 * Sets the permissions for the given target.
 	 * @param target
@@ -174,6 +182,29 @@ public class Protection {
 			target = getRank(((Rank) target).getName());
 		}
 		permissionSet.add(target, permission);
+	}
+	public boolean hasPermission(Player p, PermissionType type){
+		if(p.isOp()) return true;
+		PlayerTarget pt = new PlayerTarget(p);
+		if(hasPermissions(pt)){
+			return getPermission(type, pt);
+		}
+		Rank r = getRank(p);
+		if(hasPermissions(r)){
+			return getPermission(type, r);
+		}
+		if(getGroup().isMember(p)){
+			PermissionTarget m = new PermissionTarget(TargetType.MEMBERS);
+			if(hasPermissions(m)){
+				return getPermission(type, m);
+			}
+		} else {
+			PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
+			if(hasPermissions(o)){
+				return getPermission(type, o);
+			}
+		}
+		return false;
 	}
 	/**
 	 * Checks if this Protection has Permissions for the given target.
