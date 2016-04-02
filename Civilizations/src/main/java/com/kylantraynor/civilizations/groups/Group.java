@@ -26,6 +26,7 @@ import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.PlayerTarget;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
 
 public class Group {
@@ -327,6 +328,11 @@ public class Group {
 				fm.color(ChatColor.GRAY);
 			}
 			fm.command("/p " + p.getName());
+			Rank pr = getProtection().getRank(p);
+			if(pr != null){
+				fm.then(" (" + pr.getName() + ")");
+				fm.color(ChatColor.GOLD);
+			}
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
