@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class Rank extends PermissionTarget{
@@ -37,5 +38,13 @@ public class Rank extends PermissionTarget{
 		if(players.contains(player.getUniqueId())){
 			players.remove(player.getUniqueId());
 		}
+	}
+
+	public List<OfflinePlayer> getPlayers() {
+		List<OfflinePlayer> list = new ArrayList<OfflinePlayer>();
+		for(UUID id : players){
+			list.add(Bukkit.getServer().getOfflinePlayer(id));
+		}
+		return list;
 	}
 }

@@ -44,7 +44,7 @@ public class Group {
 	private List<UUID> members;
 	private Instant creationDate;
 	private boolean hasChanged;
-	private String name;
+	private String name = "Group";
 	private Protection protection;
 	private ChatColor chatColor;
 	
@@ -56,7 +56,9 @@ public class Group {
 		chatColor = ChatColor.WHITE;
 		protection = new Protection(this);
 	}
-	
+	public String getChatHeader(){
+		return ChatColor.GOLD + "[" + getName() + "] "; 
+	}
 	/**
 	 * Gets the group's name.
 	 * @return String
@@ -333,6 +335,37 @@ public class Group {
 				fm.then(" (" + pr.getName() + ")");
 				fm.color(ChatColor.GOLD);
 			}
+		}
+		fm.then("\n<- Previous");
+		if(page > 1){
+			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page - 1));
+		} else {
+			fm.color(ChatColor.GRAY);
+		}
+		fm.then(" - ").color(ChatColor.GRAY);
+		fm.then("" + page).color(ChatColor.GOLD);
+		fm.then(" - ").color(ChatColor.GRAY);
+		fm.then("Next ->");
+		if(page < getMembers().size() / 8){
+			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page + 1));
+		} else {
+			fm.color(ChatColor.GRAY);
+		}
+		fm.then("\n==============================").color(ChatColor.GOLD);
+		return fm;
+	}
+	public FancyMessage getInteractiveRankMembers(Rank r, int page){
+		if(page < 1) page = 1;
+		FancyMessage fm = new FancyMessage("========== " + r.getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		for(int i = 8 * (page - 1); i < r.getPlayers().size() && i < 8 * (page); i+=1){
+			OfflinePlayer p = r.getPlayers().get(i);
+			fm.then("\n" + p.getName());
+			if(p.isOnline()){
+				fm.color(ChatColor.GREEN);
+			} else {
+				fm.color(ChatColor.GRAY);
+			}
+			fm.command("/p " + p.getName());
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){

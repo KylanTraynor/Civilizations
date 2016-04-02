@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.commands.CommandGroup;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 
@@ -23,10 +24,21 @@ public class CommandTownyTown extends CommandGroup{
 			case "MEMBERS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(args.length > 2){
-						t.getInteractiveMembersList(Integer.getInteger(args[2])).send(p);
+					if(args.length >= 3){
+						if(args[2].equalsIgnoreCase("RANK")){
+							if(args.length == 4){
+								p.chat("/group " + t.getId() + " members rank " + args[3]);
+							} else if(args.length > 4){
+								p.chat("/group " + t.getId() + " members rank " + args[4] + " " + args[5]);
+							} else {
+								p.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Arguments must be " + ChatColor.WHITE + "Members Rank <rank name> [page]");
+							}
+							return true;
+						} else {
+							p.chat("/group " + t.getId() + " members " + args[2]);
+						}
 					} else {
-						t.getInteractiveMembersList().send(p);
+						p.chat("/group " + t.getId() + " members");
 					}
 				}
 				break;
