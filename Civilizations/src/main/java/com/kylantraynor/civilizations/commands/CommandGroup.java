@@ -45,21 +45,11 @@ public class CommandGroup implements CommandExecutor {
 					}
 					processRankCommand(p, g, a.toArray(new String[a.size()]));
 				}
+				break;
 			case "MEMBERS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if (args.length == 4 || (args.length == 3)) {
-						Rank r = g.getProtection().getRank(args[2]);
-						if(r != null){
-							try{
-								g.getInteractiveRankMembers(r, Integer.parseInt(args[3])).send(p);
-							} catch (NumberFormatException e){
-								p.sendMessage(Civilizations.messageHeader + ChatColor.RED + "4th Argument needs to be a page number!");
-							}
-						} else {
-							p.sendMessage(g.getChatHeader() + ChatColor.RED + "No rank has the name '" + args[2] + "'.");
-						}
-					} else if(args.length == 3){
+					if(args.length == 3){
 						try{
 							g.getInteractiveMembersList(Integer.parseInt(args[2])).send(p);
 						} catch (NumberFormatException e){

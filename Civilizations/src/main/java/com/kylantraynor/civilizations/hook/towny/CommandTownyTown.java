@@ -33,6 +33,7 @@ public class CommandTownyTown extends CommandGroup{
 					}
 					processRankCommand(p, t, a.toArray(new String[a.size()]));
 				}
+				break;
 			case "MEMBERS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
