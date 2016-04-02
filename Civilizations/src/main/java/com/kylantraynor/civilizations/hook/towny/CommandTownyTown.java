@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,22 +24,20 @@ public class CommandTownyTown extends CommandGroup{
 			case "INFO":
 				
 				break;
+			case "RANK":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					List<String> a = new ArrayList<String>();
+					for(int i = 2; i < args.length; i++){
+						a.add(args[i]);
+					}
+					processRankCommand(p, t, a.toArray(new String[a.size()]));
+				}
 			case "MEMBERS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(args.length >= 3){
-						if(args[2].equalsIgnoreCase("RANK")){
-							if(args.length == 4){
-								p.chat("/group " + t.getId() + " members rank " + args[3]);
-							} else if(args.length > 4){
-								p.chat("/group " + t.getId() + " members rank " + args[4] + " " + args[5]);
-							} else {
-								p.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Arguments must be " + ChatColor.WHITE + "Members Rank <rank name> [page]");
-							}
-							return true;
-						} else {
-							p.chat("/group " + t.getId() + " members " + args[2]);
-						}
+						p.chat("/group " + t.getId() + " members " + args[2]);
 					} else {
 						p.chat("/group " + t.getId() + " members");
 					}

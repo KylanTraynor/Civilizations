@@ -2,6 +2,8 @@ package com.kylantraynor.civilizations.commands;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
+import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.questions.ClearQuestion;
 import com.kylantraynor.civilizations.questions.JoinQuestion;
 import com.kylantraynor.civilizations.questions.LeaveQuestion;
@@ -101,6 +104,17 @@ public class CommandCamp extends CommandGroup{
 				}
 			}
 			break;
+		case "RANK":
+			if(sender instanceof Player){
+				Player p = (Player) sender;
+				Camp c = Camp.getCampAt(p.getLocation());
+				List<String> a = new ArrayList<String>();
+				for(int i = 1; i < args.length; i++){
+					a.add(args[i]);
+				}
+				processRankCommand(p, c, a.toArray(new String[a.size()]));
+			}
+			break;
 		case "MEMBERS":
 			if(sender instanceof Player){
 				Player p = (Player) sender;
@@ -109,18 +123,7 @@ public class CommandCamp extends CommandGroup{
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
 					if(args.length >= 2){
-						if(args[1].equalsIgnoreCase("RANK")){
-							if(args.length == 3){
-								p.chat("/group " + c.getId() + " members rank " + args[2]);
-							} else if(args.length > 3){
-								p.chat("/group " + c.getId() + " members rank " + args[3] + " " + args[4]);
-							} else {
-								p.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Arguments must be " + ChatColor.WHITE + "Members Rank <rank name> [page]");
-							}
-							return true;
-						} else {
-							p.chat("/group " + c.getId() + " members " + args[1]);
-						}
+						p.chat("/group " + c.getId() + " members " + args[1]);
 					} else {
 						p.chat("/group " + c.getId() + " members");
 					}

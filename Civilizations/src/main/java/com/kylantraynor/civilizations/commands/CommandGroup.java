@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.protection.Rank;
 
 public class CommandGroup implements CommandExecutor {
@@ -33,6 +36,15 @@ public class CommandGroup implements CommandExecutor {
 					g.getInteractiveInfoPanel((Player)sender);
 				}
 				break;
+			case "RANK":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					List<String> a = new ArrayList<String>();
+					for(int i = 2; i < args.length; i++){
+						a.add(args[i]);
+					}
+					processRankCommand(p, g, a.toArray(new String[a.size()]));
+				}
 			case "MEMBERS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
@@ -71,6 +83,41 @@ public class CommandGroup implements CommandExecutor {
 			}
 		}
 		return true;
+	}
+	
+	protected void processRankCommand(Player p, Group g, String[] args) {
+		switch(args.length){
+		case 1:
+			/*
+			 * Not Implemented Yet : Give Player's rank info
+			 */
+		default:
+			switch(args[0].toUpperCase()){
+			case "MEMBERS":
+				Rank pr = g.getProtection().getRank(p);
+				if(pr!=null){
+					if(args.length == 1){
+						g.getInteractiveRankMembers(pr, 0);
+					} else {
+						g.getInteractiveRankMembers(pr, Integer.parseInt(args[1]));
+					}
+				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");};
+			default:
+				Rank r = g.getProtection().getRank(args[0]);
+				if(r != null){
+					if(args.length >= 2){
+						switch(args[1].toUpperCase()){
+						case "MEMBERS":
+							if(args.length == 2){
+								g.getInteractiveRankMembers(r, 0);
+							} else {
+								g.getInteractiveRankMembers(r, Integer.parseInt(args[2]));
+							}
+						}
+					}
+				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "Rank '" + args[0] + "' doesn't exist.");};
+			}
+		}
 	}
 
 }
