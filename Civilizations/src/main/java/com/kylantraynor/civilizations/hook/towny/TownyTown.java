@@ -156,12 +156,16 @@ public class TownyTown extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		getProtection().setPermissions(new Rank("Mayor", null), new Permission(this, mayorPerm));
-		getProtection().setPermissions(new Rank("Assistant", getProtection().getRank("Mayor")), new Permission(this, assistantPerm));
-		getProtection().getRank("Mayor").addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
+		Rank mayor = new Rank("Mayor", null);
+		mayor.addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
+		
+		Rank assistant = new Rank("Assistant", mayor);
 		for(Resident r : townyTown.getAssistants()){
-			getProtection().getRank("Assistant").addPlayer(TownyHook.getPlayer(r));
+			assistant.addPlayer(TownyHook.getPlayer(r));
 		}
+		
+		getProtection().setPermissions(mayor, new Permission(this, mayorPerm));
+		getProtection().setPermissions(assistant, new Permission(this, assistantPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(this, allyPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(this, outsiderPerm));
