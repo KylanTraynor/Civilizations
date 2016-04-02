@@ -160,8 +160,12 @@ public class TownyTown extends Settlement{
 		mayor.addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
 		
 		Rank assistant = new Rank("Assistant", mayor);
-		for(Resident r : townyTown.getAssistants()){
-			assistant.addPlayer(TownyHook.getPlayer(r));
+		for(Resident r : townyTown.getResidents()){
+			for(String rank : r.getTownRanks()){
+				if(rank.equalsIgnoreCase(assistant.getName())){
+					assistant.addPlayer(TownyHook.getPlayer(r));
+				}
+			}
 		}
 		
 		getProtection().setPermissions(mayor, new Permission(this, mayorPerm));
