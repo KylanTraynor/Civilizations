@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.protection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -147,28 +148,32 @@ public class Protection {
 	}
 	
 	public boolean addRank(Rank rank){
-		if(ranks.contains(rank)){
+		if(getRank(rank.getName()) != null){
 			return false;
+		} else {
+			setPermissions(rank, new Permission(getGroup(), new HashMap<PermissionType, Boolean>()));
+			return true;
 		}
-		for(Rank r : ranks){
-			if(r.getName().equalsIgnoreCase(rank.getName())) return false;
-		}
-		ranks.add(rank);
-		return true;
 	}
 	
 	public Rank getRank(String name){
-		for(Rank r : ranks){
-			if(r.getName().equalsIgnoreCase(name)){
-				return r;
+		for(PermissionTarget r : permissionSet.getTargets()){
+			if(r instanceof Rank){
+				if(((Rank)r).getName().equalsIgnoreCase(name)){
+					return (Rank) r;
+				}
 			}
 		}
 		return null;
 	}
 	
 	public Rank getRank(OfflinePlayer player){
-		for(Rank r : ranks){
-			if(r.includes(player)) return r;
+		for(PermissionTarget r : permissionSet.getTargets()){
+			if(r instanceof Rank){
+				if(((Rank)r).includes(player)){
+					return (Rank) r;
+				}
+			}
 		}
 		return null;
 	}
@@ -178,10 +183,6 @@ public class Protection {
 	 * @param permission
 	 */
 	public void setPermissions(PermissionTarget target, Permission permission){
-		if(target instanceof Rank){
-			addRank((Rank) target);
-			target = getRank(((Rank) target).getName());
-		}
 		permissionSet.add(target, permission);
 	}
 	public boolean hasPermission(Player p, PermissionType type){

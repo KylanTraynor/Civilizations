@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 
@@ -20,6 +21,10 @@ public class PermissionSet {
 	 */
 	public Permission get(PermissionTarget target){
 		return permissions.get(target);
+	}
+	
+	public Set<PermissionTarget> getTargets(){
+		return permissions.keySet();
 	}
 	/**
 	 * Adds a permission with the given target to the list of permissions.

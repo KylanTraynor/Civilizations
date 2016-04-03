@@ -81,17 +81,19 @@ public class CommandGroup implements CommandExecutor {
 			/*
 			 * Not Implemented Yet : Give Player's rank info
 			 */
+			break;
 		default:
 			switch(args[0].toUpperCase()){
 			case "MEMBERS":
 				Rank pr = g.getProtection().getRank(p);
 				if(pr!=null){
 					if(args.length == 1){
-						g.getInteractiveRankMembers(pr, 0);
+						g.getInteractiveRankMembers(pr, 0).send(p);;
 					} else {
-						g.getInteractiveRankMembers(pr, Integer.parseInt(args[1]));
+						g.getInteractiveRankMembers(pr, Integer.parseInt(args[1])).send(p);;
 					}
 				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");};
+				break;
 			default:
 				Rank r = g.getProtection().getRank(args[0]);
 				if(r != null){
@@ -99,13 +101,14 @@ public class CommandGroup implements CommandExecutor {
 						switch(args[1].toUpperCase()){
 						case "MEMBERS":
 							if(args.length == 2){
-								g.getInteractiveRankMembers(r, 0);
+								g.getInteractiveRankMembers(r, 0).send(p);;
 							} else {
-								g.getInteractiveRankMembers(r, Integer.parseInt(args[2]));
+								g.getInteractiveRankMembers(r, Integer.parseInt(args[2])).send(p);;
 							}
 						}
 					}
 				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "Rank '" + args[0] + "' doesn't exist.");};
+				break;
 			}
 		}
 	}
