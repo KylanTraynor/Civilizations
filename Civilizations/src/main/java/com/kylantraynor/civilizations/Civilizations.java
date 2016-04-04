@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
-import mkremins.fanciful.FancyMessage;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,14 +18,10 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.dynmap.DynmapAPI;
-import org.dynmap.markers.Marker;
-import org.dynmap.markers.MarkerAPI;
-import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandCamp;
@@ -44,7 +38,7 @@ import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
-import com.kylantraynor.civilizations.menus.MenuListener;
+import com.kylantraynor.civilizations.listeners.MenuListener;
 import com.kylantraynor.civilizations.protection.Protection;
 
 public class Civilizations extends JavaPlugin{
@@ -79,6 +73,7 @@ public class Civilizations extends JavaPlugin{
 	 * Listeners
 	 */
 	private static CivilizationsListener mainListener = new CivilizationsListener();
+	private static MenuListener menuListener = new MenuListener();
 	
 	/**
 	 * Returns the main listener of Civilizations.
@@ -119,7 +114,7 @@ public class Civilizations extends JavaPlugin{
 		config = this.getConfig();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(getMainListener(), this);
-		pm.registerEvents(new MenuListener(this), this);
+		pm.registerEvents(getMenuListener(), this);
 		
 		registerAchievement("Setting up Camp!","Create a camp.");
 		
@@ -132,6 +127,10 @@ public class Civilizations extends JavaPlugin{
 		startProtectionUpdater(40L);
 		
 		setupCommands();
+	}
+
+	private Listener getMenuListener() {
+		return this.menuListener;
 	}
 
 	/**
