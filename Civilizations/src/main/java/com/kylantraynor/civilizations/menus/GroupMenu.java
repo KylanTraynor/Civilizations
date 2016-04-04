@@ -57,6 +57,11 @@ public class GroupMenu extends InventoryView{
 		return column + line * 9;
 	}
 	
+	public void changePage(Page p){
+		currentPage = p;
+		update();
+	}
+	
 	public void update(){
 		this.bottom.clear();
 		this.top.clear();
@@ -71,7 +76,6 @@ public class GroupMenu extends InventoryView{
 			updateForRanks();
 			break;
 		}
-		player.sendMessage("Updating Menu");
 		player.closeInventory();
 		player.openInventory(this);
 	}
@@ -113,8 +117,7 @@ public class GroupMenu extends InventoryView{
 
 			@Override
 			public void run() {
-				MenuManager.getMenus().get(player).currentPage = Page.MAIN;
-				MenuManager.getMenus().get(player).update();
+				MenuManager.getMenus().get(player).changePage(Page.MAIN);
 			}
 			
 		}, true);
@@ -127,8 +130,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).currentPage = Page.MANAGE;
-						MenuManager.getMenus().get(player).update();
+						MenuManager.getMenus().get(player).changePage(Page.MANAGE);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
@@ -141,8 +143,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).currentPage = Page.RANKS;
-						MenuManager.getMenus().get(player).update();
+						MenuManager.getMenus().get(player).changePage(Page.RANKS);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));

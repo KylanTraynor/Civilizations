@@ -26,6 +26,7 @@ public class CommandGroup implements CommandExecutor {
 			id = Integer.parseInt(args[0]);
 		} catch (NumberFormatException e){ id = null;}
 		Civilizations.log("INFO", "Group ID: " + id);
+		if(args.length == 1){ args = new String[]{"" + id, "MENU"};}
 		if(id != null && args.length >= 2){
 			Group g = Group.get(id);
 			if(g == null) return true;
