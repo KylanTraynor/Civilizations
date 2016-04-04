@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class CivilizationsListener implements Listener{
@@ -26,7 +27,7 @@ public class CivilizationsListener implements Listener{
 	public void onBlockBreak(BlockBreakEvent event){
 		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 		if(settlement != null){
-			if(settlement.getType() == Settlement.Type.TOWNY) return;
+			if(settlement instanceof TownyTown) return;
 			if(!settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't break blocks here.");
@@ -38,7 +39,7 @@ public class CivilizationsListener implements Listener{
 	public void onBlockPlace(BlockPlaceEvent event){
 		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 		if(settlement != null){
-			if(settlement.getType() == Settlement.Type.TOWNY) return;
+			if(settlement instanceof TownyTown) return;
 			if(!settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks here.");
@@ -50,7 +51,7 @@ public class CivilizationsListener implements Listener{
 	public void onBlockIgnite(BlockIgniteEvent event){
 		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 		if(settlement == null) return;
-		if(settlement.getType() == Settlement.Type.TOWNY) return;
+		if(settlement instanceof TownyTown) return;
 		switch(event.getCause()){
 		case SPREAD:
 			if(!settlement.hasPermission(PermissionType.FIRESPREAD, event.getBlock(), null)){
@@ -75,7 +76,7 @@ public class CivilizationsListener implements Listener{
 	public void onEntitySpawn(EntitySpawnEvent event){
 		Settlement settlement = Settlement.getAt(event.getLocation());
 		if(settlement == null) return;
-		if(settlement.getType() == Settlement.Type.TOWNY) return;
+		if(settlement instanceof TownyTown) return;
 		if(event.getEntity() instanceof LivingEntity){
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){

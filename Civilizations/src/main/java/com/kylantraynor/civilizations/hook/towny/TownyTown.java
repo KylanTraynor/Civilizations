@@ -177,8 +177,8 @@ public class TownyTown extends Settlement{
 	}
 
 	@Override
-	public Type getType(){
-		return Type.TOWNY;
+	public String getType(){
+		return "Town";
 	}
 
 	@Override
