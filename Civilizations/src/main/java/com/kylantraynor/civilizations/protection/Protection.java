@@ -257,4 +257,14 @@ public class Protection {
 	public PermissionSet getPermissionSet(){
 		return permissionSet;
 	}
+
+	public List<Rank> getRanks() {
+		List<Rank> list = new ArrayList<Rank>();
+		for(PermissionTarget t : permissionSet.getTargets()){
+			if(t instanceof Rank){
+				list.add((Rank) t);
+			}
+		}
+		return list;
+	}
 }

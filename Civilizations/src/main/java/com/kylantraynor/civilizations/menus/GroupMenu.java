@@ -18,13 +18,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Rank;
 
 public class GroupMenu extends InventoryView{
 	
 	public enum Page{
 		MAIN, //Page with the general info of the group.
 		MANAGE, //Page with all the stuff required to edit the basic stuff.
-		RANKS, //Page with the tools to edit ranks.
+		RANK, //Page with the tools to edit ranks.
+		RANKS_SELECTION //Page where the user needs to select a rank of create a new one.
 	}
 	
 	private Group group;
@@ -32,13 +34,15 @@ public class GroupMenu extends InventoryView{
 	private Inventory bottom;
 	private Player player;
 	private int linesTop = 1; // Navigation Bar
-	private int linesBottom = 5; // Menus
+	private int linesBottom = 4; // Menus
 	
 	private Material validButton = Material.EMERALD_BLOCK;
 	private Material permissionLackButton = Material.REDSTONE_BLOCK;
 	private Material navigationValid = Material.ARROW;
 	private Material navigationInvalid = Material.BARRIER;
 	private Page currentPage;
+	private String currentGoal;
+	private String currentSubPage;
 	
 	public GroupMenu(Group g){
 		this.group = g;
@@ -72,8 +76,11 @@ public class GroupMenu extends InventoryView{
 		case MANAGE:
 			updateForManage();
 			break;
-		case RANKS:
-			updateForRanks();
+		case RANK:
+			updateForRank(group.getProtection().getRank(currentSubPage));
+			break;
+		case RANKS_SELECTION:
+			updateForRankSelection();
 			break;
 		}
 		player.closeInventory();
@@ -98,7 +105,21 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(4,0), manageButton);
 		bottom.setItem(pos(4,0), ranksButton);
 	}
-	private void updateForRanks() {
+	private void updateForRank(Rank rank) {
+		//Get the Buttons.
+		ItemStack mainButton = getMainButton();
+		ItemStack manageButton = getManageButton();
+		ItemStack rankButton = getRanksButton();
+		// Draw the icons and buttons in the inventory.
+		top.setItem(pos(0,0), mainButton);
+		top.setItem(pos(3,0), manageButton);
+		top.setItem(pos(4,0), rankButton);
+		
+		Button parentButton = getParentButton(rank);
+		bottom.setItem(pos(8, 1), parentButton);
+	}
+	
+	private void updateForRankSelection() {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
 		ItemStack manageButton = getManageButton();
@@ -107,9 +128,19 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(0,0), mainButton);
 		top.setItem(pos(3,0), manageButton);
 		top.setItem(pos(4,0), ranksButton);
+		//Get the buttons.
+		List<Button> buttons = new ArrayList<Button>();
+		for(Rank r : group.getProtection().getRanks()){
+			Button rankButton = getRankButton(r);
+			buttons.add(rankButton);
+		}
+		int i = 9;
+		for(Button btn : buttons){
+			bottom.setItem(i, btn);
+		}
 	}
-	
-	public ItemStack getMainButton(){
+
+	public Button getMainButton(){
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
@@ -143,11 +174,63 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).changePage(Page.RANKS);
+						MenuManager.getMenus().get(player).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
 		return manageButton;
+	}
+	
+	public Button getParentButton(Rank rank){
+		List<String> lore = new ArrayList<String>();
+		if(rank.getParent() != null){
+			lore.add("Current: " + rank.getParent().getName());
+		} else {
+			lore.add("None");
+		}
+		Button parentButton = new Button(player, validButton, "Parent Rank", lore,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						MenuManager.getMenus().get(player).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		return parentButton;
+	}
+	
+	protected void startSelection(Page page, String string) {
+		this.currentGoal = string;
+		changePage(page);
+		this.currentGoal = null;
+	}
+
+	private Button getRankButton(final Rank r) {
+		List<String> lore = new ArrayList<String>();
+		Button rankButton = new Button(player, Material.GOLD_BLOCK, r.getName(), lore,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						MenuManager.getMenus().get(player).selectionReturned(r.getName());
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		return rankButton;
+	}
+
+	protected void selectionReturned(String name) {
+		switch(currentGoal.toUpperCase()){
+		case "RANK_SELECTION":
+			this.currentSubPage = name;
+			changePage(Page.RANK);
+			break;
+		case "PARENT_RANK_SELECTION":
+			group.getProtection().getRank(currentSubPage).setParent(group.getProtection().getRank(name));
+			changePage(Page.RANK);
+			break;
+		}
 	}
 
 	/**
