@@ -71,6 +71,7 @@ public class GroupMenu extends InventoryView{
 			updateForRanks();
 			break;
 		}
+		player.sendMessage("Updating Menu");
 		player.closeInventory();
 		player.openInventory(this);
 	}
@@ -105,7 +106,6 @@ public class GroupMenu extends InventoryView{
 	}
 	
 	public ItemStack getMainButton(){
-		final GroupMenu self = this;
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
@@ -113,8 +113,8 @@ public class GroupMenu extends InventoryView{
 
 			@Override
 			public void run() {
-				self.currentPage = Page.MAIN;
-				self.update();
+				MenuManager.getMenus().get(player).currentPage = Page.MAIN;
+				MenuManager.getMenus().get(player).update();
 			}
 			
 		}, true);
@@ -122,14 +122,13 @@ public class GroupMenu extends InventoryView{
 	}
 	
 	public Button getManageButton(){
-		final GroupMenu self = this;
 		Button manageButton = new Button(player, validButton, "Manage " + group.getType(), null,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						self.currentPage = Page.MANAGE;
-						self.update();
+						MenuManager.getMenus().get(player).currentPage = Page.MANAGE;
+						MenuManager.getMenus().get(player).update();
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
@@ -137,14 +136,13 @@ public class GroupMenu extends InventoryView{
 	}
 	
 	public Button getRanksButton(){
-		final GroupMenu self = this;
 		Button manageButton = new Button(player, validButton, "Ranks", null,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						self.currentPage = Page.RANKS;
-						self.update();
+						MenuManager.getMenus().get(player).currentPage = Page.RANKS;
+						MenuManager.getMenus().get(player).update();
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));

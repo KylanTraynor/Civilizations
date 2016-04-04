@@ -39,6 +39,7 @@ import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
 import com.kylantraynor.civilizations.listeners.MenuListener;
+import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.protection.Protection;
 
 public class Civilizations extends JavaPlugin{
@@ -68,7 +69,6 @@ public class Civilizations extends JavaPlugin{
 	public static HashMap<Player, Protection> getSelectedProtections(){ return selectedProtections; }
 	
 	private static List<BukkitRunnable> processes = new ArrayList<BukkitRunnable>();
-	
 	/*
 	 * Listeners
 	 */

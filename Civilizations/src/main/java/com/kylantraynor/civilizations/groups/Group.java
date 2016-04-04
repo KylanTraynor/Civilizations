@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.menus.GroupMenu;
+import com.kylantraynor.civilizations.menus.MenuManager;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -442,7 +443,7 @@ public class Group {
 		
 	}
 	public void openMenu(Player player){
-		new GroupMenu(this).open(player, GroupMenu.Page.MAIN);
+		MenuManager.openMenu(new GroupMenu(this), player);
 	}
 	public String getType() {
 		return "Group";
