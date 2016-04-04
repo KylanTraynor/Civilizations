@@ -17,6 +17,6 @@ public class MenuManager {
 
 	public static void openMenu(GroupMenu groupMenu, Player player) {
 		menus.put(player, groupMenu);
-		player.openInventory(groupMenu);
+		groupMenu.open(player, GroupMenu.Page.MAIN);
 	}
 }
