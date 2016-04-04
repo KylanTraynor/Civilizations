@@ -39,6 +39,9 @@ public class ButtonManager {
 			if(btn.getType().equals(stk.getType())){
 				ItemMeta im = stk.getItemMeta();
 				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
+					if(im.getLore() == null && btn.getItemMeta().getLore() == null){
+						return true;
+					}
 					if(im.getLore().equals(btn.getItemMeta().getLore())){
 						return true;
 					}
@@ -53,6 +56,9 @@ public class ButtonManager {
 			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
 				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
+					if(im.getLore() == null && btn.getItemMeta().getLore() == null){
+						return btn;
+					}
 					if(im.getLore().equals(btn.getItemMeta().getLore())){
 						return btn;
 					}
