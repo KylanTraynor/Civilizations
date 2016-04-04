@@ -297,7 +297,7 @@ public class Group {
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
-		DateFormat format = new SimpleDateFormat("MMMM, dd of yyyy");
+		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(creationDate != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(creationDate)).color(ChatColor.GOLD);

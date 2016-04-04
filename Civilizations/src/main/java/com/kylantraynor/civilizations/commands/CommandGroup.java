@@ -35,6 +35,7 @@ public class CommandGroup implements CommandExecutor {
 				if(sender instanceof Player){
 					g.openMenu((Player) sender);
 				}
+				break;
 			case "INFO":
 				if(sender instanceof Player){
 					g.getInteractiveInfoPanel((Player)sender);
