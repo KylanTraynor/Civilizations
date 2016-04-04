@@ -27,9 +27,13 @@ public class ButtonManager {
 	}
 	
 	public static void run(Button btn){
+		btn.getPlayer().sendMessage("Debug1");
 		if(buttons.containsKey(btn)){
+			btn.getPlayer().sendMessage("Debug2");
 			if(btn.isEnabled()){
+				btn.getPlayer().sendMessage("Debug3");
 				buttons.get(btn).runTask(Civilizations.currentInstance);
+				btn.getPlayer().sendMessage("Debug4");
 			}
 		}
 	}
