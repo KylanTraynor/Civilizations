@@ -10,5 +10,10 @@ public class MarketStall extends Plot{
 		super(name, shape, settlement);
 		// TODO Auto-generated constructor stub
 	}
+	
+	@Override
+	public String getType() {
+		return "Market Stall";
+	}
 
 }

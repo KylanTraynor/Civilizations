@@ -20,7 +20,7 @@ import com.kylantraynor.civilizations.protection.Rank;
 public class CommandGroup implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length == 0) args = new String[]{"Null", "INFO"};
+		if(args.length == 0) args = new String[]{"Null", "MENU"};
 		Integer id = null;
 		try{
 			id = Integer.parseInt(args[0]);
@@ -31,6 +31,10 @@ public class CommandGroup implements CommandExecutor {
 			if(g == null) return true;
 			Civilizations.log("INFO", "Group: " + g.getName());
 			switch(args[1].toUpperCase()){
+			case "MENU":
+				if(sender instanceof Player){
+					g.openMenu((Player) sender);
+				}
 			case "INFO":
 				if(sender instanceof Player){
 					g.getInteractiveInfoPanel((Player)sender);

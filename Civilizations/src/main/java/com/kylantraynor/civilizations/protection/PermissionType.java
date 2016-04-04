@@ -9,6 +9,7 @@ public enum PermissionType {
 	FIRESPREAD,
 	INVITE,
 	KICK,
+	MANAGE,
 	MOBSPAWNING,
 	PLACE,
 	UNCLAIM,

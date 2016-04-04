@@ -42,7 +42,9 @@ import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
+import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
+import com.kylantraynor.civilizations.menus.MenuListener;
 import com.kylantraynor.civilizations.protection.Protection;
 
 public class Civilizations extends JavaPlugin{
@@ -117,6 +119,7 @@ public class Civilizations extends JavaPlugin{
 		config = this.getConfig();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(getMainListener(), this);
+		pm.registerEvents(new MenuListener(this), this);
 		
 		registerAchievement("Setting up Camp!","Create a camp.");
 		
@@ -308,7 +311,7 @@ public class Civilizations extends JavaPlugin{
 			Settlement s = Settlement.getAt(l);
 			Protection newProt = s.getProtection();
 			Plot plot = null;
-			if(s.getType() == Settlement.Type.TOWNY){
+			if(s instanceof TownyTown){
 				for(Plot p : s.getPlots()){
 					if(p.protects(l)){
 						plot = p;
@@ -351,14 +354,11 @@ public class Civilizations extends JavaPlugin{
 			Settlement from = Settlement.getAt(fromL);
 			Settlement to = Settlement.getAt(toL);
 			if(!to.equals(from)){
-				
-				switch(to.getType()){
-				case CAMP:
+				if(to instanceof Camp){
 					TitleManagerHook.sendTitle("", ChatColor.GRAY + "Camp", 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
-				default:
 				}
 			}
 			
@@ -366,13 +366,10 @@ public class Civilizations extends JavaPlugin{
 			
 			Settlement from = Settlement.getAt(fromL);
 			if(from != null){
-				
-				switch(from.getType()){
-				case CAMP:
+				if(from instanceof Camp){
 					if(from.isMember(player)){
 						TitleManagerHook.sendActionBar("Leaving Camp", player, false);
 					}
-				default:
 				}
 			}
 			

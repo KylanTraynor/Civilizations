@@ -14,19 +14,14 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 
 public class Settlement extends Group {
-	public enum Type{
-		CAMP,
-		TOWNY
-	}
 	
 	private List<Plot> plots = new ArrayList<Plot>();
 	private Location location;
 	
-	/**
-	 * Gets the type of this settlement.
-	 * @return Settlement.Type
-	 */
-	public Type getType(){return null;}
+	@Override
+	public String getType() {
+		return "Settlement";
+	}
 	/**
 	 * Gets the icon to be displayed on the dynmap.
 	 * @return String

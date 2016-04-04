@@ -24,16 +24,20 @@ public class Plot extends Group {
 		this.settlement = settlement;
 		this.getProtection().add(shape);
 	}
+	@Override
+	public String getType() {
+		return "Plot";
+	}
 	/**
 	 * Gets the type of this plot.
 	 * @return PlotType
 	 */
-	public PlotType getType() { return type; }
+	public PlotType getPlotType() { return type; }
 	/**
 	 * Sets the type of this plot.
 	 * @param type
 	 */
-	public void setType(PlotType type) { this.type = type; }
+	public void setPlotType(PlotType type) { this.type = type; }
 	/**
 	 * Gets the settlement owning this plot.
 	 * @return Settlement

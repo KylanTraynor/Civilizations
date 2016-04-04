@@ -13,6 +13,11 @@ public class Warehouse extends Plot implements GroupInventory{
 		super(name, shape, settlement);
 		// TODO Auto-generated constructor stub
 	}
+	
+	@Override
+	public String getType() {
+		return "Warehouse";
+	}
 
 	@Override
 	public Inventory getInventory() {

@@ -44,8 +44,8 @@ public class Camp extends Settlement{
 	}
 	
 	@Override
-	public Type getType(){
-		return Type.CAMP;
+	public String getType() {
+		return "Camp";
 	}
 
 	@Override
