@@ -48,7 +48,9 @@ public class GroupMenu extends InventoryView{
 		this.group = g;
 		initInventories();
 	}
-	
+	/**
+	 * Initialize the Menu Inventories.
+	 */
 	private void initInventories() {
 		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + this.group.getChatHeader());
 		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
@@ -56,37 +58,42 @@ public class GroupMenu extends InventoryView{
 		this.top.setMaxStackSize(1);
 		this.bottom.setMaxStackSize(1);
 	}
-	
+	/**
+	 * Gets the index of a slot depending on its column and line.
+	 * @param column
+	 * @param line
+	 * @return
+	 */
 	public int pos(int column, int line){
 		return column + line * 9;
 	}
-	
+	/**
+	 * Changes the page and updates the menu.
+	 * @param p
+	 */
 	public void changePage(Page p){
 		currentPage = p;
 		update();
 	}
-	
+	/**
+	 * Updates the Menu depending on the active page.
+	 */
 	public void update(){
 		this.bottom.clear();
 		this.top.clear();
-		switch(currentPage){
-		case MAIN:
-			updateForMain();
-			break;
-		case MANAGE:
-			updateForManage();
-			break;
-		case RANK:
-			updateForRank(group.getProtection().getRank(currentSubPage));
-			break;
-		case RANKS_SELECTION:
-			updateForRankSelection();
-			break;
+		switch(currentPage)
+		{
+		case MAIN: updateForMain(); break;
+		case MANAGE: updateForManage(); break;
+		case RANK: updateForRank(group.getProtection().getRank(currentSubPage)); break;
+		case RANKS_SELECTION: updateForRankSelection(); break;
 		}
 		player.closeInventory();
 		player.openInventory(this);
 	}
-
+	/**
+	 * Update the menu to display the Main Screen.
+	 */
 	private void updateForMain() {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
@@ -95,6 +102,9 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(4,0), mainButton);
 		bottom.setItem(pos(4,0), manageButton);
 	}
+	/**
+	 * Update the menu to display the Group Management Screen.
+	 */
 	private void updateForManage() {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
@@ -105,6 +115,10 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(4,0), manageButton);
 		bottom.setItem(pos(4,0), ranksButton);
 	}
+	/**
+	 * Update the menu to display the Mangement screen of the given Rank.
+	 * @param rank
+	 */
 	private void updateForRank(Rank rank) {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
@@ -115,10 +129,14 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(3,0), manageButton);
 		top.setItem(pos(4,0), rankButton);
 		
+		Button nameButton = getChangeRankNameButton(rank);
 		Button parentButton = getParentButton(rank);
+		bottom.setItem(pos(0, 1), nameButton);
 		bottom.setItem(pos(8, 1), parentButton);
 	}
-	
+	/**
+	 * Updates the menu to display the Rank selection screen.
+	 */
 	private void updateForRankSelection() {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
@@ -140,7 +158,10 @@ public class GroupMenu extends InventoryView{
 			i++;
 		}
 	}
-
+	/**
+	 * Gets the Button linking to the Main Screen.
+	 * @return
+	 */
 	public Button getMainButton(){
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
@@ -155,7 +176,10 @@ public class GroupMenu extends InventoryView{
 		}, true);
 		return mainButton;
 	}
-	
+	/**
+	 * Gets the button linking to the Group Management Screen.
+	 * @return
+	 */
 	public Button getManageButton(){
 		Button manageButton = new Button(player, validButton, "Manage " + group.getType(), null,
 				new BukkitRunnable(){
@@ -168,7 +192,10 @@ public class GroupMenu extends InventoryView{
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
 		return manageButton;
 	}
-	
+	/**
+	 * Get the button linking to the Rank Selection screen.
+	 * @return
+	 */
 	public Button getRanksButton(){
 		Button manageButton = new Button(player, validButton, "Ranks", null,
 				new BukkitRunnable(){
@@ -181,7 +208,32 @@ public class GroupMenu extends InventoryView{
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
 		return manageButton;
 	}
-	
+	/**
+	 * Gets the Change Name button linking to the name change screen.
+	 * @param rank
+	 * @return
+	 */
+	public Button getChangeRankNameButton(Rank rank){
+		List<String> lore = new ArrayList<String>();
+		lore.add("Changes the name of this rank.");
+		Button nameButton = new Button(player, validButton, "Change Name", lore,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						/* TODO
+						 * Add the Name change stuff.
+						 */
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		return nameButton;
+	}
+	/**
+	 * Gets the Rank Parent Button linking to the Rank Selection Screen.
+	 * @param rank
+	 * @return
+	 */
 	public Button getParentButton(Rank rank){
 		List<String> lore = new ArrayList<String>();
 		if(rank.getParent() != null){
@@ -200,12 +252,20 @@ public class GroupMenu extends InventoryView{
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
 		return parentButton;
 	}
-	
+	/**
+	 * Starts a Selection on the given page with the given goal.
+	 * @param page
+	 * @param string
+	 */
 	protected void startSelection(Page page, String string) {
 		this.currentGoal = string;
 		changePage(page);
 	}
-
+	/**
+	 * Get a button for the given Rank linking to the Management screen of this rank.
+	 * @param r
+	 * @return
+	 */
 	private Button getRankButton(final Rank r) {
 		List<String> lore = new ArrayList<String>();
 		Button rankButton = new Button(player, Material.GOLD_BLOCK, r.getName(), lore,
@@ -219,7 +279,10 @@ public class GroupMenu extends InventoryView{
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
 		return rankButton;
 	}
-
+	/**
+	 * Sends the returned value of a selection back to the menu.
+	 * @param name
+	 */
 	protected void selectionReturned(String name) {
 		switch(currentGoal.toUpperCase()){
 		case "RANK_SELECTION":
@@ -255,7 +318,7 @@ public class GroupMenu extends InventoryView{
 	}
 
 	@Override
-	public HumanEntity getPlayer() {
+	public Player getPlayer() {
 		return this.player;
 	}
 
