@@ -164,6 +164,9 @@ public class Protection {
 				}
 			}
 		}
+		if(parent != null){
+			return parent.getRank(name);
+		}
 		return null;
 	}
 	
@@ -174,6 +177,9 @@ public class Protection {
 					return (Rank) r;
 				}
 			}
+		}
+		if(parent != null){
+			return parent.getRank(player);
 		}
 		return null;
 	}

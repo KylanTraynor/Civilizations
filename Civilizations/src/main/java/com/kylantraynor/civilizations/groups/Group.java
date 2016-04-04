@@ -334,6 +334,7 @@ public class Group {
 			if(pr != null){
 				fm.then(" (" + pr.getName() + ")");
 				fm.color(ChatColor.GOLD);
+				fm.command("/group " + this.getId() + " rank " + pr.getName() + " members");
 			}
 		}
 		fm.then("\n<- Previous");
@@ -435,5 +436,8 @@ public class Group {
 	 */
 	public boolean hasRank(String targetId, Player player) {
 		return getProtection().getRank(targetId).includes(player);
+	}
+	public void getInteractiveRankPanel(Rank playerRank) {
+		
 	}
 }

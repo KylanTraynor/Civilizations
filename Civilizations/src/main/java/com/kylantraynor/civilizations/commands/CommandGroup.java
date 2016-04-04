@@ -78,9 +78,10 @@ public class CommandGroup implements CommandExecutor {
 	protected void processRankCommand(Player p, Group g, String[] args) {
 		switch(args.length){
 		case 1:
-			/*
-			 * Not Implemented Yet : Give Player's rank info
-			 */
+			Rank playerRank = g.getProtection().getRank(p);
+			if(playerRank != null){
+				g.getInteractiveRankPanel(playerRank);
+			} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");};
 			break;
 		default:
 			switch(args[0].toUpperCase()){
