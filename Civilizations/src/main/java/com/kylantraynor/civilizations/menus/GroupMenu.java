@@ -71,30 +71,49 @@ public class GroupMenu extends InventoryView{
 	}
 
 	private void updateForMain() {
-		//Draw the info icon with the basic info of the group.
-		ItemStack infoIcon = getInfoIcon();
+		//Get the Buttons.
+		ItemStack mainButton = getMainButton();
 		ItemStack manageButton = getManageButton();
 		// Draw the icons and buttons in the inventory.
-		bottom.setItem(pos(4,0), infoIcon);
-		bottom.setItem(pos(4,1), manageButton);
+		top.setItem(pos(4,0), mainButton);
+		bottom.setItem(pos(4,0), manageButton);
 	}
 	private void updateForManage() {
-		
+		//Get the Buttons.
+		ItemStack mainButton = getMainButton();
+		ItemStack manageButton = getManageButton();
+		ItemStack ranksButton = getRanksButton();
+		// Draw the icons and buttons in the inventory.
+		top.setItem(pos(0,0), mainButton);
+		top.setItem(pos(4,0), manageButton);
+		bottom.setItem(pos(4,0), ranksButton);
 	}
 	private void updateForRanks() {
-		
+		//Get the Buttons.
+		ItemStack mainButton = getMainButton();
+		ItemStack manageButton = getManageButton();
+		ItemStack ranksButton = getRanksButton();
+		// Draw the icons and buttons in the inventory.
+		top.setItem(pos(0,0), mainButton);
+		top.setItem(pos(3,0), manageButton);
+		top.setItem(pos(4,0), ranksButton);
 	}
 	
-	public ItemStack getInfoIcon(){
-		ItemStack infoIcon = new ItemStack(Material.GOLD_BLOCK);
-		ItemMeta im = infoIcon.getItemMeta();
-		im.setDisplayName(group.getChatHeader());
+	public ItemStack getMainButton(){
+		final GroupMenu self = this;
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
-		im.setLore(lore);
-		infoIcon.setItemMeta(im);
-		return infoIcon;
+		Button mainButton = new Button(Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				self.currentPage = Page.MAIN;
+				self.update();
+			}
+			
+		}, true);
+		return mainButton;
 	}
 	
 	public Button getManageButton(){
@@ -109,6 +128,21 @@ public class GroupMenu extends InventoryView{
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
+		return manageButton;
+	}
+	
+	public Button getRanksButton(){
+		final GroupMenu self = this;
+		Button manageButton = new Button(validButton, "Ranks", null,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						self.currentPage = Page.RANKS;
+						self.update();
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
 		return manageButton;
 	}
 
