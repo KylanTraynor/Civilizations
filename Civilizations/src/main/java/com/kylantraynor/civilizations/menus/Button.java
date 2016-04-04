@@ -17,6 +17,8 @@ public class Button extends ItemStack{
 	private boolean isEnabled;
 
 	private Player player;
+
+	private BukkitRunnable runnable;
 	
 	public Button(Player p, Material mat, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){
 		super(mat);
@@ -26,8 +28,9 @@ public class Button extends ItemStack{
 		im.setDisplayName(title);
 		im.setLore(description);
 		this.isEnabled = isEnabled;
-		ButtonManager.registerButton(this, runnable);
+		this.runnable = runnable;
 		setItemMeta(im);
+		ButtonManager.registerButton(this);
 	}
 
 	public boolean isEnabled() {
@@ -40,5 +43,11 @@ public class Button extends ItemStack{
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	public void run(){
+		if(isEnabled){
+			this.runnable.runTask(Civilizations.currentInstance);
+		}
 	}
 }

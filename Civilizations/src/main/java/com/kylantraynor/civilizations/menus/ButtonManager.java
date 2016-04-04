@@ -8,38 +8,34 @@ import java.util.Map;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
 
 public class ButtonManager {
 	
-	public static Map<Button, BukkitRunnable> buttons = new HashMap<Button, BukkitRunnable>();
+	public static List<Button> buttons = new ArrayList<Button>();
 	
 	public static boolean registerButton(Button bt, BukkitRunnable run){
-		if(buttons.containsKey(bt)){
+		if(buttons.contains(bt)){
 			return false;
 		} else {
-			buttons.put(bt, run);
+			buttons.add(bt);
 			return true;
 		}
 	}
 	
 	public static void run(Button btn){
 		btn.getPlayer().sendMessage("Debug1");
-		if(buttons.containsKey(btn)){
+		if(buttons.contains(btn)){
 			btn.getPlayer().sendMessage("Debug2");
-			if(btn.isEnabled()){
-				btn.getPlayer().sendMessage("Debug3");
-				buttons.get(btn).runTask(Civilizations.currentInstance);
-				btn.getPlayer().sendMessage("Debug4");
-			}
+			btn.run();
+			btn.getPlayer().sendMessage("Debug3");
 		}
 	}
 	
 	public static boolean isButton(ItemStack stk){
-		for(Button btn : buttons.keySet()){
+		for(Button btn : buttons){
 			if(btn.getType().equals(stk.getType())){
 				ItemMeta im = stk.getItemMeta();
 				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
@@ -56,7 +52,7 @@ public class ButtonManager {
 	}
 	
 	public static Button getButton(ItemStack stk, List<HumanEntity> list){
-		for(Button btn : buttons.keySet()){
+		for(Button btn : buttons){
 			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
 				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
