@@ -50,7 +50,7 @@ public class GroupMenu extends InventoryView{
 	}
 	
 	private void initInventories() {
-		this.top = Bukkit.createInventory(null, 9 * linesTop, this.group.getName());
+		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + this.group.getChatHeader());
 		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
 		
 		this.top.setMaxStackSize(1);
