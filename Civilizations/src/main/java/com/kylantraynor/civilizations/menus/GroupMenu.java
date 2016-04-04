@@ -137,6 +137,7 @@ public class GroupMenu extends InventoryView{
 		int i = 9;
 		for(Button btn : buttons){
 			bottom.setItem(i, btn);
+			i++;
 		}
 	}
 
