@@ -16,7 +16,7 @@ public class MenuListener implements Listener{
 	
 	public void onInventoryClick(InventoryClickEvent event){
 		ItemStack item = event.getCurrentItem();
-		Button btn = ButtonManager.getButton(item);
+		Button btn = ButtonManager.getButton(item, event.getInventory().getViewers());
 		if(btn != null){
 			event.setCancelled(true);
 			ButtonManager.run(btn);

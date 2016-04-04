@@ -107,7 +107,7 @@ public class GroupMenu extends InventoryView{
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
-		Button mainButton = new Button(Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
+		Button mainButton = new Button(player, Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
 
 			@Override
 			public void run() {
@@ -121,7 +121,7 @@ public class GroupMenu extends InventoryView{
 	
 	public Button getManageButton(){
 		final GroupMenu self = this;
-		Button manageButton = new Button(validButton, "Manage " + group.getType(), null,
+		Button manageButton = new Button(player, validButton, "Manage " + group.getType(), null,
 				new BukkitRunnable(){
 
 					@Override
@@ -136,7 +136,7 @@ public class GroupMenu extends InventoryView{
 	
 	public Button getRanksButton(){
 		final GroupMenu self = this;
-		Button manageButton = new Button(validButton, "Ranks", null,
+		Button manageButton = new Button(player, validButton, "Ranks", null,
 				new BukkitRunnable(){
 
 					@Override

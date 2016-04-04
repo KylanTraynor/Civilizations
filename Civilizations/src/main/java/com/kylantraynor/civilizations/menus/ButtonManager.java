@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -47,9 +48,9 @@ public class ButtonManager {
 		return false;
 	}
 	
-	public static Button getButton(ItemStack stk){
+	public static Button getButton(ItemStack stk, List<HumanEntity> list){
 		for(Button btn : buttons.keySet()){
-			if(btn.getType().equals(stk.getType())){
+			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
 				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
 					if(im.getLore().equals(btn.getItemMeta().getLore())){
