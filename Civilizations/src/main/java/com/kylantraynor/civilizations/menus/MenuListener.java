@@ -16,10 +16,10 @@ public class MenuListener implements Listener{
 	
 	public void onInventoryClick(InventoryClickEvent event){
 		ItemStack item = event.getCurrentItem();
-		if(item instanceof Button){
+		Button btn = ButtonManager.getButton(item);
+		if(btn != null){
 			event.setCancelled(true);
-			Button button = (Button) item;
-			button.run();
+			ButtonManager.run(btn);
 		}
 	}
 }

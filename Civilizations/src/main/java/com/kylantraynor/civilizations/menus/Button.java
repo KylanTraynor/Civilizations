@@ -26,11 +26,8 @@ public class Button extends ItemStack{
 		this.isEnabled = isEnabled;
 		setItemMeta(im);
 	}
-	
-	public void run(){
-		if(runnable != null && isEnabled){
-			runnable.runTask(Civilizations.currentInstance);
-		}
+
+	public boolean isEnabled() {
+		return this.isEnabled;
 	}
-	
 }
