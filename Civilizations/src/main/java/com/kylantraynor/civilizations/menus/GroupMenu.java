@@ -71,6 +71,8 @@ public class GroupMenu extends InventoryView{
 			updateForRanks();
 			break;
 		}
+		player.closeInventory();
+		player.openInventory(this);
 	}
 
 	private void updateForMain() {
@@ -161,7 +163,6 @@ public class GroupMenu extends InventoryView{
 		this.currentPage = p;
 		this.player = player;
 		update();
-		player.openInventory(this);;
 	}
 
 	@Override
