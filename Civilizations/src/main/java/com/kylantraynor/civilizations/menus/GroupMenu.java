@@ -47,7 +47,7 @@ public class GroupMenu extends InventoryView{
 	
 	private void initInventories() {
 		this.top = Bukkit.createInventory(null, 9 * linesTop, this.group.getName());
-		this.bottom = Bukkit.createInventory(null, InventoryType.CHEST, this.group.getName());
+		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
 		
 		this.top.setMaxStackSize(1);
 		this.bottom.setMaxStackSize(1);
