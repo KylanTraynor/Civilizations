@@ -203,7 +203,6 @@ public class GroupMenu extends InventoryView{
 	protected void startSelection(Page page, String string) {
 		this.currentGoal = string;
 		changePage(page);
-		this.currentGoal = null;
 	}
 
 	private Button getRankButton(final Rank r) {
@@ -224,10 +223,12 @@ public class GroupMenu extends InventoryView{
 		switch(currentGoal.toUpperCase()){
 		case "RANK_SELECTION":
 			this.currentSubPage = name;
+			currentGoal = null;
 			changePage(Page.RANK);
 			break;
 		case "PARENT_RANK_SELECTION":
 			group.getProtection().getRank(currentSubPage).setParent(group.getProtection().getRank(name));
+			currentGoal = null;
 			changePage(Page.RANK);
 			break;
 		}
