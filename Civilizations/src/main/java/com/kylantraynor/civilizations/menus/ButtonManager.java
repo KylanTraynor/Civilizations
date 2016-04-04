@@ -21,11 +21,8 @@ public class ButtonManager {
 	}
 	
 	public static void run(Button btn){
-		btn.getPlayer().sendMessage("Debug1");
 		if(buttons.contains(btn)){
-			btn.getPlayer().sendMessage("Debug2");
 			btn.run();
-			btn.getPlayer().sendMessage("Debug3");
 		}
 	}
 	
