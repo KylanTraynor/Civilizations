@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -34,7 +35,6 @@ public class GroupMenu extends InventoryView{
 	private int linesBottom = 5; // Menus
 	
 	private Material validButton = Material.EMERALD_BLOCK;
-	private Material invalidButton = Material.IRON_BLOCK;
 	private Material permissionLackButton = Material.REDSTONE_BLOCK;
 	private Material navigationValid = Material.ARROW;
 	private Material navigationInvalid = Material.BARRIER;
@@ -97,16 +97,18 @@ public class GroupMenu extends InventoryView{
 		return infoIcon;
 	}
 	
-	public ItemStack getManageButton(){
-		ItemStack manageButton = null;
-		if(group.hasPermission(PermissionType.MANAGE, null, player)){
-			manageButton = new ItemStack(validButton);
-		} else {
-			manageButton = new ItemStack(invalidButton);
-		}
-		ItemMeta im = manageButton.getItemMeta();
-		im.setDisplayName("Manage " + group.getType());
-		manageButton.setItemMeta(im);
+	public Button getManageButton(){
+		final GroupMenu self = this;
+		Button manageButton = new Button(validButton, "Manage " + group.getType(), null,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						self.currentPage = Page.MANAGE;
+						self.update();
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE, null, player));
 		return manageButton;
 	}
 
