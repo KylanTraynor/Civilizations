@@ -1,22 +1,17 @@
 package com.kylantraynor.civilizations.menus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import com.kylantraynor.civilizations.Civilizations;
 
 public class ButtonManager {
 	
 	public static List<Button> buttons = new ArrayList<Button>();
 	
-	public static boolean registerButton(Button bt, BukkitRunnable run){
+	public static boolean registerButton(Button bt){
 		if(buttons.contains(bt)){
 			return false;
 		} else {
