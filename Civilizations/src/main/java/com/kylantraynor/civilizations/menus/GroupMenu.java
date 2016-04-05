@@ -7,6 +7,9 @@ import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -16,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
@@ -52,7 +56,7 @@ public class GroupMenu extends InventoryView{
 	 * Initialize the Menu Inventories.
 	 */
 	private void initInventories() {
-		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + this.group.getChatHeader());
+		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + this.group.getName());
 		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
 		
 		this.top.setMaxStackSize(1);
@@ -147,6 +151,8 @@ public class GroupMenu extends InventoryView{
 		top.setItem(pos(3,0), manageButton);
 		top.setItem(pos(4,0), ranksButton);
 		//Get the buttons.
+		Button newRankButton = getNewRankButton();
+		bottom.setItem(pos(8,0), newRankButton);
 		List<Button> buttons = new ArrayList<Button>();
 		for(Rank r : group.getProtection().getRanks()){
 			Button rankButton = getRankButton(r);
@@ -209,21 +215,43 @@ public class GroupMenu extends InventoryView{
 		return manageButton;
 	}
 	/**
+	 * Gets the button allowing to add a new rank.
+	 * @return
+	 */
+	public Button getNewRankButton(){
+		List<String> lore = new ArrayList<String>();
+		lore.add("Create a new rank");
+		Button button = new Button(player, validButton, "Ranks", lore,
+				new BukkitRunnable(){
+
+					@Override
+					public void run() {
+						ConversationFactory cf = new ConversationFactory(Civilizations.currentInstance);
+						Conversation c = cf.withFirstPrompt(new GetInputStringPrompt(MenuManager.getMenus().get(player), "RANK_NEW", null)).withLocalEcho(false)
+								.withEscapeSequence("CANCEL").buildConversation(getPlayer());
+						c.begin();
+					}
+			
+		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		return button;
+	}
+	/**
 	 * Gets the Change Name button linking to the name change screen.
 	 * @param rank
 	 * @return
 	 */
-	public Button getChangeRankNameButton(Rank rank){
+	public Button getChangeRankNameButton(final Rank rank){
 		List<String> lore = new ArrayList<String>();
-		lore.add("Changes the name of this rank.");
+		lore.add("Changes the name of this rank");
 		Button nameButton = new Button(player, validButton, "Change Name", lore,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						/* TODO
-						 * Add the Name change stuff.
-						 */
+						ConversationFactory cf = new ConversationFactory(Civilizations.currentInstance);
+						Conversation c = cf.withFirstPrompt(new GetInputStringPrompt(MenuManager.getMenus().get(player), "RANK_NAMING", rank.getName())).withLocalEcho(false)
+								.withEscapeSequence("CANCEL").buildConversation(getPlayer());
+						c.begin();
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -330,5 +358,18 @@ public class GroupMenu extends InventoryView{
 	@Override
 	public InventoryType getType() {
 		return InventoryType.CHEST;
+	}
+	public void textInputResult(String result, String reason, Object argument) {
+		switch(reason.toUpperCase()){
+		case "RANK_NAMING":
+			group.getProtection().getRank((String) argument).setName(result);
+			currentSubPage = result;
+			changePage(Page.RANK);
+			break;
+		case "RANK_NEW":
+			group.getProtection().addRank(new Rank(result, null));
+			changePage(Page.RANKS_SELECTION);
+			break;
+		}
 	}
 }

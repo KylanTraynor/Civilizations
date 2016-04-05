@@ -27,6 +27,7 @@ public class ButtonManager {
 	}
 	
 	public static boolean isButton(ItemStack stk){
+		if(stk == null) return false;
 		for(Button btn : buttons){
 			if(btn.getType().equals(stk.getType())){
 				ItemMeta im = stk.getItemMeta();
@@ -44,6 +45,7 @@ public class ButtonManager {
 	}
 	
 	public static Button getButton(ItemStack stk, List<HumanEntity> list){
+		if(stk == null) return null;
 		for(Button btn : buttons){
 			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
