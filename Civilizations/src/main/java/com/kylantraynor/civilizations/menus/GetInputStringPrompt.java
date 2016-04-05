@@ -21,7 +21,7 @@ public class GetInputStringPrompt extends StringPrompt{
 	@Override
 	public Prompt acceptInput(ConversationContext context, String answer) {
 		menu.textInputResult(answer.split(" ")[0], reason, argument);
-		return null;
+		return END_OF_CONVERSATION;
 	}
 
 	@Override
