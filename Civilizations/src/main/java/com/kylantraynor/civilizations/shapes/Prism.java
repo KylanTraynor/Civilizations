@@ -96,4 +96,64 @@ public class Prism extends Shape {
 		}
 		return list.toArray(new Block[list.size()]);
 	}
+	
+	public boolean intersect(Prism p){
+		return (this.getMinX() <= p.getMaxX() && this.getMaxX() >= p.getMinX()) &&
+				(this.getMinY() <= p.getMaxY() && this.getMaxY() >= p.getMinY()) &&
+				(this.getMinZ() <= p.getMaxZ() && this.getMaxZ() >= p.getMinZ());
+	}
+	
+public boolean intersect(Sphere s){
+		
+		int sX = s.getLocation().getBlockX();
+		int sY = s.getLocation().getBlockY();
+		int sZ = s.getLocation().getBlockZ();
+		
+		int x = Math.max(this.getMinX(), Math.min(sX, this.getMaxX()));
+		int y = Math.max(this.getMinY(), Math.min(sY, this.getMaxY()));
+		int z = Math.max(this.getMinZ(), Math.min(sZ, this.getMaxZ()));
+		
+		double distance = Math.sqrt((x - sX) * (x - sX)+
+				(y - sY) * (y - sY)+
+				(z - sZ) * (z - sZ));
+		
+		return distance < s.getRadius();
+	}
+
+	@Override
+	int getMinX() {
+		return getLocation().getBlockX();
+	}
+
+	@Override
+	int getMinY() {
+		return getLocation().getBlockY();
+	}
+
+	@Override
+	int getMinZ() {
+		return getLocation().getBlockZ();
+	}
+
+	@Override
+	int getMaxX() {
+		return getLocation().getBlockX() + getWidth();
+	}
+
+	@Override
+	int getMaxY() {
+		return getLocation().getBlockY() + getHeight();
+	}
+
+	@Override
+	int getMaxZ() {
+		return getLocation().getBlockZ() + getLength();
+	}
+	
+	@Override
+	public boolean intersect(Shape s) {
+		if(s instanceof Sphere) return intersect((Sphere)s);
+		if(s instanceof Prism) return intersect((Prism)s);
+		return false;
+	}
 }

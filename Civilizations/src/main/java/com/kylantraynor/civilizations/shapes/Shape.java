@@ -19,6 +19,13 @@ public abstract class Shape implements Visualizable{
 		this.location = location;
 	}
 	
+	public abstract boolean intersect(Shape s);
+	abstract int getMinX();
+	abstract int getMinY();
+	abstract int getMinZ();
+	abstract int getMaxX();
+	abstract int getMaxY();
+	abstract int getMaxZ();
 	abstract int getWidth();
 	abstract int getHeight();
 	abstract int getLength();

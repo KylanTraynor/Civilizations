@@ -25,3 +25,4 @@ commands:
   plot:
     description: Access all plot commands.
     permission: civilizations.plot
+    aliases: [civplot]

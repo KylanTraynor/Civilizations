@@ -251,6 +251,13 @@ public class Protection {
 		}
 		return false;
 	}
+	
+	public boolean intersect(Shape s){
+		for(Shape s1 : shapes){
+			if(s1.intersect(s)) return true;
+		}
+		return false;
+	}
 
 	public Group getGroup() { return group; }
 	public void setGroup(Group group) { this.group = group; }

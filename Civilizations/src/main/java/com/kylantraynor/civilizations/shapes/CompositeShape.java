@@ -12,11 +12,6 @@ public class CompositeShape extends Shape{
 	Shape shape2;
 	String operation;
 	Location[] cachedLocations;
-
-	public CompositeShape(Location location) {
-		super(location);
-		// TODO Auto-generated constructor stub
-	}
 	
 	public CompositeShape(Shape shape1, Shape shape2, String string){
 		super(new Location(shape1.getLocation().getWorld(), (shape1.getLocation().getBlockX() + shape2.getLocation().getBlockX())/2,
@@ -29,20 +24,17 @@ public class CompositeShape extends Shape{
 
 	@Override
 	int getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxX() - getMinX();
 	}
 
 	@Override
 	int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxY() - getMinY();
 	}
 
 	@Override
 	int getLength() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxZ() - getMinZ();
 	}
 
 	@Override
@@ -131,5 +123,41 @@ public class CompositeShape extends Shape{
 	public Block[] getBlockSurface() {
 		// NOT IMPLEMENTED
 		return shape1.getBlockSurface();
+	}
+
+	@Override
+	int getMinX() {
+		return Math.min(shape1.getMinX(), shape2.getMinX());
+	}
+
+	@Override
+	int getMinY() {
+		return Math.min(shape1.getMinY(), shape2.getMinY());
+	}
+
+	@Override
+	int getMinZ() {
+		return Math.min(shape1.getMinZ(), shape2.getMinZ());
+	}
+
+	@Override
+	int getMaxX() {
+		return Math.max(shape1.getMaxX(), shape2.getMaxX());
+	}
+
+	@Override
+	int getMaxY() {
+		return Math.max(shape1.getMaxY(), shape2.getMaxY());
+	}
+
+	@Override
+	int getMaxZ() {
+		return Math.max(shape1.getMaxZ(), shape2.getMaxZ());
+	}
+
+	@Override
+	public boolean intersect(Shape s) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

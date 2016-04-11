@@ -16,20 +16,17 @@ public class Hull extends Shape {
 
 	@Override
 	int getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxX() - getMinX();
 	}
 
 	@Override
 	int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxY() - getMinY();
 	}
 
 	@Override
 	int getLength() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getMaxZ() - getMinZ();
 	}
 
 	@Override
@@ -99,5 +96,89 @@ public class Hull extends Shape {
 			}
 		}
 		return distance;
+	}
+
+	@Override
+	int getMinX() {
+		Integer min = null;
+		for(Location l : points){
+			if(min == null){
+				min = l.getBlockX();
+			} else if (l.getBlockX() < min){
+				min = l.getBlockX();
+			}
+		}
+		return min;
+	}
+
+	@Override
+	int getMinY() {
+		Integer min = null;
+		for(Location l : points){
+			if(min == null){
+				min = l.getBlockY();
+			} else if (l.getBlockY() < min){
+				min = l.getBlockY();
+			}
+		}
+		return min;
+	}
+
+	@Override
+	int getMinZ() {
+		Integer min = null;
+		for(Location l : points){
+			if(min == null){
+				min = l.getBlockZ();
+			} else if (l.getBlockZ() < min){
+				min = l.getBlockZ();
+			}
+		}
+		return min;
+	}
+
+	@Override
+	int getMaxX() {
+		Integer max = null;
+		for(Location l : points){
+			if(max == null){
+				max = l.getBlockX();
+			} else if (l.getBlockX() > max){
+				max = l.getBlockX();
+			}
+		}
+		return max;
+	}
+
+	@Override
+	int getMaxY() {
+		Integer max = null;
+		for(Location l : points){
+			if(max == null){
+				max = l.getBlockY();
+			} else if (l.getBlockY() > max){
+				max = l.getBlockY();
+			}
+		}
+		return max;
+	}
+
+	@Override
+	int getMaxZ() {
+		Integer max = null;
+		for(Location l : points){
+			if(max == null){
+				max = l.getBlockZ();
+			} else if (l.getBlockZ() > max){
+				max = l.getBlockZ();
+			}
+		}
+		return max;
+	}
+
+	@Override
+	public boolean intersect(Shape s) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

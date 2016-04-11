@@ -59,19 +59,22 @@ public class CommandPlot implements CommandExecutor {
 				Shape s = new Prism(firstCorner, width, height, length);
 				
 				Settlement set = Settlement.getClosest(middlePoint);
-				
+				if(set.distance(middlePoint) > Civilizations.settlementMergeRadius){
+					set = null;
+				}
 				if(args.length >= 2){
 					switch(args[1].toUpperCase()){
 					case "HOUSE":
 						if(set == null){
-							Settlement settlement = new Settlement(middlePoint);
-							settlement.setName("Isolated Dwelling");
-							Plot p = new House("House", s, settlement);
-							p.addMember((OfflinePlayer) sender);
-							Civilizations.getSelectionPoints().remove(sender);
-							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
-							sender.sendMessage(Civilizations.messageHeader + "New private property established.");
+							sender.sendMessage(Civilizations.messageHeader + "A house cannot be created outside of a settlement.");
+							return true;
 						} else {
+							for(Plot plot : set.getPlots()){
+								if(plot.getProtection().intersect(s)){
+									sender.sendMessage(Civilizations.messageHeader + "The selection intersects with another plot.");
+									return true;
+								}
+							}
 							Plot p = new House("House", s, set);
 							Civilizations.getSelectionPoints().remove(sender);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
@@ -79,10 +82,16 @@ public class CommandPlot implements CommandExecutor {
 						}
 						break;
 					case "WAREHOUSE":
-						
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + "A warehouse cannot be created outside of a settlement.");
+							return true;
 						} else {
+							for(Plot plot : set.getPlots()){
+								if(plot.getProtection().intersect(s)){
+									sender.sendMessage(Civilizations.messageHeader + "The selection intersects with another plot.");
+									return true;
+								}
+							}
 							Plot p = new Warehouse("Warehouse", s, set);
 							Civilizations.getSelectionPoints().remove(sender);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
@@ -92,6 +101,7 @@ public class CommandPlot implements CommandExecutor {
 					}
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + "Use /plot create [plot type]");
+					return true;
 				}
 				break;
 			}

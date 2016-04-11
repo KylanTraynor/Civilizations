@@ -58,7 +58,7 @@ public class Sphere extends Shape {
 		return result;
 	}
 
-	private int getRadius() {
+	public int getRadius() {
 		return this.radius;
 	}
 
@@ -91,5 +91,73 @@ public class Sphere extends Shape {
 			}
 		}
 		return list.toArray(new Block[list.size()]);
+	}
+	
+	public boolean intersect(Sphere s){
+		int thisX = this.getLocation().getBlockX();
+		int thisY = this.getLocation().getBlockY();
+		int thisZ = this.getLocation().getBlockZ();
+		int sX = s.getLocation().getBlockX();
+		int sY = s.getLocation().getBlockY();
+		int sZ = s.getLocation().getBlockZ();
+		double distance = Math.sqrt((thisX - sX) * (thisX - sX) +
+				(thisY - sY) * (thisY - sY) +
+				(thisZ - sZ) * (thisZ - sZ));
+		
+		return distance < (this.getRadius() + s.getRadius());
+	}
+	
+	public boolean intersect(Prism p){
+		
+		int thisX = this.getLocation().getBlockX();
+		int thisY = this.getLocation().getBlockY();
+		int thisZ = this.getLocation().getBlockZ();
+		
+		int x = Math.max(p.getMinX(), Math.min(thisX, p.getMaxX()));
+		int y = Math.max(p.getMinY(), Math.min(thisY, p.getMaxY()));
+		int z = Math.max(p.getMinZ(), Math.min(thisZ, p.getMaxZ()));
+		
+		double distance = Math.sqrt((x - thisX) * (x - thisX)+
+				(y - thisY) * (y - thisY)+
+				(z - thisZ) * (z - thisZ));
+		
+		return distance < this.getRadius();
+	}
+
+	@Override
+	int getMinX() {
+		return getLocation().getBlockX() - getRadius();
+	}
+
+	@Override
+	int getMinY() {
+		return getLocation().getBlockY() - getRadius();
+	}
+
+	@Override
+	int getMinZ() {
+		return getLocation().getBlockZ() - getRadius();
+	}
+
+	@Override
+	int getMaxX() {
+		return getLocation().getBlockX() + getRadius();
+	}
+
+	@Override
+	int getMaxY() {
+		return getLocation().getBlockY() + getRadius();
+	}
+
+	@Override
+	int getMaxZ() {
+		return getLocation().getBlockZ() + getRadius();
+	}
+
+	@Override
+	public boolean intersect(Shape s) {
+		if(s instanceof Sphere) return intersect((Sphere)s);
+		if(s instanceof Prism) return intersect((Prism)s);
+		return false;
 	}
 }
