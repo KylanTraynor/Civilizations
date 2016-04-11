@@ -11,6 +11,7 @@ public class Rank extends PermissionTarget{
 	private String name = "";
 	private Rank parent;
 	private List<UUID> players = new ArrayList<UUID>();
+	private int level = 1000;
 	
 	public Rank(String name, Rank parent){
 		super(TargetType.RANK);
@@ -20,6 +21,9 @@ public class Rank extends PermissionTarget{
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
+	
+	public int getLevel() { return level; }
+	public void setLevel(int level) { this.level  = level; }
 	
 	public Rank getParent(){ return parent; }
 	public void setParent(Rank parent) { this.parent = parent; }

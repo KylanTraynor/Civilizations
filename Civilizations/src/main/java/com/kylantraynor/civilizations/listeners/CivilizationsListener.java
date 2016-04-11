@@ -1,11 +1,13 @@
 package com.kylantraynor.civilizations.listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
@@ -127,11 +129,23 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if(event.getPlayer() != null){
+		if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_AIR){
 			if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
 				Civilizations.selectTargetProtection(event.getPlayer());
 				event.setCancelled(true);
 			}
+		} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
+			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
+				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
+			}
+			Civilizations.getSelectionPoints().get(event.getPlayer())[0] = event.getClickedBlock().getLocation();
+			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
+		} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
+				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
+			}
+			Civilizations.getSelectionPoints().get(event.getPlayer())[1] = event.getClickedBlock().getLocation();
+			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
 		}
 	}
 	

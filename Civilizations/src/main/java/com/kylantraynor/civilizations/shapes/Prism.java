@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Prism extends Shape {
-
+	
 	public Prism(Location location, int width, int height, int length) {
 		super(new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
 		this.width = width;

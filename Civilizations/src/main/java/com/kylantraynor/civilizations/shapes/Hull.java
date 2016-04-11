@@ -72,6 +72,12 @@ public class Hull extends Shape {
 		points.add(location);
 	}
 	
+	public void addPoints(List<Location> list){
+		for(Location l : list){
+			points.add(l);
+		}
+	}
+	
 	public Location getMassCenter(){
 		int totalX = 0;
 		int totalZ = 0;

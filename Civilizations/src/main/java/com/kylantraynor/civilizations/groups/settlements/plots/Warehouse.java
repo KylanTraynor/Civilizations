@@ -1,5 +1,9 @@
 package com.kylantraynor.civilizations.groups.settlements.plots;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,6 +23,11 @@ public class Warehouse extends Plot implements GroupInventory{
 		return "Warehouse";
 	}
 
+	public List<Chest> getAllChests(){
+		List<Chest> list = new ArrayList<Chest>();
+		return list;
+	}
+	
 	@Override
 	public Inventory getInventory() {
 		return null;
@@ -26,13 +35,11 @@ public class Warehouse extends Plot implements GroupInventory{
 
 	@Override
 	public void addItem(ItemStack itemStack) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void removeItem(ItemStack itemStack) {
-		// TODO Auto-generated method stub
 		
 	}
 

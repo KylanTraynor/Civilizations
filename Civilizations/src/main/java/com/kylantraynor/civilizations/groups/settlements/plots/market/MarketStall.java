@@ -8,7 +8,7 @@ public class MarketStall extends Plot{
 
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name, shape, settlement);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override

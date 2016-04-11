@@ -22,3 +22,6 @@ commands:
   townytown:
     description: Access all towny import related commands.
     permission: civilizations.towny
+  plot:
+    description: Access all plot commands.
+    permission: civilizations.plot

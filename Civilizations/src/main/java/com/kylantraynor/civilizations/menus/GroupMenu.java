@@ -226,10 +226,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						ConversationFactory cf = new ConversationFactory(Civilizations.currentInstance);
-						Conversation c = cf.withFirstPrompt(new GetInputStringPrompt(MenuManager.getMenus().get(player), "RANK_NEW", null)).withLocalEcho(false)
-								.withEscapeSequence("CANCEL").buildConversation(getPlayer());
-						c.begin();
+						MenuManager.getMenus().get(player).initTextInput("RANK_NEW", null);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -248,10 +245,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						ConversationFactory cf = new ConversationFactory(Civilizations.currentInstance);
-						Conversation c = cf.withFirstPrompt(new GetInputStringPrompt(MenuManager.getMenus().get(player), "RANK_NAMING", rank.getName())).withLocalEcho(false)
-								.withEscapeSequence("CANCEL").buildConversation(getPlayer());
-						c.begin();
+						MenuManager.getMenus().get(player).initTextInput("RANK_NAMING", rank.getName());
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -296,6 +290,11 @@ public class GroupMenu extends InventoryView{
 	 */
 	private Button getRankButton(final Rank r) {
 		List<String> lore = new ArrayList<String>();
+		String parentName = "None";
+		if(r.getParent() != null){
+			parentName = r.getParent().getName();
+		}
+		lore.add("Parent: " + parentName);
 		Button rankButton = new Button(player, Material.GOLD_BLOCK, r.getName(), lore,
 				new BukkitRunnable(){
 
@@ -358,6 +357,13 @@ public class GroupMenu extends InventoryView{
 	@Override
 	public InventoryType getType() {
 		return InventoryType.CHEST;
+	}
+	public void initTextInput(String goal, String argument){
+		getPlayer().closeInventory();
+		ConversationFactory cf = new ConversationFactory(Civilizations.currentInstance);
+		Conversation c = cf.withFirstPrompt(new GetInputStringPrompt(this, goal, argument)).withLocalEcho(false)
+				.withEscapeSequence("CANCEL").buildConversation(getPlayer());
+		c.begin();
 	}
 	public void textInputResult(String result, String reason, Object argument) {
 		switch(reason.toUpperCase()){

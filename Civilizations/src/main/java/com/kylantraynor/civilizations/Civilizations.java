@@ -27,6 +27,7 @@ import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandCamp;
 import com.kylantraynor.civilizations.commands.CommandCivilizations;
 import com.kylantraynor.civilizations.commands.CommandGroup;
+import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandSelection;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
@@ -49,6 +50,7 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static final String MC_SERVER_VERSION = org.bukkit.Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 	public static final String PLUGIN_NAME = "Civilizations";
+	public static final int settlementMergeRadius = 25;
 	
 	/**
 	 * Currently running instance of Civilizations
@@ -63,6 +65,7 @@ public class Civilizations extends JavaPlugin{
 	private boolean reload;
 	private boolean clearing = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
+	static private HashMap<Player, Location[]> selectionPoints = new HashMap<Player, Location[]>();
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
 	static private FileConfiguration config;
 	
@@ -164,6 +167,8 @@ public class Civilizations extends JavaPlugin{
 		
 		this.getCommand("Selection").setExecutor(new CommandSelection());
 		
+		this.getCommand("Plot").setExecutor(new CommandPlot());
+		
 		if(TownyHook.isEnabled()){
 			this.getCommand("TownyTown").setExecutor(new CommandTownyTown());
 		}
@@ -238,13 +243,10 @@ public class Civilizations extends JavaPlugin{
 				try {
 					yaml.load(f);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "Couldn't find file " + f.getName());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "File " + f.getName() + " is in use in another application.");
 				} catch (InvalidConfigurationException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "Invalid file configuration.");
 				}
 				Group.load(yaml);
@@ -269,13 +271,10 @@ public class Civilizations extends JavaPlugin{
 				try {
 					yaml.load(f);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "Couldn't find file " + f.getName());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "File " + f.getName() + " is in use in another application.");
 				} catch (InvalidConfigurationException e) {
-					// TODO Auto-generated catch block
 					log("WARNING", "Invalid file configuration.");
 				}
 				f.delete();
@@ -460,5 +459,13 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static void setClearing(boolean clearing) {
 		currentInstance.clearing = clearing;
+	}
+
+	public static HashMap<Player, Location[]> getSelectionPoints() {
+		return selectionPoints;
+	}
+
+	public static void setSelectionPoints(HashMap<Player, Location[]> selectionPoints) {
+		Civilizations.selectionPoints = selectionPoints;
 	}
 }
