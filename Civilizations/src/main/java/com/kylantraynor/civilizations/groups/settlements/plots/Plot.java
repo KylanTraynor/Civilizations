@@ -14,14 +14,14 @@ public class Plot extends Group {
 	public Plot(String name, Shape shape, Settlement settlement){
 		super();
 		this.setName(name);
-		this.settlement = settlement;
+		setSettlement(settlement);
 		this.getProtection().add(shape);
 	}
 	
 	public Plot(Shape shape, Settlement settlement){
 		super();
 		this.setProtection(new Protection(this, settlement.getProtection()));
-		this.settlement = settlement;
+		setSettlement(settlement);
 		this.getProtection().add(shape);
 	}
 	@Override
@@ -47,7 +47,16 @@ public class Plot extends Group {
 	 * Sets the settlement this plot belongs to.
 	 * @param settlement
 	 */
-	public void setSettlement(Settlement settlement) { this.settlement = settlement; }
+	public void setSettlement(Settlement settlement) {
+		Settlement oldSettlement = this.settlement;
+		if(oldSettlement != null){
+			oldSettlement.removePlot(this);
+		}
+		this.settlement = settlement;
+		if(this.settlement != null){
+			this.settlement.addPlot(this);
+		}
+	}
 	/**
 	 * Checks if this plot protects the given location.
 	 * @param location

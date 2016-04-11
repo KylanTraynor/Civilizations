@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.groups.settlements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -184,5 +185,26 @@ public class Settlement extends Group {
 			}
 		}
 		return closest;
+	}
+	/**
+	 * Gets the members of this settlement.
+	 * @return List<UUID>
+	 */
+	@Override
+	public List<UUID> getMembers(){
+		List<UUID> list = new ArrayList<UUID>();
+		for(Plot p : getPlots()){
+			for(UUID id : p.getMembers()){
+				if(!list.contains(id)){
+					list.add(id);
+				}
+			}
+		}
+		for(UUID id : super.getMembers()){
+			if(!list.contains(id)){
+				list.add(id);
+			}
+		}
+		return list;
 	}
 }
