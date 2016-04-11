@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 
@@ -63,7 +64,9 @@ public class CommandPlot implements CommandExecutor {
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + "A warehouse cannot be created outside of a settlement.");
 						} else {
-							new Plot("Warehouse", s, set);
+							Plot p = new Warehouse("Warehouse", s, set);
+							Civilizations.getSelectionPoints().remove(sender);
+							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + "Warehouse created in " + set.getName() + "!");
 						}
 						break;
