@@ -59,7 +59,7 @@ public class CommandPlot implements CommandExecutor {
 				Shape s = new Prism(firstCorner, width, height, length);
 				
 				Settlement set = Settlement.getClosest(middlePoint);
-				if(set.distance(middlePoint) > Civilizations.settlementMergeRadius){
+				if(set != null && set.distance(middlePoint) > Civilizations.settlementMergeRadius){
 					set = null;
 				}
 				if(args.length >= 2){
