@@ -19,6 +19,8 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
+import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -36,10 +38,13 @@ public class Camp extends Settlement{
 		this.getProtection().add(new Sphere(l, Camp.getSize()), false);
 		Cache.campListChanged = true;
 		setChatColor(ChatColor.GREEN);
+		setChanged(true);
 	}
 	
 	@Override
 	public boolean isUpgradable(){
+		if(SmallOutpost.hasUpgradeRequirements(this)) return true;
+		if(IsolatedDwelling.hasUpgradeRequirements(this)) return true;
 		return false;
 	}
 	

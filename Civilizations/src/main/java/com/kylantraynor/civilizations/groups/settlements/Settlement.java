@@ -45,7 +45,10 @@ public class Settlement extends Group {
 	 * Sets the list of plots of this settlement.
 	 * @param plts
 	 */
-	public void setPlots(List<Plot> plts) {this.plots = plts;}
+	public void setPlots(List<Plot> plts) {
+		this.plots = plts;
+		setChanged(true);
+	}
 	/**
 	 * Adds a plot to this settlement.
 	 * @param p
@@ -56,6 +59,7 @@ public class Settlement extends Group {
 			return false;
 		} else {
 			this.plots.add(p);
+			setChanged(true);
 			return true;
 		}
 	}
@@ -67,6 +71,7 @@ public class Settlement extends Group {
 	public boolean removePlot(Plot p){
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
+			setChanged(true);
 			return true;
 		} else {
 			return false;
@@ -81,7 +86,10 @@ public class Settlement extends Group {
 	 * Sets the location of this settlement.
 	 * @param location
 	 */
-	public void setLocation(Location location) {this.location = location;}
+	public void setLocation(Location location) {
+		this.location = location;
+		setChanged(true);
+	}
 	/**
 	 * Gets the distance between the closest element of the settlement and the given location.
 	 * @param location
@@ -106,6 +114,10 @@ public class Settlement extends Group {
 	 * @return true if it can be upgraded, false otherwise.
 	 */
 	public boolean isUpgradable() {
+		return false;
+	}
+	
+	static public boolean hasUpgradeRequirements(Settlement s){
 		return false;
 	}
 	/**

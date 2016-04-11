@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.House;
+import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.shapes.Prism;
@@ -33,14 +35,14 @@ public class CommandPlot implements CommandExecutor {
 			case "CREATE":
 				
 				if(!hasSelectionPoints){
-					sender.sendMessage(Civilizations.messageHeader + "You have no selection points set.");
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection points set.");
 					return true;
 				}
 				
 				Location[] points = Civilizations.getSelectionPoints().get(sender);
 				
 				if(points[0] == null || points[1] == null){
-					sender.sendMessage(Civilizations.messageHeader + "Selection points are missing.");
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Selection points are missing.");
 					return true;
 				}
 				
@@ -66,41 +68,57 @@ public class CommandPlot implements CommandExecutor {
 					switch(args[1].toUpperCase()){
 					case "HOUSE":
 						if(set == null){
-							sender.sendMessage(Civilizations.messageHeader + "A house cannot be created outside of a settlement.");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A house cannot be created outside of a settlement.");
 							return true;
 						} else {
 							for(Plot plot : set.getPlots()){
 								if(plot.getProtection().intersect(s)){
-									sender.sendMessage(Civilizations.messageHeader + "The selection intersects with another plot.");
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
 									return true;
 								}
 							}
 							Plot p = new House("House", s, set);
 							Civilizations.getSelectionPoints().remove(sender);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
-							sender.sendMessage(Civilizations.messageHeader + "House created in " + set.getName() + "!");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House created in " + set.getName() + "!");
 						}
 						break;
-					case "WAREHOUSE":
+					case "KEEP":
 						if(set == null){
-							sender.sendMessage(Civilizations.messageHeader + "A warehouse cannot be created outside of a settlement.");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A keep cannot be created outside of a settlement.");
 							return true;
 						} else {
 							for(Plot plot : set.getPlots()){
 								if(plot.getProtection().intersect(s)){
-									sender.sendMessage(Civilizations.messageHeader + "The selection intersects with another plot.");
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
+									return true;
+								}
+							}
+							Plot p = new Keep("Keep", s, set);
+							Civilizations.getSelectionPoints().remove(sender);
+							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Keep created in " + set.getName() + "!");
+						}
+					case "WAREHOUSE":
+						if(set == null){
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A warehouse cannot be created outside of a settlement.");
+							return true;
+						} else {
+							for(Plot plot : set.getPlots()){
+								if(plot.getProtection().intersect(s)){
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
 									return true;
 								}
 							}
 							Plot p = new Warehouse("Warehouse", s, set);
 							Civilizations.getSelectionPoints().remove(sender);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
-							sender.sendMessage(Civilizations.messageHeader + "Warehouse created in " + set.getName() + "!");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Warehouse created in " + set.getName() + "!");
 						}
 						break;
 					}
 				} else {
-					sender.sendMessage(Civilizations.messageHeader + "Use /plot create [plot type]");
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Use /plot create [plot type]");
 					return true;
 				}
 				break;

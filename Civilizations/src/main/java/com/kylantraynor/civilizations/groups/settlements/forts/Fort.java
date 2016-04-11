@@ -6,11 +6,11 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 
 public class Fort extends Settlement{
 
+	private int influence = 1;
+	
 	public Fort(Location l) {
 		super(l);
 	}
 	
-	public Fort(Settlement s){
-		super(s.getLocation());
-	}
+	
 }
