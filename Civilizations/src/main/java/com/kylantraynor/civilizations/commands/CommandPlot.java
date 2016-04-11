@@ -14,6 +14,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 
@@ -63,7 +64,11 @@ public class CommandPlot implements CommandExecutor {
 				Settlement set = Settlement.getClosest(middlePoint);
 				if(set != null && set.distance(middlePoint) > Civilizations.settlementMergeRadius){
 					set = null;
+				} else if(set != null && !set.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
+					return true;
 				}
+				
 				if(args.length >= 2){
 					switch(args[1].toUpperCase()){
 					case "HOUSE":
@@ -99,6 +104,7 @@ public class CommandPlot implements CommandExecutor {
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Keep created in " + set.getName() + "!");
 						}
+						break;
 					case "WAREHOUSE":
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A warehouse cannot be created outside of a settlement.");

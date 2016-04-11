@@ -10,6 +10,7 @@ public enum PermissionType {
 	INVITE,
 	KICK,
 	MANAGE,
+	MANAGE_PLOTS,
 	MANAGE_RANKS,
 	MOBSPAWNING,
 	PLACE,
