@@ -12,6 +12,7 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Settlement extends Group {
 	
@@ -80,6 +81,25 @@ public class Settlement extends Group {
 	 * @param location
 	 */
 	public void setLocation(Location location) {this.location = location;}
+	/**
+	 * Gets the distance between the closest element of the settlement and the given location.
+	 * @param location
+	 * @return
+	 */
+	public double distance(Location location){
+		double distance = location.distance(getLocation());
+		
+		for(Plot p : getPlots()){
+			for(Shape s : p.getProtection().getShapes()){
+				double d = s.getLocation().distance(location);
+				if(d < distance){
+					distance = d;
+				}
+			}
+		}
+		
+		return distance;
+	}
 	/**
 	 * Checks if this settlement is upgradable.
 	 * @return true if it can be upgraded, false otherwise.
@@ -158,8 +178,8 @@ public class Settlement extends Group {
 		for(Settlement s : getSettlementList()){
 			if(distance == null){
 				closest = s;
-			} else if(distance > l.distance(s.getLocation())) {
-				distance = l.distance(s.getLocation());
+			} else if(distance > s.distance(l)) {
+				distance = s.distance(l);
 				closest = s;
 			}
 		}

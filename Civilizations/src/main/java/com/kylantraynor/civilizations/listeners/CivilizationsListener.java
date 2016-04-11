@@ -135,17 +135,21 @@ public class CivilizationsListener implements Listener{
 				event.setCancelled(true);
 			}
 		} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
+			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
 			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
 				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
 			}
 			Civilizations.getSelectionPoints().get(event.getPlayer())[0] = event.getClickedBlock().getLocation();
 			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
+			event.setCancelled(true);
 		} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
 			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
 				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
 			}
 			Civilizations.getSelectionPoints().get(event.getPlayer())[1] = event.getClickedBlock().getLocation();
 			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
+			event.setCancelled(true);
 		}
 	}
 	

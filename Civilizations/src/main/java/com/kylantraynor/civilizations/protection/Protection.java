@@ -267,4 +267,8 @@ public class Protection {
 		}
 		return list;
 	}
+
+	public List<Shape> getShapes() {
+		return shapes;
+	}
 }
