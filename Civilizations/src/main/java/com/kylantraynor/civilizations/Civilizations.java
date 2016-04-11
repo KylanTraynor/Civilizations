@@ -60,7 +60,7 @@ public class Civilizations extends JavaPlugin{
 	/**
 	 * Header displayed in chat
 	 */
-	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GOLD + "CIVILIZATIONS" + ChatColor.GOLD + "] ";
+	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GOLD + ChatColor.BOLD + "Civilizations" + ChatColor.GOLD + "] ";
 
 	private boolean reload;
 	private boolean clearing = false;

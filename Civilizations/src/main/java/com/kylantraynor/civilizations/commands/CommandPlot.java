@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.commands;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.shapes.Prism;
@@ -56,11 +58,28 @@ public class CommandPlot implements CommandExecutor {
 				
 				Shape s = new Prism(firstCorner, width, height, length);
 				
+				Settlement set = Settlement.getClosest(middlePoint);
+				
 				if(args.length >= 2){
 					switch(args[1].toUpperCase()){
+					case "HOUSE":
+						if(set == null){
+							Settlement settlement = new Settlement(middlePoint);
+							settlement.setName("Isolated Dwelling");
+							Plot p = new House("House", s, settlement);
+							p.addMember((OfflinePlayer) sender);
+							Civilizations.getSelectionPoints().remove(sender);
+							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							sender.sendMessage(Civilizations.messageHeader + "New private property established.");
+						} else {
+							Plot p = new House("House", s, set);
+							Civilizations.getSelectionPoints().remove(sender);
+							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							sender.sendMessage(Civilizations.messageHeader + "House created in " + set.getName() + "!");
+						}
+						break;
 					case "WAREHOUSE":
 						
-						Settlement set = Settlement.getClosest(middlePoint);
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + "A warehouse cannot be created outside of a settlement.");
 						} else {
