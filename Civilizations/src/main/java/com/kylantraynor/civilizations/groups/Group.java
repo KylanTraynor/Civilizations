@@ -319,7 +319,7 @@ public class Group {
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(Date.from(creationDate))).color(ChatColor.GOLD);
 		}
-		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;

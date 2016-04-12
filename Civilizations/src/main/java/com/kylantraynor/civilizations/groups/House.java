@@ -110,7 +110,7 @@ public class House extends Group implements IHasBanner{
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
 		}
-		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
