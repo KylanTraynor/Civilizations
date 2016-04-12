@@ -79,6 +79,9 @@ public class Plot extends Group {
 	@Override
 	public File getFile(){
 		File dir = new File(Civilizations.getPlotDirectory(), this.getClass().toString());
+		if(!dir.exists()){
+			dir.mkdir();
+		}
 		File f = new File(dir, "" + getId() + ".yml");
 		if(!f.exists()){
 			try {
