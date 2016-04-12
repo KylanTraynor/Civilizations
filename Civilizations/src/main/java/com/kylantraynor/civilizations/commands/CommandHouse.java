@@ -36,6 +36,10 @@ public class CommandHouse implements CommandExecutor{
 			return true;
 		}
 		
+		if(args[0].equalsIgnoreCase("LIST")){
+			return true;
+		}
+		
 		House house = House.get(args[0]);
 		if(house != null){
 			if(args.length > 1){
@@ -69,6 +73,9 @@ public class CommandHouse implements CommandExecutor{
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do this.");
 					}
+					if(house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
+						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
+					}
 					if(args.length > 2){
 						for(Player p1 : Bukkit.getServer().getOnlinePlayers()){
 							if(p1.getName().equalsIgnoreCase(args[2])){
@@ -78,7 +85,7 @@ public class CommandHouse implements CommandExecutor{
 									house.sendMessage(ChatColor.GREEN + p1.getName() + " is now a member of house " + house.getName(), null);
 									return true;
 								} else {
-									sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + p1.getName() + " is already a member of house " + p1House.getName());
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + p1.getName() + " is already a member of house " + p1House.getName());
 									return true;
 								}
 							}
@@ -108,7 +115,7 @@ public class CommandHouse implements CommandExecutor{
 					Player p = (Player) sender;
 					House pHouse = House.get(p);
 					if(pHouse != null){
-						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You're already belong to house " + pHouse.getName() + ".");
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You already belong to house " + pHouse.getName() + ".");
 						return true;
 					}
 					

@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
@@ -23,14 +24,12 @@ import com.kylantraynor.civilizations.banners.IHasBanner;
  */
 public class House extends Group implements IHasBanner{
 	
-	private static List<House> all = new ArrayList<House>();
 	private Banner banner;
 	
 	public House(String name, Banner b) {
 		super();
 		setName(name);
 		this.banner = b;
-		all.add(this);
 		setChanged(true);
 	}
 	
@@ -48,9 +47,13 @@ public class House extends Group implements IHasBanner{
 		this.banner = newBanner;
 		setChanged(true);
 	}
+	
+	public static List<House> getAll(){
+		return Cache.getHouseList();
+	}
 
 	public static House get(Banner banner) {
-		for(House h : all){
+		for(House h : getAll()){
 			if(h.getBanner().equals(banner)){
 				return h;
 			}
@@ -59,7 +62,7 @@ public class House extends Group implements IHasBanner{
 	}
 	
 	public static House get(Player p){
-		for(House h : all){
+		for(House h : getAll()){
 			if(h.isMember(p)){
 				return h;
 			}
@@ -68,7 +71,7 @@ public class House extends Group implements IHasBanner{
 	}
 	
 	public static House get(String name){
-		for(House h : all){
+		for(House h : getAll()){
 			if(h.getName().equalsIgnoreCase(name)){
 				return h;
 			}

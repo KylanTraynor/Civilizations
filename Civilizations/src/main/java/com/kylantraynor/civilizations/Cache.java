@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -22,6 +23,8 @@ public class Cache {
 	private static List<Camp> campList;
 	private static List<TownyTown> townyTownList;
 	private static List<Plot> plotList;
+	private static boolean houseListChanged;
+	private static ArrayList<House> houseList;
 	
 	/**
 	 * Gets the list of Groups.
@@ -105,5 +108,21 @@ public class Cache {
 			}
 		}
 		return townyTownList;
+	}
+	/**
+	 * Gets the list of Houses.
+	 * @return List<House> of cached Houses.
+	 */
+	public static List<House> getHouseList(){
+		if(houseListChanged || houseList == null){
+			houseListChanged = false;
+			houseList = new ArrayList<House>();
+			for(Group g : getGroupList()){
+				if(g instanceof House){
+					houseList.add((House) g);
+				}
+			}
+		}
+		return houseList;
 	}
 }
