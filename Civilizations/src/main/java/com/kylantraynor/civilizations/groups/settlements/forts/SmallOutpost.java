@@ -1,7 +1,18 @@
 package com.kylantraynor.civilizations.groups.settlements.forts;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -18,7 +29,11 @@ public class SmallOutpost extends Fort{
 		c.remove();
 		setChanged(true);
 	}
-	
+
+	public SmallOutpost(Location location, House house) {
+		super(location, house);
+	}
+
 	static public boolean hasUpgradeRequirements(Settlement s){
 		for(Plot p : s.getPlots()){
 			if(p instanceof Keep){
@@ -32,5 +47,67 @@ public class SmallOutpost extends Fort{
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Loads a SmallOutpost from its configuration file.
+	 * @param cf
+	 * @return SmallOutpost
+	 */
+	public static SmallOutpost load(YamlConfiguration cf){
+		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
+		double x = cf.getDouble("Location.X");
+		double y = cf.getDouble("Location.Y");
+		double z = cf.getDouble("Location.Z");
+		Instant creation;
+		String house = cf.getString("House");
+		if(cf.getString("Creation") != null){
+			creation = Instant.parse(cf.getString("Creation"));
+		} else {
+			creation = Instant.now();
+			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by NOW.");
+		}
+		
+		SmallOutpost o = new SmallOutpost(new Location(w, x, y, z), House.get(house));
+		o.setCreationDate(creation);
+		
+		int i = 0;
+		while(cf.contains("Members." + i)){
+			o.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
+			i+=1;
+		}
+		
+		return o;
+	}
+	/**
+	 * Saves the Small Outpost to its file.
+	 * @return true if the small outpost has been saved, false otherwise.
+	 */
+	@Override
+	public boolean save(){
+		File f = getFile();
+		if(f == null) return false;
+		YamlConfiguration fc = new YamlConfiguration();
+		
+		fc.set("Location.World", getLocation().getWorld().getName());
+		fc.set("Location.X", getLocation().getBlockX());
+		fc.set("Location.Y", getLocation().getBlockY());
+		fc.set("Location.Z", getLocation().getBlockZ());
+		
+		fc.set("Creation", getCreationDate().toString());
+		
+		int i = 0;
+		for(UUID id : getMembers()){
+			fc.set("Members." + i, id.toString());
+			i += 1;
+		}
+		
+		try {
+			fc.save(f);
+			setChanged(false);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 }

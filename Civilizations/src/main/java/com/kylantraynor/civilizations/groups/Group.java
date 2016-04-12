@@ -67,12 +67,17 @@ public class Group {
 	 * Gets the group's name.
 	 * @return String
 	 */
-	public String getName(){return name;}
+	public String getName(){
+		return name;
+	}
 	/**
 	 * Sets the group's name.
 	 * @param newName
 	 */
-	public void setName(String newName){name = newName;} 
+	public void setName(String newName){
+		name = newName;
+		setChanged(true);
+	} 
 	
 	/**
 	 * Gets the color of this group's chat.

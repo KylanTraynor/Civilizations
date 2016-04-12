@@ -34,6 +34,7 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
@@ -384,7 +385,12 @@ public class Civilizations extends JavaPlugin{
 			
 			if(!to.equals(from)){
 				if(to instanceof Camp){
-					TitleManagerHook.sendTitle("", ChatColor.GRAY + "Camp", 10, 40, 10, player);
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getType(), 10, 40, 10, player);
+					if(!to.isMember(player)){
+						TitleManagerHook.sendActionBar("Protected Area", player, false);
+					}
+				} else if(to instanceof SmallOutpost){
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getType(), 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
@@ -440,6 +446,19 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getHouseDirectory() {
 		File f = new File(currentInstance.getDataFolder(), "Houses");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
+	 * Get the directory the fort files are stored in.
+	 * @return File
+	 */
+	public static File getFortDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Forts");
 		if(f.exists()){
 			return f;
 		} else {

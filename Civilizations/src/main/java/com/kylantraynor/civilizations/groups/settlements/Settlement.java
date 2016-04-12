@@ -141,6 +141,9 @@ public class Settlement extends Group {
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
 			getProtection().hide(p);
 		}
+		for(Plot p : getPlots()){
+			p.remove();
+		}
 		Cache.settlementListChanged = true;
 		return super.remove();
 	}
