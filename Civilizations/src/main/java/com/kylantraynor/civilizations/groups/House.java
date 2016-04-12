@@ -2,10 +2,14 @@ package com.kylantraynor.civilizations.groups;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import mkremins.fanciful.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -90,6 +94,25 @@ public class House extends Group implements IHasBanner{
 	public boolean remove(){
 		Cache.houseListChanged = true;
 		return super.remove();
+	}
+	
+	/**
+	 * Gets an interactive info panel of this group.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		fm.then("\nWords: ").color(ChatColor.GRAY).then(getWords()).color(ChatColor.GOLD);
+		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
+		if(getCreationDate() != null){
+			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
+				then(format.format(getCreationDate())).color(ChatColor.GOLD);
+		}
+		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\n==============================").color(ChatColor.GOLD);
+		return fm;
 	}
 	
 	/**

@@ -44,6 +44,9 @@ public class CommandHouse implements CommandExecutor{
 		if(house != null){
 			if(args.length > 1){
 				switch(args[1].toUpperCase()){
+				case "INFO":
+					house.getInteractiveInfoPanel((Player) sender).send(sender);;
+					return true;
 				case "GETBANNER":
 					Player p2 = (Player ) sender;
 					if(p2.isOp()){
