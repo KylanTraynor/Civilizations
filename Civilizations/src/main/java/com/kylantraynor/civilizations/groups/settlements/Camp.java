@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -268,7 +269,7 @@ public class Camp extends Settlement{
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
-			c.getMembers().add(UUID.fromString((cf.getString("Members."+i))));
+			c.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
 			i+=1;
 		}
 		

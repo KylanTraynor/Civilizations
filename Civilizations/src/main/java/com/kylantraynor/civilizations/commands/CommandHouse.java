@@ -13,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
@@ -102,6 +103,20 @@ public class CommandHouse implements CommandExecutor{
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You're already a part of house " + pHouse.getName() + ".");
 						return true;
 					}
+					
+					ItemStack is = p.getInventory().getItemInMainHand();
+					if(is.getType() == Material.BANNER || is.getType() == Material.STANDING_BANNER){
+						BannerMeta bm = (BannerMeta) is.getItemMeta();
+						House h = new House(args[0], Banner.get(bm));
+						if(!p.isOp()){
+							h.addMember(p);
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established house " + h.getName() + "!");
+						} else {
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House " + h.getName() + " has been created.");
+						}
+						return true;
+					}
+					/*
 					Block target = p.getTargetBlock((Set<Material>) null, 15);
 					if(target != null){
 						if(target.getType() == Material.BANNER || target.getType() == Material.STANDING_BANNER){
@@ -116,8 +131,8 @@ public class CommandHouse implements CommandExecutor{
 							}
 							return true;
 						}
-					}
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You need to target a banner to use this command.");
+					}*/
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You need a banner in your hand to use this command.");
 					return true;
 				}
 			}

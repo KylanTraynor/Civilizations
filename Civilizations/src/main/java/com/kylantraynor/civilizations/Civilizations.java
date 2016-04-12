@@ -30,6 +30,7 @@ import com.kylantraynor.civilizations.commands.CommandGroup;
 import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandSelection;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -122,6 +123,7 @@ public class Civilizations extends JavaPlugin{
 		registerAchievement("Setting up Camp!","Create a camp.");
 		
 		loadGroups();
+		loadHouses();
 		loadCamps();
 		
 		loadHooks(pm);
@@ -130,6 +132,32 @@ public class Civilizations extends JavaPlugin{
 		startProtectionUpdater(40L);
 		
 		setupCommands();
+	}
+
+	private void loadHouses() {
+		File houseDir = getHouseDirectory();
+		if(houseDir.exists()){
+			for(File f : houseDir.listFiles()){
+				if(!f.getName().split("\\.")[1].equals("yml")) continue;
+				if(isClearing() ){
+					log("INFO", "Cleared file " + f.getName());
+					f.delete();
+					continue;
+				}
+				YamlConfiguration yaml = new YamlConfiguration();
+				try {
+					yaml.load(f);
+				} catch (FileNotFoundException e) {
+					log("WARNING", "Couldn't find file " + f.getName());
+				} catch (IOException e) {
+					log("WARNING", "File " + f.getName() + " is in use in another application.");
+				} catch (InvalidConfigurationException e) {
+					log("WARNING", "Invalid file configuration.");
+				}
+				f.delete();
+				House h = House.load(yaml);
+			}
+		}
 	}
 
 	private Listener getMenuListener() {
@@ -403,7 +431,19 @@ public class Civilizations extends JavaPlugin{
 			return f;
 		}
 	}
-	
+	/**
+	 * Get the directory the house files are stored in.
+	 * @return File
+	 */
+	public static File getHouseDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Houses");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
 	/**
 	 * Registers an achievement.
 	 * @param name of the achievement

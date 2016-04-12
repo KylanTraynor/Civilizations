@@ -57,6 +57,7 @@ public class Group {
 		Cache.groupListChanged = true;
 		chatColor = ChatColor.WHITE;
 		protection = new Protection(this);
+		setChanged(true);
 	}
 	public String getChatHeader(){
 		return ChatColor.GOLD + "[" + getName() + "] "; 
@@ -112,7 +113,10 @@ public class Group {
 	 * Sets the protection of this group.
 	 * @param protection
 	 */
-	public void setProtection(Protection protection) {this.protection = protection;}
+	public void setProtection(Protection protection) {
+		this.protection = protection;
+		setChanged(true);
+	}
 	/**
 	 * Gets the list of all the members of this group.
 	 * @return List<UUID> of the members
@@ -122,7 +126,10 @@ public class Group {
 	 * Sets the list of all the members of this group.
 	 * @param members
 	 */
-	public void setMembers(List<UUID> members) {this.members = members;}
+	public void setMembers(List<UUID> members) {
+		this.members = members;
+		setChanged(true);
+	}
 	/**
 	 * Adds the given player to the list of members of this group.
 	 * @param member
@@ -131,6 +138,7 @@ public class Group {
 	public boolean addMember(OfflinePlayer member){
 		if(this.members.contains(member.getUniqueId())) return false;
 		this.members.add(member.getUniqueId());
+		setChanged(true);
 		return true;
 	}
 	/**
@@ -141,6 +149,7 @@ public class Group {
 	public boolean removeMember(OfflinePlayer member){
 		if(this.members.contains(member.getUniqueId())){
 			this.members.remove(member.getUniqueId());
+			setChanged(true);
 			return true;
 		}
 		return false;
