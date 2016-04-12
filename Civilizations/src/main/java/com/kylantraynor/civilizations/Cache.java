@@ -17,13 +17,13 @@ public class Cache {
 	public static boolean campListChanged = true;
 	public static boolean townyTownListChanged = true;
 	public static boolean plotListChanged = true;
+	public static boolean houseListChanged = true;
 	
 	private static List<Group> groupList;
 	private static List<Settlement> settlementList;
 	private static List<Camp> campList;
 	private static List<TownyTown> townyTownList;
 	private static List<Plot> plotList;
-	private static boolean houseListChanged;
 	private static ArrayList<House> houseList;
 	
 	/**

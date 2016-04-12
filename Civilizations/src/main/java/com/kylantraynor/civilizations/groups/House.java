@@ -16,6 +16,7 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 
 /**
  * Family House, with all the members of the family.
@@ -31,6 +32,7 @@ public class House extends Group implements IHasBanner{
 		setName(name);
 		this.banner = b;
 		setChanged(true);
+		Cache.houseListChanged = true;
 	}
 	
 	public String getChatHeader(){
@@ -77,6 +79,16 @@ public class House extends Group implements IHasBanner{
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Destroys this house.
+	 * @return true if the house has been removed, false otherwise.
+	 */
+	@Override
+	public boolean remove(){
+		Cache.houseListChanged = true;
+		return super.remove();
 	}
 	
 	/**
