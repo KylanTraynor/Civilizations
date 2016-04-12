@@ -14,22 +14,30 @@ public class CommandSelection implements CommandExecutor{
 		if(!(sender instanceof Player)) return false;
 		if(args.length >= 1){
 			switch(args[0].toUpperCase()){
+			case "INFO":
+				if(Civilizations.getSelectedProtections().containsKey(sender)){
+					Civilizations.getSelectedProtections().get(sender).getGroup().getInteractiveInfoPanel((Player) sender).send(sender);
+				} else {
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
+				}
+				return true;
 			case "MEMBERS":
 				if(Civilizations.getSelectedProtections().containsKey(sender)){
 					Civilizations.getSelectedProtections().get(sender).getGroup().getInteractiveMembersList().send(sender);
 				} else {
-					sender.sendMessage(ChatColor.RED + "You have no protection selected.");
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
 				}
-				break;
+				return true;
 			case "PERMISSIONS":
 				if(Civilizations.getSelectedProtections().containsKey(sender)){
 					Civilizations.getSelectedProtections().get(sender).getGroup().getProtection().getPermissionSet().getFancyMessage().send(sender);;
 				} else {
-					sender.sendMessage(ChatColor.RED + "You have no protection selected.");
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
 				}
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 }
