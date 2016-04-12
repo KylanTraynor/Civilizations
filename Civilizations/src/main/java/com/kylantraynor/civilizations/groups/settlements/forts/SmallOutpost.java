@@ -29,7 +29,7 @@ public class SmallOutpost extends Fort {
 				for(Shape shape : p.getProtection().getShapes()){
 					s.sendMessage(s.getChatHeader() + "Checking Shape", PermissionType.UPGRADE);
 					for(Location b : shape.getBlockLocations()){
-						if(b.getBlock().getType() == Material.BANNER){
+						if(b.getBlock().getType() == Material.BANNER || b.getBlock().getType() == Material.STANDING_BANNER){
 							s.sendMessage(s.getChatHeader() + "Found Banner", PermissionType.UPGRADE);
 							return true;
 						}
