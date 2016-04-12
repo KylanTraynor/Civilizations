@@ -26,7 +26,9 @@ public class SmallOutpost extends Fort{
 	public SmallOutpost(Camp c, House house) {
 		super(c.getLocation(), house);
 		this.setMembers(c.getMembers());
-		this.setPlots(c.getPlots());
+		for(Plot p : c.getPlots().toArray(new Plot[c.getPlots().size()])){
+			p.setSettlement(this);
+		}
 		c.remove();
 		setChanged(true);
 	}

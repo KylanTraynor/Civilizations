@@ -19,6 +19,7 @@ import com.kylantraynor.civilizations.shapes.Shape;
 public class Plot extends Group {
 	private PlotType type;
 	private Settlement settlement;
+	private boolean persistent = false;
 	
 	public Plot(String name, Shape shape, Settlement settlement){
 		super();
@@ -155,5 +156,13 @@ public class Plot extends Group {
 			sb.append(s.toString() + " ");
 		}
 		return sb.toString();
+	}
+
+	public boolean isPersistent() {
+		return persistent;
+	}
+
+	public void setPersistent(boolean persistent) {
+		this.persistent = persistent;
 	}
 }
