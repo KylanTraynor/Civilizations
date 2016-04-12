@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 public class Prism extends Shape {
@@ -164,5 +165,33 @@ public boolean intersect(Sphere s){
 		double z = Math.max(getMinZ(), Math.min(getMaxZ(), l.getZ()));
 		
 		return new Location(l.getWorld(), x, y, z).distance(l);
+	}
+	
+	public boolean expand(BlockFace direction, int amount){
+		switch(direction){
+		case UP:
+			height += amount;
+			return true;
+		case DOWN:
+			height += amount;
+			getLocation().add(0, -amount, 0);
+			return true;
+		case EAST:
+			width += amount;
+			return true;
+		case NORTH:
+			length += amount;
+			getLocation().add(0, 0, -amount);
+			return true;
+		case SOUTH:
+			length += amount;
+			return true;
+		case WEST:
+			width += amount;
+			getLocation().add(-amount, 0, 0);
+			return true;
+		default:
+			return false;
+		}
 	}
 }

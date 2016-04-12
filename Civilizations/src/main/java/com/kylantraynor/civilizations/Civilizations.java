@@ -381,6 +381,7 @@ public class Civilizations extends JavaPlugin{
 			
 			Settlement from = Settlement.getAt(fromL);
 			Settlement to = Settlement.getAt(toL);
+			
 			if(!to.equals(from)){
 				if(to instanceof Camp){
 					TitleManagerHook.sendTitle("", ChatColor.GRAY + "Camp", 10, 40, 10, player);

@@ -6,6 +6,7 @@ import java.util.List;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 
 public class Cache {
@@ -13,12 +14,14 @@ public class Cache {
 	public static boolean groupListChanged = true;
 	public static boolean settlementListChanged = true;
 	public static boolean campListChanged = true;
-	public static boolean townyTownListChanged;
+	public static boolean townyTownListChanged = true;
+	public static boolean plotListChanged = true;
 	
 	private static List<Group> groupList;
 	private static List<Settlement> settlementList;
 	private static List<Camp> campList;
 	private static List<TownyTown> townyTownList;
+	private static List<Plot> plotList;
 	
 	/**
 	 * Gets the list of Groups.
@@ -68,6 +71,23 @@ public class Cache {
 			}
 		}
 		return campList;
+	}
+	
+	/**
+	 * Gets the list of Plots.
+	 * @return List<Plot> of cached Plots.
+	 */
+	public static List<Plot> getPlotList(){
+		if(plotListChanged || plotList == null){
+			plotListChanged = false;
+			plotList = new ArrayList<Plot>();
+			for(Group g : getGroupList()){
+				if(g instanceof Plot){
+					plotList.add((Plot) g);
+				}
+			}
+		}
+		return plotList;
 	}
 
 	/**

@@ -81,7 +81,7 @@ public abstract class Shape implements Visualizable{
 	 * @return
 	 */
 	public boolean removePlayer(Player player){
-		if(players.contains(player) && player != null){
+		if(player != null){
 			return players.remove(player);
 		} else {
 			return false;

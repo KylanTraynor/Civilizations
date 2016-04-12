@@ -1,7 +1,12 @@
 package com.kylantraynor.civilizations.groups.settlements.plots;
 
-import org.bukkit.Location;
+import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -16,6 +21,7 @@ public class Plot extends Group {
 		this.setName(name);
 		setSettlement(settlement);
 		this.getProtection().add(shape);
+		Cache.plotListChanged = true;
 	}
 	
 	public Plot(Shape shape, Settlement settlement){
@@ -38,6 +44,18 @@ public class Plot extends Group {
 	 * @param type
 	 */
 	public void setPlotType(PlotType type) { this.type = type; }
+	/**
+	 * Destroys this plot.
+	 * @return true if the plot has been removed, false otherwise.
+	 */
+	@Override
+	public boolean remove(){
+		for(Player p : Bukkit.getServer().getOnlinePlayers()){
+			getProtection().hide(p);
+		}
+		Cache.plotListChanged = true;
+		return super.remove();
+	}
 	/**
 	 * Gets the settlement owning this plot.
 	 * @return Settlement
@@ -64,5 +82,16 @@ public class Plot extends Group {
 	 */
 	public boolean protects(Location location) {
 		return getProtection().isInside(location);
+	}
+	
+	public static List<Plot> getAll(){
+		return Cache.getPlotList();
+	}
+	
+	public static Plot getAt(Location location){
+		for(Plot p : getAll()){
+			if(p.protects(location)) return p;
+		}
+		return null;
 	}
 }

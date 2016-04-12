@@ -97,7 +97,9 @@ public class Settlement extends Group {
 	 */
 	public double distance(Location location){
 		double distance = location.distance(getLocation());
-		
+		for(Shape s : this.getProtection().getShapes()){
+			distance = Math.min(s.distance(location), distance);
+		}
 		for(Plot p : getPlots()){
 			for(Shape s : p.getProtection().getShapes()){
 				distance = Math.min(s.distance(location), distance);
@@ -156,7 +158,11 @@ public class Settlement extends Group {
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public boolean protects(Location l){
-		return getProtection().isInside(l);
+		if(getProtection().isInside(l)) return true;
+		for(Plot p : getPlots()){
+			if(p.protects(l)) return true;
+		}
+		return false;
 	}
 	/**
 	 * Gets the Settlement at the given location

@@ -37,7 +37,6 @@ public class Fort extends Settlement implements IHasBanner{
 	}
 
 	private void updateAllBanners() {
-		// TODO Auto-generated method stub
 		
 	}
 
