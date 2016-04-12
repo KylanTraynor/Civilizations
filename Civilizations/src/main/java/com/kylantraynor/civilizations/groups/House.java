@@ -151,7 +151,9 @@ public class House extends Group implements IHasBanner{
 		
 		House h = new House(name, Banner.parse(cf.getString("Banner")));
 		h.setCreationDate(creation);
-		h.setWords(words);
+		if(words != null){
+			h.setWords(words);
+		}
 		int i = 0;
 		while(cf.contains("Members." + i)){
 			h.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));

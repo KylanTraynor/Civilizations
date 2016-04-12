@@ -8,11 +8,7 @@ public class ChatListener implements Listener{
 	
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event){
-		if(event.isAsynchronous()){
-			
-		} else {
-			
-		}
+		event.setFormat("%s: %s");
 	}
 	
 }
