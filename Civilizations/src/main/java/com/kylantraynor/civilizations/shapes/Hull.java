@@ -181,4 +181,13 @@ public class Hull extends Shape {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public double distance(Location location) {
+		double distance = getMassCenter().distance(location);
+		for(Location l : points){
+			distance = Math.min(l.distance(location), distance);
+		}
+		return distance;
+	}
 }

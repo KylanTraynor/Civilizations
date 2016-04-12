@@ -156,4 +156,13 @@ public boolean intersect(Sphere s){
 		if(s instanceof Prism) return intersect((Prism)s);
 		return false;
 	}
+
+	@Override
+	public double distance(Location l) {
+		double x = Math.max(getMinX(), Math.min(getMaxX(), l.getX()));
+		double y = Math.max(getMinY(), Math.min(getMaxY(), l.getY()));
+		double z = Math.max(getMinZ(), Math.min(getMaxZ(), l.getZ()));
+		
+		return new Location(l.getWorld(), x, y, z).distance(l);
+	}
 }

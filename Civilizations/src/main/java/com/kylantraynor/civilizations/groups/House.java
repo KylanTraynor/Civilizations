@@ -3,22 +3,18 @@ package com.kylantraynor.civilizations.groups;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
-import com.kylantraynor.civilizations.groups.settlements.Camp;
 
 /**
  * Family House, with all the members of the family.
@@ -35,6 +31,7 @@ public class House extends Group implements IHasBanner{
 		setName(name);
 		this.banner = b;
 		all.add(this);
+		setChanged(true);
 	}
 	
 	public String getChatHeader(){
@@ -49,6 +46,7 @@ public class House extends Group implements IHasBanner{
 	@Override
 	public void setBanner(Banner newBanner) {
 		this.banner = newBanner;
+		setChanged(true);
 	}
 
 	public static House get(Banner banner) {

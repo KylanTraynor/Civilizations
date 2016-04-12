@@ -160,4 +160,9 @@ public class Sphere extends Shape {
 		if(s instanceof Prism) return intersect((Prism)s);
 		return false;
 	}
+
+	@Override
+	public double distance(Location l) {
+		return Math.max(getLocation().distance(l) - getRadius(), 0);
+	}
 }

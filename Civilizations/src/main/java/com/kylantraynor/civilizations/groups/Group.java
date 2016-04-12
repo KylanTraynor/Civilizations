@@ -420,7 +420,7 @@ public class Group {
 			if(permission != null){
 				if(!hasPermission(permission, null, p)) continue;
 			}
-			p.sendMessage(message);
+			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
 	}
 	/**

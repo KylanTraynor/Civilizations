@@ -160,4 +160,10 @@ public class CompositeShape extends Shape{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public double distance(Location l) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

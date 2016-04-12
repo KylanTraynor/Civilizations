@@ -100,7 +100,7 @@ public class CommandHouse implements CommandExecutor{
 					Player p = (Player) sender;
 					House pHouse = House.get(p);
 					if(pHouse != null){
-						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You're already a part of house " + pHouse.getName() + ".");
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You're already belong to house " + pHouse.getName() + ".");
 						return true;
 					}
 					
@@ -116,22 +116,6 @@ public class CommandHouse implements CommandExecutor{
 						}
 						return true;
 					}
-					/*
-					Block target = p.getTargetBlock((Set<Material>) null, 15);
-					if(target != null){
-						if(target.getType() == Material.BANNER || target.getType() == Material.STANDING_BANNER){
-							BlockState state = target.getState();
-							org.bukkit.block.Banner b = (org.bukkit.block.Banner)state;
-							House h = new House(args[0], b);
-							if(!p.isOp()){
-								h.addMember(p);
-								sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established house " + h.getName() + "!");
-							} else {
-								sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House " + h.getName() + " has been created.");
-							}
-							return true;
-						}
-					}*/
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You need a banner in your hand to use this command.");
 					return true;
 				}

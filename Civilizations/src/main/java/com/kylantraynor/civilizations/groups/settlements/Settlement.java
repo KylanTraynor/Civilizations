@@ -100,10 +100,7 @@ public class Settlement extends Group {
 		
 		for(Plot p : getPlots()){
 			for(Shape s : p.getProtection().getShapes()){
-				double d = s.getLocation().distance(location);
-				if(d < distance){
-					distance = d;
-				}
+				distance = Math.min(s.distance(location), distance);
 			}
 		}
 		
