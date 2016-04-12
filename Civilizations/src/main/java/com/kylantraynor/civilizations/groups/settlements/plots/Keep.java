@@ -6,7 +6,9 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -75,6 +77,7 @@ public class Keep extends Plot{
 		}
 		
 		try {
+			Bukkit.getServer().getLogger().log(Level.INFO, "Keep saved in " + f.getAbsolutePath());
 			fc.save(f);
 			setChanged(false);
 			return true;

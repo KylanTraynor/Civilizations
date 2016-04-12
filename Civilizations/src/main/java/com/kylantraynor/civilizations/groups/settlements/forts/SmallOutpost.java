@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -109,6 +110,7 @@ public class SmallOutpost extends Fort{
 		}
 		
 		try {
+			Bukkit.getServer().getLogger().log(Level.INFO, "Outpost saved in " + f.getAbsolutePath());
 			fc.save(f);
 			setChanged(false);
 			return true;
