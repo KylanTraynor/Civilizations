@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -107,7 +108,7 @@ public class House extends Group implements IHasBanner{
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(getCreationDate())).color(ChatColor.GOLD);
+				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");

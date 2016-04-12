@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -316,7 +317,7 @@ public class Group {
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(creationDate != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(creationDate)).color(ChatColor.GOLD);
+				then(format.format(Date.from(creationDate))).color(ChatColor.GOLD);
 		}
 		fm.then("Members: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
