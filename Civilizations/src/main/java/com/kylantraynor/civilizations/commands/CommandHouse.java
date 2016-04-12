@@ -40,6 +40,14 @@ public class CommandHouse implements CommandExecutor{
 		if(house != null){
 			if(args.length > 1){
 				switch(args[1].toUpperCase()){
+				case "GETBANNER":
+					Player p2 = (Player ) sender;
+					if(p2.isOp()){
+						p2.getInventory().addItem(house.getBanner().getItemStack());
+					} else {
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You don't have the permission to do this.");
+					}
+					return true;
 				case "SETBANNER":
 					Player p = (Player) sender;
 					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, p)){
