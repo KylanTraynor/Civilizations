@@ -127,7 +127,6 @@ public class SmallOutpost extends Fort{
 		}
 		
 		try {
-			Bukkit.getServer().getLogger().log(Level.INFO, "Outpost saved in " + f.getAbsolutePath());
 			fc.save(f);
 			setChanged(false);
 			return true;

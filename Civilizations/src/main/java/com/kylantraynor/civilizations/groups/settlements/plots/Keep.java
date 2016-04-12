@@ -104,7 +104,6 @@ public class Keep extends Plot{
 		}
 		
 		try {
-			Bukkit.getServer().getLogger().log(Level.INFO, "Keep saved in " + f.getAbsolutePath());
 			fc.save(f);
 			setChanged(false);
 			return true;

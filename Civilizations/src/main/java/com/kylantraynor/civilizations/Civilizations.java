@@ -276,6 +276,7 @@ public class Civilizations extends JavaPlugin{
 				for(Group g : Cache.getGroupList()){
 					g.update();
 				}
+				log("INFO", "Files saved!");
 			}
 			
 		};
