@@ -56,6 +56,11 @@ public class Plot extends Group {
 		Cache.plotListChanged = true;
 		return super.remove();
 	}
+	
+	@Override
+	public boolean save(){
+		return false;
+	}
 	/**
 	 * Gets the settlement owning this plot.
 	 * @return Settlement
