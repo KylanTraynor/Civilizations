@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 
 public class CommandGroup implements CommandExecutor {
@@ -39,10 +40,14 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "UPGRADE":
 				if(sender instanceof Player){
-					if(g.upgrade()){
-						sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
+					if(g.hasPermission(PermissionType.UPGRADE, null, ((Player)sender))){
+						if(g.upgrade()){
+							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
+						} else {
+							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "Failed to upgrade.");
+						}
 					} else {
-						sender.sendMessage(g.getChatHeader() + ChatColor.RED + "Failed to upgrade.");
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to upgrade this.");
 					}
 				}
 				break;

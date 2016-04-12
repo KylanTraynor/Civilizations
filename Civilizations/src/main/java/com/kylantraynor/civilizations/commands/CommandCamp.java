@@ -141,6 +141,17 @@ public class CommandCamp extends CommandGroup{
 				}
 			}
 			break;
+		case "UPGRADE":
+			if(sender instanceof Player){
+				Player p = (Player) sender;
+				Camp c = Camp.getCampAt(p.getLocation());
+				if(c == null){
+					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
+				} else {
+					p.chat("/group " + c.getId() + " upgrade");
+				}
+			}
+			break;
 		case "INFO": default:
 			if(sender instanceof Player){
 				Player p = (Player) sender;

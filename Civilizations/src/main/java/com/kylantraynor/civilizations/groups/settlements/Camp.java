@@ -164,7 +164,7 @@ public class Camp extends Settlement{
 			}
 			fm.then(" - ").color(ChatColor.GRAY);
 			if(isUpgradable()){
-				fm.then("Upgrade").color(ChatColor.GOLD).tooltip("Upgrade the camp").command("/camp upgrade");
+				fm.then("Upgrade").color(ChatColor.GOLD).tooltip("Upgrade the camp").command("/group " + this.getId() + " upgrade");
 			} else {
 				fm.then("Upgrade").color(ChatColor.GRAY).tooltip("No upgrade available");
 			}
