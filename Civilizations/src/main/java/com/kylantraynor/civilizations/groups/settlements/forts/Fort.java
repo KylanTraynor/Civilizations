@@ -2,12 +2,8 @@ package com.kylantraynor.civilizations.groups.settlements.forts;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
@@ -60,32 +56,22 @@ public class Fort extends Settlement implements IHasBanner{
 	public void setInfluence(int influence) {
 		this.influence = influence;
 	}
-
+	
 	/**
-	 * Saves the camp to its file.
-	 * @return true if the camp has been saved, false otherwise.
+	 * Gets the file where this fort is saved.
+	 * @return File
 	 */
 	@Override
-	public boolean save(){
-		File f = getFile();
-		if(f == null) return false;
-		YamlConfiguration fc = new YamlConfiguration();
-		fc.set("Name", getName());
-		fc.set("Creation", getCreationDate().toString());
-		fc.set("Banner", getBanner().toString());
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
+	public File getFile(){
+		File dir = new File(Civilizations.getFortDirectory(), this.getClass().toString());
+		File f = new File(dir, "" + getId() + ".yml");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
 		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
+		return f;
 	}
-	
 }

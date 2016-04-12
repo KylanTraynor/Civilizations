@@ -32,8 +32,11 @@ public class SmallOutpost extends Fort{
 
 	public SmallOutpost(Location location, House house) {
 		super(location, house);
+		setChanged(true);
 	}
 
+	
+	
 	static public boolean hasUpgradeRequirements(Settlement s){
 		for(Plot p : s.getPlots()){
 			if(p instanceof Keep){
