@@ -24,7 +24,11 @@ public class Keep extends Plot{
 	public Keep(String name, List<Shape> shapes, Settlement settlement) {
 		super(name, shapes, settlement);
 	}
-
+	
+	public PlotType getPlotType(){
+		return PlotType.KEEP;
+	}
+	
 	/**
 	 * Loads Keep from its configuration file.
 	 * @param cf

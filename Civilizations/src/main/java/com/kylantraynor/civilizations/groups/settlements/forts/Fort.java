@@ -63,7 +63,7 @@ public class Fort extends Settlement implements IHasBanner{
 	 */
 	@Override
 	public File getFile(){
-		File dir = new File(Civilizations.getFortDirectory(), this.getClass().getTypeName());
+		File dir = new File(Civilizations.getFortDirectory(), getType());
 		if(!dir.exists()){
 			dir.mkdir();
 		}

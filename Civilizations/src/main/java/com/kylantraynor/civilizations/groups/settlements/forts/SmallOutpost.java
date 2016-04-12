@@ -40,7 +40,7 @@ public class SmallOutpost extends Fort{
 
 	@Override
 	public String getType(){
-		return "Outpost";
+		return "Small Outpost";
 	}
 	
 	static public boolean hasUpgradeRequirements(Settlement s){
