@@ -394,6 +394,11 @@ public class Civilizations extends JavaPlugin{
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
+				} else if(to instanceof TownyTown){
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);
+					if(!to.isMember(player)){
+						TitleManagerHook.sendActionBar("Protected Area", player, false);
+					}
 				}
 			}
 			
@@ -405,6 +410,12 @@ public class Civilizations extends JavaPlugin{
 					if(from.isMember(player)){
 						TitleManagerHook.sendActionBar("Leaving Camp", player, false);
 					}
+				} else if(from instanceof SmallOutpost){
+					if(from.isMember(player)){
+						TitleManagerHook.sendActionBar("Leaving Outpost", player, false);
+					}
+				} else if(from instanceof TownyTown){
+					TitleManagerHook.sendActionBar("Leaving " + from.getName(), player, false);
 				}
 			}
 			
