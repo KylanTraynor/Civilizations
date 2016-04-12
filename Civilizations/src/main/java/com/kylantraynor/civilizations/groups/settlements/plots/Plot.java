@@ -78,7 +78,7 @@ public class Plot extends Group {
 	 */
 	@Override
 	public File getFile(){
-		File dir = new File(Civilizations.getPlotDirectory(), this.getClass().toString());
+		File dir = new File(Civilizations.getPlotDirectory(), this.getClass().getTypeName());
 		if(!dir.exists()){
 			dir.mkdir();
 		}
