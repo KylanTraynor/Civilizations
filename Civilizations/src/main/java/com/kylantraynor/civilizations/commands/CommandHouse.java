@@ -68,7 +68,20 @@ public class CommandHouse implements CommandExecutor{
 					}
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You need to target a banner to use this command.");
 					return true;
-					
+				case "GETWORDS":
+					sender.sendMessage(house.getWords());
+					return true;
+				case "SETWORDS":
+					if(!house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
+						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
+					}
+					StringBuilder sb = new StringBuilder();
+					for(int i = 2; i < args.length; i++){
+						sb.append(args[i] + " ");
+					}
+					house.setWords(sb.toString().trim());
+					house.sendMessage("Words of the house have been changed to \"" + house.getWords() + "\".", null);
+					return true;
 				case "ADOPT":
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do this.");

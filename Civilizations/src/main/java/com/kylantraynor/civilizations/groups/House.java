@@ -26,6 +26,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 public class House extends Group implements IHasBanner{
 	
 	private Banner banner;
+	private String words = "We don't know what to say, so we just don't say it.";
 	
 	public House(String name, Banner b) {
 		super();
@@ -114,9 +115,10 @@ public class House extends Group implements IHasBanner{
 	 */
 	public static House load(YamlConfiguration cf){
 		String name;
+		String words;
 		Instant creation;
 		name = cf.getString("Name");
-		
+		words = cf.getString("Words");
 		if(cf.getString("Creation") != null){
 			creation = Instant.parse(cf.getString("Creation"));
 		} else {
@@ -126,7 +128,7 @@ public class House extends Group implements IHasBanner{
 		
 		House h = new House(name, Banner.parse(cf.getString("Banner")));
 		h.setCreationDate(creation);
-		
+		h.setWords(words);
 		int i = 0;
 		while(cf.contains("Members." + i)){
 			h.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
@@ -147,6 +149,7 @@ public class House extends Group implements IHasBanner{
 		fc.set("Name", getName());
 		fc.set("Creation", getCreationDate().toString());
 		fc.set("Banner", getBanner().toString());
+		fc.set("Words", getWords());
 		int i = 0;
 		for(UUID id : getMembers()){
 			fc.set("Members." + i, id.toString());
@@ -160,6 +163,14 @@ public class House extends Group implements IHasBanner{
 		} catch (IOException e) {
 			return false;
 		}
+	}
+
+	public String getWords() {
+		return words;
+	}
+
+	public void setWords(String words) {
+		this.words = words;
 	}
 	
 }
