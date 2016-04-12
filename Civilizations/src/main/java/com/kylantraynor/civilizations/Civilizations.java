@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -35,6 +36,7 @@ import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
+import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
@@ -126,6 +128,7 @@ public class Civilizations extends JavaPlugin{
 		
 		loadGroups();
 		loadHouses();
+		loadPlots();
 		loadCamps();
 		
 		loadHooks(pm);
@@ -134,6 +137,62 @@ public class Civilizations extends JavaPlugin{
 		startProtectionUpdater(40L);
 		
 		setupCommands();
+	}
+
+	private void loadPlots() {
+		Map<String, Settlement> settlements = new HashMap<String, Settlement>();
+		loadKeeps(settlements);
+	}
+
+	private void loadKeeps(Map<String, Settlement> settlements) {
+		File houseDir = getHouseDirectory();
+		if(houseDir.exists()){
+			for(File f : houseDir.listFiles()){
+				if(!f.getName().split("\\.")[1].equals("yml")) continue;
+				if(isClearing() ){
+					log("INFO", "Cleared file " + f.getName());
+					f.delete();
+					continue;
+				}
+				YamlConfiguration yaml = new YamlConfiguration();
+				try {
+					yaml.load(f);
+				} catch (FileNotFoundException e) {
+					log("WARNING", "Couldn't find file " + f.getName());
+				} catch (IOException e) {
+					log("WARNING", "File " + f.getName() + " is in use in another application.");
+				} catch (InvalidConfigurationException e) {
+					log("WARNING", "Invalid file configuration.");
+				}
+				f.delete();
+				Keep h = Keep.load(yaml, settlements);
+			}
+		}
+	}
+	
+	public static Settlement loadSettlement(String path){
+		File f = new File(path);
+		if(f.exists()){
+			if(!f.getName().split("\\.")[1].equals("yml")) return null;
+			YamlConfiguration yaml = new YamlConfiguration();
+			try {
+				yaml.load(f);
+			} catch (FileNotFoundException e) {
+				log("WARNING", "Couldn't find file " + f.getName());
+			} catch (IOException e) {
+				log("WARNING", "File " + f.getName() + " is in use in another application.");
+			} catch (InvalidConfigurationException e) {
+				log("WARNING", "Invalid file configuration.");
+			}
+			f.delete();
+			switch(path.split("/")[path.split("/").length - 2]){
+			case "Camps":
+				return Camp.load(yaml);	
+			case "Small Outpost":
+				return SmallOutpost.load(yaml);
+			}
+		}
+		return null;
 	}
 
 	private void loadHouses() {
@@ -478,11 +537,37 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	/**
-	 * Get the directory the fort files are stored in.
+	 * Get the directory the Small Outpost files are stored in.
+	 * @return File
+	 */
+	public static File getSmallOutpostDirectory() {
+		File f = new File(getFortDirectory(), "Small Outposts");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
+	 * Get the directory the plot files are stored in.
 	 * @return File
 	 */
 	public static File getPlotDirectory() {
 		File f = new File(currentInstance.getDataFolder(), "Plots");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
+	 * Get the directory the keep files are stored in.
+	 * @return File
+	 */
+	public static File getKeepDirectory() {
+		File f = new File(getPlotDirectory(), "Keeps");
 		if(f.exists()){
 			return f;
 		} else {

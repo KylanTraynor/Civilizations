@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -30,11 +31,28 @@ public class Keep extends Plot{
 	}
 	
 	/**
+	 * Gets the file where this keep is saved.
+	 * @return File
+	 */
+	@Override
+	public File getFile(){
+		File f = new File(Civilizations.getKeepDirectory(), "" + getId() + ".yml");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		return f;
+	}
+	
+	/**
 	 * Loads Keep from its configuration file.
 	 * @param cf
 	 * @return Group
 	 */
-	public static Keep load(YamlConfiguration cf, HashMap<String, Settlement> settlements){
+	public static Keep load(YamlConfiguration cf, Map<String, Settlement> settlements){
 		if(cf == null) return null;
 		Instant creation;
 		String name = cf.getString("Name");
@@ -46,7 +64,12 @@ public class Keep extends Plot{
 			creation = Instant.now();
 			Civilizations.log("WARNING", "Couldn't find creation date for a keep. Replacing it by NOW.");
 		}
-		
+		if(settlements.get(settlementPath) == null){
+			Settlement s = Civilizations.loadSettlement(settlementPath);
+			if(s!= null){
+				settlements.put(settlementPath, Civilizations.loadSettlement(settlementPath));
+			}
+		}
 		Keep g = new Keep(name, Plot.parseShapes(shapes), settlements.get(settlementPath));
 		g.setCreationDate(creation);
 		

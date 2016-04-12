@@ -57,7 +57,22 @@ public class SmallOutpost extends Fort{
 		}
 		return false;
 	}
-	
+	/**
+	 * Gets the file where this Small Outpost is saved.
+	 * @return File
+	 */
+	@Override
+	public File getFile(){
+		File f = new File(Civilizations.getSmallOutpostDirectory(), "" + getId() + ".yml");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		return f;
+	}
 	/**
 	 * Loads a SmallOutpost from its configuration file.
 	 * @param cf

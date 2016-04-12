@@ -63,11 +63,7 @@ public class Fort extends Settlement implements IHasBanner{
 	 */
 	@Override
 	public File getFile(){
-		File dir = new File(Civilizations.getFortDirectory(), getType());
-		if(!dir.exists()){
-			dir.mkdir();
-		}
-		File f = new File(dir, "" + getId() + ".yml");
+		File f = new File(Civilizations.getFortDirectory(), "" + getId() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
