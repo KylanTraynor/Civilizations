@@ -73,6 +73,10 @@ public class Camp extends Settlement{
 									org.bukkit.block.Banner banner = (org.bukkit.block.Banner) state;
 									Banner b = Banner.get(banner);
 									House house = House.get(b);
+									if(house == null){
+										this.sendMessage("The Banner in the Keep doesn't belong to any house.", null);
+										return false;
+									}
 									new SmallOutpost(this, house);
 									return true;
 								}
@@ -112,6 +116,9 @@ public class Camp extends Settlement{
 	@Override
 	public boolean remove(){
 		Cache.campListChanged = true;
+		for(Plot p : getPlots()){
+			p.remove();
+		}
 		return super.remove();
 	}
 	/**
