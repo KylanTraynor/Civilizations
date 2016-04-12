@@ -35,7 +35,10 @@ public class SmallOutpost extends Fort{
 		setChanged(true);
 	}
 
-	
+	@Override
+	public String getType(){
+		return "Outpost";
+	}
 	
 	static public boolean hasUpgradeRequirements(Settlement s){
 		for(Plot p : s.getPlots()){

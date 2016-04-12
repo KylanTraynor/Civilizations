@@ -117,7 +117,7 @@ public class Banner {
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder("BANNER;");
-		sb.append(getBaseColor().toString());
+		sb.append(getBaseColor().toString() + ";");
 		for(Pattern p : getPatterns()){
 			sb.append("{" + p.getPattern().toString() + ":" + p.getColor().toString() + "};");
 		}
