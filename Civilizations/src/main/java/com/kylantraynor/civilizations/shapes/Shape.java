@@ -88,6 +88,20 @@ public abstract class Shape implements Visualizable{
 		}
 	}
 	
+	public static Shape parse(String s){
+		if(s.split(";").length > 1){
+			switch(s.split(";")[0].toUpperCase()){
+			case "PRISM":
+				return Prism.parse(s);
+			case "SPHERE":
+				return Sphere.parse(s);
+			}
+			return null;
+		} else {
+			return null;
+		}
+	}
+	
 	public void show(Player player) {
 		if(addPlayer(player)){
 			for(Block b : getBlockSurface()){

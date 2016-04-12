@@ -3,7 +3,9 @@ package com.kylantraynor.civilizations.shapes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class Sphere extends Shape {
@@ -52,10 +54,20 @@ public class Sphere extends Shape {
 	
 	@Override
 	public String toString() {
-		String result = "Sphere;" + this.getLocation().getWorld().getName() + ";" +
+		String result = "SPHERE;" + this.getLocation().getWorld().getName() + ";" +
 				this.getLocation().getX() + ";" + this.getLocation().getY() +
 				";" + this.getLocation().getZ() + ";" + getRadius();
 		return result;
+	}
+	
+	public static Sphere parse(String str){
+		String[] components = str.split(";");
+		World w = Bukkit.getWorld(components[1]);
+		double x = Double.parseDouble(components[2]);
+		double y = Double.parseDouble(components[3]);
+		double z = Double.parseDouble(components[4]);
+		int radius = Integer.parseInt(components[5]);
+		return new Sphere(new Location(w, x, y, z), radius);
 	}
 
 	public int getRadius() {

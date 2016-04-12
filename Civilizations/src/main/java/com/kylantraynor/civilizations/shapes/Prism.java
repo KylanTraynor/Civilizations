@@ -3,8 +3,10 @@ package com.kylantraynor.civilizations.shapes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -63,11 +65,23 @@ public class Prism extends Shape {
 
 	@Override
 	public String toString() {
-		String result = "Prism;" + getLocation().getWorld().getName() + ";" +
+		String result = "PRISM;" + getLocation().getWorld().getName() + ";" +
 				getLocation().getX() + ";" + getLocation().getY() +
 				";" + getLocation().getZ() + ";" + getWidth() + ";" +
 				getHeight() + ";" + getLength();
 		return result;
+	}
+	
+	public static Prism parse(String str){
+		String[] components = str.split(";");
+		World w = Bukkit.getWorld(components[1]);
+		double x = Double.parseDouble(components[2]);
+		double y = Double.parseDouble(components[3]);
+		double z = Double.parseDouble(components[4]);
+		int width = Integer.parseInt(components[5]);
+		int height = Integer.parseInt(components[6]);
+		int length = Integer.parseInt(components[7]);
+		return new Prism(new Location(w, x, y, z), height, height, height);
 	}
 
 	@Override
