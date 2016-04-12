@@ -38,7 +38,7 @@ import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Camp extends Settlement{
 	
-	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GREEN + "CAMP" + ChatColor.GOLD + "] ";
+	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + "CAMP" + ChatColor.GOLD + "] ";
 	private Instant expireOn;
 	
 	public String getChatHeader(){

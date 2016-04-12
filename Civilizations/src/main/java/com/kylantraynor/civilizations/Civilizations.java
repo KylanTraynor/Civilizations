@@ -478,6 +478,19 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	/**
+	 * Get the directory the fort files are stored in.
+	 * @return File
+	 */
+	public static File getPlotDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Plots");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
 	 * Registers an achievement.
 	 * @param name of the achievement
 	 * @param description of the achievement

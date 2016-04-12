@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.groups.settlements.plots;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -7,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -22,6 +26,16 @@ public class Plot extends Group {
 		setSettlement(settlement);
 		this.getProtection().add(shape);
 		Cache.plotListChanged = true;
+		setChanged(true);
+	}
+	
+	public Plot(String name, List<Shape> shapes, Settlement settlement){
+		super();
+		this.setName(name);
+		setSettlement(settlement);
+		this.getProtection().setShapes(shapes);
+		Cache.plotListChanged = true;
+		setChanged(true);
 	}
 	
 	public Plot(Shape shape, Settlement settlement){
@@ -29,6 +43,7 @@ public class Plot extends Group {
 		this.setProtection(new Protection(this, settlement.getProtection()));
 		setSettlement(settlement);
 		this.getProtection().add(shape);
+		setChanged(true);
 	}
 	@Override
 	public String getType() {
@@ -57,6 +72,24 @@ public class Plot extends Group {
 		return super.remove();
 	}
 	
+	/**
+	 * Gets the file where this plot is saved.
+	 * @return File
+	 */
+	@Override
+	public File getFile(){
+		File dir = new File(Civilizations.getPlotDirectory(), this.getClass().toString());
+		File f = new File(dir, "" + getId() + ".yml");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		return f;
+	}
+	
 	@Override
 	public boolean save(){
 		return false;
@@ -79,6 +112,7 @@ public class Plot extends Group {
 		if(this.settlement != null){
 			this.settlement.addPlot(this);
 		}
+		setChanged(true);
 	}
 	/**
 	 * Checks if this plot protects the given location.
@@ -98,5 +132,25 @@ public class Plot extends Group {
 			if(p.protects(location)) return p;
 		}
 		return null;
+	}
+	
+	public static List<Shape> parseShapes(String str){
+		String[] shapes = str.split(" ");
+		List<Shape> list = new ArrayList<Shape>();
+		for(String shape : shapes){
+			Shape s = Shape.parse(shape);
+			if(s != null){
+				list.add(s);
+			}
+		}
+		return list;
+	}
+	
+	public String getShapesString(){
+		StringBuilder sb = new StringBuilder();
+		for(Shape s : getProtection().getShapes()){
+			sb.append(s.toString() + " ");
+		}
+		return sb.toString();
 	}
 }
