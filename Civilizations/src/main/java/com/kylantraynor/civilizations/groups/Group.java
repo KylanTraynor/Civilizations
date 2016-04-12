@@ -57,6 +57,7 @@ public class Group {
 		Cache.groupListChanged = true;
 		chatColor = ChatColor.WHITE;
 		protection = new Protection(this);
+		creationDate = Instant.now();
 		setChanged(true);
 	}
 	public String getChatHeader(){
