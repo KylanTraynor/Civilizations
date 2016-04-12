@@ -37,6 +37,15 @@ public class CommandGroup implements CommandExecutor {
 					g.openMenu((Player) sender);
 				}
 				break;
+			case "UPGRADE":
+				if(sender instanceof Player){
+					if(g.upgrade()){
+						sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
+					} else {
+						sender.sendMessage(g.getChatHeader() + ChatColor.RED + "Failed to upgrade.");
+					}
+				}
+				break;
 			case "INFO":
 				if(sender instanceof Player){
 					g.getInteractiveInfoPanel((Player)sender);

@@ -13,25 +13,36 @@ import mkremins.fanciful.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.banners.Banner;
+import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
+import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.TargetType;
+import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Camp extends Settlement{
 	
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GREEN + "CAMP" + ChatColor.GOLD + "] ";
 	private Instant expireOn;
+	
+	public String getChatHeader(){
+		return ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + getName() + ChatColor.GOLD + "] "; 
+	}
 	
 	public Camp(Location l) {
 		super(l);
@@ -45,6 +56,34 @@ public class Camp extends Settlement{
 	public boolean isUpgradable(){
 		if(SmallOutpost.hasUpgradeRequirements(this)) return true;
 		if(IsolatedDwelling.hasUpgradeRequirements(this)) return true;
+		return false;
+	}
+	
+	@Override
+	public boolean upgrade(){
+		if(SmallOutpost.hasUpgradeRequirements(this)){
+			for(Plot p : getPlots()){
+				if(p instanceof Keep){
+					for(Shape s : p.getProtection().getShapes()){
+						for(Location l : s.getBlockLocations()){
+							if(l.getBlock().getType() == Material.BANNER || l.getBlock().getType() == Material.STANDING_BANNER){
+								BlockState state = l.getBlock().getState();
+								if(state instanceof org.bukkit.block.Banner){
+									org.bukkit.block.Banner banner = (org.bukkit.block.Banner) state;
+									Banner b = Banner.get(banner);
+									House house = House.get(b);
+									new SmallOutpost(this, house);
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		} else if(IsolatedDwelling.hasUpgradeRequirements(this)){
+			
+			return true;
+		}
 		return false;
 	}
 	

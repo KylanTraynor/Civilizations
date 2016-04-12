@@ -411,7 +411,7 @@ public class Group {
 			if(permission != null){
 				if(!hasPermission(permission, null, p)) continue;
 			}
-			p.sendMessage(message);;
+			p.sendMessage(message);
 		}
 	}
 	/**
@@ -447,5 +447,8 @@ public class Group {
 	}
 	public String getType() {
 		return "Group";
+	}
+	public boolean upgrade() {
+		return false;
 	}
 }

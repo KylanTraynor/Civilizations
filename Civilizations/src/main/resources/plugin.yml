@@ -26,3 +26,6 @@ commands:
     description: Access all plot commands.
     permission: civilizations.plot
     aliases: [civplot]
+  house:
+    description: Access all house commands.
+    permission: civilizations.house

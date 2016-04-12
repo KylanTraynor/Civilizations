@@ -117,6 +117,11 @@ public class Settlement extends Group {
 		return false;
 	}
 	
+	@Override
+	public boolean upgrade(){
+		return false;
+	}
+	
 	static public boolean hasUpgradeRequirements(Settlement s){
 		return false;
 	}
