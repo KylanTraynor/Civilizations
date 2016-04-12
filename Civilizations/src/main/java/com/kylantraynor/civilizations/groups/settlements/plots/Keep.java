@@ -93,6 +93,8 @@ public class Keep extends Plot{
 		fc.set("Name", getName());
 		if(getSettlement() != null){
 			fc.set("SettlementPath", getSettlement().getFile().getAbsolutePath());
+		} else {
+			fc.set("SettlementPath", null);
 		}
 		fc.set("Shape", getShapesString());
 		fc.set("Creation", getCreationDate().toString());
