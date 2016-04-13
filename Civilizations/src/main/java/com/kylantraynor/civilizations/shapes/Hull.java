@@ -8,7 +8,14 @@ import org.bukkit.block.Block;
 
 public class Hull extends Shape {
 	
+	private int precision = 50;
 	private List<Location> points = new ArrayList<Location>();
+	
+	private List<Location> cachedHullPoints;
+	private Double cachedMaxDistanceFromCenter;
+	
+	private boolean maxDistanceHasChanged = true;
+	private boolean verticesHaveChanged = true;
 
 	public Hull(Location location) {
 		super(location);
@@ -67,12 +74,14 @@ public class Hull extends Shape {
 	
 	public void addPoint(Location location){
 		points.add(location);
+		setChanged(true);
 	}
 	
 	public void addPoints(List<Location> list){
 		for(Location l : list){
 			points.add(l);
 		}
+		setChanged(true);
 	}
 	
 	public Location getMassCenter(){
@@ -87,17 +96,60 @@ public class Hull extends Shape {
 		return new Location(getLocation().getWorld(), totalX / points.size(), totalY / points.size(), totalZ / points.size());
 	}
 	
-	public int getMaxDistanceFromCenter(){
-		int distance = 0;
-		Location center = getMassCenter();
-		for(Location l : points){
-			if(l.distance(center) > distance){
-				distance = (int) l.distance(center);
+	public double getMaxDistanceFromCenter(){
+		if(maxDistanceHasChanged || cachedMaxDistanceFromCenter == null){
+			cachedMaxDistanceFromCenter = 0.0;
+			Location center = getMassCenter();
+			for(Location l : points){
+				if(l.distance(center) > cachedMaxDistanceFromCenter){
+					cachedMaxDistanceFromCenter = l.distance(center);
+				}
 			}
+			maxDistanceHasChanged = false;
 		}
-		return distance;
+		return cachedMaxDistanceFromCenter;
 	}
-
+	
+	public List<Location> get2DVertices(int y){
+		if(verticesHaveChanged  || cachedHullPoints == null){
+			cachedHullPoints = new ArrayList<Location>();
+			
+			for(double angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / precision){
+				double x = Math.cos(angle) * getMaxDistanceFromCenter();
+				double z = Math.sin(angle) * getMaxDistanceFromCenter();
+				Location onCircle = new Location(getLocation().getWorld(), x, y, z);
+				Location closest = null;
+				for(Location l : points){
+					if(closest == null){
+						closest = l.clone();
+						closest.setY(y);
+						continue;
+					} else {
+						Location temp = l.clone();
+						temp.setY(y);
+						if(onCircle.distance(temp) < onCircle.distance(closest)){
+							closest = temp;
+						}
+					}
+				}
+				cachedHullPoints.add(closest);
+			}
+			verticesHaveChanged = false;
+		}
+		return cachedHullPoints;
+	}
+	
+	public void setChanged(boolean changed){
+		maxDistanceHasChanged = true;
+		verticesHaveChanged = true;
+	}
+	
+	public boolean hasChanged(){
+		if(maxDistanceHasChanged) return true;
+		if(verticesHaveChanged) return true;
+		return false;
+	}
+	
 	@Override
 	int getMinX() {
 		Integer min = null;

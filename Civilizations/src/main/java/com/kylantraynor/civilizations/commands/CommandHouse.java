@@ -58,7 +58,7 @@ public class CommandHouse implements CommandExecutor{
 				case "SETBANNER":
 					Player p = (Player) sender;
 					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, p)){
-						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this house.");
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this House.");
 					}
 					Block target = p.getTargetBlock((Set<Material>) null, 15);
 					if(target != null){
@@ -83,7 +83,7 @@ public class CommandHouse implements CommandExecutor{
 						sb.append(args[i] + " ");
 					}
 					house.setWords(sb.toString().trim());
-					house.sendMessage("Words of the house have been changed to \"" + house.getWords() + "\".", null);
+					house.sendMessage("Words of the House have been changed to \"" + house.getWords() + "\".", null);
 					return true;
 				case "ADOPT":
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
@@ -98,10 +98,10 @@ public class CommandHouse implements CommandExecutor{
 								House p1House = House.get(p1);
 								if(p1House == null){
 									house.addMember(p1);
-									house.sendMessage(ChatColor.GREEN + p1.getName() + " is now a member of house " + house.getName(), null);
+									house.sendMessage(ChatColor.GREEN + p1.getName() + " is now a member of House " + house.getName(), null);
 									return true;
 								} else {
-									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + p1.getName() + " is already a member of house " + p1House.getName());
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + p1.getName() + " is already a member of House " + p1House.getName());
 									return true;
 								}
 							}
@@ -131,7 +131,7 @@ public class CommandHouse implements CommandExecutor{
 					Player p = (Player) sender;
 					House pHouse = House.get(p);
 					if(pHouse != null){
-						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You already belong to house " + pHouse.getName() + ".");
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You already belong to House " + pHouse.getName() + ".");
 						return true;
 					}
 					
@@ -140,13 +140,13 @@ public class CommandHouse implements CommandExecutor{
 						BannerMeta bm = (BannerMeta) is.getItemMeta();
 						if(Banner.exist(bm)){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + 
-									"This banner is already used by house " + House.get(Banner.get(bm)).getName() + ".");
+									"This banner is already used by House " + House.get(Banner.get(bm)).getName() + ".");
 							return true;
 						}
 						House h = new House(args[0], Banner.get(bm));
 						if(!p.isOp()){
 							h.addMember(p);
-							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established house " + h.getName() + "!");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established House " + h.getName() + "!");
 						} else {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House " + h.getName() + " has been created.");
 						}
