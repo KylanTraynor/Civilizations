@@ -2,14 +2,20 @@ package com.kylantraynor.civilizations.groups.settlements.forts;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class Fort extends Settlement implements IHasBanner{
 
@@ -19,11 +25,16 @@ public class Fort extends Settlement implements IHasBanner{
 	public Fort(Location l, House house) {
 		super(l);
 		this.house = house;
+		Cache.fortListChanged = true;
 	}
 	
 	@Override
 	public String getType(){
 		return "Fort";
+	}
+	
+	public static List<Fort> getAll(){
+		return Cache.getFortList();
 	}
 
 	@Override
@@ -55,6 +66,22 @@ public class Fort extends Settlement implements IHasBanner{
 
 	public void setInfluence(int influence) {
 		this.influence = influence;
+	}
+	
+	@Override
+	public void update(){
+		InfluenceMap.renderInfluenceMap(this);
+		super.update();
+	}
+	
+	/**
+	 * Destroys this settlement.
+	 * @return true if the settlement has been removed, false otherwise.
+	 */
+	@Override
+	public boolean remove(){
+		Cache.fortListChanged = true;
+		return super.remove();
 	}
 	
 	/**

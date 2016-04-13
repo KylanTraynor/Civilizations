@@ -7,6 +7,7 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 
@@ -18,13 +19,15 @@ public class Cache {
 	public static boolean townyTownListChanged = true;
 	public static boolean plotListChanged = true;
 	public static boolean houseListChanged = true;
+	public static boolean fortListChanged = true;
 	
 	private static List<Group> groupList;
 	private static List<Settlement> settlementList;
 	private static List<Camp> campList;
 	private static List<TownyTown> townyTownList;
 	private static List<Plot> plotList;
-	private static ArrayList<House> houseList;
+	private static List<House> houseList;
+	private static List<Fort> fortList;
 	
 	/**
 	 * Gets the list of Groups.
@@ -124,5 +127,21 @@ public class Cache {
 			}
 		}
 		return houseList;
+	}
+	/**
+	 * Gets the list of Forts.
+	 * @return List<Fort> of cached Forts.
+	 */
+	public static List<Fort> getFortList(){
+		if(fortListChanged || fortList == null){
+			fortListChanged = false;
+			fortList = new ArrayList<Fort>();
+			for(Settlement g : getSettlementList()){
+				if(g instanceof Fort){
+					fortList.add((Fort) g);
+				}
+			}
+		}
+		return fortList;
 	}
 }
