@@ -133,7 +133,7 @@ public class Civilizations extends JavaPlugin{
 		
 		loadHooks(pm);
 		
-		startGroupUpdater(1000L);
+		startGroupUpdater(20L * 60 * 5);
 		startProtectionUpdater(40L);
 		
 		setupCommands();
@@ -377,6 +377,9 @@ public class Civilizations extends JavaPlugin{
 
 	@Override
 	public void onDisable(){
+		for(Group g : Cache.getGroupList()){
+			g.update();
+		}
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}
