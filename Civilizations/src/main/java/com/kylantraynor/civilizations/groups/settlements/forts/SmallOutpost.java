@@ -2,16 +2,23 @@ package com.kylantraynor.civilizations.groups.settlements.forts;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import mkremins.fanciful.FancyMessage;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.House;
@@ -57,6 +64,29 @@ public class SmallOutpost extends Fort{
 		}
 		return false;
 	}
+	
+	/**
+	 * Gets an interactive info panel of this Keep.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
+		if(getCreationDate() != null){
+			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
+				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+		}
+		String houseInfoCommand = "/house " + this.getHouse().getName() + " info";
+		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
+			then("" + this.getHouse().getName()).color(ChatColor.GOLD).
+			command(houseInfoCommand);
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\n==============================").color(ChatColor.GOLD);
+		return fm;
+	}
+	
 	/**
 	 * Gets the file where this Small Outpost is saved.
 	 * @return File

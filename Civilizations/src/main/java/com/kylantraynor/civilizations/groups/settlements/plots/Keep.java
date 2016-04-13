@@ -2,18 +2,26 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import mkremins.fanciful.FancyMessage;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Keep extends Plot{
@@ -28,6 +36,28 @@ public class Keep extends Plot{
 	
 	public PlotType getPlotType(){
 		return PlotType.KEEP;
+	}
+	
+	/**
+	 * Gets an interactive info panel of this Keep.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
+		if(getCreationDate() != null){
+			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
+				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+		}
+		String houseInfoCommand = "/house " + ((Fort)getSettlement()).getHouse().getName() + " info";
+		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
+			then("" + ((Fort)getSettlement()).getHouse().getName()).color(ChatColor.GOLD).
+			command(houseInfoCommand);
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\n==============================").color(ChatColor.GOLD);
+		return fm;
 	}
 	
 	/**
