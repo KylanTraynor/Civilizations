@@ -20,6 +20,27 @@ public class Banner {
 	private org.bukkit.block.Banner banner;
 	private DyeColor baseColor;
 	
+	public static boolean exist(BannerMeta bm){
+		for(Banner b : all){
+			if(b.isSimilar(bm)) return true;
+		}
+		return false;
+	}
+	
+	public static boolean exist(org.bukkit.block.Banner banner){
+		for(Banner b : all){
+			if(b.isSimilar(banner)) return true;
+		}
+		return false;
+	}
+	
+	public static boolean exist(Banner banner){
+		for(Banner b : all){
+			if(b.isSimilar(banner)) return true;
+		}
+		return false;
+	}
+	
 	public static Banner get(org.bukkit.block.Banner banner){
 		for(Banner b : all){
 			if(b.isSimilar(banner)) return b;

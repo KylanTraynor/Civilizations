@@ -138,6 +138,11 @@ public class CommandHouse implements CommandExecutor{
 					ItemStack is = p.getInventory().getItemInMainHand();
 					if(is.getType() == Material.BANNER || is.getType() == Material.STANDING_BANNER){
 						BannerMeta bm = (BannerMeta) is.getItemMeta();
+						if(Banner.exist(bm)){
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + 
+									"This banner is already used by house " + House.get(Banner.get(bm)).getName() + ".");
+							return true;
+						}
 						House h = new House(args[0], Banner.get(bm));
 						if(!p.isOp()){
 							h.addMember(p);
