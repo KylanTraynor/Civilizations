@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +20,6 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
-import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 
 /**
  * Family House, with all the members of the family.

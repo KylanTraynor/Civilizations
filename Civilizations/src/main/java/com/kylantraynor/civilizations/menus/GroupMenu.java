@@ -9,14 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -41,9 +38,9 @@ public class GroupMenu extends InventoryView{
 	private int linesBottom = 4; // Menus
 	
 	private Material validButton = Material.EMERALD_BLOCK;
-	private Material permissionLackButton = Material.REDSTONE_BLOCK;
-	private Material navigationValid = Material.ARROW;
-	private Material navigationInvalid = Material.BARRIER;
+	//private Material permissionLackButton = Material.REDSTONE_BLOCK;
+	//private Material navigationValid = Material.ARROW;
+	//private Material navigationInvalid = Material.BARRIER;
 	private Page currentPage;
 	private String currentGoal;
 	private String currentSubPage;

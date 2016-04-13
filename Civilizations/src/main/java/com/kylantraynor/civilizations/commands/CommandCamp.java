@@ -10,9 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
-import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.questions.ClearQuestion;
 import com.kylantraynor.civilizations.questions.JoinQuestion;
 import com.kylantraynor.civilizations.questions.LeaveQuestion;

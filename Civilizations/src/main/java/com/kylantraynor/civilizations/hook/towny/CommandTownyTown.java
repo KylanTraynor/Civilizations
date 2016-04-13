@@ -3,14 +3,11 @@ package com.kylantraynor.civilizations.hook.towny;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.commands.CommandGroup;
-import com.kylantraynor.civilizations.groups.settlements.Camp;
 
 public class CommandTownyTown extends CommandGroup{
 

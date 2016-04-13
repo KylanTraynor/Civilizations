@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 
 public class Prism extends Shape {
 	
@@ -81,7 +79,7 @@ public class Prism extends Shape {
 		int width = Integer.parseInt(components[5]);
 		int height = Integer.parseInt(components[6]);
 		int length = Integer.parseInt(components[7]);
-		return new Prism(new Location(w, x, y, z), height, height, height);
+		return new Prism(new Location(w, x, y, z), width, height, length);
 	}
 
 	@Override
