@@ -121,9 +121,10 @@ public class SmallOutpost extends Fort{
 			creation = Instant.now();
 			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by NOW.");
 		}
-		
+		House h = House.get(house);
 		SmallOutpost o = new SmallOutpost(new Location(w, x, y, z), House.get(house));
 		o.setCreationDate(creation);
+		o.setHouse(h);
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
@@ -149,6 +150,7 @@ public class SmallOutpost extends Fort{
 		fc.set("Location.Z", getLocation().getBlockZ());
 		
 		fc.set("Creation", getCreationDate().toString());
+		fc.set("House", getHouse().getName());
 		
 		int i = 0;
 		for(UUID id : getMembers()){

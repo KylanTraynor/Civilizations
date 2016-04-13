@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Keep extends Plot{
@@ -56,6 +58,16 @@ public class Keep extends Plot{
 			command(houseInfoCommand);
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		
+		fm.then("\nActions: ").color(ChatColor.GRAY);
+		if(this.isMember(player)){
+			if(getSettlement().hasPermission(PermissionType.MANAGE_PLOTS, null, player)){
+				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getId() + " setname NEW NAME");
+			} else {
+				fm.then("\nRename").color(ChatColor.GRAY).tooltip("You don't have the MANAGE PLOTS permission here.");
+			}
+		}
+		
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	}

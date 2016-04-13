@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 
@@ -38,6 +39,40 @@ public class CommandGroup implements CommandExecutor {
 					g.openMenu((Player) sender);
 				}
 				break;
+			case "SETNAME":
+				if(sender instanceof Player){
+					if(g instanceof Plot){
+						if(g.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
+							StringBuilder sb = new StringBuilder();
+							for(int i = 2; i < args.length; i++){
+								sb.append(args[i] + " ");
+							}
+							g.setName(sb.toString().trim());
+							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
+						} else {
+							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
+						}
+					} else {
+						if(g.hasPermission(PermissionType.MANAGE, null, (Player) sender)){
+							StringBuilder sb = new StringBuilder();
+							for(int i = 2; i < args.length; i++){
+								sb.append(args[i] + " ");
+							}
+							g.setName(sb.toString().trim());
+							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
+						} else {
+							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
+						}
+					}
+				} else {
+					StringBuilder sb = new StringBuilder();
+					for(int i = 2; i < args.length; i++){
+						sb.append(args[i] + " ");
+					}
+					g.setName(sb.toString().trim());
+					sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
+				}
+				return true;
 			case "UPGRADE":
 				if(sender instanceof Player){
 					if(g.hasPermission(PermissionType.UPGRADE, null, ((Player)sender))){
