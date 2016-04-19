@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
@@ -51,7 +52,6 @@ public class InfluenceMap {
 			try {
 				ImageIO.write(img, "JPEG", file);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -74,13 +74,14 @@ public class InfluenceMap {
 		if(!f.getLocation().getWorld().equals(l.getWorld())) return 0.0;
 		l = l.clone();
 		l.setY(255);
-		while(l.getBlock().getType() == Material.AIR){
+		while(l.getBlock().getType() == Material.AIR || l.getBlock().isLiquid()){
 			l.setY(l.getY() - 1);
 			if(l.getY() < oceanLevel - 1) break;
 		}
 		
-		
-		if(l.getY() < oceanLevel - 1) return 0.0;
+		if(l.getBlock().getBiome() == Biome.OCEAN || l.getBlock().getBiome() == Biome.DEEP_OCEAN){
+			if(l.getY() < oceanLevel - 1) return 0.0;
+		}
 		
 		double fx = f.getLocation().getX();
 		double fy = f.getLocation().getY();
