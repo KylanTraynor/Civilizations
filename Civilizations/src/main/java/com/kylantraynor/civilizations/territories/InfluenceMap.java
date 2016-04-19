@@ -72,7 +72,7 @@ public class InfluenceMap {
 	
 	public static double getFortInfluenceAt(Fort f, Location l){
 		if(!f.getLocation().getWorld().equals(l.getWorld())) return 0.0;
-		
+		l = l.clone();
 		l.setY(255);
 		while(l.getBlock().getType() == Material.AIR){
 			l.setY(l.getY() - 1);
