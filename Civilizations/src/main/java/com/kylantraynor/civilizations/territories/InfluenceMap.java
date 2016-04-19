@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -91,10 +93,34 @@ public class InfluenceMap {
 		double result = Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
 		BufferedImage img = getImage(f);
 		if(img != null){
-			img.setRGB((int)((l.getX() + WorldBorderHook.getWorldCenter(l.getWorld()).getX()) / precision),
-					(int)((l.getZ() + WorldBorderHook.getWorldCenter(l.getWorld()).getZ()) / precision),
-					(int)(result * 255 / 100));
+			imgSetPixelAtLocation(l, img, (int)(result * 255 / 100));
 		}
 		return result;
 	}
+	
+	public static void imgSetPixelAtLocation(Location l, BufferedImage img, int data){
+		if(!WorldBorderHook.isActive()) return;
+		if(img == null) return;
+		if(l == null) return;
+		
+		int imgX = 0;
+		int imgY = 0;
+		
+		int imgMinX = -WorldBorderHook.getWorldRadiusX(l.getWorld());
+		imgMinX += WorldBorderHook.getWorldCenter(l.getWorld()).getBlockX();
+		
+		int imgMinZ = -WorldBorderHook.getWorldRadiusZ(l.getWorld());
+		imgMinZ += WorldBorderHook.getWorldCenter(l.getWorld()).getBlockZ();
+		
+		imgX = l.getBlockX() - imgMinX;
+		imgY = l.getBlockZ() - imgMinZ;
+		
+		imgX /= precision;
+		imgY /= precision;
+		
+		Bukkit.getServer().getLogger().log(Level.INFO, "Writing in image at " + imgX + ", " + imgY + ".");
+		
+		img.setRGB(imgX, imgY, data);
+	}
+	
 }
