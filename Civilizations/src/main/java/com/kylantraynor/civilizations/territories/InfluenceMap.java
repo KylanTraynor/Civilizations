@@ -94,12 +94,12 @@ public class InfluenceMap {
 		double result = Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
 		BufferedImage img = getImage(f);
 		if(img != null){
-			imgSetPixelAtLocation(l, img, (int)(result * 255 / 100));
+			imgSetGrayscaleAtLocation(l, img, result / 100);
 		}
 		return result;
 	}
 	
-	public static void imgSetPixelAtLocation(Location l, BufferedImage img, int data){
+	public static void imgSetGrayscaleAtLocation(Location l, BufferedImage img, double data){
 		if(!WorldBorderHook.isActive()) return;
 		if(img == null) return;
 		if(l == null) return;
@@ -121,7 +121,12 @@ public class InfluenceMap {
 		
 		Bukkit.getServer().getLogger().log(Level.INFO, "Writing in image at " + imgX + ", " + imgY + ". (" + data + ")");
 		
-		img.setRGB(imgX, imgY, data);
+		int r = (int) (255 * data);// red component 0...255
+	    int g = (int) (255 * data);// green component 0...255
+		int b = (int) (255 * data);// blue component 0...255
+		int col = (r << 16) | (g << 8) | b;
+		
+		img.setRGB(imgX, imgY, col);
 	}
 	
 }
