@@ -116,22 +116,27 @@ public class Banner {
 	}
 	
 	public static Banner parse(String s){
-		DyeColor baseColor = null;
-		List<Pattern> patterns = new ArrayList<Pattern>();
-		String[] components = s.split(";");
-		if(components.length >= 2){
-			baseColor = DyeColor.valueOf(components[1]);
-		}
-		for(int i = 2; i < components.length; i++){
-			String str = components[i];
-			str.replaceAll("\\{", "");
-			str.replaceAll("\\}", "");
-			String[] pat = str.split(":");
-			patterns.add(new Pattern(DyeColor.valueOf(pat[1]), PatternType.valueOf(pat[0])));
-		}
-		if(baseColor != null){
-			return new Banner(baseColor, patterns);
-		} else {
+		try{
+			DyeColor baseColor = null;
+			List<Pattern> patterns = new ArrayList<Pattern>();
+			String[] components = s.split(";");
+			if(components.length >= 2){
+				baseColor = DyeColor.valueOf(components[1]);
+			}
+			for(int i = 2; i < components.length; i++){
+				String str = components[i];
+				str.replaceAll("\\{", "");
+				str.replaceAll("\\}", "");
+				String[] pat = str.split(":");
+				patterns.add(new Pattern(DyeColor.valueOf(pat[1]), PatternType.valueOf(pat[0])));
+			}
+			if(baseColor != null){
+				return new Banner(baseColor, patterns);
+			} else {
+				return null;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 			return null;
 		}
 	}
