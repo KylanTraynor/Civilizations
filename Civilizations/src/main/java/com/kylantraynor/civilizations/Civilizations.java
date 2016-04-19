@@ -190,7 +190,8 @@ public class Civilizations extends JavaPlugin{
 				log("WARNING", "Invalid file configuration.");
 			}
 			f.delete();
-			switch(path.split(File.pathSeparator)[path.split(File.pathSeparator).length - 2]){
+			String[] pathSplit = path.split("\\\\");
+			switch(pathSplit[pathSplit.length - 2]){
 			case "Camps":
 				log("INFO", "Loading camp from " + path);
 				return Camp.load(yaml);	
