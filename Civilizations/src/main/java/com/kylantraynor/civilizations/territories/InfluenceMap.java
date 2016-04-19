@@ -21,7 +21,7 @@ import com.kylantraynor.civilizations.hook.worldborder.WorldBorderHook;
 public class InfluenceMap {
 	
 	private static int oceanLevel = 48;
-	private static int precision = 128; // (1 px = 128 blocks)
+	private static int precision = 64; // (1 px = 128 blocks)
 	private static Map<Fort, BufferedImage> image = new HashMap<Fort, BufferedImage>();
 	
 	

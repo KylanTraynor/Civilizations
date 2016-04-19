@@ -150,6 +150,7 @@ public class Civilizations extends JavaPlugin{
 	private void loadKeeps(Map<String, Settlement> settlements) {
 		File houseDir = getHouseDirectory();
 		if(houseDir.exists()){
+			log("INFO", "Loading Keeps...");
 			for(File f : houseDir.listFiles()){
 				if(!f.getName().split("\\.")[1].equals("yml")) continue;
 				if(isClearing() ){
@@ -167,6 +168,7 @@ public class Civilizations extends JavaPlugin{
 				} catch (InvalidConfigurationException e) {
 					log("WARNING", "Invalid file configuration.");
 				}
+				log("INFO", "Loading Keep from file: " + f.getPath());
 				f.delete();
 				Keep h = Keep.load(yaml, settlements);
 			}
