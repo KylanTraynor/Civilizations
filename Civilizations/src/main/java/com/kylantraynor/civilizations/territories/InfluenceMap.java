@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
@@ -26,6 +25,7 @@ public class InfluenceMap {
 	public static BufferedImage getImage(Fort f){
 		if(!image.containsKey(f)){
 			if(WorldBorderHook.isActive()){
+				if(WorldBorderHook.getWorldRadiusX(f.getLocation().getWorld()) == 0) return null;
 				image.put(f, new BufferedImage(
 						WorldBorderHook.getWorldRadiusX(f.getLocation().getWorld()) * 2 / precision,
 						WorldBorderHook.getWorldRadiusZ(f.getLocation().getWorld()) * 2 / precision,
@@ -38,16 +38,13 @@ public class InfluenceMap {
 			return image.get(f);
 		}
 	}
-	
-	public static void renderInfluenceMap(Fort f){
+	/**
+	 * Saves the influence Map.
+	 * @param f
+	 */
+	public static void saveInfluenceMap(Fort f){
 		BufferedImage img = getImage(f);
 		if(img != null){
-			for(int x = 0; x < img.getWidth(); x++){
-				for(int z = 0; z < img.getHeight(); z++){
-					int value = (int) (255 * (getFortInfluenceAt(f, new Location(f.getLocation().getWorld(), x * precision, 0, z * precision))) / 100.0);
-					img.setRGB(x, z, value);
-				}
-			}
 			File file = new File(Civilizations.currentInstance.getDataFolder(), f.getName() + " Influence.jpg");
 			try {
 				ImageIO.write(img, "JPEG", file);
@@ -91,7 +88,11 @@ public class InfluenceMap {
 		double yCoeff = fy - l.getY();
 		
 		double totalCoeff = Math.max(xzCoeff - yCoeff, 0.1);
-		
-		return Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
+		double result = Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
+		BufferedImage img = getImage(f);
+		if(img != null){
+			img.setRGB((int)(l.getX() / precision), (int)(l.getZ() / precision), (int)(result * 255 / 100));
+		}
+		return result;
 	}
 }

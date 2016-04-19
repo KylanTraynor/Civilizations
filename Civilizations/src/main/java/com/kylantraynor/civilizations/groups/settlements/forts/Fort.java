@@ -25,6 +25,7 @@ public class Fort extends Settlement implements IHasBanner{
 	public Fort(Location l, House house) {
 		super(l);
 		this.house = house;
+		setName("Fort");
 		Cache.fortListChanged = true;
 	}
 	
@@ -70,7 +71,6 @@ public class Fort extends Settlement implements IHasBanner{
 	
 	@Override
 	public void update(){
-		InfluenceMap.renderInfluenceMap(this);
 		super.update();
 	}
 	

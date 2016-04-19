@@ -25,6 +25,7 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class SmallOutpost extends Fort{
 
@@ -138,6 +139,7 @@ public class SmallOutpost extends Fort{
 	 */
 	@Override
 	public boolean save(){
+		InfluenceMap.saveInfluenceMap(this);
 		File f = getFile();
 		if(f == null) return false;
 		YamlConfiguration fc = new YamlConfiguration();
