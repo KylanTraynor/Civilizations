@@ -91,7 +91,9 @@ public class InfluenceMap {
 		double result = Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
 		BufferedImage img = getImage(f);
 		if(img != null){
-			img.setRGB((int)(l.getX() / precision), (int)(l.getZ() / precision), (int)(result * 255 / 100));
+			img.setRGB((int)((l.getX() + WorldBorderHook.getWorldCenter(l.getWorld()).getX()) / precision),
+					(int)((l.getZ() + WorldBorderHook.getWorldCenter(l.getWorld()).getZ()) / precision),
+					(int)(result * 255 / 100));
 		}
 		return result;
 	}
