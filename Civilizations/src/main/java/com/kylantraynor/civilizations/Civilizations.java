@@ -148,10 +148,10 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private void loadKeeps(Map<String, Settlement> settlements) {
-		File houseDir = getHouseDirectory();
-		if(houseDir.exists()){
+		File keepDir = getKeepDirectory();
+		if(keepDir.exists()){
 			log("INFO", "Loading Keeps...");
-			for(File f : houseDir.listFiles()){
+			for(File f : keepDir.listFiles()){
 				if(!f.getName().split("\\.")[1].equals("yml")) continue;
 				if(isClearing() ){
 					log("INFO", "Cleared file " + f.getName());
