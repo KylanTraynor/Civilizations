@@ -190,8 +190,10 @@ public class Civilizations extends JavaPlugin{
 			f.delete();
 			switch(path.split("/")[path.split("/").length - 2]){
 			case "Camps":
+				log("INFO", "Loading camp from " + path);
 				return Camp.load(yaml);	
 			case "Small Outpost":
+				log("INFO", "Loading small outpost from " + path);
 				return SmallOutpost.load(yaml);
 			}
 		}
