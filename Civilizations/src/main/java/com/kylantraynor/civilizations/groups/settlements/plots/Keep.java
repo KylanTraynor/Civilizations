@@ -102,13 +102,18 @@ public class Keep extends Plot{
 			creation = Instant.now();
 			Civilizations.log("WARNING", "Couldn't find creation date for a keep. Replacing it by NOW.");
 		}
-		if(settlements.get(settlementPath) == null){
-			Settlement s = Civilizations.loadSettlement(settlementPath);
-			if(s!= null){
-				settlements.put(settlementPath, Civilizations.loadSettlement(settlementPath));
+		Settlement settlement = null;
+		if(settlementPath != null){
+			if(settlements.get(settlementPath) == null){
+				Settlement s = Civilizations.loadSettlement(settlementPath);
+				if(s!= null){
+					settlements.put(settlementPath, s);
+					settlement = s;
+				}
 			}
+			
 		}
-		Keep g = new Keep(name, Plot.parseShapes(shapes), settlements.get(settlementPath));
+		Keep g = new Keep(name, Plot.parseShapes(shapes), settlement);
 		g.setCreationDate(creation);
 		
 		int i = 0;
