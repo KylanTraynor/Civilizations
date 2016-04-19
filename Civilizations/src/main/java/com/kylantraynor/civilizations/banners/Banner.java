@@ -125,8 +125,7 @@ public class Banner {
 			}
 			for(int i = 2; i < components.length; i++){
 				String str = components[i];
-				str.replaceAll("\\{", "");
-				str.replaceAll("\\}", "");
+				str.replaceAll("[{}]", "");
 				String[] pat = str.split(":");
 				patterns.add(new Pattern(DyeColor.valueOf(pat[1]), PatternType.valueOf(pat[0])));
 			}
