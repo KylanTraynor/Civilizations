@@ -197,7 +197,7 @@ public class Civilizations extends JavaPlugin{
 			case "Camps":
 				log("INFO", "Loading camp from " + path);
 				return Camp.load(yaml);	
-			case "Small Outpost":
+			case "Small Outposts":
 				log("INFO", "Loading small outpost from " + path);
 				return SmallOutpost.load(yaml);
 			}
