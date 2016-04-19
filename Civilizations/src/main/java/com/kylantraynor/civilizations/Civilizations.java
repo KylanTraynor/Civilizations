@@ -176,6 +176,7 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	public static Settlement loadSettlement(String path){
+		log("INFO", "Getting settlement from " + path);
 		File f = new File(path);
 		if(f.exists()){
 			if(!f.getName().split("\\.")[1].equals("yml")) return null;
@@ -191,6 +192,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			f.delete();
 			String[] pathSplit = path.split("\\\\");
+			log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
 			switch(pathSplit[pathSplit.length - 2]){
 			case "Camps":
 				log("INFO", "Loading camp from " + path);
