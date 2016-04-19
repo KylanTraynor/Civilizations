@@ -139,6 +139,7 @@ public class CommandHouse implements CommandExecutor{
 					if(is.getType() == Material.BANNER || is.getType() == Material.STANDING_BANNER){
 						BannerMeta bm = (BannerMeta) is.getItemMeta();
 						if(Banner.exist(bm)){
+							
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + 
 									"This banner is already used by House " + House.get(Banner.get(bm)).getName() + ".");
 							return true;

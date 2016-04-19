@@ -118,7 +118,7 @@ public class InfluenceMap {
 		imgX /= precision;
 		imgY /= precision;
 		
-		Bukkit.getServer().getLogger().log(Level.INFO, "Writing in image at " + imgX + ", " + imgY + ".");
+		Bukkit.getServer().getLogger().log(Level.INFO, "Writing in image at " + imgX + ", " + imgY + ". (" + data + ")");
 		
 		img.setRGB(imgX, imgY, data);
 	}

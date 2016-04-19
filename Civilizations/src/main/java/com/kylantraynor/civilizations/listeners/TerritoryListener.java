@@ -17,6 +17,9 @@ public class TerritoryListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
+		
+		if(event.getTo().getBlock().equals(event.getFrom().getBlock())) return;
+		
 		Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
 		if(f != null){
 			if(playerLocations.containsKey(event.getPlayer())){
