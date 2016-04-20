@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.shapes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -76,7 +77,72 @@ public class CompositeShape extends Shape{
 
 	@Override
 	public String toString() {
-		return operation + "({" + shape1.toString() + "}, {" + shape2.toString() + "})";
+		return operation.toUpperCase() + "({" + shape1.toString() + "}, {" + shape2.toString() + "})";
+	}
+	
+	static public CompositeShape parse(String s){
+		s = s.trim();
+		int start = 0;
+		int end = 0;
+		start = s.indexOf('(');
+		end = s.lastIndexOf(')');
+		if(start == 0 || end == 0) return null;
+		// get >OPERATION<({Stuff}, {Stuff})
+		String operation = s.substring(0, start - 1);
+		
+		Shape shape1 = null;
+		Shape shape2 = null;
+		
+		String s1 = s.substring(start + 1, end - 1).trim();
+		
+		if(s1.startsWith("{")){
+			// get {>Stuff<}, {Stuff}
+			String subShape = "";
+			Stack<Character> stack = new Stack<Character>();
+			int subShapeEnd = 0;
+			for(int i = 0; i < s1.length(); i++){
+				switch(s1.charAt(i)){
+				case '{':
+					stack.push('{');
+					break;
+				case '}':
+					if(stack.peek().equals('}')){
+						stack.pop();
+						subShapeEnd = i;
+						if(stack.empty()) break;
+					}
+				}
+			}
+			subShape = s1.substring(1, subShapeEnd - 1);
+			shape1 = Shape.parse(subShape);
+			
+			// get {Stuff}, {>Stuff<}
+			String subShape2 = "";
+			stack = new Stack<Character>();
+			int subShape2Begin = 0;
+			int subShape2End = 0;
+			for(int i = subShapeEnd + 1; i < s1.length(); i++){
+				switch(s1.charAt(i)){
+				case '{':
+					if(stack.empty()){
+						subShape2Begin = i;
+					}
+					stack.push('{');
+					break;
+				case '}':
+					if(stack.peek().equals('}')){
+						stack.pop();
+						subShape2End = i;
+						if(stack.empty()) break;
+					}
+				}
+			}
+			
+			subShape2 = s1.substring(subShape2Begin + 1, subShape2End - 1);
+			shape2 = Shape.parse(subShape2);
+		}
+		if(shape1 == null || shape2 == null) return null;
+		return new CompositeShape(shape1, shape2, operation);
 	}
 
 	@Override
@@ -157,13 +223,27 @@ public class CompositeShape extends Shape{
 
 	@Override
 	public boolean intersect(Shape s) {
-		// TODO Auto-generated method stub
+		switch(operation.toUpperCase()){
+		case "UNION":
+			return (shape1.intersect(s) || shape2.intersect(s));
+		case "INTERSECTION":
+			break;
+		case "DIFFERENCE":
+			break;
+		}
 		return false;
 	}
 
 	@Override
 	public double distance(Location l) {
-		// TODO Auto-generated method stub
+		switch(operation.toUpperCase()){
+		case "UNION":
+			return Math.min(shape1.distance(l), shape2.distance(l));
+		case "INTERSECTION":
+			break;
+		case "DIFFERENCE":
+			break;
+		}
 		return 0;
 	}
 }
