@@ -23,30 +23,33 @@ import com.kylantraynor.civilizations.protection.PermissionType;
 public class CommandHouse implements CommandExecutor{
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
+		// Makes sure the user of this command is a player.
 		if(!(sender instanceof Player)){
 			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This command has to be used by a player.");
 			return true;
 		}
-		
+		// Makes sure there is more than just /House
 		if(args.length == 0){
 			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "/house [name]");
 			return true;
 		}
-		
+		// TODO Need to add the list of all the houses.
 		if(args[0].equalsIgnoreCase("LIST")){
 			return true;
 		}
-		
+		// When the command is of the kind /House [House Name]
+		// Gets the House
 		House house = House.get(args[0]);
 		if(house != null){
 			if(args.length > 1){
 				switch(args[1].toUpperCase()){
+				// /House [Name] Info
 				case "INFO":
 					house.getInteractiveInfoPanel((Player) sender).send(sender);;
 					return true;
+				// /House [Name] GetBanner
 				case "GETBANNER":
 					Player p2 = (Player ) sender;
 					if(p2.isOp()){
@@ -55,6 +58,7 @@ public class CommandHouse implements CommandExecutor{
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You don't have the permission to do this.");
 					}
 					return true;
+				// /House [Name] SetBanner
 				case "SETBANNER":
 					Player p = (Player) sender;
 					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, p)){
@@ -71,9 +75,11 @@ public class CommandHouse implements CommandExecutor{
 					}
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You need to target a banner to use this command.");
 					return true;
+				// /House [Name] GetWords
 				case "GETWORDS":
 					sender.sendMessage(house.getWords());
 					return true;
+				// /House [Name] SetWords Some words with spaces
 				case "SETWORDS":
 					if(!house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
 						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
@@ -85,6 +91,7 @@ public class CommandHouse implements CommandExecutor{
 					house.setWords(sb.toString().trim());
 					house.sendMessage("Words of the House have been changed to \"" + house.getWords() + "\".", null);
 					return true;
+				// /House [Name] Adopt [Player]
 				case "ADOPT":
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do this.");
@@ -110,7 +117,7 @@ public class CommandHouse implements CommandExecutor{
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "/house " + args[0] + " adopt [playername]");
 						return true;
 					}
-					
+				// /House [Name] Solidor
 				case "CREATE":
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "House " + args[0] + " already exists.");
 					return true;

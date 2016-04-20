@@ -290,7 +290,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			
 		};
-		br.runTaskTimer(this, interval, interval);
+		br.runTaskTimer(this, 0, interval);
 	}
 	
 	/**
@@ -413,12 +413,10 @@ public class Civilizations extends JavaPlugin{
 			Settlement s = Settlement.getAt(l);
 			Protection newProt = s.getProtection();
 			Plot plot = null;
-			if(s instanceof TownyTown){
-				for(Plot p : s.getPlots()){
-					if(p.protects(l)){
-						plot = p;
-						newProt = p.getProtection();
-					}
+			for(Plot p : s.getPlots()){
+				if(p.protects(l)){
+					plot = p;
+					newProt = p.getProtection();
 				}
 			}
 			Protection old = Civilizations.getSelectedProtections().get(player);

@@ -82,7 +82,7 @@ public class CivilizationsListener implements Listener{
 		if(event.getEntity() instanceof LivingEntity){
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){
-			case ZOMBIE: case SKELETON: case CREEPER:
+			case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case WITHER_SKULL:
 				if(!settlement.hasPermission(PermissionType.MOBSPAWNING, event.getLocation().getBlock(), null)){
 					event.setCancelled(true);
 				}
@@ -114,15 +114,6 @@ public class CivilizationsListener implements Listener{
 						updateProtectionVisibility(event.getPlayer(), p.getProtection());
 					}
 				}*/
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onBlockDamage(BlockDamageEvent event){
-		if(event.getPlayer() != null){
-			if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
-				event.setCancelled(true);
 			}
 		}
 	}
