@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
@@ -88,13 +89,26 @@ public class CommandGroup implements CommandExecutor {
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(g instanceof MarketStall){
-						if(((MarketStall)g).isOwner(p)){
-							((MarketStall)g).setForRent(!((MarketStall)g).isForRent());
-							if(((MarketStall)g).isForRent()){
-								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The stall is now for rent.");
+						MarketStall stall = (MarketStall) g;
+						if(stall.isOwner(p)){
+							stall.setForRent(!stall.isForRent());
+							if(stall.isForRent()){
+								sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The stall is now for rent.");
 							} else {
-								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The stall is no longer for rent.");
+								sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The stall is no longer for rent.");
 							}
+						}
+					}
+				}
+				break;
+			case "PURCHASE":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						MarketStall stall = (MarketStall) g;
+						if(stall.getOwner() == null){
+							stall.setOwner(p);
+							p.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "You've purchased this stall!");
 						}
 					}
 				}
@@ -103,8 +117,10 @@ public class CommandGroup implements CommandExecutor {
 				if(sender instanceof Player && args.length > 2){
 					Player p = (Player) sender;
 					if(g instanceof MarketStall){
-						if(((MarketStall)g).isOwner(p)){
-							((MarketStall)g).setRent(Double.parseDouble(args[2]));
+						MarketStall stall = (MarketStall) g;
+						if(stall.isOwner(p)){
+							stall.setRent(Double.parseDouble(args[2]));
+							sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The rent for this stall is now " + Economy.format(stall.getRent()) + ".");
 						}
 					}
 				}

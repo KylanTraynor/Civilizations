@@ -59,7 +59,7 @@ public class MarketStall extends Plot{
 	@Override
 	public void update(){
 		if(Instant.now().isAfter(nextPayment)){
-			nextPayment = nextPayment.plus(1, ChronoUnit.DAYS);
+			nextPayment = Instant.now().plus(1, ChronoUnit.DAYS);
 			payRent();
 			setChanged(true);
 		}

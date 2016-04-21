@@ -44,6 +44,7 @@ public class Plot extends Group {
 		this.setProtection(new Protection(this, settlement.getProtection()));
 		setSettlement(settlement);
 		this.getProtection().add(shape);
+		Cache.plotListChanged = true;
 		setChanged(true);
 	}
 	@Override
