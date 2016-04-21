@@ -61,7 +61,8 @@ public class CommandPlot implements CommandExecutor {
 						middlePoint.getY() - (height) / 2.0,
 						middlePoint.getZ() - (length) / 2.0);
 				
-				Shape s = new Prism(firstCorner, width, height, length);
+				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
+				Shape s = new Prism(firstCorner, width + 1, height + 1, length + 1);
 				
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
