@@ -38,6 +38,7 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
@@ -138,6 +139,7 @@ public class Civilizations extends JavaPlugin{
 		
 		startGroupUpdater(20L * 60 * 5);
 		startProtectionUpdater(40L);
+		startEconomyUpdater(20L * 60);
 		
 		setupCommands();
 	}
@@ -145,6 +147,7 @@ public class Civilizations extends JavaPlugin{
 	private void loadPlots() {
 		Map<String, Settlement> settlements = new HashMap<String, Settlement>();
 		loadKeeps(settlements);
+		loadStalls(settlements);
 	}
 
 	private void loadKeeps(Map<String, Settlement> settlements) {
@@ -171,6 +174,34 @@ public class Civilizations extends JavaPlugin{
 				log("INFO", "Loading Keep from file: " + f.getPath());
 				f.delete();
 				Keep h = Keep.load(yaml, settlements);
+			}
+		}
+	}
+	
+	private void loadStalls(Map<String, Settlement> settlements) {
+		File stallDir = getMarketStallDirectory();
+		if(stallDir.exists()){
+			log("INFO", "Loading Stalls...");
+			for(File f : stallDir.listFiles()){
+				if(!f.getName().split("\\.")[1].equals("yml")) continue;
+				if(isClearing() ){
+					log("INFO", "Cleared file " + f.getName());
+					f.delete();
+					continue;
+				}
+				YamlConfiguration yaml = new YamlConfiguration();
+				try {
+					yaml.load(f);
+				} catch (FileNotFoundException e) {
+					log("WARNING", "Couldn't find file " + f.getName());
+				} catch (IOException e) {
+					log("WARNING", "File " + f.getName() + " is in use in another application.");
+				} catch (InvalidConfigurationException e) {
+					log("WARNING", "Invalid file configuration.");
+				}
+				log("INFO", "Loading Stall from file: " + f.getPath());
+				f.delete();
+				MarketStall h = MarketStall.load(yaml, settlements);
 			}
 		}
 	}
@@ -232,7 +263,7 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private Listener getMenuListener() {
-		return this.menuListener;
+		return Civilizations.menuListener;
 	}
 
 	/**
@@ -249,7 +280,9 @@ public class Civilizations extends JavaPlugin{
 		if(TownyHook.load(pm)){ log("INFO", "Side by side with Towny: OK");
 		} else { log("INFO", "Side by side with Towny: NO");
 		}
-		
+		if(Economy.load(pm)){ log("INFO", "Economy: OK");
+		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly.");
+		}
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
 		if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
 	}
@@ -287,6 +320,24 @@ public class Civilizations extends JavaPlugin{
 					g.update();
 				}
 				log("INFO", "Files saved!");
+			}
+			
+		};
+		br.runTaskTimer(this, 0, interval);
+	}
+	
+	/**
+	 * Starts the process of updating the economy.
+	 * @param interval in ticks between updates.
+	 */
+	private void startEconomyUpdater(long interval) {
+		BukkitRunnable br = new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				for(MarketStall stall : Cache.getMarketstallList()){
+					stall.payRent();
+				}
 			}
 			
 		};
@@ -425,9 +476,9 @@ public class Civilizations extends JavaPlugin{
 				return;
 			}
 			Civilizations.getSelectedProtections().put(player, newProt);
-			String plotName = "Settlement.";
-			if(plot != null) plotName = " " + plot.getName() + ".";
-			player.sendMessage(messageHeader + ChatColor.GREEN + "Protection selected: " + s.getName() + " " + plotName);
+			String plotName = " Settlement";
+			if(plot != null) plotName = " " + plot.getName();
+			player.sendMessage(messageHeader + ChatColor.GREEN + "Protection selected: " + s.getName() + plotName + ".");
 			if(old != null) updateProtectionVisibility(player, old);
 			updateProtectionVisibility(player, newProt);
 		} else {
@@ -580,6 +631,19 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getKeepDirectory() {
 		File f = new File(getPlotDirectory(), "Keeps");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
+	 * Get the directory the stall files are stored in.
+	 * @return File
+	 */
+	public static File getMarketStallDirectory() {
+		File f = new File(getPlotDirectory(), "Stalls");
 		if(f.exists()){
 			return f;
 		} else {

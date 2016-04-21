@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 
@@ -40,7 +41,18 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "SETNAME":
 				if(sender instanceof Player){
-					if(g instanceof Plot){
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).isOwner((Player) sender) || ((MarketStall)g).getRenter() == sender){
+							StringBuilder sb = new StringBuilder();
+							for(int i = 2; i < args.length; i++){
+								sb.append(args[i] + " ");
+							}
+							g.setName(sb.toString().trim());
+							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
+						} else {
+							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
+						}
+					}else if(g instanceof Plot){
 						if(g.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
@@ -72,6 +84,16 @@ public class CommandGroup implements CommandExecutor {
 					sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
 				}
 				return true;
+			case "SETRENT":
+				if(sender instanceof Player && args.length > 2){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).isOwner(p)){
+							((MarketStall)g).setRent(Double.parseDouble(args[2]));
+						}
+					}
+				}
+				break;
 			case "UPGRADE":
 				if(sender instanceof Player){
 					if(g.hasPermission(PermissionType.UPGRADE, null, ((Player)sender))){
@@ -98,6 +120,37 @@ public class CommandGroup implements CommandExecutor {
 						a.add(args[i]);
 					}
 					processRankCommand(p, g, a.toArray(new String[a.size()]));
+				}
+				break;
+			case "KICK":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).isOwner(p)){
+							((MarketStall)g).setRenter(null);
+						}
+					}
+				}
+				break;
+			case "JOIN":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).getRenter() == null){
+							((MarketStall)g).setRenter(p);
+							((MarketStall)g).payRent();
+						}
+					}
+				}
+				break;
+			case "LEAVE":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).getRenter() == p){
+							((MarketStall)g).setRenter(null);
+						}
+					}
 				}
 				break;
 			case "MEMBERS":

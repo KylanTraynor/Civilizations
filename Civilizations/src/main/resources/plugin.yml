@@ -1,7 +1,7 @@
 name: Civilizations
 main: com.kylantraynor.civilizations.Civilizations
 version: 0.0.1
-softdepend: [dynmap, TitleManager, Towny]
+softdepend: [dynmap, TitleManager, Towny, Vault]
 commands:
   civilizationsanswer:
     description: Used to answer questions.

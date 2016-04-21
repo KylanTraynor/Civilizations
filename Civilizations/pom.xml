@@ -39,8 +39,18 @@
          	<id>localrepository</id>
          	<url>file:C:/Users/Baptiste/.m2/repository/</url>
       	</repository>
+      	<repository>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+        </repository>
 	</repositories>
 	<dependencies>
+		<!-- Vault -->
+		<dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		<!-- Citizens -->
 		<dependency>
 			<groupId>net.citizensnpc</groupId>
@@ -115,6 +125,11 @@
 				<groupId>com.wimbli</groupId>
 				<artifactId>WorldBorder</artifactId>
 				<version>1.8.5</version>
+			</dependency>
+			<dependency>
+				<groupId>net.milkbowl.vault</groupId>
+				<artifactId>VaultAPI</artifactId>
+				<version>1.5</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

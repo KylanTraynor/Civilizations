@@ -25,11 +25,11 @@ import com.kylantraynor.civilizations.shapes.Shape;
 public class Keep extends Plot{
 
 	public Keep(String name, Shape shape, Settlement settlement) {
-		super(name, shape, settlement);
+		super(name.isEmpty() ? "Keep" : name, shape, settlement);
 	}
 	
 	public Keep(String name, List<Shape> shapes, Settlement settlement) {
-		super(name, shapes, settlement);
+		super(name.isEmpty() ? "Keep" : name, shapes, settlement);
 	}
 	
 	public PlotType getPlotType(){

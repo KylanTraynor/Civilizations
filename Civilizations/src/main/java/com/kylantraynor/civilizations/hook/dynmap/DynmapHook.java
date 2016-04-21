@@ -15,8 +15,10 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 
 public class DynmapHook {
 	private static Plugin plugin;
@@ -24,6 +26,7 @@ public class DynmapHook {
 	private static MarkerAPI markerAPI;
 	private static boolean reload;
 	private static MarkerSet campMarkerSet;
+	private static MarkerSet stallsMarkerSet;
 	private static HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	/**
 	 * Tries to load the dynmap plugin. Returns true if successfully loaded, returns false otherwise.
@@ -100,16 +103,88 @@ public class DynmapHook {
 	}
 	
 	/**
+	 * Loads the marker set for Stalls
+	 */
+	private static void loadStallsMarkerSet() {
+		if(!isEnabled()) return;
+		stallsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.stalls");
+		if (stallsMarkerSet == null) {
+			stallsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.stalls", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Name", "Camps"), null, false);
+		} else {
+			stallsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.Name", "Market Stalls"));
+		}
+		if (stallsMarkerSet == null){
+			Civilizations.log("SEVERE", "Error creating marker set");
+			return;
+		}
+		int minzoom = Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.MinZoom", 5);
+		if (minzoom > 0) {
+		   stallsMarkerSet.setMinZoom(minzoom);
+		}
+		stallsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.LayerPrio", 10));
+	    stallsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Stalls.HideByDefault", false));
+	}
+	
+	/**
 	 * Update a settlement on the dynmap.
 	 * @param settlement to update.
 	 */
-	public static void updateMap(Settlement settlement){
+	public static void updateMap(Group group){
 		if(!DynmapHook.isEnabled()) return;
-		if(settlement instanceof Camp){
-			Camp c = (Camp) settlement;
+		if(group instanceof Camp){
+			Camp c = (Camp) group;
 			DynmapHook.updateCamp(c);
+		} else if (group instanceof MarketStall){
+			MarketStall m = (MarketStall) group;
+			DynmapHook.updateStall(m);
 		}
 	}
+	
+	/**
+	 * Updates the display of the given Stall.
+	 * @param c
+	 */
+	private static void updateStall(MarketStall m) {
+		String id = "" + m.getProtection().getCenter().getBlockX() + "_" +
+				m.getProtection().getCenter().getBlockY() + "_" +
+				m.getProtection().getCenter().getBlockZ() + "_camp";
+		String stallMarker = m.getIcon();
+		MarkerIcon stallIcon = null;
+	    if (stallMarker != null)
+	    {
+	    	stallIcon = markerAPI.getMarkerIcon(stallMarker);
+	        if (stallIcon == null)
+	        {
+	          Civilizations.log("INFO", "Invalid StallIcon: " + stallMarker);
+	          stallIcon = markerAPI.getMarkerIcon("scales");
+	        }
+	    }
+	    if(stallIcon != null){
+	    	Marker stall = markerList.remove(id);
+	    	if (stall == null){
+	    		stall = stallsMarkerSet.createMarker(id, m.getName(), m.getProtection().getCenter().getWorld().getName(),
+	    				m.getProtection().getCenter().getBlockX(),
+	    				m.getProtection().getCenter().getBlockY(),
+	    				m.getProtection().getCenter().getBlockZ(), stallIcon, false);
+	    	} else {
+	    		stall.setLocation(m.getProtection().getCenter().getWorld().getName(),
+	    				m.getProtection().getCenter().getBlockX(),
+	    				m.getProtection().getCenter().getBlockY(),
+	    				m.getProtection().getCenter().getBlockZ());
+	            stall.setLabel(m.getName());
+	            stall.setMarkerIcon(stallIcon);
+	    	}
+	    	StringBuilder sb = new StringBuilder();
+	    	if(m.getRenter() == null){
+	    		sb.append("Available For Rent" + "\n");
+	    	} else {
+	    		sb.append(m.getRenter().getName() + "\n");
+	    	}
+	    	stall.setDescription("Renter: " + sb.toString());
+	    	markerList.put(id, stall);
+	    }
+	}
+
 	/**
 	 * Updates the display of the given Camp.
 	 * @param c

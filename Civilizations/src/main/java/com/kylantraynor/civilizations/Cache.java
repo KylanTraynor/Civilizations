@@ -9,6 +9,7 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 
 public class Cache {
@@ -20,6 +21,7 @@ public class Cache {
 	public static boolean plotListChanged = true;
 	public static boolean houseListChanged = true;
 	public static boolean fortListChanged = true;
+	public static boolean marketstallListChanged = true;
 	
 	private static List<Group> groupList;
 	private static List<Settlement> settlementList;
@@ -28,6 +30,7 @@ public class Cache {
 	private static List<Plot> plotList;
 	private static List<House> houseList;
 	private static List<Fort> fortList;
+	private static List<MarketStall> marketstallList;
 	
 	/**
 	 * Gets the list of Groups.
@@ -143,5 +146,22 @@ public class Cache {
 			}
 		}
 		return fortList;
+	}
+	
+	/**
+	 * Gets the list of MarketStalls.
+	 * @return List<MarketStall> of cached MarketStalls.
+	 */
+	public static List<MarketStall> getMarketstallList(){
+		if(marketstallListChanged || marketstallList == null){
+			marketstallListChanged = false;
+			marketstallList = new ArrayList<MarketStall>();
+			for(Plot p : getPlotList()){
+				if(p instanceof MarketStall){
+					marketstallList.add((MarketStall) p);
+				}
+			}
+		}
+		return marketstallList;
 	}
 }

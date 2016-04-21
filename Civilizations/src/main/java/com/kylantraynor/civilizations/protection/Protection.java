@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -281,5 +282,26 @@ public class Protection {
 
 	public void setShapes(List<Shape> shapes) {
 		this.shapes = shapes;
+	}
+
+	public Location getCenter() {
+		World w = null;
+		int minX = 0;
+		int minY = 0;
+		int minZ = 0;
+		int maxX = 0;
+		int maxY = 0;
+		int maxZ = 0;
+		for(Shape s : shapes){
+			w = s.getLocation().getWorld();
+			minX = Math.min(minX, s.getMinX());
+			minY = Math.min(minY, s.getMinY());
+			minZ = Math.min(minZ, s.getMinZ());
+			maxX = Math.max(maxX, s.getMaxX());
+			maxY = Math.max(maxY, s.getMaxY());
+			maxZ = Math.max(maxZ, s.getMaxZ());
+		}
+		if(w == null) return null;
+		return new Location(w, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 	}
 }
