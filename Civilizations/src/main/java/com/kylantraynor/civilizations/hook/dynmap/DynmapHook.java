@@ -152,7 +152,7 @@ public class DynmapHook {
 	private static void updateStall(MarketStall m) {
 		String id = "" + m.getProtection().getCenter().getBlockX() + "_" +
 				m.getProtection().getCenter().getBlockY() + "_" +
-				m.getProtection().getCenter().getBlockZ() + "_camp";
+				m.getProtection().getCenter().getBlockZ() + "_stall";
 		String stallMarker = m.getIcon();
 		MarkerIcon stallIcon = null;
 	    if (stallMarker != null)
