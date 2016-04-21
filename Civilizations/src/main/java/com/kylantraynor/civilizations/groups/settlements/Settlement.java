@@ -58,6 +58,7 @@ public class Settlement extends Group {
 		if(this.plots.contains(p)){
 			return false;
 		} else {
+			p.getProtection().setParent(this.getProtection());;
 			this.plots.add(p);
 			setChanged(true);
 			return true;
@@ -71,6 +72,7 @@ public class Settlement extends Group {
 	public boolean removePlot(Plot p){
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
+			p.getProtection().setParent(null);
 			setChanged(true);
 			return true;
 		} else {

@@ -172,10 +172,8 @@ public class MarketStall extends Plot{
 			if(player == getOwner()){
 				return true;
 			}
-		} else if(getSettlement() != null){
-			if(getSettlement().hasPermission(PermissionType.MANAGE_STALLS, null, player.getPlayer())){
-				return true;
-			}
+		} else if(this.hasPermission(PermissionType.MANAGE_STALLS, null, player.getPlayer())){
+			return true;
 		} else if(player.isOp()){
 			return true;
 		}
@@ -203,6 +201,9 @@ public class MarketStall extends Plot{
 		fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand)
 		.then(owner).color(ChatColor.GOLD).command(ownerCommand);
 		fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
+		if(getRenter() == player){
+			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), this.nextPayment) + " hours").color(ChatColor.GOLD);
+		}
 		fm.then("\nActions: ").color(ChatColor.GRAY);
 		if(isOwner(player)){
 			fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Stall.").suggest("/group " + getId() + " setname NEW NAME");

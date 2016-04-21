@@ -17,6 +17,8 @@ public class ProtectionListener implements Listener{
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.getPlayer() == null) return;
 		if(Settlement.isProtected(event.getBlock().getLocation())){
+			
+			// Checks if the protection belongs to a Market Stall.
 			for(MarketStall ms : Cache.getMarketstallList()){
 				if(ms.protects(event.getBlock().getLocation())){
 					if(ms.isOwner(event.getPlayer())){
@@ -42,6 +44,8 @@ public class ProtectionListener implements Listener{
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.getPlayer() == null) return;
 		if(Settlement.isProtected(event.getBlock().getLocation())){
+			
+			// Checks if the protection belongs to a Market Stall.
 			for(MarketStall ms : Cache.getMarketstallList()){
 				if(ms.protects(event.getBlock().getLocation())){
 					if(ms.isOwner(event.getPlayer())){

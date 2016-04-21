@@ -39,6 +39,14 @@ public class Protection {
 		ranks = new ArrayList<Rank>();
 	}
 	
+	public void setParent(Protection newParent){
+		this.parent = newParent;
+	}
+	
+	public Protection getParent(){
+		return this.parent;
+	}
+	
 	public void show(final Player p){
 		if(p != null){
 			for(final Shape s : shapes){
