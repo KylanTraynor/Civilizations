@@ -222,7 +222,7 @@ public class Civilizations extends JavaPlugin{
 				log("WARNING", "Invalid file configuration.");
 			}
 			f.delete();
-			String[] pathSplit = path.split("\\\\");
+			String[] pathSplit = path.split(File.separator);
 			log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
 			switch(pathSplit[pathSplit.length - 2]){
 			case "Camps":
