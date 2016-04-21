@@ -533,6 +533,7 @@ public class Civilizations extends JavaPlugin{
 				for(Plot plot : to.getPlots()){
 					if(plot.protects(toL)) p = plot;
 				}
+				if(p == null) return;
 				if(!p.protects(fromL)){
 					TitleManagerHook.sendActionBar(p.getName(), player, false);
 				}
