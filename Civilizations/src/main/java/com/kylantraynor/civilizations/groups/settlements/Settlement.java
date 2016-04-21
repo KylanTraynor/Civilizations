@@ -96,6 +96,7 @@ public class Settlement extends Group {
 	 * @return
 	 */
 	public double distance(Location location){
+		if(protects(location)) return 0.0;
 		double distance = location.distance(getLocation());
 		for(Shape s : this.getProtection().getShapes()){
 			distance = Math.min(s.distance(location), distance);
