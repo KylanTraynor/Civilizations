@@ -69,10 +69,15 @@ public class DynmapHook {
 					campMarkerSet.deleteMarkerSet();
 					campMarkerSet = null;
 				}
+				if (stallsMarkerSet != null){
+					stallsMarkerSet.deleteMarkerSet();
+					stallsMarkerSet = null;
+				}
 		    } else {
 		    	reload = true;
 		    }
 			loadCampMarkerSet();
+			loadStallsMarkerSet();
 		} catch (Exception e) {
 			Civilizations.log("SEVERE", "Something went wrong activating Dynmap for Civilizations. Is it up to date?");
 			e.printStackTrace();
