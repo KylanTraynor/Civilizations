@@ -114,7 +114,7 @@ public class DynmapHook {
 		if(!isEnabled()) return;
 		stallsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.stalls");
 		if (stallsMarkerSet == null) {
-			stallsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.stalls", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Name", "Camps"), null, false);
+			stallsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.stalls", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Name", "Market Stalls"), null, false);
 		} else {
 			stallsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.Name", "Market Stalls"));
 		}
