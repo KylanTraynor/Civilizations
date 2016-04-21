@@ -476,10 +476,14 @@ public class Civilizations extends JavaPlugin{
 					newProt = p.getProtection();
 				}
 			}
-			
+			Settlement s = null;
 			if(newProt == null){
-				Settlement s = Settlement.getAt(l);
-				newProt = s.getProtection();
+				s = Settlement.getAt(l);
+				if(s != null){
+					newProt = s.getProtection();
+				}
+			} else {
+				s = plot.getSettlement();
 			}
 			Protection old = Civilizations.getSelectedProtections().get(player);
 			if(newProt.equals(old)){
@@ -489,7 +493,7 @@ public class Civilizations extends JavaPlugin{
 			Civilizations.getSelectedProtections().put(player, newProt);
 			String plotName = " Settlement";
 			if(plot != null) plotName = " " + plot.getName();
-			player.sendMessage(messageHeader + ChatColor.GREEN + "Protection selected: " + s.getName() + plotName + ".");
+			player.sendMessage(messageHeader + ChatColor.GREEN + "Protection selected: " + (s != null ? s.getName() : "") + plotName + ".");
 			if(old != null) updateProtectionVisibility(player, old);
 			updateProtectionVisibility(player, newProt);
 		} else {
