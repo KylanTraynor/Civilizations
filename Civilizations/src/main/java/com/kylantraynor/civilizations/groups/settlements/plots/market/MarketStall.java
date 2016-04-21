@@ -37,6 +37,7 @@ public class MarketStall extends Plot{
 	private UUID renter;
 	private double rent = 1.0;
 	private Instant nextPayment = Instant.now();
+	private boolean forRent = true;
 	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
@@ -60,9 +61,7 @@ public class MarketStall extends Plot{
 			payRent();
 			setChanged(true);
 		}
-		if(isChanged()){
-			DynmapHook.updateMap(this);
-		}
+		DynmapHook.updateMap(this);
 		super.update();
 	}
 	/**
@@ -196,11 +195,15 @@ public class MarketStall extends Plot{
 		String renterCommand = getRenter() == null ? "" : "/p " + getRenter().getName();
 		String ownerCommand = getOwner() == null ? (getSettlement() == null ? "" : "/group " + getSettlement().getId() + " INFO") : "/p " + getOwner().getName(); 
 		String owner = getOwner() == null ? (getSettlement() == null ? "No one" : getSettlement().getName()) : getOwner().getName();
-		fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
+		if(isForRent()){
+			fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
 			.then(getRenter() == null ? "Available" : getRenter().getName()).color(ChatColor.GOLD).command(renterCommand);
+		}
 		fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand)
 		.then(owner).color(ChatColor.GOLD).command(ownerCommand);
-		fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
+		if(isForRent()){
+			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
+		}
 		if(getRenter() == player){
 			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), this.nextPayment) + " hours").color(ChatColor.GOLD);
 		}
@@ -208,14 +211,24 @@ public class MarketStall extends Plot{
 		if(isOwner(player)){
 			fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Stall.").suggest("/group " + getId() + " setname NEW NAME");
 			fm.then(" - ").color(ChatColor.GRAY);
-			fm.then("Kick").color(ChatColor.GOLD).tooltip("Kicks the renter of this Stall").command("/group " + getId() + " kick");
+			if(getRenter() != null){
+				fm.then("Kick").color(ChatColor.GOLD).tooltip("Kicks the renter of this Stall").command("/group " + getId() + " kick");
+			} else {
+				fm.then("Kick").color(ChatColor.GRAY).tooltip("Kicks the renter of this Stall");
+			}
 			fm.then(" - ").color(ChatColor.GRAY);
 			fm.then("Price").color(ChatColor.GOLD).tooltip("Change the rent of this Stall").suggest("/group " + getId() + " setrent " + getRent());
+			fm.then(" - ").color(ChatColor.GRAY);
+			if(isForRent()){
+				fm.then("Rentable").color(ChatColor.GREEN).tooltip("Toggle the rentable state of the stall.").suggest("/group " + getId() + " togglerentable");
+			} else {
+				fm.then("Rentable").color(ChatColor.RED).tooltip("Toggle the rentable state of the stall.").suggest("/group " + getId() + " togglerentable");
+			}
 		} else if(getRenter() == player){
 			fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Stall.").suggest("/group " + getId() + " setname NEW NAME");
 			fm.then(" - ").color(ChatColor.GRAY);
 			fm.then("Leave").color(ChatColor.GOLD).tooltip("Stop renting this Stall").command("/group " + getId() + " leave");
-		} else if(getRenter() == null) {
+		} else if(getRenter() == null && isForRent()) {
 			fm.then("\nRent").color(ChatColor.GOLD).tooltip("Start renting this Stall").command("/group " + getId() + " join");
 		}
 		
@@ -251,6 +264,7 @@ public class MarketStall extends Plot{
 		String name = cf.getString("Name");
 		String settlementPath = cf.getString("SettlementPath");
 		String shapes = cf.getString("Shape");
+		Boolean forRent = cf.getBoolean("IsForRent");
 		Double rent = cf.getDouble("Rent");
 		String nextpayment = cf.getString("NextPayment");
 		if(cf.getString("Creation") != null){
@@ -284,6 +298,9 @@ public class MarketStall extends Plot{
 				g.setRenter(Bukkit.getOfflinePlayer(id));
 			}
 		}
+		if(forRent != null){
+			g.setForRent(forRent);
+		}
 		if(rent != null){
 			g.setRent(rent);
 		}
@@ -313,6 +330,7 @@ public class MarketStall extends Plot{
 			fc.set("SettlementPath", null);
 		}
 		fc.set("Shape", getShapesString());
+		fc.set("IsForRent", isForRent());
 		fc.set("Rent", getRent());
 		fc.set("NextPayment", nextPayment.toString());
 		fc.set("Creation", getCreationDate().toString());
@@ -330,6 +348,14 @@ public class MarketStall extends Plot{
 		} catch (IOException e) {
 			return false;
 		}
+	}
+
+	public boolean isForRent() {
+		return forRent;
+	}
+
+	public void setForRent(boolean forRent) {
+		this.forRent = forRent;
 	}
 	
 }

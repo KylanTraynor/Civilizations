@@ -84,6 +84,16 @@ public class CommandGroup implements CommandExecutor {
 					sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
 				}
 				return true;
+			case "TOGGLERENTABLE":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof MarketStall){
+						if(((MarketStall)g).isOwner(p)){
+							((MarketStall)g).setForRent(((MarketStall)g).isForRent());
+						}
+					}
+				}
+				break;
 			case "SETRENT":
 				if(sender instanceof Player && args.length > 2){
 					Player p = (Player) sender;
