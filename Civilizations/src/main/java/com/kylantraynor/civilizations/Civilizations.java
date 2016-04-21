@@ -155,6 +155,7 @@ public class Civilizations extends JavaPlugin{
 		if(keepDir.exists()){
 			log("INFO", "Loading Keeps...");
 			for(File f : keepDir.listFiles()){
+				try{
 				if(!f.getName().split("\\.")[1].equals("yml")) continue;
 				if(isClearing() ){
 					log("INFO", "Cleared file " + f.getName());
@@ -174,6 +175,9 @@ public class Civilizations extends JavaPlugin{
 				log("INFO", "Loading Keep from file: " + f.getPath());
 				f.delete();
 				Keep h = Keep.load(yaml, settlements);
+				} catch (Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -183,6 +187,7 @@ public class Civilizations extends JavaPlugin{
 		if(stallDir.exists()){
 			log("INFO", "Loading Stalls...");
 			for(File f : stallDir.listFiles()){
+				try{
 				if(!f.getName().split("\\.")[1].equals("yml")) continue;
 				if(isClearing() ){
 					log("INFO", "Cleared file " + f.getName());
@@ -202,6 +207,9 @@ public class Civilizations extends JavaPlugin{
 				log("INFO", "Loading Stall from file: " + f.getPath());
 				f.delete();
 				MarketStall h = MarketStall.load(yaml, settlements);
+				} catch (Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
 	}
