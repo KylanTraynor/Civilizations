@@ -151,6 +151,7 @@ public class SmallOutpost extends Fort{
 		
 		fc.set("Creation", getCreationDate().toString());
 		fc.set("House", getHouse().getName());
+		fc.set("Influence", getInfluence());
 		
 		int i = 0;
 		for(UUID id : getMembers()){

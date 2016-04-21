@@ -9,7 +9,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
-import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class ProtectionListener implements Listener{
 	
