@@ -161,7 +161,7 @@ public class CommandPlot implements CommandExecutor {
 						break;
 					case "STALL":
 						if(set == null){
-							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A warehouse cannot be created outside of a settlement.");
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A stall cannot be created outside of a settlement.");
 							return true;
 						} else {
 							Plot p = new MarketStall("Stall", s, set);

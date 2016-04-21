@@ -86,8 +86,11 @@ public class MarketStall extends Plot{
 	}
 	
 	public void setOwner(OfflinePlayer player){
-		if(player == null) owner = null;
-		owner = player.getUniqueId();
+		if(player == null){
+			owner = null;
+		} else {
+			owner = player.getUniqueId();
+		}
 		setChanged(true);
 	}
 	
@@ -97,8 +100,11 @@ public class MarketStall extends Plot{
 	}
 	
 	public void setRenter(OfflinePlayer player){
-		if(player == null) renter = null;
-		renter = player.getUniqueId();
+		if(player == null){
+			renter = null;
+		} else {
+			renter = player.getUniqueId();
+		}
 		setChanged(true);
 	}
 
