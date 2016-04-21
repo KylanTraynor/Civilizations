@@ -530,7 +530,7 @@ public class Civilizations extends JavaPlugin{
 				}
 			} else {
 				Plot p = null;
-				for(Plot plot : to.getPlots()){
+				for(Plot plot : Cache.getPlotList()){
 					if(plot.protects(toL)) p = plot;
 				}
 				if(p == null) return;
