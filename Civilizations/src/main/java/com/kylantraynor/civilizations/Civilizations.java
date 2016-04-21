@@ -31,6 +31,7 @@ import com.kylantraynor.civilizations.commands.CommandGroup;
 import com.kylantraynor.civilizations.commands.CommandHouse;
 import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandSelection;
+import com.kylantraynor.civilizations.commands.CommandStall;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
@@ -312,6 +313,7 @@ public class Civilizations extends JavaPlugin{
 		this.getCommand("Selection").setExecutor(new CommandSelection());
 		
 		this.getCommand("Plot").setExecutor(new CommandPlot());
+		this.getCommand("Stall").setExecutor(new CommandStall());
 		
 		if(TownyHook.isEnabled()){
 			this.getCommand("TownyTown").setExecutor(new CommandTownyTown());
