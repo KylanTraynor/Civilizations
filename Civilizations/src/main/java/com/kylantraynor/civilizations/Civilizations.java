@@ -467,14 +467,19 @@ public class Civilizations extends JavaPlugin{
 			}
 		}
 		if(l != null){
-			Settlement s = Settlement.getAt(l);
-			Protection newProt = s.getProtection();
+			//Try getting a plot
 			Plot plot = null;
-			for(Plot p : s.getPlots()){
+			Protection newProt = null;
+			for(Plot p : Cache.getPlotList()){
 				if(p.protects(l)){
 					plot = p;
 					newProt = p.getProtection();
 				}
+			}
+			
+			if(newProt == null){
+				Settlement s = Settlement.getAt(l);
+				newProt = s.getProtection();
 			}
 			Protection old = Civilizations.getSelectedProtections().get(player);
 			if(newProt.equals(old)){
