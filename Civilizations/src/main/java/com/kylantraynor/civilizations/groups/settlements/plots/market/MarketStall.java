@@ -16,8 +16,10 @@ import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
@@ -125,6 +127,10 @@ public class MarketStall extends Plot{
 		if(this.owner != null){
 			OfflinePlayer owner = Bukkit.getOfflinePlayer(this.owner);
 			if(Economy.withdrawPlayer(renter, rent)){
+				if(renter.isOnline()){
+					renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
+					Economy.playPaySound(renter.getPlayer());
+				}
 				double payout = rent;
 				//Pay Settlement's Stall Tax
 				if(getSettlement() != null){
@@ -141,9 +147,17 @@ public class MarketStall extends Plot{
 				}
 				//Pay Owner
 				Economy.depositPlayer(owner, payout);
+				if(owner.isOnline()){
+					owner.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(rent) + " for the rent.");
+					Economy.playCashinSound(owner.getPlayer());
+				}
 			}
 		} else if(getSettlement() != null) {
 			if(Economy.withdrawPlayer(renter, rent)){
+				if(renter.isOnline()){
+					renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
+					Economy.playPaySound(renter.getPlayer());
+				}
 				double payout = rent;
 				//Pay Fort's Stall Tax
 				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
@@ -160,6 +174,10 @@ public class MarketStall extends Plot{
 			Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 			if(f != null){
 				if(Economy.withdrawPlayer(renter, rent)){
+					if(renter.isOnline()){
+						renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
+						Economy.playPaySound(renter.getPlayer());
+					}
 					Economy.depositSettlement(f, rent);
 				}
 			}

@@ -4,9 +4,12 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.potion.PotionEffectType;
 
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
@@ -104,6 +107,14 @@ public class Economy {
 		}
 	}
 	
+	public static String format(double amount){
+		if(isVaultEnabled()){
+			return vault.format(amount);
+		} else {
+			return "$" + amount;
+		}
+	}
+	
 	public static boolean depositSettlement(Settlement settlement, double amount){
 		if(settlement instanceof TownyTown && isVaultEnabled()){
 			EconomyResponse r = vault.bankDeposit("town_" + settlement.getName(), amount);
@@ -114,6 +125,18 @@ public class Economy {
 			}
 		} else {
 			return false;
+		}
+	}
+	
+	public static void playCashinSound(Player player){
+		if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY) && !player.isSneaking()){
+			player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 1);
+		}
+	}
+	
+	public static void playPaySound(Player player){
+		if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY) && !player.isSneaking()){
+			player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 0.5);
 		}
 	}
 }
