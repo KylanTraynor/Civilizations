@@ -94,12 +94,12 @@ public class CommandPlot implements CommandExecutor {
 					return true;
 				}
 				
-				Location middlePoint = new Location(points[0].getWorld(), (points[0].getX() + points[1].getX())/2,
-						(points[0].getY() + points[1].getY()) /2, (points[0].getZ() + points[1].getZ()) / 2);
+				Location middlePoint = new Location(points[0].getWorld(), (points[0].getX() + points[1].getX())/2.0,
+						(points[0].getY() + points[1].getY()) /2.0, (points[0].getZ() + points[1].getZ()) / 2.0);
 				
-				int width = (int) Math.abs(points[1].getX() - points[0].getX());
-				int height = (int) Math.abs(points[1].getY() - points[0].getY());
-				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
+				int width = (int) Math.abs(points[1].getBlockX() - points[0].getBlockX());
+				int height = (int) Math.abs(points[1].getBlockY() - points[0].getBlockY());
+				int length = (int) Math.abs(points[1].getBlockZ() - points[0].getBlockZ());
 				
 				Location firstCorner = new Location(middlePoint.getWorld(),
 						middlePoint.getX() - (width) / 2.0,
