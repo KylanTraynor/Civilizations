@@ -16,7 +16,7 @@ public class CommandStall extends CommandGroup{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		Player player = null;
-		if(sender instanceof Player){
+		if(!(sender instanceof Player)){
 			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This command can only be used by a player.");
 			return true;
 		}
