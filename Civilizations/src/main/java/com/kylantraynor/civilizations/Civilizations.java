@@ -46,6 +46,7 @@ import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
 import com.kylantraynor.civilizations.listeners.MenuListener;
+import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -85,6 +86,7 @@ public class Civilizations extends JavaPlugin{
 	private static CivilizationsListener mainListener = new CivilizationsListener();
 	private static MenuListener menuListener = new MenuListener();
 	private static TerritoryListener territoryListener = new TerritoryListener();
+	private static ProtectionListener protectionListener = new ProtectionListener();
 	
 	/**
 	 * Returns the main listener of Civilizations.
@@ -127,6 +129,7 @@ public class Civilizations extends JavaPlugin{
 		pm.registerEvents(getMainListener(), this);
 		pm.registerEvents(getMenuListener(), this);
 		pm.registerEvents(getTerritoryListener(), this);
+		pm.registerEvents(getProtectionListener(), this);
 		
 		registerAchievement("Setting up Camp!","Create a camp.");
 		
@@ -742,5 +745,9 @@ public class Civilizations extends JavaPlugin{
 
 	public static TerritoryListener getTerritoryListener() {
 		return territoryListener;
+	}
+
+	public static ProtectionListener getProtectionListener() {
+		return protectionListener;
 	}
 }
