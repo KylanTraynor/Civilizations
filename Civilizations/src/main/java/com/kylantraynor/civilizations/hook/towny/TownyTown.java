@@ -131,6 +131,7 @@ public class TownyTown extends Settlement{
 		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
 		
+		
 		mayorPerm.put(PermissionType.PLACE, true);
 		mayorPerm.put(PermissionType.BREAK, true);
 		mayorPerm.put(PermissionType.INVITE, true);
@@ -138,6 +139,10 @@ public class TownyTown extends Settlement{
 		mayorPerm.put(PermissionType.CLAIM, true);
 		mayorPerm.put(PermissionType.UNCLAIM, true);
 		mayorPerm.put(PermissionType.UPGRADE, true);
+		
+		mayorPerm.put(PermissionType.MANAGE, true);
+		mayorPerm.put(PermissionType.MANAGE_STALLS, true);
+		
 		
 		assistantPerm.put(PermissionType.UPGRADE, false);
 		
