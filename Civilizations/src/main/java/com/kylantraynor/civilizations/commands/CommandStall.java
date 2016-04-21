@@ -25,7 +25,10 @@ public class CommandStall extends CommandGroup{
 		
 		MarketStall stall = null;
 		for(MarketStall s : Cache.getMarketstallList()){
-			if(s.protects(player.getLocation())) stall = s; break;
+			if(s.protects(player.getLocation())){
+				stall = s;
+				break;
+			}
 		}
 		if(stall == null){
 			player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "There is no stall here.");
