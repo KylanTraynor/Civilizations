@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -12,7 +13,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStal
 
 public class ProtectionListener implements Listener{
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.getPlayer() == null) return;
 		if(Settlement.isProtected(event.getBlock().getLocation())){
@@ -39,7 +40,7 @@ public class ProtectionListener implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.getPlayer() == null) return;
 		if(Settlement.isProtected(event.getBlock().getLocation())){
