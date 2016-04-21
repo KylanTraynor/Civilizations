@@ -335,9 +335,7 @@ public class Civilizations extends JavaPlugin{
 
 			@Override
 			public void run() {
-				for(MarketStall stall : Cache.getMarketstallList()){
-					stall.payRent();
-				}
+				
 			}
 			
 		};

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class MarketStall extends Plot{
 	private UUID owner;
 	private UUID renter;
 	private double rent = 1.0;
+	private Instant nextPayment = Instant.now();
 	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
@@ -53,7 +55,14 @@ public class MarketStall extends Plot{
 	
 	@Override
 	public void update(){
-		DynmapHook.updateMap(this);
+		if(Instant.now().isAfter(nextPayment)){
+			nextPayment = nextPayment.plus(1, ChronoUnit.DAYS);
+			payRent();
+			setChanged(true);
+		}
+		if(isChanged()){
+			DynmapHook.updateMap(this);
+		}
 		super.update();
 	}
 	/**
@@ -242,6 +251,7 @@ public class MarketStall extends Plot{
 		String settlementPath = cf.getString("SettlementPath");
 		String shapes = cf.getString("Shape");
 		Double rent = cf.getDouble("Rent");
+		String nextpayment = cf.getString("NextPayment");
 		if(cf.getString("Creation") != null){
 			creation = Instant.parse(cf.getString("Creation"));
 		} else {
@@ -276,9 +286,16 @@ public class MarketStall extends Plot{
 		if(rent != null){
 			g.setRent(rent);
 		}
+		if(!nextpayment.isEmpty()){
+			g.setNextPayment(Instant.parse(nextpayment));
+		}
 		
 		return g;
 	}
+	private void setNextPayment(Instant instant) {
+		nextPayment = instant;
+	}
+
 	/**
 	 * Saves the Stall to its file.
 	 * @return true if the group has been saved, false otherwise.
@@ -295,12 +312,14 @@ public class MarketStall extends Plot{
 			fc.set("SettlementPath", null);
 		}
 		fc.set("Shape", getShapesString());
+		fc.set("Rent", getRent());
+		fc.set("NextPayment", nextPayment.toString());
 		fc.set("Creation", getCreationDate().toString());
-		
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
+		if(owner != null){
+			fc.set("Owner", owner);
+		}
+		if(renter != null){
+			fc.set("Renter", renter);
 		}
 		
 		try {
