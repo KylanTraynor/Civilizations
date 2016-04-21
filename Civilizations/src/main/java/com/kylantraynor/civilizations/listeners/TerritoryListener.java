@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class TerritoryListener implements Listener {
@@ -27,11 +28,11 @@ public class TerritoryListener implements Listener {
 					return;
 				} else {
 					playerLocations.put(event.getPlayer(), f);
-					event.getPlayer().sendMessage("You are on House " + f.getHouse().getName() + "'s territory.");
+					TitleManagerHook.sendActionBar("House " + f.getHouse().getName() + "'s territory.", event.getPlayer(), false);
 				}
 			} else {
 				playerLocations.put(event.getPlayer(), f);
-				event.getPlayer().sendMessage("You are on House " + f.getHouse().getName() + "'s territory.");
+				TitleManagerHook.sendActionBar("House " + f.getHouse().getName() + "'s territory.", event.getPlayer(), false);
 			}
 		} else {
 			playerLocations.remove(event.getPlayer());
