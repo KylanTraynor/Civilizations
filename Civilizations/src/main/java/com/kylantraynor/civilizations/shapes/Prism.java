@@ -134,32 +134,32 @@ public boolean intersect(Sphere s){
 	}
 
 	@Override
-	int getMinX() {
+	public int getMinX() {
 		return getLocation().getBlockX();
 	}
 
 	@Override
-	int getMinY() {
+	public int getMinY() {
 		return getLocation().getBlockY();
 	}
 
 	@Override
-	int getMinZ() {
+	public int getMinZ() {
 		return getLocation().getBlockZ();
 	}
 
 	@Override
-	int getMaxX() {
+	public int getMaxX() {
 		return getLocation().getBlockX() + getWidth();
 	}
 
 	@Override
-	int getMaxY() {
+	public int getMaxY() {
 		return getLocation().getBlockY() + getHeight();
 	}
 
 	@Override
-	int getMaxZ() {
+	public int getMaxZ() {
 		return getLocation().getBlockZ() + getLength();
 	}
 	

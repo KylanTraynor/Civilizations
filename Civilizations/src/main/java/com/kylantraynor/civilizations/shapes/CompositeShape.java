@@ -192,32 +192,32 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	int getMinX() {
+	public int getMinX() {
 		return Math.min(shape1.getMinX(), shape2.getMinX());
 	}
 
 	@Override
-	int getMinY() {
+	public int getMinY() {
 		return Math.min(shape1.getMinY(), shape2.getMinY());
 	}
 
 	@Override
-	int getMinZ() {
+	public int getMinZ() {
 		return Math.min(shape1.getMinZ(), shape2.getMinZ());
 	}
 
 	@Override
-	int getMaxX() {
+	public int getMaxX() {
 		return Math.max(shape1.getMaxX(), shape2.getMaxX());
 	}
 
 	@Override
-	int getMaxY() {
+	public int getMaxY() {
 		return Math.max(shape1.getMaxY(), shape2.getMaxY());
 	}
 
 	@Override
-	int getMaxZ() {
+	public int getMaxZ() {
 		return Math.max(shape1.getMaxZ(), shape2.getMaxZ());
 	}
 

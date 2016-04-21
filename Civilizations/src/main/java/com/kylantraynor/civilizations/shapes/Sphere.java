@@ -137,32 +137,32 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	int getMinX() {
+	public int getMinX() {
 		return getLocation().getBlockX() - getRadius();
 	}
 
 	@Override
-	int getMinY() {
+	public int getMinY() {
 		return getLocation().getBlockY() - getRadius();
 	}
 
 	@Override
-	int getMinZ() {
+	public int getMinZ() {
 		return getLocation().getBlockZ() - getRadius();
 	}
 
 	@Override
-	int getMaxX() {
+	public int getMaxX() {
 		return getLocation().getBlockX() + getRadius();
 	}
 
 	@Override
-	int getMaxY() {
+	public int getMaxY() {
 		return getLocation().getBlockY() + getRadius();
 	}
 
 	@Override
-	int getMaxZ() {
+	public int getMaxZ() {
 		return getLocation().getBlockZ() + getRadius();
 	}
 

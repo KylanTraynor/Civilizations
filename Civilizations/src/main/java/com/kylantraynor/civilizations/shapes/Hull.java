@@ -151,7 +151,7 @@ public class Hull extends Shape {
 	}
 	
 	@Override
-	int getMinX() {
+	public int getMinX() {
 		Integer min = null;
 		for(Location l : points){
 			if(min == null){
@@ -164,7 +164,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getMinY() {
+	public int getMinY() {
 		Integer min = null;
 		for(Location l : points){
 			if(min == null){
@@ -177,7 +177,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getMinZ() {
+	public int getMinZ() {
 		Integer min = null;
 		for(Location l : points){
 			if(min == null){
@@ -190,7 +190,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getMaxX() {
+	public int getMaxX() {
 		Integer max = null;
 		for(Location l : points){
 			if(max == null){
@@ -203,7 +203,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getMaxY() {
+	public int getMaxY() {
 		Integer max = null;
 		for(Location l : points){
 			if(max == null){
@@ -216,7 +216,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getMaxZ() {
+	public int getMaxZ() {
 		Integer max = null;
 		for(Location l : points){
 			if(max == null){
