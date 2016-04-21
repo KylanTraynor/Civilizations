@@ -520,6 +520,14 @@ public class Civilizations extends JavaPlugin{
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
 				}
+			} else {
+				Plot p = null;
+				for(Plot plot : to.getPlots()){
+					if(plot.protects(toL)) p = plot;
+				}
+				if(!p.protects(fromL)){
+					TitleManagerHook.sendActionBar(p.getName(), player, false);
+				}
 			}
 			
 		} else if( fromProtected && !toProtected){
