@@ -89,7 +89,12 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof MarketStall){
 						if(((MarketStall)g).isOwner(p)){
-							((MarketStall)g).setForRent(((MarketStall)g).isForRent());
+							((MarketStall)g).setForRent(!((MarketStall)g).isForRent());
+							if(((MarketStall)g).isForRent()){
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The stall is now for rent.");
+							} else {
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The stall is no longer for rent.");
+							}
 						}
 					}
 				}
