@@ -207,6 +207,10 @@ public class Settlement extends Group {
 				distance = s.distance(l);
 				closest = s;
 			}
+			if(s.protects(l)){
+				closest = s;
+				break;
+			}
 		}
 		return closest;
 	}
