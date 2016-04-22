@@ -183,7 +183,8 @@ public class DynmapHook {
 	            stall.setMarkerIcon(stallIcon);
 	    	}
 	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.InfoBubble", "%Name%");
-	    	description.replaceAll("%Name%", m.getName());
+	    	description = "<div class=\"regioninfo\">" + description + "</div>";
+	    	description = description.replaceAll("%Name%", m.getName());
 	    	StringBuilder sb = new StringBuilder();
 	    	if(m.isForRent()){
 	    		if(m.getRenter() == null){
@@ -193,11 +194,11 @@ public class DynmapHook {
 		    	}
 	    	}
 	    	String rent = m.isForRent() ? Economy.format(m.getRent()) : "Not for rent";
-	    	description.replaceAll("%RentStatus%", sb.toString());
-	    	description.replaceAll("%Rent%", rent);
+	    	description = description.replaceAll("%RentStatus%", sb.toString());
+	    	description = description.replaceAll("%Rent%", rent);
 	    	StringBuilder sb1 = new StringBuilder();
     		sb1.append("Unknown");
-    		description.replaceAll("%WaresList%", sb1.toString());
+    		description = description.replaceAll("%WaresList%", sb1.toString());
 	    	stall.setDescription(description);
 	    	markerList.put(id, stall);
 	    }
