@@ -73,7 +73,7 @@ public class Civilizations extends JavaPlugin{
 
 	private boolean reload;
 	private boolean clearing = false;
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	static private HashMap<Player, Location[]> selectionPoints = new HashMap<Player, Location[]>();
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();

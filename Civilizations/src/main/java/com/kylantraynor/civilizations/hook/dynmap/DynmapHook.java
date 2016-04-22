@@ -136,6 +136,7 @@ public class DynmapHook {
 	 */
 	public static void updateMap(Group group){
 		if(!DynmapHook.isEnabled()) return;
+		Civilizations.DEBUG("Updating Dynmap for " + group.getName());
 		if(group instanceof Camp){
 			Camp c = (Camp) group;
 			DynmapHook.updateCamp(c);
@@ -150,6 +151,7 @@ public class DynmapHook {
 	 * @param c
 	 */
 	private static void updateStall(MarketStall m) {
+		Civilizations.DEBUG("Updating Dynmap for " + m.getName() + " as a stall.");
 		String id = "" + m.getProtection().getCenter().getBlockX() + "_" +
 				m.getProtection().getCenter().getBlockY() + "_" +
 				m.getProtection().getCenter().getBlockZ() + "_stall";

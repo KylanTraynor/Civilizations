@@ -58,10 +58,11 @@ public class MarketStall extends Plot{
 	
 	@Override
 	public void update(){
-		if(Instant.now().isAfter(nextPayment)){
-			nextPayment = Instant.now().plus(1, ChronoUnit.DAYS);
-			payRent();
-			setChanged(true);
+		if(getRenter() != null){
+			if(Instant.now().isAfter(nextPayment)){
+				payRent();
+				setChanged(true);
+			}
 		}
 		DynmapHook.updateMap(this);
 		super.update();
@@ -122,7 +123,7 @@ public class MarketStall extends Plot{
 		if(this.renter == null){
 			return;
 		}
-		
+		nextPayment = Instant.now().plus(1, ChronoUnit.DAYS);
 		OfflinePlayer renter = Bukkit.getOfflinePlayer(this.renter);
 		if(this.owner != null){
 			OfflinePlayer owner = Bukkit.getOfflinePlayer(this.owner);
