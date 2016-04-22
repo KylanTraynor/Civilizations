@@ -418,10 +418,10 @@ public class MarketStall extends Plot{
 		fc.set("NextPayment", nextPayment.toString());
 		fc.set("Creation", getCreationDate().toString());
 		if(owner != null){
-			fc.set("Owner", owner);
+			fc.set("Owner", owner.toString());
 		}
 		if(renter != null){
-			fc.set("Renter", renter);
+			fc.set("Renter", renter.toString());
 		}
 		
 		try {
