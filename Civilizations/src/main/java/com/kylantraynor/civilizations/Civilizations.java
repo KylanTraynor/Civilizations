@@ -330,14 +330,18 @@ public class Civilizations extends JavaPlugin{
 
 			@Override
 			public void run() {
-				for(Group g : Cache.getGroupList()){
-					g.update();
-				}
-				log("INFO", "Files saved!");
+				updateAllGroups();
 			}
 			
 		};
 		br.runTaskTimer(this, 0, interval);
+	}
+	
+	public static void updateAllGroups(){
+		for(Group g : Cache.getGroupList()){
+			g.update();
+		}
+		log("INFO", "Files saved!");
 	}
 	
 	/**
@@ -450,9 +454,7 @@ public class Civilizations extends JavaPlugin{
 
 	@Override
 	public void onDisable(){
-		for(Group g : Cache.getGroupList()){
-			g.update();
-		}
+		updateAllGroups();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}

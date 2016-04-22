@@ -12,6 +12,11 @@ public class CommandCivilizations implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0 && sender.isOp()){
 			switch(args[0].toUpperCase()){
+			case "UPDATEGROUPS":
+				if(sender.isOp()){
+					Civilizations.updateAllGroups();
+				}
+				break;
 			case "TOGGLE":
 				if(args.length > 1){
 					switch(args[1].toUpperCase()){
