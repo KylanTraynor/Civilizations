@@ -46,7 +46,7 @@ public class Cache {
 			}
 			
 		}
-		Civilizations.DEBUG("Returning a list of " + groupList.size() + " groups.");
+		//Civilizations.DEBUG("Returning a list of " + groupList.size() + " groups.");
 		return groupList;
 	}
 	
@@ -65,7 +65,7 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + settlementList.size() + " settlements.");
+		//Civilizations.DEBUG("Returning a list of " + settlementList.size() + " settlements.");
 		return settlementList;
 	}
 	
@@ -103,7 +103,7 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + plotList.size() + " plots.");
+		//Civilizations.DEBUG("Returning a list of " + plotList.size() + " plots.");
 		return plotList;
 	}
 
