@@ -6,20 +6,28 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
@@ -89,6 +97,57 @@ public class MarketStall extends Plot{
 	public void setRent(double newRent){
 		rent = newRent;
 		setChanged(true);
+	}
+	
+	public Map<ItemStack, Double> getWares(){
+		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
+		Location current = this.getProtection().getCenter().clone();
+		for(Shape s : getProtection().getShapes()){
+			for(int x = s.getMinX(); x <= s.getMaxX(); x++){
+				for(int y = s.getMinY(); y <= s.getMaxY(); y++){
+					for(int z = s.getMinZ(); z <= s.getMaxZ(); z++){
+						current.setX(x);
+						current.setY(y);
+						current.setZ(z);
+						if(current.getBlock().getType() == Material.SIGN || current.getBlock().getType() == Material.SIGN_POST){
+							BlockState state = current.getBlock().getState();
+							if(state instanceof Sign){
+								Sign sign = (Sign) state;
+								org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) sign.getData();
+								if(sign.getLine(0).toUpperCase().contains("[QUICKSHOP]")){
+									int priceMultiplier = 1;
+									if(!sign.getLine(1).equalsIgnoreCase("Selling")){
+										priceMultiplier = -1;
+									}
+									Block chest = current.getBlock().getRelative(signMaterial.getAttachedFace());
+									if(chest.getType() == Material.CHEST || chest.getType() == Material.TRAPPED_CHEST){
+										Chest c = (Chest) chest.getState();
+										Integer i = c.getBlockInventory().first(Material.getMaterial(sign.getLine(2).toUpperCase()));
+										if(i >= 0){
+											ItemStack is = c.getBlockInventory().getItem(i);
+											String priceString = sign.getLine(3);
+											priceString = priceString.replace("For ", "");
+											priceString = priceString.replace(" each", "");
+											double price = Double.parseDouble(priceString);
+											wares.put(is, price * priceMultiplier);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return wares;
+	}
+	
+	public List<String> getWaresToString(){
+		List<String> result = new ArrayList<String>();
+		for(Entry<ItemStack, Double> e : getWares().entrySet()){
+			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + e.getKey().getItemMeta().getDisplayName() + " " + Economy.format(Math.abs(e.getValue())));
+		}
+		return result;
 	}
 	
 	public OfflinePlayer getOwner(){

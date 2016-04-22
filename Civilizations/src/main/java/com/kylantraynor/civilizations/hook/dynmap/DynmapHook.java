@@ -197,7 +197,11 @@ public class DynmapHook {
 	    	description = description.replace("%RentStatus%", sb.toString());
 	    	description = description.replace("%Rent%", rent);
 	    	StringBuilder sb1 = new StringBuilder();
-    		sb1.append("Unknown");
+	    	sb1.append("<ul>");
+	    	for(String s : m.getWaresToString()){
+	    		sb1.append("<li>" + s + "</li>");
+	    	}
+    		sb1.append("</ul>");
     		description = description.replace("%WaresList%", sb1.toString());
 	    	stall.setDescription(description);
 	    	markerList.put(id, stall);
