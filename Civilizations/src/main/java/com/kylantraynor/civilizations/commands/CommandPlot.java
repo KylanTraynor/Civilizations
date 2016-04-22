@@ -49,18 +49,15 @@ public class CommandPlot implements CommandExecutor {
 					return true;
 				}
 				
-				Location middlePoint = new Location(points[0].getWorld(), (points[0].getX() + points[1].getX())/2,
-						(points[0].getY() + points[1].getY()) /2, (points[0].getZ() + points[1].getZ()) / 2);
 				
+				int minX = Math.min(points[0].getBlockX(), points[1].getBlockX());
+				int minY = Math.min(points[0].getBlockY(), points[1].getBlockY());
+				int minZ = Math.min(points[0].getBlockZ(), points[1].getBlockZ());
 				int width = (int) Math.abs(points[1].getX() - points[0].getX());
 				int height = (int) Math.abs(points[1].getY() - points[0].getY());
 				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
 				
-				Location firstCorner = new Location(middlePoint.getWorld(),
-						middlePoint.getX() - (width) / 2.0,
-						middlePoint.getY() - (height) / 2.0,
-						middlePoint.getZ() - (length) / 2.0);
-				
+				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
 				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
 				Shape s = new Prism(firstCorner, width + 1, height + 1, length + 1);
 				
@@ -98,16 +95,16 @@ public class CommandPlot implements CommandExecutor {
 				Location middlePoint = new Location(points[0].getWorld(), (points[0].getX() + points[1].getX())/2.0,
 						(points[0].getY() + points[1].getY()) /2.0, (points[0].getZ() + points[1].getZ()) / 2.0);
 				
-				int width = (int) Math.abs(points[1].getBlockX() - points[0].getBlockX());
-				int height = (int) Math.abs(points[1].getBlockY() - points[0].getBlockY());
-				int length = (int) Math.abs(points[1].getBlockZ() - points[0].getBlockZ());
+				int minX = Math.min(points[0].getBlockX(), points[1].getBlockX());
+				int minY = Math.min(points[0].getBlockY(), points[1].getBlockY());
+				int minZ = Math.min(points[0].getBlockZ(), points[1].getBlockZ());
+				int width = (int) Math.abs(points[1].getX() - points[0].getX());
+				int height = (int) Math.abs(points[1].getY() - points[0].getY());
+				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
 				
-				Location firstCorner = new Location(middlePoint.getWorld(),
-						middlePoint.getX() - (width) / 2.0,
-						middlePoint.getY() - (height) / 2.0,
-						middlePoint.getZ() - (length) / 2.0);
-				
-				Shape s = new Prism(firstCorner, width, height, length);
+				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
+				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
+				Shape s = new Prism(firstCorner, width + 1, height + 1, length + 1);
 				
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : Cache.getPlotList()){
