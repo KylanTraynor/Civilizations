@@ -15,6 +15,7 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -182,12 +183,17 @@ public class DynmapHook {
 	            stall.setMarkerIcon(stallIcon);
 	    	}
 	    	StringBuilder sb = new StringBuilder();
-	    	if(m.getRenter() == null){
-	    		sb.append("Available For Rent" + "\n");
-	    	} else {
-	    		sb.append(m.getRenter().getName() + "\n");
+	    	if(m.isForRent()){
+	    		if(m.getRenter() == null){
+		    		sb.append("Available For Rent" + "\n");
+		    	} else {
+		    		sb.append(m.getRenter().getName() + "\n");
+		    	}
+	    		sb.append("\nRent: " + Economy.format(m.getRent()));
+	    		sb.append("\n\nWares: ");
+	    		sb.append("Unknown");
 	    	}
-	    	stall.setDescription("Renter: " + sb.toString());
+	    	stall.setDescription(sb.toString());
 	    	markerList.put(id, stall);
 	    }
 	}
