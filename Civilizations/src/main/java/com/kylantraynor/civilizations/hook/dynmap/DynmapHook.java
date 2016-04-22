@@ -198,7 +198,7 @@ public class DynmapHook {
 	    	StringBuilder sb1 = new StringBuilder();
     		sb1.append("Unknown");
     		description.replaceAll("%WaresList%", sb1.toString());
-	    	stall.setDescription(sb.toString());
+	    	stall.setDescription(description);
 	    	markerList.put(id, stall);
 	    }
 	}
