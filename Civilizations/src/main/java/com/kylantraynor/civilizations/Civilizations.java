@@ -73,6 +73,7 @@ public class Civilizations extends JavaPlugin{
 
 	private boolean reload;
 	private boolean clearing = false;
+	private boolean DEBUG = true;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	static private HashMap<Player, Location[]> selectionPoints = new HashMap<Player, Location[]>();
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
@@ -751,5 +752,18 @@ public class Civilizations extends JavaPlugin{
 
 	public static ProtectionListener getProtectionListener() {
 		return protectionListener;
+	}
+
+	public boolean isDEBUG() {
+		return DEBUG;
+	}
+
+	public void setDEBUG(boolean dEBUG) {
+		DEBUG = dEBUG;
+	}
+	
+	public static void DEBUG(String message){
+		if(!currentInstance.DEBUG) return;
+		log("INFO", message);
 	}
 }

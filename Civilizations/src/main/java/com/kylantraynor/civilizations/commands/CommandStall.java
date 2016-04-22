@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.commands;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,7 +11,7 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 
-public class CommandStall extends CommandGroup{
+public class CommandStall implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -22,7 +23,7 @@ public class CommandStall extends CommandGroup{
 		}
 		player = (Player)sender;
 		
-		
+		Civilizations.DEBUG("Trying to find Stall.");
 		MarketStall stall = null;
 		for(MarketStall s : Cache.getMarketstallList()){
 			if(s.protects(player.getLocation())){

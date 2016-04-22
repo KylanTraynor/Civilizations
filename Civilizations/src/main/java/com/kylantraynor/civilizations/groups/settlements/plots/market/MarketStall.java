@@ -374,6 +374,7 @@ public class MarketStall extends Plot{
 
 	public void setForRent(boolean forRent) {
 		this.forRent = forRent;
+		setChanged(true);
 	}
 	
 }

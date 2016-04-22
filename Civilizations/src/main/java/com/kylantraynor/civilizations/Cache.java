@@ -37,7 +37,9 @@ public class Cache {
 	 * @return List<Group> of cached groups.
 	 */
 	public static List<Group> getGroupList(){
+		Civilizations.DEBUG("Getting Groups from Cache.");
 		if(groupListChanged || groupList == null){
+			Civilizations.DEBUG("Groups list needs update. Updating... ");
 			groupListChanged = false;
 			groupList = new ArrayList<Group>();
 			for(Group g : Group.getList()){
@@ -45,6 +47,7 @@ public class Cache {
 			}
 			
 		}
+		Civilizations.DEBUG("Returning a list of " + groupList.size() + " groups.");
 		return groupList;
 	}
 	
@@ -53,7 +56,9 @@ public class Cache {
 	 * @return List<Settlement> of cached settlements.
 	 */
 	public static List<Settlement> getSettlementList(){
+		Civilizations.DEBUG("Getting Settlements from Cache.");
 		if(settlementListChanged || settlementList == null){
+			Civilizations.DEBUG("Settlements list needs update. Updating... ");
 			settlementListChanged = false;
 			settlementList = new ArrayList<Settlement>();
 			for(Group g : getGroupList()){
@@ -62,6 +67,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + settlementList.size() + " settlements.");
 		return settlementList;
 	}
 	
@@ -70,7 +76,9 @@ public class Cache {
 	 * @return List<Camp> of cached Camps.
 	 */
 	public static List<Camp> getCampList(){
+		Civilizations.DEBUG("Getting Camps from Cache.");
 		if(campListChanged || campList == null){
+			Civilizations.DEBUG("Camps list needs update. Updating... ");
 			campListChanged = false;
 			campList = new ArrayList<Camp>();
 			for(Settlement s : getSettlementList()){
@@ -79,6 +87,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + campList.size() + " camps.");
 		return campList;
 	}
 	
@@ -87,7 +96,9 @@ public class Cache {
 	 * @return List<Plot> of cached Plots.
 	 */
 	public static List<Plot> getPlotList(){
+		Civilizations.DEBUG("Getting Plots from Cache.");
 		if(plotListChanged || plotList == null){
+			Civilizations.DEBUG("Plots list needs update. Updating... ");
 			plotListChanged = false;
 			plotList = new ArrayList<Plot>();
 			for(Group g : getGroupList()){
@@ -96,6 +107,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + plotList.size() + " plots.");
 		return plotList;
 	}
 
@@ -104,7 +116,9 @@ public class Cache {
 	 * @return List<TownyTown> of cached Towns.
 	 */
 	public static List<TownyTown> getTownyTownList() {
+		Civilizations.DEBUG("Getting Towny Towns from Cache.");
 		if(townyTownListChanged || townyTownList == null){
+			Civilizations.DEBUG("Towny towns list needs update. Updating... ");
 			townyTownListChanged = false;
 			townyTownList = new ArrayList<TownyTown>();
 			for(Settlement s : getSettlementList()){
@@ -113,6 +127,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + townyTownList.size() + " Towny towns.");
 		return townyTownList;
 	}
 	/**
@@ -120,7 +135,9 @@ public class Cache {
 	 * @return List<House> of cached Houses.
 	 */
 	public static List<House> getHouseList(){
+		Civilizations.DEBUG("Getting Houses from Cache.");
 		if(houseListChanged || houseList == null){
+			Civilizations.DEBUG("Houses list needs update. Updating... ");
 			houseListChanged = false;
 			houseList = new ArrayList<House>();
 			for(Group g : getGroupList()){
@@ -129,6 +146,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + houseList.size() + " Houses.");
 		return houseList;
 	}
 	/**
@@ -136,7 +154,9 @@ public class Cache {
 	 * @return List<Fort> of cached Forts.
 	 */
 	public static List<Fort> getFortList(){
+		Civilizations.DEBUG("Getting Forts from Cache.");
 		if(fortListChanged || fortList == null){
+			Civilizations.DEBUG("Forts list needs update. Updating... ");
 			fortListChanged = false;
 			fortList = new ArrayList<Fort>();
 			for(Settlement g : getSettlementList()){
@@ -145,6 +165,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + fortList.size() + " forts.");
 		return fortList;
 	}
 	
@@ -153,7 +174,9 @@ public class Cache {
 	 * @return List<MarketStall> of cached MarketStalls.
 	 */
 	public static List<MarketStall> getMarketstallList(){
+		Civilizations.DEBUG("Getting Stalls from Cache.");
 		if(marketstallListChanged || marketstallList == null){
+			Civilizations.DEBUG("Stalls list needs update. Updating... ");
 			marketstallListChanged = false;
 			marketstallList = new ArrayList<MarketStall>();
 			for(Plot p : getPlotList()){
@@ -162,6 +185,7 @@ public class Cache {
 				}
 			}
 		}
+		Civilizations.DEBUG("Returning a list of " + marketstallList.size() + " stalls.");
 		return marketstallList;
 	}
 }

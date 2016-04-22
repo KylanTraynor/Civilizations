@@ -27,6 +27,12 @@ public class CommandCivilizations implements CommandExecutor{
 							Civilizations.getPlayersInProtectionMode().add((Player) sender);
 							sender.sendMessage(Civilizations.messageHeader + "Protection mode turned on.");
 						}
+						break;
+					case "DEBUG":
+						if(sender.isOp()){
+							Civilizations.currentInstance.setDEBUG(!Civilizations.currentInstance.isDEBUG());
+							sender.sendMessage(Civilizations.messageHeader + "DEBUG: " + Civilizations.currentInstance.isDEBUG());
+						}
 					}
 				}
 			}
