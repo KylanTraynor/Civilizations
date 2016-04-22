@@ -116,13 +116,13 @@ public class MarketStall extends Plot{
 								org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) sign.getData();
 								if(sign.getLine(0).toUpperCase().contains("[QUICKSHOP]")){
 									int priceMultiplier = 1;
-									if(!sign.getLine(1).equalsIgnoreCase("Selling")){
+									if(!sign.getLine(1).contains("Selling")){
 										priceMultiplier = -1;
 									}
 									Block chest = current.getBlock().getRelative(signMaterial.getAttachedFace());
 									if(chest.getType() == Material.CHEST || chest.getType() == Material.TRAPPED_CHEST){
 										Chest c = (Chest) chest.getState();
-										Integer i = c.getBlockInventory().first(Material.getMaterial(sign.getLine(2).toUpperCase()));
+										Integer i = c.getBlockInventory().first(Material.getMaterial(sign.getLine(2).toUpperCase().replace(" ", "_")));
 										if(i >= 0){
 											ItemStack is = c.getBlockInventory().getItem(i);
 											String priceString = sign.getLine(3);
