@@ -100,6 +100,7 @@ public class MarketStall extends Plot{
 	}
 	
 	public Map<ItemStack, Double> getWares(){
+		try{
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
 		Location current = this.getProtection().getCenter().clone();
 		for(Shape s : getProtection().getShapes()){
@@ -140,6 +141,10 @@ public class MarketStall extends Plot{
 			}
 		}
 		return wares;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new HashMap<ItemStack, Double>();
+		}
 	}
 	
 	public List<String> getWaresToString(){
