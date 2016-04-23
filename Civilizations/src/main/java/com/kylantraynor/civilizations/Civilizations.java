@@ -166,7 +166,7 @@ public class Civilizations extends JavaPlugin{
 		createServerViews();
 		
 		int port = 8120;
-		webServer = API.createServer(port, "Civilizations", "/");
+		webServer = API.createServer(port, "Civilizations", WebListener.getResourceBase());
 		try{
 		    webServer.start();
 		    getServer().getPluginManager().registerEvents(getWebListener(), this);
