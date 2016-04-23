@@ -32,6 +32,7 @@ public class WebListener implements Listener{
 	    			target = "/Index.jsp";
 	    			try {
 	    				ServletContext sc = baseReq.getServletContext();
+	    				Civilizations.log("WARNING", "Current Path: " + sc.getContextPath());
 						sc.getRequestDispatcher(target).forward(req, res);
 					} catch (ServletException | IOException e1) {
 						// TODO Auto-generated catch block
