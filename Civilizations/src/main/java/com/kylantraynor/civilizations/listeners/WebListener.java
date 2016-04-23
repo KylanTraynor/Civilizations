@@ -2,6 +2,8 @@ package com.kylantraynor.civilizations.listeners;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
@@ -32,8 +34,8 @@ public class WebListener implements Listener{
 	    return map.getContentType(filename.toLowerCase());
 	}
 	
-	public static InputStream getResource(String resource){
-	    return Civilizations.currentInstance.getClass().getClassLoader().getResourceAsStream(resource);
+	public static URL getResource(String resource){
+	    return Civilizations.currentInstance.getClass().getClassLoader().getResource(resource);
 	}
 	
 	@EventHandler
@@ -48,12 +50,12 @@ public class WebListener implements Listener{
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
 	    			String file = "Index.jsp";
-	    			InputStream stream = getResource(file);
+	    			URL jsp = getResource(file);
 	    			res.setContentType(getContentType(file));
-	    			if(stream != null){
+	    			if(jsp!= null){
 	    			    try {
-							ByteStreams.copy(stream, res.getOutputStream());
-						} catch (IOException e1) {
+							e.getHandler().getContext().getServletContext().getRequestDispatcher(jsp.getPath()).forward(req, res);;
+						} catch (IOException | ServletException e1) {
 							e.setCancelled(true);
 							e1.printStackTrace();
 						}
