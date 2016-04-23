@@ -49,8 +49,12 @@ import com.kylantraynor.civilizations.listeners.CivilizationsListener;
 import com.kylantraynor.civilizations.listeners.MenuListener;
 import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
-import com.kylantraynor.civilizations.menus.GroupMenu;
+import com.kylantraynor.civilizations.listeners.WebListener;
 import com.kylantraynor.civilizations.protection.Protection;
+
+import fr.rhaz.webservers.WebServers;
+import fr.rhaz.webservers.WebServers.API;
+import fr.rhaz.webservers.WebServers.API.WebServer;
 
 public class Civilizations extends JavaPlugin{
 	
@@ -89,6 +93,7 @@ public class Civilizations extends JavaPlugin{
 	private static MenuListener menuListener = new MenuListener();
 	private static TerritoryListener territoryListener = new TerritoryListener();
 	private static ProtectionListener protectionListener = new ProtectionListener();
+	private static WebListener webListener = new WebListener();
 	
 	/**
 	 * Returns the main listener of Civilizations.
@@ -104,6 +109,11 @@ public class Civilizations extends JavaPlugin{
 		return currentInstance.getConfig();
 	}
 	
+	private static WebServer webServer;
+	
+	public static WebServer getWebServer(){
+		return webServer;
+	}
 	/**
 	 * Sends a message to the console with the specified level.
 	 * @param level of the message.
@@ -147,6 +157,20 @@ public class Civilizations extends JavaPlugin{
 		startEconomyUpdater(20L * 60);
 		
 		setupCommands();
+		
+		startWebServer();
+	}
+
+	private void startWebServer() {
+		int port = 8120;
+		webServer = API.createServer(port, "Civilizations", "");
+		try{
+		    webServer.start();
+		    getServer().getPluginManager().registerEvents(getWebListener(), this);
+		    log("INFO", "Successfully started webserver on port " + port);
+		}catch(Exception e){
+		    log("WARNING", "Could not start webserver on port "+port);
+		}
 	}
 
 	private void loadPlots() {
@@ -767,5 +791,13 @@ public class Civilizations extends JavaPlugin{
 	public static void DEBUG(String message){
 		if(!currentInstance.DEBUG) return;
 		log("INFO", message);
+	}
+
+	public static WebListener getWebListener() {
+		return webListener;
+	}
+
+	public static void setWebListener(WebListener webListener) {
+		Civilizations.webListener = webListener;
 	}
 }

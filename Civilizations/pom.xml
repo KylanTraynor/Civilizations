@@ -45,6 +45,11 @@
         </repository>
 	</repositories>
 	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>compile</scope>
+		</dependency>
 		<!-- Vault -->
 		<dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -88,6 +93,12 @@
     		<groupId>com.wimbli</groupId>
     		<artifactId>WorldBorder</artifactId>
     	</dependency>
+    	<!-- WebServers -->
+    	<dependency>
+    		<groupId>fr.rhaz</groupId>
+    		<artifactId>webservers</artifactId>
+    		<scope>compile</scope>
+    	</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -130,6 +141,16 @@
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>VaultAPI</artifactId>
 				<version>1.5</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.rhaz</groupId>
+				<artifactId>webservers</artifactId>
+				<version>1.4.9</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

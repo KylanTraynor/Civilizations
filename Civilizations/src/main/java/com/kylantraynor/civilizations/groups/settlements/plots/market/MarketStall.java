@@ -101,6 +101,7 @@ public class MarketStall extends Plot{
 	
 	public Map<ItemStack, Double> getWares(){
 		try{
+			Civilizations.DEBUG("Trying to find wares in stall.");
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
 		Location current = this.getProtection().getCenter().clone();
 		for(Shape s : getProtection().getShapes()){
