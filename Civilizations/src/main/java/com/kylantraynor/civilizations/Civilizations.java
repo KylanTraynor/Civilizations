@@ -169,8 +169,7 @@ public class Civilizations extends JavaPlugin{
 		    getServer().getPluginManager().registerEvents(getWebListener(), this);
 		    log("INFO", "Successfully started webserver on port " + port);
 		}catch(Exception e){
-		    log("WARNING", "Could not start webserver on port "+port);
-		    e.printStackTrace();
+		    log("WARNING", "Could not start webserver on port "+port + ". This port is probably already in use.");
 		}
 	}
 
