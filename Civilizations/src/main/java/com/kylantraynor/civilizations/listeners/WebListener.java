@@ -31,7 +31,7 @@ public class WebListener implements Listener{
 	    		if(target.equals("/")){
 	    			target = "/Index.jsp";
 	    			try {
-	    				ServletContext sc = baseReq.getContext();
+	    				ServletContext sc = e.getHandler().getContext().getServletContext();
 						sc.getRequestDispatcher(target).forward(req, res);
 					} catch (ServletException | IOException e1) {
 						// TODO Auto-generated catch block
