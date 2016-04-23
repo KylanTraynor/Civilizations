@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.listeners;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -66,6 +67,17 @@ public class WebListener implements Listener{
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
+	    			String file = "index.jsp";
+	    			InputStream stream = getResource("WebContent/WEB-INF/" + file);
+	    			res.setContentType(getContentType(file));
+	    			if(stream != null){
+	    			    try {
+							ByteStreams.copy(stream, res.getOutputStream());
+						} catch (IOException e1) {
+							e.setCancelled(true);
+							e1.printStackTrace();
+						}
+	    			} else e.setCancelled(true);
 	    			/*
 	    			String file = "index.jsp";
 	    			InputStream stream = getResource(file);
