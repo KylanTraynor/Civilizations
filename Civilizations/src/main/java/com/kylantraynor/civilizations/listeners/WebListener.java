@@ -68,7 +68,8 @@ public class WebListener implements Listener{
 						e2.printStackTrace();
 					}
 	    			String file = "index.jsp";
-	    			InputStream stream = getResource("WebContent/WEB-INF/" + file);
+	    			InputStream stream = e.getHandler().getContext().getServletContext().getResourceAsStream("/WEB-INF/" + file);
+	    			//InputStream stream = getResource("WebContent/WEB-INF/" + file);
 	    			res.setContentType(getContentType(file));
 	    			if(stream != null){
 	    			    try {
