@@ -170,6 +170,7 @@ public class Civilizations extends JavaPlugin{
 		    log("INFO", "Successfully started webserver on port " + port);
 		}catch(Exception e){
 		    log("WARNING", "Could not start webserver on port "+port);
+		    e.printStackTrace();
 		}
 	}
 
