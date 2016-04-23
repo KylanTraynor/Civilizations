@@ -39,7 +39,7 @@ public class WebListener implements Listener{
 	}
 	
 	public static String getResourceBase(){
-		return Civilizations.currentInstance.getClass().getClassLoader().getResource("WEB-INF").toExternalForm();
+		return Civilizations.currentInstance.getClass().getClassLoader().getResource("WebContent").toExternalForm();
 	}
 	
 	@EventHandler
@@ -53,11 +53,12 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
+	    			e.getHandler().getContext().setContextPath("/");
 	    			e.getHandler().getContext().setResourceBase(getResourceBase());
 	    			Civilizations.DEBUG(e.getHandler().getContext().getResourceBase());
 	    			
 	    			try {
-						e.getHandler().getContext().getServletContext().getRequestDispatcher("/index.jsp").forward(req,res);
+						e.getHandler().getContext().getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req,res);
 					} catch (ServletException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
