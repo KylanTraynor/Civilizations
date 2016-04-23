@@ -28,7 +28,6 @@ public class WebListener implements Listener{
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
 	    			target = "/Index.jsp";
-	    		} else {
 	    			try {
 						res.getWriter().println("<h1>Civilizations' Web Interface is still a work in progress.</h1>");
 					} catch (IOException e1) {
