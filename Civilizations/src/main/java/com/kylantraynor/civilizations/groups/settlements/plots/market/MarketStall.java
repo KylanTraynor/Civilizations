@@ -104,24 +104,27 @@ public class MarketStall extends Plot{
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
 		Location current = this.getProtection().getCenter().clone();
 		for(Shape s : getProtection().getShapes()){
-			for(int x = s.getMinX(); x <= s.getMaxX(); x++){
+			for(int x = s.getMinX() - 1; x <= s.getMaxX() + 1; x++){
 				for(int y = s.getMinY(); y <= s.getMaxY(); y++){
-					for(int z = s.getMinZ(); z <= s.getMaxZ(); z++){
+					for(int z = s.getMinZ() - 1; z <= s.getMaxZ() + 1; z++){
 						current.setX(x);
 						current.setY(y);
 						current.setZ(z);
 						if(current.getBlock().getType() == Material.SIGN || current.getBlock().getType() == Material.SIGN_POST){
+							Civilizations.DEBUG("Found Sign in Stall.");
 							BlockState state = current.getBlock().getState();
 							if(state instanceof Sign){
 								Sign sign = (Sign) state;
 								org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) sign.getData();
 								if(sign.getLine(0).toUpperCase().contains("[QUICKSHOP]")){
+									Civilizations.DEBUG("Found Quickshop in Stall.");
 									int priceMultiplier = 1;
 									if(!sign.getLine(1).contains("Selling")){
 										priceMultiplier = -1;
 									}
 									Block chest = current.getBlock().getRelative(signMaterial.getAttachedFace());
 									if(chest.getType() == Material.CHEST || chest.getType() == Material.TRAPPED_CHEST){
+										Civilizations.DEBUG("Found Chest in Stall.");
 										Chest c = (Chest) chest.getState();
 										Integer i = c.getBlockInventory().first(Material.getMaterial(sign.getLine(2).toUpperCase().replace(" ", "_")));
 										if(i >= 0){
