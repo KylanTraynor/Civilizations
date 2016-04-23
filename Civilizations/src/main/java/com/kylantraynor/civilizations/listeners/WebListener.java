@@ -53,7 +53,7 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
-	    			
+	    			e.getHandler().getContext().setResourceBase(getResourceBase());
 	    			Civilizations.DEBUG(e.getHandler().getContext().getResourceBase());
 	    			
 	    			try {
