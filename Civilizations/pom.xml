@@ -16,11 +16,6 @@
                   <target>1.7</target>
               </configuration>
           </plugin>
-          <plugin>
-  			<groupId>org.eclipse.jetty</groupId>
-  			<artifactId>jetty-maven-plugin</artifactId>
-  			<version>9.3.7.v20160115</version>
-		  </plugin>
       </plugins>
    </build>
    <repositories>
@@ -50,11 +45,6 @@
         </repository>
 	</repositories>
 	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>compile</scope>
-		</dependency>
 		<!-- Vault -->
 		<dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -151,11 +141,6 @@
 				<groupId>fr.rhaz</groupId>
 				<artifactId>webservers</artifactId>
 				<version>1.4.9</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>3.1.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
