@@ -162,15 +162,22 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private void startWebServer() {
+		
+		createServerViews();
+		
 		int port = 8120;
-		webServer = API.createServer(port, "Civilizations", this.getDataFolder().getAbsolutePath());
+		webServer = API.createServer(port, "Civilizations", "/");
 		try{
 		    webServer.start();
 		    getServer().getPluginManager().registerEvents(getWebListener(), this);
 		    log("INFO", "Successfully started webserver on port " + port);
 		}catch(Exception e){
-		    log("WARNING", "Could not start webserver on port "+port + ". This port is probably already in use.");
+		    log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 		}
+	}
+
+	private void createServerViews() {
+		
 	}
 
 	private void loadPlots() {
