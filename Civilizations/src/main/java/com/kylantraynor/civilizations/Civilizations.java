@@ -163,7 +163,7 @@ public class Civilizations extends JavaPlugin{
 
 	private void startWebServer() {
 		int port = 8120;
-		webServer = API.createServer(port, "Civilizations", "");
+		webServer = API.createServer(port, "Civilizations", this.getDataFolder().getAbsolutePath());
 		try{
 		    webServer.start();
 		    getServer().getPluginManager().registerEvents(getWebListener(), this);
