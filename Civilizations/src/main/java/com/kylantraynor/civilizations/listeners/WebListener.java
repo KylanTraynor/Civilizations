@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.listeners;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +26,15 @@ public class WebListener implements Listener{
 	   
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
-	    		// TODO do stuff
+	    		if(target.equals("/")){
+	    			target = "/index.html";
+	    			try {
+						res.getWriter().println("<h1>Civilizations' Web Interface is still a work in progress.</h1>");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	    		}
 	    	}
 	    }
 	}
