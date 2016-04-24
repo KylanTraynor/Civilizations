@@ -55,7 +55,7 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
-	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.jsp");
+	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.html");
 	    			if(f.exists()){
 	    				
 	    			} else {
