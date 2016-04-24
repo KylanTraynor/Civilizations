@@ -55,7 +55,7 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
-	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.html");
+	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.jsp");
 	    			if(f.exists()){
 	    				
 	    			} else {
@@ -66,20 +66,7 @@ public class WebListener implements Listener{
 							e1.printStackTrace();
 						}
 	    			}
-	    			/*try {
-						e.getHandler().getContext().getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req,res);
-					} catch (ServletException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-	    			String file = "index.jsp";
-	    			InputStream stream = e.getHandler().getContext().getServletContext().getResourceAsStream("/WEB-INF/" + file);
-	    			//InputStream stream = getResource("WebContent/WEB-INF/" + file);
-	    			 */
-	    			res.setContentType(getContentType(f.getName()));
+	    			/*res.setContentType(getContentType(f.getName()));
 	    			if(f != null){
 	    			    try {
 							Files.copy(f, res.getOutputStream());
@@ -88,19 +75,16 @@ public class WebListener implements Listener{
 							e1.printStackTrace();
 						}
 	    			} else e.setCancelled(true);
-	    			/*
-	    			String file = "index.jsp";
-	    			InputStream stream = getResource(file);
-	    			res.setContentType(getContentType(file));
-	    			if(stream != null){
-	    			    try {
-							ByteStreams.copy(stream, res.getOutputStream());
-						} catch (IOException e1) {
-							e.setCancelled(true);
-							e1.printStackTrace();
-						}
-	    			} else e.setCancelled(true);
 	    			*/
+	    			try {
+						e.getHandler().getContext().getServletContext().getRequestDispatcher(f.getAbsolutePath()).forward(req,res);
+					} catch (ServletException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	    		}
 	    	}
 	    }
