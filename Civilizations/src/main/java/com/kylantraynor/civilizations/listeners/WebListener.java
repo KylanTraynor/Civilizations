@@ -21,6 +21,7 @@ import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
 
 import fr.rhaz.webservers.Bukkit.BukkitWebEvent;
+import fr.rhaz.webservers.WebServers.API.WebEvent;
 import fr.rhaz.webservers.WebServers.API.WebServer;
 
 public class WebListener implements Listener{
@@ -53,7 +54,7 @@ public class WebListener implements Listener{
 	    HttpServletResponse res = e.getResponse();
 	   
 	    if(Civilizations.getWebServer() != null){
-	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
+	    	if(e.getPort() == ((WebServer) Civilizations.getWebServer()).getPort()){
 	    		if(target.equals("/")){
 	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.html");
 	    			if(f.exists()){
