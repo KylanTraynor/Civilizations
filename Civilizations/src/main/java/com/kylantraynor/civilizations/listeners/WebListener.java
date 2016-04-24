@@ -55,7 +55,7 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
-	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.jsp");
+	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.html");
 	    			if(f.exists()){
 	    				
 	    			} else {
@@ -66,7 +66,7 @@ public class WebListener implements Listener{
 							e1.printStackTrace();
 						}
 	    			}
-	    			/*res.setContentType(getContentType(f.getName()));
+	    			res.setContentType(getContentType(f.getName()));
 	    			if(f != null){
 	    			    try {
 							Files.copy(f, res.getOutputStream());
@@ -75,16 +75,6 @@ public class WebListener implements Listener{
 							e1.printStackTrace();
 						}
 	    			} else e.setCancelled(true);
-	    			*/
-	    			try {
-						baseReq.getRequestDispatcher(f.toURL().getPath()).forward(req,res);
-					} catch (ServletException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 	    		}
 	    	}
 	    }
