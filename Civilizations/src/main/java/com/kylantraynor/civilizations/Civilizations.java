@@ -176,7 +176,7 @@ public class Civilizations extends JavaPlugin{
 		Server server = new Server(port);
 		ServletHandler handler = new ServletHandler();
 		server.setHandler(handler);
-		handler.addServletWithMapping(BaseServlet.class, "/");
+		handler.addServletWithMapping(com.kylantraynor.civilizations.webserver.BaseServlet.class, "/*");
 		server.start();
 	}
 	
