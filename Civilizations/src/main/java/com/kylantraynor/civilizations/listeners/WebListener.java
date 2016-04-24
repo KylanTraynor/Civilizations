@@ -77,7 +77,7 @@ public class WebListener implements Listener{
 	    			} else e.setCancelled(true);
 	    			*/
 	    			try {
-						e.getRequest().getRequestDispatcher(f.getAbsolutePath()).forward(req,res);
+						e.getRequest().getRequestDispatcher(f.toURL().getPath()).forward(req,res);
 					} catch (ServletException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
