@@ -63,6 +63,7 @@ public class Banner {
 	}
 	
 	public boolean isSimilar(BannerMeta banner){
+		if(banner == null) return false;
 		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
 		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
 		for(int i = 0; i < banner.getPatterns().size(); i++){
@@ -73,6 +74,7 @@ public class Banner {
 	}
 	
 	public boolean isSimilar(org.bukkit.block.Banner banner){
+		if(banner == null) return false;
 		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
 		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
 		for(int i = 0; i < banner.getPatterns().size(); i++){
@@ -83,6 +85,7 @@ public class Banner {
 	}
 	
 	public boolean isSimilar(Banner banner){
+		if(banner == null) return false;
 		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
 		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
 		for(int i = 0; i < banner.getPatterns().size(); i++){
