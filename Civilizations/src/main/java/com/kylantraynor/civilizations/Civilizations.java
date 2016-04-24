@@ -24,8 +24,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 
 import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandCamp;
@@ -54,7 +52,6 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
 import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.webserver.BaseServlet;
 
 import fr.rhaz.webservers.WebServers;
 import fr.rhaz.webservers.WebServers.API;

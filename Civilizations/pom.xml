@@ -94,11 +94,6 @@
     		<artifactId>webservers</artifactId>
     		<scope>compile</scope>
     	</dependency>
-    	<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<scope>compile</scope>
-		</dependency>
     	
 	</dependencies>
 	<dependencyManagement>
@@ -147,11 +142,6 @@
 				<groupId>fr.rhaz</groupId>
 				<artifactId>webservers</artifactId>
 				<version>1.4.9</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-servlet</artifactId>
-				<version>9.3.8.v20160314</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
