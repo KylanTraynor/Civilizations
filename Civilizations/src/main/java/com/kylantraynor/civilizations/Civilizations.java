@@ -714,6 +714,26 @@ public class Civilizations extends JavaPlugin{
 			return f;
 		}
 	}
+	
+	public static File getWebDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Web");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	
+	public static File getPrivateWebDirectory(){
+		File f = new File(getWebDirectory(), "WEB-INF");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
 	/**
 	 * Registers an achievement.
 	 * @param name of the achievement
@@ -807,4 +827,5 @@ public class Civilizations extends JavaPlugin{
 	public static void setWebListener(WebListener webListener) {
 		Civilizations.webListener = webListener;
 	}
+
 }

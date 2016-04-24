@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.eclipse.jetty.server.Request;
 
 import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
 
 import fr.rhaz.webservers.Bukkit.BukkitWebEvent;
@@ -54,11 +55,18 @@ public class WebListener implements Listener{
 	    if(Civilizations.getWebServer() != null){
 	    	if(e.getPort() == Civilizations.getWebServer().getPort()){
 	    		if(target.equals("/")){
-	    			e.getHandler().getContext().setContextPath("/");
-	    			e.getHandler().getContext().setResourceBase(getResourceBase());
-	    			Civilizations.DEBUG(e.getHandler().getContext().getResourceBase());
-	    			
-	    			try {
+	    			File f = new File(Civilizations.getPrivateWebDirectory(), "index.jsp");
+	    			if(f.exists()){
+	    				
+	    			} else {
+	    				try {
+							f.createNewFile();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	    			}
+	    			/*try {
 						e.getHandler().getContext().getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req,res);
 					} catch (ServletException e2) {
 						// TODO Auto-generated catch block
@@ -70,10 +78,11 @@ public class WebListener implements Listener{
 	    			String file = "index.jsp";
 	    			InputStream stream = e.getHandler().getContext().getServletContext().getResourceAsStream("/WEB-INF/" + file);
 	    			//InputStream stream = getResource("WebContent/WEB-INF/" + file);
-	    			res.setContentType(getContentType(file));
-	    			if(stream != null){
+	    			 */
+	    			res.setContentType(getContentType(f.getName()));
+	    			if(f != null){
 	    			    try {
-							ByteStreams.copy(stream, res.getOutputStream());
+							Files.copy(f, res.getOutputStream());
 						} catch (IOException e1) {
 							e.setCancelled(true);
 							e1.printStackTrace();
