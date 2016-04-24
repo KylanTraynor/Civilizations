@@ -113,9 +113,9 @@ public class Civilizations extends JavaPlugin{
 		return currentInstance.getConfig();
 	}
 	
-	private static WebServer webServer;
+	private static Server webServer;
 	
-	public static WebServer getWebServer(){
+	public static Server getWebServer(){
 		return webServer;
 	}
 	/**
@@ -173,11 +173,12 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private void startWebServer(int port) throws Exception{
-		Server server = new Server(port);
+		webServer = new Server(port);
 		ServletHandler handler = new ServletHandler();
-		server.setHandler(handler);
-		handler.addServletWithMapping(com.kylantraynor.civilizations.webserver.BaseServlet.class, "/*");
-		server.start();
+		webServer.setHandler(handler);
+		handler.addServletWithMapping(BaseServlet.class, "/*");
+		webServer.setStopAtShutdown(true);
+		webServer.start();
 	}
 	
 	private void startWebServer2() {
