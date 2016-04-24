@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
@@ -40,6 +42,7 @@ public class TownyTown extends Settlement{
 	}
 
 	Town townyTown;
+	private boolean bypassPlotLoading = true;
 	/**
 	 * Gets the cached list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -108,6 +111,9 @@ public class TownyTown extends Settlement{
 	 * @return true if the TownBlock is a plot, false otherwise.
 	 */
 	private boolean isPlot(TownBlock tb){
+		if(bypassPlotLoading ){
+			return false;
+		}
 		if(tb.getPermissions().residentBuild != townyTown.getPermissions().residentBuild) return true;
 		if(tb.getPermissions().residentDestroy != townyTown.getPermissions().residentDestroy) return true;
 		if(tb.getPermissions().allyBuild != townyTown.getPermissions().allyBuild) return true;
@@ -222,5 +228,10 @@ public class TownyTown extends Settlement{
 	@Override
 	public boolean addMember(OfflinePlayer p){
 		return false;
+	}
+	
+	@Override
+	public boolean hasPermission(PermissionType perm, Block b, Player player){
+		return true;
 	}
 }
