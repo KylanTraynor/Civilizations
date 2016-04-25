@@ -46,7 +46,6 @@ public class Cache {
 			}
 			
 		}
-		//Civilizations.DEBUG("Returning a list of " + groupList.size() + " groups.");
 		return groupList;
 	}
 	
@@ -65,7 +64,6 @@ public class Cache {
 				}
 			}
 		}
-		//Civilizations.DEBUG("Returning a list of " + settlementList.size() + " settlements.");
 		return settlementList;
 	}
 	
@@ -84,7 +82,6 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + campList.size() + " camps.");
 		return campList;
 	}
 	
@@ -103,7 +100,6 @@ public class Cache {
 				}
 			}
 		}
-		//Civilizations.DEBUG("Returning a list of " + plotList.size() + " plots.");
 		return plotList;
 	}
 
@@ -122,7 +118,6 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + townyTownList.size() + " Towny towns.");
 		return townyTownList;
 	}
 	/**
@@ -140,7 +135,6 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + houseList.size() + " Houses.");
 		return houseList;
 	}
 	/**
@@ -158,7 +152,6 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + fortList.size() + " forts.");
 		return fortList;
 	}
 	
@@ -177,7 +170,6 @@ public class Cache {
 				}
 			}
 		}
-		Civilizations.DEBUG("Returning a list of " + marketstallList.size() + " stalls.");
 		return marketstallList;
 	}
 }
