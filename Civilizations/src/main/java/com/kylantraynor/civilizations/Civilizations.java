@@ -42,6 +42,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
@@ -335,6 +336,8 @@ public class Civilizations extends JavaPlugin{
 		if(Economy.load(pm)){ log("INFO", "Economy: OK");
 		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly.");
 		}
+		if(LWCHook.isActive()) {log("INFO", "LWC: OK");
+		} else {log("INFO", "LWC: NO");}
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
 		//if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
 	}

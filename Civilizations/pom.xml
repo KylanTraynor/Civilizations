@@ -45,6 +45,12 @@
         </repository>
 	</repositories>
 	<dependencies>
+		<!-- LWC -->
+		<dependency>
+			<groupId>com.griefcraft</groupId>
+			<artifactId>LWC</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Vault -->
 		<dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -142,6 +148,11 @@
 				<groupId>fr.rhaz</groupId>
 				<artifactId>webservers</artifactId>
 				<version>1.4.9</version>
+			</dependency>
+			<dependency>
+				<groupId>com.griefcraft</groupId>
+				<artifactId>LWC</artifactId>
+				<version>4.4.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
