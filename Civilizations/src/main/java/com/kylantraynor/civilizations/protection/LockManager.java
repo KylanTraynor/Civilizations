@@ -19,11 +19,11 @@ public class LockManager {
 	
 	private static Map<Player, LockpickSession> sessions = new HashMap<Player, LockpickSession>();
 	
-	public LockManager(){
+	public static void init() {
 		addLockpickRecipe();
 	}
 	
-	private void addLockpickRecipe() {
+	private static void addLockpickRecipe() {
 		ShapedRecipe recipe = new ShapedRecipe(getLockpick(4));
 		recipe.shape("A", "A");
 		recipe.setIngredient('A', Material.IRON_INGOT);

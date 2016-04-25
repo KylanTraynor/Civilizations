@@ -52,6 +52,7 @@ import com.kylantraynor.civilizations.listeners.MenuListener;
 import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
+import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.Protection;
 
 import fr.rhaz.webservers.WebServers;
@@ -157,6 +158,8 @@ public class Civilizations extends JavaPlugin{
 		startGroupUpdater(20L * 60 * 5);
 		startProtectionUpdater(40L);
 		startEconomyUpdater(20L * 60);
+		
+		LockManager.init();
 		
 		setupCommands();
 		
