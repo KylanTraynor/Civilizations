@@ -25,6 +25,15 @@ public class Warehouse extends Plot implements GroupInventory{
 
 	public List<Chest> getAllChests(){
 		List<Chest> list = new ArrayList<Chest>();
+		for(Shape s : getProtection().getShapes()){
+			for(int x = s.getMinX(); x < s.getMaxX(); x++){
+				for(int y = s.getMinY(); y < s.getMaxY(); y++){
+					for(int z = s.getMinZ(); z < s.getMaxZ(); z++){
+						
+					}
+				}
+			}
+		}
 		return list;
 	}
 	

@@ -67,7 +67,9 @@ public class InfluenceMap {
 				influent = f;
 			}
 		}
-		return influent;
+		if(influence >= 0.01){
+			return influent;
+		} else {return null;}
 	}
 	
 	public static double getFortInfluenceAt(Fort f, Location l){
@@ -91,7 +93,7 @@ public class InfluenceMap {
 		double yCoeff = fy - l.getY();
 		
 		double totalCoeff = Math.max(xzCoeff - yCoeff, 0.1);
-		double result = Math.min(Math.max((f.getInfluence() * 100.0) / totalCoeff, 0.1), 100.0);
+		double result = Math.min((f.getInfluence() * 100.0) / totalCoeff, 100.0);
 		BufferedImage img = getImage(f);
 		if(img != null){
 			imgSetGrayscaleAtLocation(l, img, result / 100);
