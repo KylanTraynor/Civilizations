@@ -254,29 +254,35 @@ public class Civilizations extends JavaPlugin{
 	
 	public static Settlement loadSettlement(String path){
 		log("INFO", "Getting settlement from " + path);
-		File f = new File(path);
-		if(f.exists()){
-			if(!f.getName().split("\\.")[1].equals("yml")) return null;
-			YamlConfiguration yaml = new YamlConfiguration();
-			try {
-				yaml.load(f);
-			} catch (FileNotFoundException e) {
-				log("WARNING", "Couldn't find file " + f.getName());
-			} catch (IOException e) {
-				log("WARNING", "File " + f.getName() + " is in use in another application.");
-			} catch (InvalidConfigurationException e) {
-				log("WARNING", "Invalid file configuration.");
-			}
-			f.delete();
-			String[] pathSplit = path.split(File.separator);
-			log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
-			switch(pathSplit[pathSplit.length - 2]){
-			case "Camps":
-				log("INFO", "Loading camp from " + path);
-				return Camp.load(yaml);	
-			case "Small Outposts":
-				log("INFO", "Loading small outpost from " + path);
-				return SmallOutpost.load(yaml);
+		if(path.contains("TOWNY: ")){
+			if(TownyHook.isEnabled()){
+				return TownyHook.loadTownyTown(path.replace("TOWNY: ", ""));
+			} else { return null;}
+		} else {
+			File f = new File(path);
+			if(f.exists()){
+				if(!f.getName().split("\\.")[1].equals("yml")) return null;
+				YamlConfiguration yaml = new YamlConfiguration();
+				try {
+					yaml.load(f);
+				} catch (FileNotFoundException e) {
+					log("WARNING", "Couldn't find file " + f.getName());
+				} catch (IOException e) {
+					log("WARNING", "File " + f.getName() + " is in use in another application.");
+				} catch (InvalidConfigurationException e) {
+					log("WARNING", "Invalid file configuration.");
+				}
+				f.delete();
+				String[] pathSplit = path.split(File.separator);
+				log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
+				switch(pathSplit[pathSplit.length - 2]){
+				case "Camps":
+					log("INFO", "Loading camp from " + path);
+					return Camp.load(yaml);	
+				case "Small Outposts":
+					log("INFO", "Loading small outpost from " + path);
+					return SmallOutpost.load(yaml);
+				}
 			}
 		}
 		return null;
@@ -330,7 +336,7 @@ public class Civilizations extends JavaPlugin{
 		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly.");
 		}
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
-		if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
+		//if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
 	}
 	
 	/**

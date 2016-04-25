@@ -37,6 +37,7 @@ import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
@@ -412,7 +413,11 @@ public class MarketStall extends Plot{
 		
 		fc.set("Name", getName());
 		if(getSettlement() != null){
-			fc.set("SettlementPath", getSettlement().getFile().getAbsolutePath());
+			if(getSettlement() instanceof TownyTown){
+				fc.set("SettlementPath", "TOWNY: " + getSettlement().getName());
+			} else {
+				fc.set("SettlementPath", getSettlement().getFile().getAbsolutePath());
+			}
 		} else {
 			fc.set("SettlementPath", null);
 		}
