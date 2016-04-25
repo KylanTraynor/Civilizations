@@ -71,6 +71,7 @@ public class ProtectionListener implements Listener{
 		}
 	}
 	
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
