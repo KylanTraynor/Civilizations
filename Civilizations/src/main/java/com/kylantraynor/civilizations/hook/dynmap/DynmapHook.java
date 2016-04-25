@@ -152,7 +152,6 @@ public class DynmapHook {
 	 * @param c
 	 */
 	private static void updateStall(MarketStall m) {
-		Civilizations.DEBUG("Updating Dynmap for " + m.getName() + " as a stall.");
 		String id = "" + m.getProtection().getCenter().getBlockX() + "_" +
 				m.getProtection().getCenter().getBlockY() + "_" +
 				m.getProtection().getCenter().getBlockZ() + "_stall";
