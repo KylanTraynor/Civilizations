@@ -78,7 +78,7 @@ public class ProtectionListener implements Listener{
 					if(LockManager.isLocked(event.getClickedBlock())){
 						if(!LockManager.hasAccess(event.getPlayer(), event.getClickedBlock())){
 							if(event.getPlayer().getInventory().containsAtLeast(LockManager.getLockpick(1), 1)){
-								LockManager.startLockPicking(event.getPlayer(), event.getClickedBlock());
+								LockManager.startLockpicking(event.getPlayer(), event.getClickedBlock());
 							} else {
 								event.getPlayer().sendMessage("You don't have any lockpick.");
 							}

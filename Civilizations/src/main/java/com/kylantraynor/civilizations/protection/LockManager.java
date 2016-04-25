@@ -73,7 +73,7 @@ public class LockManager {
 		return false;
 	}
 
-	public static void startLockPicking(Player player, Block block) {
+	public static void startLockpicking(Player player, Block block) {
 		player.sendMessage("Lockpicking is yet to be implemented.");
 		for(LockpickSession session : sessions.values()){
 			if(session.getBlock().equals(block)){
