@@ -67,7 +67,7 @@ public class InfluenceMap {
 				influent = f;
 			}
 		}
-		if(influence >= 0.01){
+		if(influence > 0){
 			return influent;
 		} else {return null;}
 	}
@@ -92,11 +92,11 @@ public class InfluenceMap {
 		double xzCoeff = Math.sqrt((fx - l.getX()) * (fx - l.getX()) + (fz - l.getZ()) * (fz - l.getZ()));
 		double yCoeff = fy - l.getY();
 		
-		double totalCoeff = Math.max(xzCoeff - yCoeff, 0.1);
-		double result = Math.min((f.getInfluence() * 100.0) / totalCoeff, 100.0);
+		double totalCoeff = xzCoeff - yCoeff;
+		double result = Math.max(f.getInfluence() - totalCoeff * 0.0001, 0);
 		BufferedImage img = getImage(f);
 		if(img != null){
-			imgSetGrayscaleAtLocation(l, img, result / 100);
+			imgSetGrayscaleAtLocation(l, img, result / Math.max(f.getInfluence(), 1));
 		}
 		return result;
 	}
