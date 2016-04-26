@@ -33,7 +33,7 @@ public class LockpickSession {
 	}
 
 	public int getCodeForCurrentStage() {
-		return this.code[this.stage];
+		return this.code[this.stage - 1];
 	}
 
 	public int getStage() {
@@ -41,7 +41,7 @@ public class LockpickSession {
 	}
 
 	public void passStage() {
-		if(this.stage == 0){
+		if(this.stage == 1){
 			LockManager.unlock(getBlock());
 		} else {
 			this.stage = this.stage - 1;

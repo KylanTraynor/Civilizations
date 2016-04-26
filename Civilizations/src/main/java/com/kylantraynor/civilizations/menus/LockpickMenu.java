@@ -104,7 +104,7 @@ public class LockpickMenu extends Menu{
 	
 	protected void tryPick() {
 		if(isValidPick()){
-			if(session.getStage() == 0){
+			if(session.getStage() == 1){
 				this.close();
 			}
 			session.passStage();
