@@ -120,13 +120,14 @@ public class InfluenceMap {
 		
 		imgX /= precision;
 		imgY /= precision;
-		
 		int r = (int) (255 * data);// red component 0...255
 	    int g = (int) (255 * data);// green component 0...255
 		int b = (int) (255 * data);// blue component 0...255
 		int col = (r << 16) | (g << 8) | b;
 		
-		img.setRGB(imgX, imgY, col);
+		if(imgX >= 0 && imgX < img.getWidth() && imgY >= 0 && imgY < img.getHeight()){
+			img.setRGB(imgX, imgY, col);
+		}
 	}
 	
 }
