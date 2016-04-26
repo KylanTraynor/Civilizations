@@ -120,7 +120,6 @@ public class LockpickMenu extends Menu{
 			session.reset();
 			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)) this.close();
 		}
-		update();
 	}
 	/**
 	 * Opens this view to the given player at the given page.
