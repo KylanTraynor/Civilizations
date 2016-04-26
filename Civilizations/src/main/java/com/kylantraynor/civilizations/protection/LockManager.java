@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,7 +31,7 @@ public class LockManager {
 		Bukkit.getServer().addRecipe(recipe);
 	}
 
-	public boolean isLockpick(ItemStack is){
+	public static boolean isLockpick(ItemStack is){
 		if(is.getType() != Material.TRIPWIRE_HOOK) return false;
 		ItemMeta im = is.getItemMeta();
 		if(!im.getDisplayName().equalsIgnoreCase("Lockpick")) return false;
@@ -71,6 +72,21 @@ public class LockManager {
 			return LWCHook.canAccessProtection(player, block);
 		}
 		return false;
+	}
+	
+	public static void removePickFromInventory(Inventory inventory, int amount){
+		for( int i = 0 ; i < inventory.getContents().length; i++){
+			if(inventory.getContents()[i] != null){
+				if(isLockpick(inventory.getContents()[i])){
+					if(inventory.getContents()[i].getAmount() > 1){
+						inventory.getContents()[i].setAmount(inventory.getContents()[i].getAmount() - 1);
+					} else {
+						inventory.removeItem(inventory.getContents()[i]);
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	public static void startLockpicking(Player player, Block block) {
