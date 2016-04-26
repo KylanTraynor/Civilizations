@@ -69,9 +69,7 @@ public class LockpickMenu extends Menu{
 		}
 		
 		top.setItem(pos(8,1), getPickButton());
-		
-		player.closeInventory();
-		player.openInventory(this);
+		player.updateInventory();
 	}
 	
 	public boolean isValidPick(){

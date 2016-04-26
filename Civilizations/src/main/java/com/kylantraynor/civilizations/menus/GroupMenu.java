@@ -89,8 +89,7 @@ public class GroupMenu extends Menu{
 		case RANK: updateForRank(group.getProtection().getRank(currentSubPage)); break;
 		case RANKS_SELECTION: updateForRankSelection(); break;
 		}
-		player.closeInventory();
-		player.openInventory(this);
+		player.updateInventory();
 	}
 	/**
 	 * Update the menu to display the Main Screen.
