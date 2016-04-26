@@ -82,7 +82,7 @@ public class LockpickMenu extends Menu{
 			}
 		};
 		if(MenuManager.getMenus().get(player) != null){
-			bk.runTaskLater(Civilizations.currentInstance, 5);
+			bk.runTaskLater(Civilizations.currentInstance, 2);
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class LockpickMenu extends Menu{
 			}
 			
 		}, true);
-		mainButton.setAmount(session.getStage() + 1);
+		mainButton.setAmount(session.getStage());
 		return mainButton;
 	}
 	
