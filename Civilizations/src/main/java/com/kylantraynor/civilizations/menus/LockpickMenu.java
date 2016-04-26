@@ -12,18 +12,15 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.kylantraynor.civilizations.groups.Group;
-import com.kylantraynor.civilizations.menus.GroupMenu.Page;
 import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.LockpickSession;
 
 public class LockpickMenu extends Menu{
 
 	private LockpickSession session;
-	private int linesTop = 1;
+	private int linesTop = 2;
 	private int linesBottom = 5;
 	private Inventory top;
 	private Inventory bottom;
