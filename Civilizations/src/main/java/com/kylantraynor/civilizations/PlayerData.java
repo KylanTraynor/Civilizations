@@ -66,7 +66,7 @@ public class PlayerData {
 	}
 	
 	public int getLevelForExperience(int exp){
-		return Math.max((int) (Math.sqrt(exp) / 5), 1);
+		return Math.max((int) (Math.floor(Math.sqrt(exp) / 5.0)), 1);
 	}
 	
 	public int getSkillExperience(String skill){
