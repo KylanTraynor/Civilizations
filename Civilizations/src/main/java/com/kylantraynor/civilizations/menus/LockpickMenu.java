@@ -59,11 +59,11 @@ public class LockpickMenu extends Menu{
 		
 		for(int i = 0; i < 9; i++){
 			if(i == currentHighlight){
-				top.setItem(pos(i, 0), new Button(player, Material.GOLD_BLOCK, "", new ArrayList<String>(), null, false));
+				top.setItem(pos(i, 0), new Button(player, Material.GOLD_BLOCK, " ", new ArrayList<String>(), null, true));
 			} else if(i == code){
-				top.setItem(pos(i, 0), new Button(player, Material.LAPIS_BLOCK, "", new ArrayList<String>(), null, false));
+				top.setItem(pos(i, 0), new Button(player, Material.LAPIS_BLOCK, " ", new ArrayList<String>(), null, true));
 			} else {
-				top.setItem(pos(i, 0), new Button(player, Material.IRON_BLOCK, "", new ArrayList<String>(), null, false));
+				top.setItem(pos(i, 0), new Button(player, Material.IRON_BLOCK, " ", new ArrayList<String>(), null, true));
 			}
 		}
 		
