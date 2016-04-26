@@ -80,6 +80,7 @@ public class GroupMenu extends Menu{
 	 */
 	@Override
 	public void update(){
+		ButtonManager.clearButtons(player);
 		this.bottom.clear();
 		this.top.clear();
 		switch(currentPage)

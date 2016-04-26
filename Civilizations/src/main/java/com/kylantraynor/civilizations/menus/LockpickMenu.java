@@ -53,7 +53,9 @@ public class LockpickMenu extends Menu{
 	 */
 	@Override
 	public void update(){
+		ButtonManager.clearButtons(player);
 		currentHighlight = (currentHighlight + 1) % 9;
+		
 		this.top.clear();
 		int code = session.getCodeForCurrentStage();
 		
