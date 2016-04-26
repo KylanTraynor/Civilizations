@@ -44,6 +44,7 @@ public class LockpickSession {
 
 	public void passStage() {
 		if(this.stage == 1){
+			LockManager.stopLockpicking(player);
 			LockManager.unlock(getBlock());
 		} else {
 			this.stage = this.stage - 1;
@@ -52,6 +53,10 @@ public class LockpickSession {
 	
 	public void reset(){
 		this.stage = startStage;
+	}
+
+	public void end() {
+		LockManager.stopLockpicking(player);
 	}
 	
 }

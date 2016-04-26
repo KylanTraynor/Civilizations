@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +56,13 @@ public class LockManager {
 		if(block.getType() == Material.CHEST) return true;
 		if(block.getType() == Material.TRAPPED_CHEST) return true;
 		if(block.getType() == Material.WOOD_DOOR) return true;
+		if(block.getType() == Material.ACACIA_DOOR) return true;
+		if(block.getType() == Material.DARK_OAK_DOOR) return true;
+		if(block.getType() == Material.BIRCH_DOOR) return true;
+		if(block.getType() == Material.SPRUCE_DOOR) return true;
+		if(block.getType() == Material.IRON_DOOR) return true;
+		if(block.getType() == Material.FURNACE) return true;
+		if(block.getType() == Material.BURNING_FURNACE) return true;
 		if(block.getType() == Material.TRAP_DOOR) return true;
 		if(block.getType() == Material.IRON_TRAPDOOR) return true;
 		return false;
@@ -100,6 +108,12 @@ public class LockManager {
 			sessions.put(player, new LockpickSession(player, block));
 		} else {
 			player.sendMessage("You're too far to try picking this lock.");
+		}
+	}
+	
+	public static void stopLockpicking(HumanEntity humanEntity){
+		if(sessions.containsKey(humanEntity)){
+			sessions.remove(humanEntity);
 		}
 	}
 

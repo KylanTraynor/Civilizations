@@ -12,6 +12,7 @@ import com.kylantraynor.civilizations.menus.ButtonManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.LockpickMenu;
 import com.kylantraynor.civilizations.menus.MenuManager;
+import com.kylantraynor.civilizations.protection.LockManager;
 
 public class MenuListener implements Listener{
 	
@@ -30,6 +31,9 @@ public class MenuListener implements Listener{
 		if(event.getView() instanceof GroupMenu || event.getView() instanceof LockpickMenu){
 			MenuManager.clearMenu(event.getPlayer());
 			ButtonManager.clearButtons(event.getPlayer());
+			if(event.getView() instanceof LockpickMenu){
+				LockManager.stopLockpicking(event.getPlayer());
+			}
 		}
 	}
 }

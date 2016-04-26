@@ -35,7 +35,7 @@ public class LockpickMenu extends Menu{
 	 * Initialize the Menu Inventories.
 	 */
 	private void initInventories() {
-		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + "Lockpick");
+		this.top = Bukkit.createInventory(null, 9 * linesTop, "" + ChatColor.BLACK + ChatColor.BOLD + "Lockpick");
 		this.bottom = session.getPlayer().getInventory();
 	}
 	
@@ -111,6 +111,7 @@ public class LockpickMenu extends Menu{
 	protected void tryPick() {
 		if(isValidPick()){
 			if(session.getStage() == 1){
+				session.end();
 				this.close();
 			}
 			session.passStage();
@@ -121,6 +122,7 @@ public class LockpickMenu extends Menu{
 			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)) this.close();
 		}
 	}
+	
 	/**
 	 * Opens this view to the given player at the given page.
 	 * @param player
