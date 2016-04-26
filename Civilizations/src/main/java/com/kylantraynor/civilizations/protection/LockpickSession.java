@@ -17,7 +17,7 @@ public class LockpickSession {
 	public LockpickSession(Player player, Block block){
 		this.player = player;
 		this.block = block;
-		this.startStage = 5;
+		this.startStage = LockManager.getLockLevel(block);
 		this.stage = this.startStage;
 		this.code = new Integer[stage];
 		for(int i = 0; i < this.stage; i++){
