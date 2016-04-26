@@ -21,7 +21,6 @@ public class LockpickMenu extends Menu{
 
 	private LockpickSession session;
 	private int linesTop = 2;
-	private int linesBottom = 5;
 	private Inventory top;
 	private Inventory bottom;
 	private Player player;
@@ -59,9 +58,9 @@ public class LockpickMenu extends Menu{
 		int code = session.getCodeForCurrentStage();
 		
 		for(int i = 0; i < 9; i++){
-			if(i == currentHighlight && i == code){
+			if(i == currentHighlight){
 				top.setItem(pos(i, 0), new Button(player, Material.GOLD_BLOCK, "", new ArrayList<String>(), null, false));
-			} else if(i == currentHighlight){
+			} else if(i == code){
 				top.setItem(pos(i, 0), new Button(player, Material.LAPIS_BLOCK, "", new ArrayList<String>(), null, false));
 			} else {
 				top.setItem(pos(i, 0), new Button(player, Material.IRON_BLOCK, "", new ArrayList<String>(), null, false));
