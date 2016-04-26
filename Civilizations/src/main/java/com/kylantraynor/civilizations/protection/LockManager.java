@@ -74,14 +74,24 @@ public class LockManager {
 	}
 
 	public static void startLockpicking(Player player, Block block) {
-		player.sendMessage("Lockpicking is yet to be implemented.");
 		for(LockpickSession session : sessions.values()){
 			if(session.getBlock().equals(block)){
 				player.sendMessage("This is already being lockpicked.");
+				return;
 			}
 		}
-		/*
-		sessions.put(player, new LockpickSession(player, block)) 
-		*/
+		sessions.put(player, new LockpickSession(player, block));
+	}
+
+	public static void unlock(Block block) {
+		if(isLockable(block)){
+			if(isLocked(block)){
+				if(LWCHook.isActive()){
+					LWCHook.unlock(block);
+				} else {
+					
+				}
+			}
+		}
 	}
 }

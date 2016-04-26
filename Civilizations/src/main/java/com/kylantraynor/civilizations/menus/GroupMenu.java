@@ -12,7 +12,6 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,7 +20,7 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 
-public class GroupMenu extends InventoryView{
+public class GroupMenu extends Menu{
 	
 	public enum Page{
 		MAIN, //Page with the general info of the group.
@@ -79,6 +78,7 @@ public class GroupMenu extends InventoryView{
 	/**
 	 * Updates the Menu depending on the active page.
 	 */
+	@Override
 	public void update(){
 		this.bottom.clear();
 		this.top.clear();
@@ -173,7 +173,7 @@ public class GroupMenu extends InventoryView{
 
 			@Override
 			public void run() {
-				MenuManager.getMenus().get(player).changePage(Page.MAIN);
+				((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MAIN);
 			}
 			
 		}, true);
@@ -189,7 +189,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).changePage(Page.MANAGE);
+						((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
@@ -205,7 +205,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
+						((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -223,7 +223,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).initTextInput("RANK_NEW", null);
+						((GroupMenu)MenuManager.getMenus().get(player)).initTextInput("RANK_NEW", null);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -242,7 +242,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).initTextInput("RANK_NAMING", rank.getName());
+						((GroupMenu)MenuManager.getMenus().get(player)).initTextInput("RANK_NAMING", rank.getName());
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -265,7 +265,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
+						((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -297,7 +297,7 @@ public class GroupMenu extends InventoryView{
 
 					@Override
 					public void run() {
-						MenuManager.getMenus().get(player).selectionReturned(r.getName());
+						((GroupMenu)MenuManager.getMenus().get(player)).selectionReturned(r.getName());
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));

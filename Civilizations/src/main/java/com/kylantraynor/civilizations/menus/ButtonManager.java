@@ -61,4 +61,12 @@ public class ButtonManager {
 		}
 		return null;
 	}
+
+	public static void clearButtons(HumanEntity player) {
+		for(Button btn : buttons.toArray(new Button[buttons.size()])){
+			if(btn.getPlayer() == player){
+				buttons.remove(btn);
+			}
+		}
+	}
 }
