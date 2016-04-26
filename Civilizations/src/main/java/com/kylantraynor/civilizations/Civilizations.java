@@ -376,6 +376,7 @@ public class Civilizations extends JavaPlugin{
 			@Override
 			public void run() {
 				updateAllGroups();
+				PlayerData.updateAll();
 			}
 			
 		};
@@ -721,6 +722,16 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getMarketStallDirectory() {
 		File f = new File(getPlotDirectory(), "Stalls");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	
+	public static File getPlayerDataDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "PlayerData");
 		if(f.exists()){
 			return f;
 		} else {

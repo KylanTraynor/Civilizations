@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.PlayerData;
 import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.LockpickSession;
 
@@ -71,6 +72,7 @@ public class LockpickMenu extends Menu{
 		}
 		
 		top.setItem(pos(8,1), getPickButton());
+		top.setItem(pos(0,1), getPickingLevelButton());
 		player.updateInventory();
 		
 		BukkitRunnable bk = new BukkitRunnable(){
@@ -82,7 +84,8 @@ public class LockpickMenu extends Menu{
 			}
 		};
 		if(MenuManager.getMenus().get(player) != null){
-			bk.runTaskLater(Civilizations.currentInstance, 2);
+			PlayerData pd = PlayerData.get(player.getUniqueId());
+			bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking"), 2),10));
 		}
 	}
 	
@@ -108,6 +111,17 @@ public class LockpickMenu extends Menu{
 		return mainButton;
 	}
 	
+	/**
+	 * Gets the Button linking to the Main Screen.
+	 * @return
+	 */
+	public Button getPickingLevelButton(){
+		List<String> lore = new ArrayList<String>();
+		Button mainButton = new Button(player, Material.EMERALD_BLOCK, "Lock Picking Level", lore, null, true);
+		mainButton.setAmount(PlayerData.get(player.getUniqueId()).getSkillLevel("Lock Picking"));
+		return mainButton;
+	}
+	
 	protected void tryPick() {
 		if(isValidPick()){
 			if(session.getStage() == 1){
@@ -118,6 +132,7 @@ public class LockpickMenu extends Menu{
 		} else {
 			LockManager.removePickFromInventory(player.getInventory(), 1);
 			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
 			session.reset();
 			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)) this.close();
 		}
