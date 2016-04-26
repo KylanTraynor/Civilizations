@@ -128,6 +128,7 @@ public class LockpickMenu extends Menu{
 	public void open(Player player){
 		this.player = player;
 		update();
+		player.openInventory(this);
 	}
 	
 	@Override

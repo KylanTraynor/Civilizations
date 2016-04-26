@@ -334,6 +334,7 @@ public class GroupMenu extends Menu{
 		this.currentPage = p;
 		this.player = player;
 		update();
+		player.openInventory(this);
 	}
 
 	@Override
