@@ -28,7 +28,6 @@ public class MenuListener implements Listener{
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		if(event.getView() instanceof GroupMenu || event.getView() instanceof LockpickMenu){
-			event.getPlayer().openInventory((InventoryView)null);
 			MenuManager.clearMenu(event.getPlayer());
 			ButtonManager.clearButtons(event.getPlayer());
 		}

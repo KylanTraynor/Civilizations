@@ -36,9 +36,7 @@ public class LockpickMenu extends Menu{
 	 */
 	private void initInventories() {
 		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + "Lockpick");
-		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, "");
-		
-		this.top.setMaxStackSize(1);
+		this.bottom = session.getPlayer().getInventory();
 	}
 	
 	/**
@@ -57,7 +55,6 @@ public class LockpickMenu extends Menu{
 	@Override
 	public void update(){
 		currentHighlight = (currentHighlight + 1) % 9;
-		this.bottom.clear();
 		this.top.clear();
 		int code = session.getCodeForCurrentStage();
 		
