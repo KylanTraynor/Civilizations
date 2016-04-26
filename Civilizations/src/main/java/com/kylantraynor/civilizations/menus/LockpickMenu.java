@@ -76,10 +76,12 @@ public class LockpickMenu extends Menu{
 		BukkitRunnable bk = new BukkitRunnable(){
 			@Override
 			public void run() {
-				update();
+				if(MenuManager.getMenus().get(player) != null){
+					((LockpickMenu)MenuManager.getMenus().get(player)).update();
+				}
 			}
 		};
-		if(!this.getTopInventory().getViewers().isEmpty()){
+		if(MenuManager.getMenus().get(player) != null){
 			bk.runTaskLater(Civilizations.currentInstance, 5);
 		}
 	}
