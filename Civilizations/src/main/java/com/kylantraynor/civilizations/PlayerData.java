@@ -6,8 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.md_5.bungee.api.ChatColor;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class PlayerData {
 	
@@ -78,8 +83,16 @@ public class PlayerData {
 	}
 	
 	public void giveSkillExperience(String skill, int amount){
+		int oldLevel = getSkillLevel(skill);
 		config.set("Skills." + skill, Math.max(getSkillExperience(skill) + amount, 1));
 		hasChanged = true;
+		if(oldLevel != getSkillLevel(skill)){
+			Player p = Bukkit.getPlayer(playerId);
+			if(p != null){
+				p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+				p.sendMessage(ChatColor.GOLD + "[" + ChatColor.AQUA + skill + ChatColor.GOLD + "] Skill leveled up!");
+			}
+		}
 	}
 	
 	public void takeSkillExperience(String skill, int amount){
