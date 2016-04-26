@@ -14,4 +14,14 @@ public class CitizensHook {
 		}
 	}
 	
+	public static boolean isSentryEnabled(){
+		if(!isEnabled()) return false;
+		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Sentry");
+		if(plugin == null){
+			return false;
+		} else {
+			return plugin.isEnabled();
+		}
+	}
+	
 }
