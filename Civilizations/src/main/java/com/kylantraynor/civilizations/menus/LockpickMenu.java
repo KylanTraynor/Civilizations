@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.LockpickSession;
 
@@ -71,6 +72,16 @@ public class LockpickMenu extends Menu{
 		
 		top.setItem(pos(8,1), getPickButton());
 		player.updateInventory();
+		
+		BukkitRunnable bk = new BukkitRunnable(){
+			@Override
+			public void run() {
+				update();
+			}
+		};
+		if(!this.getTopInventory().getViewers().isEmpty()){
+			bk.runTaskLater(Civilizations.currentInstance, 5);
+		}
 	}
 	
 	public boolean isValidPick(){
