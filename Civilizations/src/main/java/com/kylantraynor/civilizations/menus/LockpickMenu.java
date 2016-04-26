@@ -104,6 +104,7 @@ public class LockpickMenu extends Menu{
 		} else {
 			player.getInventory().remove(LockManager.getLockpick(1));
 			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+			session.reset();
 			if(player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)) this.close();
 		}
 		update();

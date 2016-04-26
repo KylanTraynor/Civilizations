@@ -80,7 +80,11 @@ public class LockManager {
 				return;
 			}
 		}
-		sessions.put(player, new LockpickSession(player, block));
+		if(block.getLocation().distance(player.getLocation()) <= 3){
+			sessions.put(player, new LockpickSession(player, block));
+		} else {
+			player.sendMessage("You're too far to try picking this lock.");
+		}
 	}
 
 	public static void unlock(Block block) {

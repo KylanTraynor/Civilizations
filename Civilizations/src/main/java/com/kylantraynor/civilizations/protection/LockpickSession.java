@@ -10,13 +10,15 @@ public class LockpickSession {
 
 	private Player player;
 	private Block block;
+	private int startStage;
 	private int stage;
 	private Integer[] code;
 	
 	public LockpickSession(Player player, Block block){
 		this.player = player;
 		this.block = block;
-		this.stage = 5;
+		this.startStage = 5;
+		this.stage = this.startStage;
 		this.code = new Integer[stage];
 		for(int i = 0; i < this.stage; i++){
 			this.code[i] = (int) (Math.random() * 9);
@@ -46,6 +48,10 @@ public class LockpickSession {
 		} else {
 			this.stage = this.stage - 1;
 		}
+	}
+	
+	public void reset(){
+		this.stage = startStage;
 	}
 	
 }
