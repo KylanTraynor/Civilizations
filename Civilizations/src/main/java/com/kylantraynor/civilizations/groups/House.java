@@ -13,6 +13,7 @@ import mkremins.fanciful.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,7 @@ public class House extends Group implements IHasBanner{
 	
 	private Banner banner;
 	private String words = "We don't know what to say, so we just don't say it.";
+	private UUID lord;
 	
 	public House(String name, Banner b) {
 		super();
@@ -108,12 +110,24 @@ public class House extends Group implements IHasBanner{
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
 		}
+		fm.then("\nCurrent Lord:").color(ChatColor.GRAY).
+			then("" + getLordName()).color(ChatColor.GOLD);
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	}
 	
+	private String getLordName() {
+		if(lord != null){
+			OfflinePlayer p = Bukkit.getOfflinePlayer(lord);
+			if(p != null){
+				return p.getName();
+			}
+		}
+		return "Unkown";
+	}
+
 	/**
 	 * Gets the file where this camp is saved.
 	 * @return File
@@ -138,9 +152,11 @@ public class House extends Group implements IHasBanner{
 	public static House load(YamlConfiguration cf){
 		String name;
 		String words;
+		String lord;
 		Instant creation;
 		name = cf.getString("Name");
 		words = cf.getString("Words");
+		lord = cf.getString("Lord");
 		if(cf.getString("Creation") != null){
 			creation = Instant.parse(cf.getString("Creation"));
 		} else {
@@ -158,9 +174,25 @@ public class House extends Group implements IHasBanner{
 			h.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
 			i+=1;
 		}
+		if(lord != null){
+			h.setLord(Bukkit.getOfflinePlayer(UUID.fromString(lord)));
+		}
 		
 		return h;
 	}
+	private void setLord(OfflinePlayer offlinePlayer) {
+		if(offlinePlayer == null){
+			lord = null;
+		} else {
+			lord = offlinePlayer.getUniqueId();
+		}
+		setChanged(true);
+	}
+	
+	public OfflinePlayer getLord(){
+		return Bukkit.getOfflinePlayer(lord);
+	}
+
 	/**
 	 * Saves the camp to its file.
 	 * @return true if the camp has been saved, false otherwise.
@@ -174,6 +206,10 @@ public class House extends Group implements IHasBanner{
 		fc.set("Creation", getCreationDate().toString());
 		fc.set("Banner", getBanner().toString());
 		fc.set("Words", getWords());
+		if(getLord() != null){
+			fc.set("Lord", getLord().getUniqueId());
+		} else {fc.set("Lord", null);}
+		
 		int i = 0;
 		for(UUID id : getMembers()){
 			fc.set("Members." + i, id.toString());

@@ -126,6 +126,7 @@ public class LockpickMenu extends Menu{
 	
 	protected void tryPick() {
 		if(isValidPick()){
+			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
 			if(session.getStage() == 1){
 				session.end();
 				this.close();
@@ -135,8 +136,12 @@ public class LockpickMenu extends Menu{
 			LockManager.removePickFromInventory(player.getInventory(), 1);
 			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
-			session.reset();
-			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)) this.close();
+			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)){
+				session.end();
+				this.close();
+			} else {
+				session.reset();
+			}
 		}
 	}
 	

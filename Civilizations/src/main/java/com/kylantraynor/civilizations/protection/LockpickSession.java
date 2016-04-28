@@ -1,6 +1,9 @@
 package com.kylantraynor.civilizations.protection;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.menus.LockpickMenu;
@@ -57,6 +60,12 @@ public class LockpickSession {
 
 	public void end() {
 		LockManager.stopLockpicking(player);
+		if(getBlock().getType() == Material.CHEST || getBlock().getType() == Material.TRAPPED_CHEST){
+			BlockState state = getBlock().getState();
+			if(state instanceof Chest){
+				getPlayer().openInventory(((Chest) state).getInventory());
+			}
+		}
 	}
 	
 }
