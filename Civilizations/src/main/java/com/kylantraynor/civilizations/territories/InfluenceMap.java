@@ -67,7 +67,7 @@ public class InfluenceMap {
 				influent = f;
 			}
 		}
-		if(influence > 0){
+		if(influence > 0.0){
 			return influent;
 		} else {return null;}
 	}
@@ -93,7 +93,7 @@ public class InfluenceMap {
 		double yCoeff = fy - l.getY();
 		
 		double totalCoeff = xzCoeff - yCoeff;
-		double result = Math.max(f.getInfluence() - totalCoeff * 0.0001, 0);
+		double result = Math.max(((double)f.getInfluence()) - totalCoeff * 0.001, 0.0);
 		BufferedImage img = getImage(f);
 		if(img != null){
 			imgSetGrayscaleAtLocation(l, img, result / Math.max(f.getInfluence(), 1));

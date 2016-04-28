@@ -19,7 +19,7 @@ import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class Fort extends Settlement implements IHasBanner{
 
-	private int influence = 1;
+	private int influence = 10;
 	private House house;
 	
 	public Fort(Location l, House house) {
