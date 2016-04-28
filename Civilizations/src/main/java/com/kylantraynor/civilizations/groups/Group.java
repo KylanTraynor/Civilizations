@@ -273,7 +273,9 @@ public class Group {
 	 * Updates the group.
 	 */
 	public void update(){
-		if(isChanged()) save();
+		if(isChanged()){
+			try{save();} catch (Exception e) {e.printStackTrace();};
+		}
 	}
 	/**
 	 * Checks if the group has changed.
