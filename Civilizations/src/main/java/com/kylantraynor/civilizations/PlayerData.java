@@ -95,6 +95,25 @@ public class PlayerData {
 		}
 	}
 	
+	public int getSkillExperienceForLevel(int level){
+		return (int) ((level * 5.0) * (level * 5.0));
+	}
+	
+	public int getSkillExpToNextLevel(String skill){
+		int level = getSkillLevel(skill);
+		if(level <= 0) return 1;
+		return getSkillExperienceForLevel(level + 1) - getSkillExperienceForLevel(level);
+	}
+	
+	public int getSkillExpToNextLevel(int level){
+		if(level <= 0) return 1;
+		return getSkillExperienceForLevel(level + 1) - getSkillExperienceForLevel(level);
+	}
+	
+	public int getSkillLevelExp(String skill){
+		return getSkillExperience(skill) - getSkillExperienceForLevel(getSkillLevel(skill));
+	}
+	
 	public void takeSkillExperience(String skill, int amount){
 		giveSkillExperience(skill, -amount);
 	}

@@ -117,6 +117,8 @@ public class LockpickMenu extends Menu{
 	 */
 	public Button getPickingLevelButton(){
 		List<String> lore = new ArrayList<String>();
+		PlayerData pd = PlayerData.get(player.getUniqueId());
+		lore.add("Exp: " + pd.getSkillLevelExp("Lock Picking") + "/" + pd.getSkillExpToNextLevel("Lock Picking"));
 		Button mainButton = new Button(player, Material.EMERALD_BLOCK, "Lock Picking Level", lore, null, true);
 		mainButton.setAmount(PlayerData.get(player.getUniqueId()).getSkillLevel("Lock Picking"));
 		return mainButton;
