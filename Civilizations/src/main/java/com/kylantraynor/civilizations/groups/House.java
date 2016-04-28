@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,8 @@ public class House extends Group implements IHasBanner{
 	private Banner banner;
 	private String words = "We don't know what to say, so we just don't say it.";
 	private UUID lord;
+	private List<String> unloadedVassals = new ArrayList<String>();
+	private List<House> vassals = new ArrayList<House>();
 	
 	public House(String name, Banner b) {
 		super();
@@ -114,6 +117,8 @@ public class House extends Group implements IHasBanner{
 			then("" + getLordName()).color(ChatColor.GOLD);
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nVassals: ").color(ChatColor.GRAY).command("/house " + this.getName() + " Vassals").
+			then("" + getVassals().size()).color(ChatColor.GOLD).command("/house " + this.getName() + " Vassals");
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
 	}
@@ -174,12 +179,32 @@ public class House extends Group implements IHasBanner{
 			h.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
 			i+=1;
 		}
+		
+		i = 0;
+		while(cf.contains("Vassals." + i)){
+			h.addVassal(cf.getString("Vassals." + i));
+		}
 		if(lord != null){
 			h.setLord(Bukkit.getOfflinePlayer(UUID.fromString(lord)));
 		}
 		
 		return h;
 	}
+	
+	public void addVassal(String string) {
+		if(House.get(string) != null){
+			addVassal(House.get(string));
+		} else {
+			unloadedVassals.add(string);
+		}
+	}
+	
+	public void addVassal(House house){
+		vassals.add(house);
+		unloadedVassals.add(house.getName());
+		setChanged(true);
+	}
+
 	private void setLord(OfflinePlayer offlinePlayer) {
 		if(offlinePlayer == null){
 			lord = null;
@@ -210,6 +235,10 @@ public class House extends Group implements IHasBanner{
 			fc.set("Lord", getLord().getUniqueId());
 		} else {fc.set("Lord", null);}
 		
+		for(int i = 0; i < getVassals().size(); i++){
+			fc.set("Vassals." + i, getVassals().get(i).getName());
+		}
+		
 		int i = 0;
 		for(UUID id : getMembers()){
 			fc.set("Members." + i, id.toString());
@@ -233,4 +262,25 @@ public class House extends Group implements IHasBanner{
 		this.words = words;
 	}
 	
+	public List<House> getVassals(){
+		if(vassals.size() != unloadedVassals.size()){
+			vassals = new ArrayList<House>();
+			for(String s : unloadedVassals){
+				if(House.get(s) != null){
+					vassals.add(House.get(s));
+				}
+			}
+			setChanged(true);
+		}
+		return vassals;
+	}
+
+	public FancyMessage getInteractiveVassalsList() {
+		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " VASSALS ==========").color(ChatColor.GOLD);
+		for(House h : getVassals()){
+			fm.then("\n" + h.getName()).command("/House " + h.getName() + " INFO");
+		}
+		fm.then("\n==============================").color(ChatColor.GOLD);
+		return fm;
+	}
 }

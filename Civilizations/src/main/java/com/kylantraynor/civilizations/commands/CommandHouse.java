@@ -79,6 +79,10 @@ public class CommandHouse implements CommandExecutor{
 				case "GETWORDS":
 					sender.sendMessage(house.getWords());
 					return true;
+				// /House [Name] Vassals
+				case "VASSALS":
+					house.getInteractiveVassalsList().send(sender);
+					return true;
 				// /House [Name] SetWords Some words with spaces
 				case "SETWORDS":
 					if(!house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
