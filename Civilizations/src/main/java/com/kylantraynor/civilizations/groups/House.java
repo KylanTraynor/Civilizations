@@ -215,6 +215,7 @@ public class House extends Group implements IHasBanner{
 	}
 	
 	public OfflinePlayer getLord(){
+		if(lord == null) return null;
 		return Bukkit.getOfflinePlayer(lord);
 	}
 
