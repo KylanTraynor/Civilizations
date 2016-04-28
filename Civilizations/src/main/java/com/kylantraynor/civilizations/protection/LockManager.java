@@ -131,8 +131,8 @@ public class LockManager {
 
 	public static int getLockLevel(Block block) {
 		if(!isLockable(block)) return 0;
-		if(block.getType() == Material.CHEST) return 5;
-		if(block.getType() == Material.TRAPPED_CHEST) return 6;
+		if(block.getType() == Material.CHEST) return 4;
+		if(block.getType() == Material.TRAPPED_CHEST) return 5;
 		if(block.getType() == Material.WOOD_DOOR) return 5;
 		if(block.getType() == Material.ACACIA_DOOR) return 5;
 		if(block.getType() == Material.DARK_OAK_DOOR) return 5;
