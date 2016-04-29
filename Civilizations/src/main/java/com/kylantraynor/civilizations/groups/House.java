@@ -233,7 +233,7 @@ public class House extends Group implements IHasBanner{
 		fc.set("Banner", getBanner().toString());
 		fc.set("Words", getWords());
 		if(getLord() != null){
-			fc.set("Lord", getLord().getUniqueId());
+			fc.set("Lord", getLord().getUniqueId().toString());
 		} else {fc.set("Lord", null);}
 		
 		for(int i = 0; i < getVassals().size(); i++){
