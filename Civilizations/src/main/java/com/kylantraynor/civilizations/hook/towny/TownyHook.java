@@ -13,29 +13,22 @@ import org.bukkit.plugin.PluginManager;
 import com.kylantraynor.civilizations.Civilizations;
 
 public class TownyHook {
+	
 	private static Plugin plugin;
 
-	/**
-	 * Tries to load the TitleManager plugin. Returns true if successfully loaded, returns false otherwise.
-	 * @param manager
-	 * @return boolean
-	 */
-	public static boolean load(PluginManager manager) {
-		if((plugin = manager.getPlugin("Towny")) != null){
-			return true;
-		}
-		return false;
-	}
-	
 	/**
 	 * Gets the state of the TitleManager hook. Returns true if the plugin is loaded and enabled, returns false otherwise.
 	 * @return boolean
 	 */
-	public static boolean isEnabled(){
-		if(plugin != null){
-			return plugin.isEnabled();
+	public static boolean isActive(){
+		if((plugin = Bukkit.getPluginManager().getPlugin("Towny")) != null){
+			if(plugin != null){
+				return plugin.isEnabled();
+			} else {
+				return false;
+			}
 		} else {
-			return false;
+			return true;
 		}
 	}
 	
@@ -43,7 +36,7 @@ public class TownyHook {
 	 * Loads all Towns data from Towny to Civilizations.
 	 */
 	public static void loadTownyTowns() {
-		if(isEnabled()){
+		if(isActive()){
 			List<com.palmergames.bukkit.towny.object.Town> tl = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTowns();
 			for(com.palmergames.bukkit.towny.object.Town t : tl){
 				Civilizations.log("INFO", "Loading " + t.getName() + ".");
@@ -57,7 +50,7 @@ public class TownyHook {
 	}
 	
 	public static TownyTown loadTownyTown(String name){
-		if(isEnabled()){
+		if(isActive()){
 			try {
 				com.palmergames.bukkit.towny.object.Town t = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTown(name);
 				return new TownyTown(t);
