@@ -20,6 +20,9 @@ public class CommandCivilizations implements CommandExecutor{
 			case "TOGGLE":
 				if(args.length > 1){
 					switch(args[1].toUpperCase()){
+					case "CHAT":
+						Civilizations.useChat = !Civilizations.useChat;
+						break;
 					case "CLEARING":
 						Civilizations.setClearing(!Civilizations.isClearing());
 						break;

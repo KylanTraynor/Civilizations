@@ -7,13 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.House;
 
 public class ChatListener implements Listener{
 	
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event){
-		
+		if(!Civilizations.useChat) return;
 		if(event.isCancelled()) return;
 		
 		String format = "%name%house: %message";

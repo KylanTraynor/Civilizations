@@ -115,6 +115,7 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	private static Server webServer;
+	public static boolean useChat = false;
 	
 	public static Server getWebServer(){
 		return webServer;
