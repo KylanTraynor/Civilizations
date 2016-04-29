@@ -333,9 +333,11 @@ public class Civilizations extends JavaPlugin{
 		if(TitleManagerHook.load(pm)){ log("INFO", "Hook to TitleManager: OK");
 		} else { log("WARNING", "Hook to Titlemanager: NO");
 		}
-		if(TownyHook.isActive()){ log("INFO", "Side by side with Towny: OK");
-		} else { log("INFO", "Side by side with Towny: NO");
-		}
+		try{
+			if(TownyHook.isActive()){ log("INFO", "Side by side with Towny: OK");
+			} else { log("INFO", "Side by side with Towny: NO");
+			}
+		} catch (Exception e){ log("INFO", "Side by side with Towny: NO"); }
 		if(Economy.load(pm)){ log("INFO", "Economy: OK");
 		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly.");
 		}
