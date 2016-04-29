@@ -57,7 +57,7 @@ public class PlayerData {
 	
 	public void update(){
 		if(hasChanged){
-			save();
+			try{save();} catch (Exception e){e.printStackTrace();}
 		}
 	}
 	
