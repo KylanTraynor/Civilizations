@@ -83,13 +83,19 @@ public class Camp extends Settlement{
 							}
 						}
 					}
+					this.sendMessage("No Banner could be found in the keep.", null);
+					return false;
 				}
 			}
+			this.sendMessage("No keep could be found in the camp.", null);
+			return false;
 		} else if(IsolatedDwelling.hasUpgradeRequirements(this)){
 			
-			return true;
+			return false;
+		} else {
+			this.sendMessage("Nothing to upgrade to!", null);
+			return false;
 		}
-		return false;
 	}
 	
 	@Override
