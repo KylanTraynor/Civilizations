@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.listeners;
 
 import mkremins.fanciful.FancyMessage;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -12,6 +13,9 @@ public class ChatListener implements Listener{
 	
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event){
+		
+		if(event.isCancelled()) return;
+		
 		String format = "%s%house: %s";
 		
 		if(event.getPlayer() != null){
@@ -31,7 +35,10 @@ public class ChatListener implements Listener{
 		fm.then(": ");
 		fm.then("%s");
 		
-		event.setFormat(fm.toJSONString());
+		for(Player p : event.getRecipients()){
+			fm.send(p);
+		}
+		event.setCancelled(true);
 	}
 	
 }
