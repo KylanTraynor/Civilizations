@@ -23,8 +23,7 @@ public class ChatListener implements Listener{
 			}
 		}
 		
-		FancyMessage fm = new FancyMessage();
-		fm.then("%s");
+		FancyMessage fm = new FancyMessage("%s");
 		if(House.get(event.getPlayer()) != null){
 			fm.then(" " + House.get(event.getPlayer()).getName());
 			fm.tooltip("Test");

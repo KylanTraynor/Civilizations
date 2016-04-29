@@ -331,21 +331,19 @@ public class Civilizations extends JavaPlugin{
 	 */
 	private void loadHooks(PluginManager pm) {
 		if(DynmapHook.load(pm)){ log("INFO", "Hook to Dynmap: OK");
-		} else { log("WARNING", "Hook to Dynmap: NO, " + PLUGIN_NAME + " will not be displayed.");
-		}
+		} else { log("WARNING", "Hook to Dynmap: NO, " + PLUGIN_NAME + " will not be displayed."); }
+		
 		if(TitleManagerHook.load(pm)){ log("INFO", "Hook to TitleManager: OK");
-		} else { log("WARNING", "Hook to Titlemanager: NO");
-		}
-		try{
-			if(TownyHook.isActive()){ log("INFO", "Side by side with Towny: OK");
-			} else { log("INFO", "Side by side with Towny: NO");
-			}
-		} catch (Exception e){ log("INFO", "Side by side with Towny: NO"); }
+		} else { log("WARNING", "Hook to Titlemanager: NO"); }
+		
+		if(TownyHook.isActive()){ log("INFO", "Side by side with Towny: OK");
+		} else { log("INFO", "Side by side with Towny: NO"); }
+			
 		if(Economy.load(pm)){ log("INFO", "Economy: OK");
-		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly.");
-		}
-		if(LWCHook.isActive()) {log("INFO", "LWC: OK");
-		} else {log("INFO", "LWC: NO");}
+		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly."); }
+		
+		if(LWCHook.isActive()) {log("INFO", "LWC: OK"); } else {log("INFO", "LWC: NO"); }
+		
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
 		//if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
 	}
