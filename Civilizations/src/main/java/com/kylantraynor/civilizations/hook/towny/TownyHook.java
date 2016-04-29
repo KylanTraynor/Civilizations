@@ -11,11 +11,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyHook {
 	private static Plugin plugin;
@@ -49,8 +44,8 @@ public class TownyHook {
 	 */
 	public static void loadTownyTowns() {
 		if(isEnabled()){
-			List<Town> tl = TownyUniverse.getDataSource().getTowns();
-			for(Town t : tl){
+			List<com.palmergames.bukkit.towny.object.Town> tl = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTowns();
+			for(com.palmergames.bukkit.towny.object.Town t : tl){
 				Civilizations.log("INFO", "Loading " + t.getName() + ".");
 				try {
 					new TownyTown(t);
@@ -64,21 +59,21 @@ public class TownyHook {
 	public static TownyTown loadTownyTown(String name){
 		if(isEnabled()){
 			try {
-				Town t = TownyUniverse.getDataSource().getTown(name);
+				com.palmergames.bukkit.towny.object.Town t = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTown(name);
 				return new TownyTown(t);
-			} catch (NotRegisteredException e) {
+			} catch (com.palmergames.bukkit.towny.exceptions.NotRegisteredException e) {
 				Civilizations.log("WARNING", name + " couldn't be found.");
 				return null;
-			} catch (TownyException e) {
+			} catch (com.palmergames.bukkit.towny.exceptions.TownyException e) {
 				Civilizations.log("WARNING", name + " couldn't be loaded.");
 				return null;
 			}
 		} else { return null;}
 	}
 
-	private static Map<Resident, UUID> residentCache = new HashMap<Resident, UUID>();
+	private static Map<com.palmergames.bukkit.towny.object.Resident, UUID> residentCache = new HashMap<com.palmergames.bukkit.towny.object.Resident, UUID>();
 	
-	public static OfflinePlayer getPlayer(Resident res){
+	public static OfflinePlayer getPlayer(com.palmergames.bukkit.towny.object.Resident res){
 		if(residentCache.containsKey(res)){
 			return Bukkit.getServer().getOfflinePlayer(residentCache.get(res));
 		} else {
