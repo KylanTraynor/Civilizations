@@ -17,21 +17,12 @@ public class ChatListener implements Listener{
 		if(!Civilizations.useChat) return;
 		if(event.isCancelled()) return;
 		
-		String format = "%name%house: %message";
-		
-		if(event.getPlayer() != null){
-			House h = House.get(event.getPlayer());
-			if(h != null){
-				format = format.replace("%house", " " + h.getName());
-			} else {
-				format = format.replace("%house", "");
-			}
-		}
-		
 		FancyMessage fm = new FancyMessage(event.getPlayer().getCustomName());
+		fm.suggest("/msg " + event.getPlayer().getName() + " ");
 		if(House.get(event.getPlayer()) != null){
 			fm.then(" " + House.get(event.getPlayer()).getName());
-			fm.tooltip("Test");
+			fm.tooltip("\"" + House.get(event.getPlayer()).getWords() + "\"");
+			fm.command("/house " + House.get(event.getPlayer()).getName() + " INFO");
 		}
 		fm.then(": ");
 		fm.then(event.getMessage());
