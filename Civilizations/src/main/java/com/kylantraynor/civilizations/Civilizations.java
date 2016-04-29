@@ -259,7 +259,7 @@ public class Civilizations extends JavaPlugin{
 	public static Settlement loadSettlement(String path){
 		log("INFO", "Getting settlement from " + path);
 		if(path.contains("TOWNY: ")){
-			if(TownyHook.isEnabled()){
+			if(TownyHook.isActive()){
 				return TownyHook.loadTownyTown(path.replace("TOWNY: ", ""));
 			} else { return null;}
 		} else {
@@ -361,7 +361,7 @@ public class Civilizations extends JavaPlugin{
 		this.getCommand("Plot").setExecutor(new CommandPlot());
 		this.getCommand("Stall").setExecutor(new CommandStall());
 		
-		if(TownyHook.isEnabled()){
+		if(TownyHook.isActive()){
 			this.getCommand("TownyTown").setExecutor(new CommandTownyTown());
 		}
 	}
