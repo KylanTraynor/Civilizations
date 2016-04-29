@@ -17,7 +17,14 @@ public class ChatListener implements Listener{
 		if(!Civilizations.useChat) return;
 		if(event.isCancelled()) return;
 		
-		FancyMessage fm = new FancyMessage(event.getPlayer().getCustomName());
+		if(event.getPlayer() == null) return;
+		
+		FancyMessage fm;
+		if(event.getPlayer().getCustomName() == null){
+			fm = new FancyMessage(""+event.getPlayer().getName());
+		} else {
+			fm = new FancyMessage(""+event.getPlayer().getCustomName());
+		}
 		fm.suggest("/msg " + event.getPlayer().getName() + " ");
 		if(House.get(event.getPlayer()) != null){
 			fm.then(" " + House.get(event.getPlayer()).getName());
