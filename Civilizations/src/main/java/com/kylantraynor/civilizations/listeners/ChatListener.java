@@ -16,7 +16,7 @@ public class ChatListener implements Listener{
 		
 		if(event.isCancelled()) return;
 		
-		String format = "%s%house: %s";
+		String format = "%name%house: %message";
 		
 		if(event.getPlayer() != null){
 			House h = House.get(event.getPlayer());
@@ -27,13 +27,13 @@ public class ChatListener implements Listener{
 			}
 		}
 		
-		FancyMessage fm = new FancyMessage("%s");
+		FancyMessage fm = new FancyMessage(event.getPlayer().getCustomName());
 		if(House.get(event.getPlayer()) != null){
 			fm.then(" " + House.get(event.getPlayer()).getName());
 			fm.tooltip("Test");
 		}
 		fm.then(": ");
-		fm.then("%s");
+		fm.then(event.getMessage());
 		
 		for(Player p : event.getRecipients()){
 			fm.send(p);
