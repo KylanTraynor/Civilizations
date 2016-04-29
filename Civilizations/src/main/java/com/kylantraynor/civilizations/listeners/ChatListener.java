@@ -33,7 +33,7 @@ public class ChatListener implements Listener{
 			fm.command("/house " + House.get(event.getPlayer()).getName() + " INFO");
 		}
 		fm.then(": ");
-		fm.then(event.getMessage());
+		fm.then(""+event.getMessage());
 		
 		for(Player p : event.getRecipients()){
 			fm.send(p);
