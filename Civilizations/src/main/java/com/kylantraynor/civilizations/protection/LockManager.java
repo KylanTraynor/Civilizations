@@ -16,6 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
+import com.kylantraynor.civilizations.hook.towny.TownyHook;
 
 public class LockManager {
 	
@@ -103,6 +104,8 @@ public class LockManager {
 				player.sendMessage("This is already being lockpicked.");
 				return;
 			}
+		}
+		if(TownyHook.isActive()){
 		}
 		if(block.getLocation().distance(player.getLocation()) <= 3){
 			sessions.put(player, new LockpickSession(player, block));

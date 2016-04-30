@@ -189,7 +189,7 @@ public class Civilizations extends JavaPlugin{
 	private void createServerViews() {
 		
 	}
-
+	
 	private void loadPlots() {
 		Map<String, Settlement> settlements = new HashMap<String, Settlement>();
 		loadKeeps(settlements);
