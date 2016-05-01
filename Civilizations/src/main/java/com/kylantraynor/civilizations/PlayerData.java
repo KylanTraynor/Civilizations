@@ -76,7 +76,7 @@ public class PlayerData {
 	
 	public int getSkillExperience(String skill){
 		if(config.contains("Skills." + skill)){
-			return Math.max(config.getInt("Skill." + skill), 1);
+			return Math.max(config.getInt("Skills." + skill), 1);
 		} else {
 			return 1;
 		}
@@ -84,7 +84,8 @@ public class PlayerData {
 	
 	public void giveSkillExperience(String skill, int amount){
 		int oldLevel = getSkillLevel(skill);
-		config.set("Skills." + skill, Math.max(getSkillExperience(skill) + amount, 1));
+		int currentExp = getSkillExperience(skill);
+		config.set("Skills." + skill, Math.max(currentExp + amount, 1));
 		hasChanged = true;
 		if(oldLevel != getSkillLevel(skill)){
 			Player p = Bukkit.getPlayer(playerId);

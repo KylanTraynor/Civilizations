@@ -106,6 +106,9 @@ public class LockManager {
 			}
 		}
 		if(TownyHook.isActive()){
+			if(!TownyHook.hasSwitchPerm(player, block)){
+				player.sendMessage("You can't pick a lock here.");
+			}
 		}
 		if(block.getLocation().distance(player.getLocation()) <= 3){
 			sessions.put(player, new LockpickSession(player, block));

@@ -7,10 +7,13 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyHook {
 	
@@ -76,5 +79,20 @@ public class TownyHook {
 			}
 		}
 		return null;
+	}
+
+	public static boolean hasSwitchPerm(Player player, Block block) {
+		if(isActive()){
+			com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
+			if(tb != null){
+				if(tb.getPermissions() != null){
+					if(tb.getPermissions().outsiderSwitch) return true;
+					return false;
+				}
+			}
+			return true;
+		}else{
+			return true;
+		}
 	}
 }
