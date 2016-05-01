@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
@@ -108,7 +109,12 @@ public class LockManager {
 		if(TownyHook.isActive()){
 			if(!TownyHook.hasSwitchPerm(player, block)){
 				player.sendMessage("You can't pick a lock here.");
+				return;
 			}
+		}
+		if(player.getGameMode() == GameMode.CREATIVE){
+			player.sendMessage("You can't pick locks in creative.");
+			return;
 		}
 		if(block.getLocation().distance(player.getLocation()) <= 3){
 			sessions.put(player, new LockpickSession(player, block));

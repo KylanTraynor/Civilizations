@@ -49,12 +49,22 @@ public class ButtonManager {
 		for(Button btn : buttons){
 			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
-				if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
+				if(im == null && btn.getItemMeta() == null) return btn;
+				if(im.getDisplayName() == null && btn.getItemMeta().getDisplayName() == null){
 					if(im.getLore() == null && btn.getItemMeta().getLore() == null){
 						return btn;
 					}
 					if(im.getLore().equals(btn.getItemMeta().getLore())){
 						return btn;
+					}
+				} else {
+					if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
+						if(im.getLore() == null && btn.getItemMeta().getLore() == null){
+							return btn;
+						}
+						if(im.getLore().equals(btn.getItemMeta().getLore())){
+							return btn;
+						}
 					}
 				}
 			}
