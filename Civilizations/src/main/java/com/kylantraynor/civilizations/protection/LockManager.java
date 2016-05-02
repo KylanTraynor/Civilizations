@@ -84,7 +84,7 @@ public class LockManager {
 		return false;
 	}
 	
-	public static void removePickFromInventory(Inventory inventory, int amount){
+	public static void removePickFromInventory(Inventory inventory){
 		for( int i = 0 ; i < inventory.getContents().length; i++){
 			if(inventory.getContents()[i] != null){
 				if(isLockpick(inventory.getContents()[i])){
@@ -96,6 +96,12 @@ public class LockManager {
 					break;
 				}
 			}
+		}
+	}
+	
+	public static void removePickFromInventory(Inventory inventory, int amount){
+		for(int i = 0; i < amount; i++){
+			removePickFromInventory(inventory);
 		}
 	}
 
