@@ -32,3 +32,6 @@ commands:
   house:
     description: Access all house commands.
     permission: civilizations.house
+  blueprint:
+    description: Access all blueprint commands.
+    permission: civilizations.blueprint

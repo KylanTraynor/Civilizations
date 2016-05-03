@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.jetty.server.Server;
 
 import com.kylantraynor.civilizations.commands.CommandAnswer;
+import com.kylantraynor.civilizations.commands.CommandBlueprint;
 import com.kylantraynor.civilizations.commands.CommandCamp;
 import com.kylantraynor.civilizations.commands.CommandCivilizations;
 import com.kylantraynor.civilizations.commands.CommandGroup;
@@ -355,6 +356,7 @@ public class Civilizations extends JavaPlugin{
 	private void setupCommands() {
 		this.getCommand("Civilizations").setExecutor(new CommandCivilizations());
 		this.getCommand("CivilizationsAnswer").setExecutor(new CommandAnswer());
+		this.getCommand("Blueprint").setExecutor(new CommandBlueprint());
 		
 		this.getCommand("Group").setExecutor(new CommandGroup());
 		this.getCommand("House").setExecutor(new CommandHouse());

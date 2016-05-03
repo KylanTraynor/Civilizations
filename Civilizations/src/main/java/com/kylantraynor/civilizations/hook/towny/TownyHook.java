@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -44,7 +45,9 @@ public class TownyHook {
 			for(com.palmergames.bukkit.towny.object.Town t : tl){
 				Civilizations.log("INFO", "Loading " + t.getName() + ".");
 				try {
-					new TownyTown(t);
+					if(!isTownLoaded(t.getName())){
+						new TownyTown(t);
+					}
 				} catch (Exception e) {
 					Civilizations.log("WARNING", t.getName() + " couldn't be loaded.");
 				}
@@ -52,8 +55,22 @@ public class TownyHook {
 		}
 	}
 	
+	public static boolean isTownLoaded(String name){
+		for(TownyTown t : Cache.getTownyTownList()){
+			if(t.getName().equalsIgnoreCase(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static TownyTown loadTownyTown(String name){
 		if(isActive()){
+			for(TownyTown t : Cache.getTownyTownList()){
+				if(t.getName().equalsIgnoreCase(name)){
+					return t;
+				}
+			}
 			try {
 				com.palmergames.bukkit.towny.object.Town t = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTown(name);
 				return new TownyTown(t);
@@ -87,6 +104,7 @@ public class TownyHook {
 			if(tb != null){
 				if(tb.getPermissions() != null){
 					if(tb.getPermissions().outsiderSwitch) return true;
+					if(tb.getPermissions().allySwitch) return true;
 					return false;
 				}
 			}

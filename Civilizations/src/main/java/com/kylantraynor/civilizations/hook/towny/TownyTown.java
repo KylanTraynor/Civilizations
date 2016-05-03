@@ -203,6 +203,15 @@ public class TownyTown extends Settlement{
 	}
 	
 	@Override
+	public void update(){
+		if(townyTown != null){
+			townyTown.getPermissions().set("Switch", true);
+			townyTown.getPermissions().set("ItemUse", true);
+		}
+		super.update();
+	}
+	
+	@Override
 	public boolean remove(){
 		Cache.townyTownListChanged = true;
 		return super.remove();
