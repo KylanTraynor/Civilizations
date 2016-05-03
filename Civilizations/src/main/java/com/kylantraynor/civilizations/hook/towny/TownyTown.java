@@ -111,6 +111,8 @@ public class TownyTown extends Settlement{
 	 * @return true if the TownBlock is a plot, false otherwise.
 	 */
 	private boolean isPlot(TownBlock tb){
+		tb.getPermissions().set("Switch", true);
+		tb.getPermissions().set("ItemUse", true);
 		if(bypassPlotLoading ){
 			return false;
 		}
