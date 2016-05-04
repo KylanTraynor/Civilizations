@@ -111,8 +111,12 @@ public class TownyTown extends Settlement{
 	 * @return true if the TownBlock is a plot, false otherwise.
 	 */
 	private boolean isPlot(TownBlock tb){
-		tb.getPermissions().set("Switch", true);
-		tb.getPermissions().set("ItemUse", true);
+		tb.getPermissions().set("residentSwitch", true);
+		tb.getPermissions().set("outsiderSwitch", true);
+		tb.getPermissions().set("allySwitch", true);
+		tb.getPermissions().set("residentItemUse", true);
+		tb.getPermissions().set("outsiderItemUse", true);
+		tb.getPermissions().set("allyItemUse", true);
 		if(bypassPlotLoading ){
 			return false;
 		}
@@ -207,8 +211,12 @@ public class TownyTown extends Settlement{
 	@Override
 	public void update(){
 		if(townyTown != null){
-			townyTown.getPermissions().set("Switch", true);
-			townyTown.getPermissions().set("ItemUse", true);
+			townyTown.getPermissions().set("residentSwitch", true);
+			townyTown.getPermissions().set("outsiderSwitch", true);
+			townyTown.getPermissions().set("allySwitch", true);
+			townyTown.getPermissions().set("residentItemUse", true);
+			townyTown.getPermissions().set("outsiderItemUse", true);
+			townyTown.getPermissions().set("allyItemUse", true);
 		}
 		super.update();
 	}
