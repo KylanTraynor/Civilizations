@@ -1,6 +1,5 @@
 package com.kylantraynor.civilizations.settings;
 
-import java.io.File;
 import java.time.Instant;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,10 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class GroupSettings extends YamlConfiguration{
 	
 	private Instant creationDate;
-	
-	public GroupSettings(){
-		
-	}
 
 	/**
 	 * Gets the creation date of the group.

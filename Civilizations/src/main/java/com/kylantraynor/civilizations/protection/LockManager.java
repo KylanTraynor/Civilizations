@@ -63,6 +63,7 @@ public class LockManager {
 		if(block.getType() == Material.BIRCH_DOOR) return true;
 		if(block.getType() == Material.SPRUCE_DOOR) return true;
 		if(block.getType() == Material.IRON_DOOR) return true;
+		if(block.getType() == Material.IRON_DOOR_BLOCK) return true;
 		if(block.getType() == Material.FURNACE) return true;
 		if(block.getType() == Material.BURNING_FURNACE) return true;
 		if(block.getType() == Material.TRAP_DOOR) return true;
@@ -157,6 +158,7 @@ public class LockManager {
 		if(block.getType() == Material.BIRCH_DOOR) return 5;
 		if(block.getType() == Material.SPRUCE_DOOR) return 5;
 		if(block.getType() == Material.IRON_DOOR) return 10;
+		if(block.getType() == Material.IRON_DOOR_BLOCK) return 10;
 		if(block.getType() == Material.FURNACE) return 5;
 		if(block.getType() == Material.BURNING_FURNACE) return 5;
 		if(block.getType() == Material.TRAP_DOOR) return 4;
