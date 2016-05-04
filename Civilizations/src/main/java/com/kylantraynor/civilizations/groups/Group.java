@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.MenuManager;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -312,7 +313,7 @@ public class Group {
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(creationDate != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
@@ -320,7 +321,7 @@ public class Group {
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	/**
@@ -337,7 +338,7 @@ public class Group {
 	 */
 	public FancyMessage getInteractiveMembersList(int page){
 		if(page < 1) page = 1;
-		FancyMessage fm = new FancyMessage("========== MEMBERS ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("MEMBERS", null));
 		for(int i = 8 * (page - 1); i < getMembers().size() && i < 8 * (page); i+=1){
 			OfflinePlayer p = Civilizations.currentInstance.getServer().getOfflinePlayer(getMembers().get(i));
 			fm.then("\n" + p.getName());
@@ -369,12 +370,12 @@ public class Group {
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	public FancyMessage getInteractiveRankMembers(Rank r, int page){
 		if(page < 1) page = 1;
-		FancyMessage fm = new FancyMessage("========== " + r.getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(r.getName().toUpperCase(), null));
 		for(int i = 8 * (page - 1); i < r.getPlayers().size() && i < 8 * (page); i+=1){
 			OfflinePlayer p = r.getPlayers().get(i);
 			fm.then("\n" + p.getName());
@@ -400,7 +401,7 @@ public class Group {
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GOLD);
 		return fm;
 	}
 	/**

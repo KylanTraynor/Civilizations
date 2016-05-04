@@ -22,6 +22,7 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
+import com.kylantraynor.civilizations.chat.ChatTools;
 
 /**
  * Family House, with all the members of the family.
@@ -106,7 +107,7 @@ public class House extends Group implements IHasBanner{
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("HOUSE " + getName().toUpperCase(), null));
 		fm.then("\nWords: ").color(ChatColor.GRAY).then(getWords()).color(ChatColor.GOLD);
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(getCreationDate() != null){
@@ -119,7 +120,7 @@ public class House extends Group implements IHasBanner{
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\nVassals: ").color(ChatColor.GRAY).command("/house " + this.getName() + " Vassals").
 			then("" + getVassals().size()).color(ChatColor.GOLD).command("/house " + this.getName() + " Vassals");
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	

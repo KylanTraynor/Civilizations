@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
@@ -156,8 +157,7 @@ public class Camp extends Settlement{
 	 */
 	@Override
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("============ CAMP ============")
-			.color(ChatColor.GOLD)
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("CAMP", ChatColor.GREEN))
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
 			.then("" + ChronoUnit.HOURS.between(Instant.now(), getExpireOn()) + " hours").color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
@@ -189,7 +189,7 @@ public class Camp extends Settlement{
 				fm.color(ChatColor.RED).tooltip("One member needs to be online to join the camp.");
 			}
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	} 
 	/**

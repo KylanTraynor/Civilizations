@@ -19,6 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -70,7 +71,7 @@ public class SmallOutpost extends Fort{
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
@@ -82,7 +83,7 @@ public class SmallOutpost extends Fort{
 			command(houseInfoCommand);
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	

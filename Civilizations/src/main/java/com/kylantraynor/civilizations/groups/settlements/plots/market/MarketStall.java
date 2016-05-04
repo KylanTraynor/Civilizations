@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
@@ -273,7 +274,7 @@ public class MarketStall extends Plot{
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage("========== " + getName().toUpperCase() + " ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		/*DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
@@ -320,7 +321,7 @@ public class MarketStall extends Plot{
 			fm.then("\nRent").color(ChatColor.GOLD).tooltip("Start renting this Stall").command("/group " + getId() + " join");
 		}
 		
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	
