@@ -16,11 +16,13 @@ public class LockpickSession {
 	private int startStage;
 	private int stage;
 	private Integer[] code;
+	private int lockLevel;
 	
 	public LockpickSession(Player player, Block block){
 		this.player = player;
 		this.block = block;
 		this.startStage = LockManager.getLockLevel(block);
+		this.lockLevel = this.startStage;
 		this.stage = this.startStage;
 		this.code = new Integer[stage];
 		for(int i = 0; i < this.stage; i++){
@@ -66,6 +68,14 @@ public class LockpickSession {
 				getPlayer().openInventory(((Chest) state).getInventory());
 			}
 		}
+	}
+
+	public int getLockLevel() {
+		return lockLevel;
+	}
+
+	public void setLockLevel(int locklevel) {
+		this.lockLevel = locklevel;
 	}
 	
 }

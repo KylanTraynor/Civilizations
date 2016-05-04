@@ -85,7 +85,7 @@ public class LockpickMenu extends Menu{
 		};
 		if(MenuManager.getMenus().get(player) != null){
 			PlayerData pd = PlayerData.get(player.getUniqueId());
-			bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking"), 1),5));
+			bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 2),5));
 		}
 	}
 	
