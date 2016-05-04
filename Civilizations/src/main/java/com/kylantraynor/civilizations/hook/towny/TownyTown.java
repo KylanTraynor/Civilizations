@@ -24,11 +24,14 @@ import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyTown extends Settlement{
 	
@@ -111,12 +114,13 @@ public class TownyTown extends Settlement{
 	 * @return true if the TownBlock is a plot, false otherwise.
 	 */
 	private boolean isPlot(TownBlock tb){
-		tb.getPermissions().set("residentSwitch", true);
-		tb.getPermissions().set("outsiderSwitch", true);
-		tb.getPermissions().set("allySwitch", true);
-		tb.getPermissions().set("residentItemUse", true);
-		tb.getPermissions().set("outsiderItemUse", true);
-		tb.getPermissions().set("allyItemUse", true);
+		tb.getPermissions().residentSwitch = true;
+		tb.getPermissions().allySwitch = true;
+		tb.getPermissions().outsiderSwitch = true;
+		tb.getPermissions().residentItemUse = true;
+		tb.getPermissions().allyItemUse = true;
+		tb.getPermissions().outsiderItemUse = true;
+		
 		if(bypassPlotLoading ){
 			return false;
 		}
@@ -210,14 +214,7 @@ public class TownyTown extends Settlement{
 	
 	@Override
 	public void update(){
-		if(townyTown != null){
-			townyTown.getPermissions().set("residentSwitch", true);
-			townyTown.getPermissions().set("outsiderSwitch", true);
-			townyTown.getPermissions().set("allySwitch", true);
-			townyTown.getPermissions().set("residentItemUse", true);
-			townyTown.getPermissions().set("outsiderItemUse", true);
-			townyTown.getPermissions().set("allyItemUse", true);
-		}
+		removeUnusedTownyPerms();
 		super.update();
 	}
 	
@@ -252,5 +249,36 @@ public class TownyTown extends Settlement{
 	@Override
 	public boolean hasPermission(PermissionType perm, Block b, Player player){
 		return true;
+	}
+	
+	public void removeUnusedTownyPerms(){
+		if(townyTown != null){
+			
+			if(townyTown.getPermissions().residentSwitch &&
+					townyTown.getPermissions().allySwitch &&
+					townyTown.getPermissions().outsiderSwitch &&
+					townyTown.getPermissions().residentItemUse &&
+					townyTown.getPermissions().allyItemUse &&
+					townyTown.getPermissions().outsiderItemUse) return;
+			
+			townyTown.getPermissions().residentSwitch = true;
+			townyTown.getPermissions().allySwitch = true;
+			townyTown.getPermissions().outsiderSwitch = true;
+			townyTown.getPermissions().residentItemUse = true;
+			townyTown.getPermissions().allyItemUse = true;
+			townyTown.getPermissions().outsiderItemUse = true;
+			
+			// Propagate perms to all unchanged, town owned, townblocks
+			for (TownBlock townBlock : townyTown.getTownBlocks()) {
+				if ((townyTown instanceof Town) && (!townBlock.hasResident())) {
+					if (!townBlock.isChanged()) {
+						townBlock.setType(townBlock.getType());
+						TownyUniverse.getDataSource().saveTownBlock(townBlock);
+					}
+				}
+			}
+			
+			Towny.plugin.resetCache();
+		}
 	}
 }
