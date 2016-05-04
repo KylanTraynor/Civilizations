@@ -29,6 +29,7 @@ import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
+import com.kylantraynor.civilizations.settings.GroupSettings;
 
 public class Group {
 	
@@ -43,11 +44,10 @@ public class Group {
 	
 	private int id;
 	private List<UUID> members;
-	private Instant creationDate;
 	private boolean hasChanged;
-	private String name = "Group";
 	private Protection protection;
 	private ChatColor chatColor;
+	private GroupSettings settings = new GroupSettings();
 	
 	public Group(){
 		list.add(this);
@@ -56,7 +56,7 @@ public class Group {
 		Cache.groupListChanged = true;
 		chatColor = ChatColor.WHITE;
 		protection = new Protection(this);
-		creationDate = Instant.now();
+		setCreationDate(Instant.now());
 		setChanged(true);
 	}
 	public String getChatHeader(){
@@ -67,14 +67,14 @@ public class Group {
 	 * @return String
 	 */
 	public String getName(){
-		return name;
+		return getSettings().getName();
 	}
 	/**
 	 * Sets the group's name.
 	 * @param newName
 	 */
 	public void setName(String newName){
-		name = newName;
+		getSettings().setName(newName);
 		setChanged(true);
 	} 
 	
@@ -296,17 +296,12 @@ public class Group {
 	 * Gets the creation date of this group.
 	 * @return Instant
 	 */
-	public Instant getCreationDate() {return creationDate;}
-	/**
-	 * Gets the creation date of this group as a string.
-	 * @return String
-	 */
-	public String getCreationDateString(){return creationDate.toString();}
+	public Instant getCreationDate() {return getSettings().getCreationDate();}
 	/**
 	 * Sets the creation date of this group.
 	 * @param creationDate
 	 */
-	public void setCreationDate(Instant creationDate) {this.creationDate = creationDate;}
+	public void setCreationDate(Instant creationDate) {getSettings().setCreationDate(creationDate);}
 	/**
 	 * Gets an interactive info panel of this group.
 	 * @param player Context
@@ -315,9 +310,9 @@ public class Group {
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(creationDate != null){
+		if(getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(creationDate))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
@@ -466,5 +461,11 @@ public class Group {
 	}
 	public boolean upgrade() {
 		return false;
+	}
+	public GroupSettings getSettings() {
+		return settings;
+	}
+	public void setSettings(GroupSettings settings) {
+		this.settings = settings;
 	}
 }

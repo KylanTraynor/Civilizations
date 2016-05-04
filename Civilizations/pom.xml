@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kylantraynor</groupId>
   <artifactId>Civilizations</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>Civilizations</name>
   <description>Plugin making it possible to create entire Civilizations.</description>
   <build>
