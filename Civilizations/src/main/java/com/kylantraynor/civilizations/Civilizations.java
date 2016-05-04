@@ -347,7 +347,7 @@ public class Civilizations extends JavaPlugin{
 		if(LWCHook.isActive()) {log("INFO", "LWC: OK"); } else {log("INFO", "LWC: NO"); }
 		
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
-		//if(TownyHook.isEnabled()) TownyHook.loadTownyTowns();
+		if(TownyHook.isActive()) TownyHook.loadTownyTowns();
 	}
 	
 	/**
