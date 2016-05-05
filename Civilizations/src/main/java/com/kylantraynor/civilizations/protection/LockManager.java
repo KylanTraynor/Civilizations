@@ -55,20 +55,7 @@ public class LockManager {
 	}
 
 	public static boolean isLockable(Block block) {
-		if(block.getType() == Material.CHEST) return true;
-		if(block.getType() == Material.TRAPPED_CHEST) return true;
-		if(block.getType() == Material.WOOD_DOOR) return true;
-		if(block.getType() == Material.ACACIA_DOOR) return true;
-		if(block.getType() == Material.DARK_OAK_DOOR) return true;
-		if(block.getType() == Material.BIRCH_DOOR) return true;
-		if(block.getType() == Material.SPRUCE_DOOR) return true;
-		if(block.getType() == Material.IRON_DOOR) return true;
-		if(block.getType() == Material.IRON_DOOR_BLOCK) return true;
-		if(block.getType() == Material.FURNACE) return true;
-		if(block.getType() == Material.BURNING_FURNACE) return true;
-		if(block.getType() == Material.TRAP_DOOR) return true;
-		if(block.getType() == Material.IRON_TRAPDOOR) return true;
-		return false;
+		return getLockLevel(block) > 0;
 	}
 
 	public static boolean isLocked(Block block) {
@@ -149,10 +136,10 @@ public class LockManager {
 	}
 
 	public static int getLockLevel(Block block) {
-		if(!isLockable(block)) return 0;
 		if(block.getType() == Material.CHEST) return 4;
 		if(block.getType() == Material.TRAPPED_CHEST) return 5;
 		if(block.getType() == Material.WOOD_DOOR) return 5;
+		if(block.getType() == Material.WOODEN_DOOR) return 5;
 		if(block.getType() == Material.ACACIA_DOOR) return 5;
 		if(block.getType() == Material.DARK_OAK_DOOR) return 5;
 		if(block.getType() == Material.BIRCH_DOOR) return 5;
@@ -163,6 +150,6 @@ public class LockManager {
 		if(block.getType() == Material.BURNING_FURNACE) return 5;
 		if(block.getType() == Material.TRAP_DOOR) return 4;
 		if(block.getType() == Material.IRON_TRAPDOOR) return 8;
-		return 4;
+		return 0;
 	}
 }
