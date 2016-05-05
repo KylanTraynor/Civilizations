@@ -110,7 +110,7 @@ public class LockManager {
 			player.sendMessage("You can't pick locks in creative.");
 			return;
 		}
-		if(block.getLocation().distance(player.getLocation()) <= 3){
+		if(block.getLocation().distance(player.getLocation()) <= 2){
 			sessions.put(player, new LockpickSession(player, block));
 		} else {
 			player.sendMessage("You're too far to try picking this lock.");
