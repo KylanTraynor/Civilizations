@@ -21,10 +21,10 @@ public class ChatListener implements Listener{
 		if(event.getPlayer() == null) return;
 		
 		FancyMessage fm;
-		if(event.getPlayer().getCustomName() == null){
+		if(event.getPlayer().getDisplayName() == null){
 			fm = new FancyMessage(""+event.getPlayer().getName());
 		} else {
-			fm = new FancyMessage(""+event.getPlayer().getCustomName());
+			fm = new FancyMessage(""+event.getPlayer().getDisplayName());
 		}
 		fm.suggest("/msg " + event.getPlayer().getName() + " ");
 		if(House.get(event.getPlayer()) != null){

@@ -128,4 +128,16 @@ public class PlayerData {
 	public int getSkillLevel(String skill) {
 		return getLevelForExperience(getSkillExperience(skill));
 	}
+	
+	public int getCampsCreated(){
+		if(this.config.contains("general.campsCreated")){
+			return this.config.getInt("general.campsCreated");
+		}
+		return 0;
+	}
+	
+	public void setCampsCreated(int newCount){
+		this.config.set("general.campsCreated", newCount);
+		hasChanged = true;
+	}
 }

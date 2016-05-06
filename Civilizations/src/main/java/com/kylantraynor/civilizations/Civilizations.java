@@ -26,6 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.jetty.server.Server;
 
+import com.kylantraynor.civilizations.achievements.Achievement;
+import com.kylantraynor.civilizations.achievements.AchievementManager;
 import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandBlueprint;
 import com.kylantraynor.civilizations.commands.CommandCamp;
@@ -81,7 +83,6 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GOLD + ChatColor.BOLD + "Civilizations" + ChatColor.GOLD + "] ";
 
-	private boolean reload;
 	private boolean clearing = false;
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
@@ -152,7 +153,7 @@ public class Civilizations extends JavaPlugin{
 		pm.registerEvents(getProtectionListener(), this);
 		pm.registerEvents(getChatListener(), this);
 		
-		registerAchievement("Setting up Camp!","Create a camp.");
+		registerAchievements();
 		
 		loadGroups();
 		loadHouses();
@@ -179,6 +180,12 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	
+	private void registerAchievements() {
+		Achievement createCamp = new Achievement("create_camp", "Setting up Camp!", null, new ArrayList<String>());
+		createCamp.getDescription().add("Create a camp.");
+		AchievementManager.registerAchievement(createCamp);
+	}
+
 	private void startWebServer(int port) throws Exception {
 		
 		createServerViews();
@@ -765,14 +772,6 @@ public class Civilizations extends JavaPlugin{
 			f.mkdir();
 			return f;
 		}
-	}
-	/**
-	 * Registers an achievement.
-	 * @param name of the achievement
-	 * @param description of the achievement
-	 */
-	public void registerAchievement(String name, String description){
-		
 	}
 	
 	/**

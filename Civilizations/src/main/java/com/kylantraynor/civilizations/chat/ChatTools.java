@@ -18,7 +18,7 @@ public class ChatTools {
 	}
 	
 	public static String getDelimiter(){
-		return "" + delimiter;
+		return "" + delimiter.replaceFirst("______", "");
 	}
 	
 }
