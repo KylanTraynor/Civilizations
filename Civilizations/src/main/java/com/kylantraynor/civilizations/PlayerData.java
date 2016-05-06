@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +14,8 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import com.kylantraynor.civilizations.achievements.Achievement;
 
 public class PlayerData {
 	
@@ -130,14 +133,28 @@ public class PlayerData {
 	}
 	
 	public int getCampsCreated(){
-		if(this.config.contains("general.campsCreated")){
-			return this.config.getInt("general.campsCreated");
+		if(this.config.contains("general.stats.campsCreated")){
+			return this.config.getInt("general.stats.campsCreated");
 		}
 		return 0;
 	}
 	
 	public void setCampsCreated(int newCount){
-		this.config.set("general.campsCreated", newCount);
+		this.config.set("general.stats.campsCreated", newCount);
 		hasChanged = true;
+	}
+	
+	public boolean hasAchievement(Achievement a){
+		return this.config.contains("achievements." + a.getId());
+	}
+	
+	public boolean giveAchievement(Achievement a){
+		if(!hasAchievement(a)){
+			this.config.set("achievements." + a.getId(), Instant.now().toString());
+			hasChanged = true;
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

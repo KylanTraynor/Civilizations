@@ -5,7 +5,11 @@ import java.util.Map;
 
 import mkremins.fanciful.FancyMessage;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import com.kylantraynor.civilizations.PlayerData;
 
 public class AchievementManager {
 	
@@ -21,7 +25,19 @@ public class AchievementManager {
 	}
 	
 	public static void broadcast(Player player, Achievement achievement){
-		FancyMessage fm = new FancyMessage("");
+		FancyMessage fm = new FancyMessage(player.getDisplayName() + ChatColor.AQUA + " has received the achivement ");
+		fm.then(achievement.getName()).color(ChatColor.GOLD).tooltip(achievement.getDescription());
+		fm.then("!").color(ChatColor.AQUA);
+		for(Player p : Bukkit.getServer().getOnlinePlayers()){
+			fm.send(p);
+		}
 	}
 	
+	public static void giveAchievement(Player player, String id){
+		if(achievements.containsKey(id)){
+			if(PlayerData.get(player.getUniqueId()).giveAchievement(achievements.get(id))){
+				broadcast(player, achievements.get(id));
+			}
+		}
+	}
 }

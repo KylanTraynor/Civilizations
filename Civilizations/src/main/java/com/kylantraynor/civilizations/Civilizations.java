@@ -181,7 +181,7 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	private void registerAchievements() {
-		Achievement createCamp = new Achievement("create_camp", "Setting up Camp!", null, new ArrayList<String>());
+		Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
 		createCamp.getDescription().add("Create a camp.");
 		AchievementManager.registerAchievement(createCamp);
 	}
