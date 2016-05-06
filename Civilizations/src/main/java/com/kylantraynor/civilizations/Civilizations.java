@@ -754,6 +754,16 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	
+	public static File getBlueprintDirectory(){
+		File f = new File(currentInstance.getDataFolder(), "Blueprints");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	
 	public static File getWebDirectory() {
 		File f = new File(currentInstance.getDataFolder(), "Web");
 		if(f.exists()){

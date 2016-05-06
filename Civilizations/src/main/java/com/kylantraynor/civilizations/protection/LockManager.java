@@ -112,7 +112,7 @@ public class LockManager {
 			player.sendMessage("You can't pick locks in creative.");
 			return;
 		}
-		if(block.getLocation().distance(player.getLocation()) <= 2){
+		if(block.getLocation().distance(player.getLocation()) < 3.0){
 			PlayerLockpickEvent event = new PlayerLockpickEvent(player, block);
 			Civilizations.callEvent(event);
 			if(!event.isCancelled()){

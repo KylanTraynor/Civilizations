@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.CharSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -71,7 +68,6 @@ public class Blueprint{
 	}
 	
 	public static Blueprint load(File f){
-		StringBuilder sb = new StringBuilder();
 		// load list of materials
 		List<Material> materialCodes = new ArrayList<Material>();
 		String s;
