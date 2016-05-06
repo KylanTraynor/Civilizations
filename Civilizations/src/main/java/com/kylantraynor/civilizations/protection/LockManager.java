@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.events.PlayerLockpickEvent;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 
@@ -111,7 +113,11 @@ public class LockManager {
 			return;
 		}
 		if(block.getLocation().distance(player.getLocation()) <= 2){
-			sessions.put(player, new LockpickSession(player, block));
+			PlayerLockpickEvent event = new PlayerLockpickEvent(player, block);
+			Civilizations.callEvent(event);
+			if(!event.isCancelled()){
+				sessions.put(player, new LockpickSession(player, block));
+			}
 		} else {
 			player.sendMessage("You're too far to try picking this lock.");
 		}

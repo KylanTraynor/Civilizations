@@ -19,6 +19,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -861,6 +862,10 @@ public class Civilizations extends JavaPlugin{
 
 	public static ChatListener getChatListener() {
 		return chatListener;
+	}
+
+	public static void callEvent(Event event) {
+		currentInstance.getServer().getPluginManager().callEvent(event);
 	}
 
 }
