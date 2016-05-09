@@ -27,6 +27,7 @@ public class CommandBlueprint implements CommandExecutor{
 			player.sendMessage(messageHeader + ChatColor.RED + "You need to have a selection.");
 		}
 		
+		player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are not yet activated.");
 		return false;
 	}
 

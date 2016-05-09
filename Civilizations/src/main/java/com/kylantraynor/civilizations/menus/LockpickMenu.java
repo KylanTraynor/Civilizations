@@ -128,6 +128,7 @@ public class LockpickMenu extends Menu{
 		if(isValidPick()){
 			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
 			if(session.getStage() == 1){
+				LockManager.removePickFromInventory(player.getInventory(), 1);
 				session.end();
 				this.close();
 			}
