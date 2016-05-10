@@ -152,10 +152,15 @@ public class LockManager {
 		if(block.getType() == Material.SPRUCE_DOOR) return 5;
 		if(block.getType() == Material.IRON_DOOR) return 10;
 		if(block.getType() == Material.IRON_DOOR_BLOCK) return 10;
-		if(block.getType() == Material.FURNACE) return 5;
-		if(block.getType() == Material.BURNING_FURNACE) return 5;
+		if(block.getType() == Material.FURNACE) return 1;
+		if(block.getType() == Material.BURNING_FURNACE) return 1;
 		if(block.getType() == Material.TRAP_DOOR) return 4;
 		if(block.getType() == Material.IRON_TRAPDOOR) return 8;
+		if(block.getType() == Material.FENCE_GATE) return 4;
+		if(block.getType() == Material.SPRUCE_FENCE_GATE) return 4;
+		if(block.getType() == Material.DARK_OAK_FENCE_GATE) return 4;
+		if(block.getType() == Material.BIRCH_FENCE_GATE) return 4;
+		if(block.getType() == Material.ACACIA_FENCE_GATE) return 4;
 		return 0;
 	}
 }
