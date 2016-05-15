@@ -38,9 +38,13 @@ import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.hook.quickshop.QuickshopHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.shops.Shop;
+import com.kylantraynor.civilizations.shops.ShopManager;
+import com.kylantraynor.civilizations.shops.ShopType;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class MarketStall extends Plot{
@@ -113,33 +117,14 @@ public class MarketStall extends Plot{
 						current.setX(x);
 						current.setY(y);
 						current.setZ(z);
-						if(current.getBlock().getType() == Material.SIGN || current.getBlock().getType() == Material.SIGN_POST){
-							Civilizations.DEBUG("Found Sign in Stall.");
-							BlockState state = current.getBlock().getState();
-							if(state instanceof Sign){
-								Sign sign = (Sign) state;
-								org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) sign.getData();
-								if(sign.getLine(0).toUpperCase().contains("[QUICKSHOP]")){
-									Civilizations.DEBUG("Found Quickshop in Stall.");
-									int priceMultiplier = 1;
-									if(!sign.getLine(1).contains("Selling")){
-										priceMultiplier = -1;
-									}
-									Block chest = current.getBlock().getRelative(signMaterial.getAttachedFace());
-									if(chest.getType() == Material.CHEST || chest.getType() == Material.TRAPPED_CHEST){
-										Civilizations.DEBUG("Found Chest in Stall.");
-										Chest c = (Chest) chest.getState();
-										Integer i = c.getBlockInventory().first(Material.getMaterial(sign.getLine(2).toUpperCase().replace(" ", "_")));
-										if(i >= 0){
-											ItemStack is = c.getBlockInventory().getItem(i);
-											String priceString = sign.getLine(3);
-											priceString = priceString.replace("For ", "");
-											priceString = priceString.replace(" each", "");
-											double price = Double.parseDouble(priceString);
-											wares.put(is, price * priceMultiplier);
-										}
-									}
+						if(current.getBlock().getType() == Material.CHEST || current.getBlock().getType() == Material.TRAPPED_CHEST){
+							Shop shop = ShopManager.getShop(current);
+							if(shop != null){
+								double multiplier = 1.0;
+								if(shop.getType() == ShopType.BUYING){
+									multiplier = -1.0;
 								}
+								wares.put(shop.getItem(), multiplier * shop.getPrice());
 							}
 						}
 					}

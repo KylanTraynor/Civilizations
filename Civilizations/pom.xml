@@ -57,6 +57,12 @@
             <artifactId>VaultAPI</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--  QuickShop -->
+        <dependency>
+        	<groupId>org.maxgamer</groupId>
+        	<artifactId>QuickShop</artifactId>
+        	<scope>provided</scope>
+        </dependency>
 		<!-- Citizens -->
 		<dependency>
 			<groupId>net.citizensnpc</groupId>
@@ -164,6 +170,11 @@
 				<groupId>org.bukkit</groupId>
 				<artifactId>bukkit</artifactId>
 				<version>1.9-R0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.maxgamer</groupId>
+				<artifactId>QuickShop</artifactId>
+				<version>4.5</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
