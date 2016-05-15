@@ -6,8 +6,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.griefcraft.lwc.LWC;
+import com.griefcraft.model.Protection;
+import com.griefcraft.model.Protection.Type;
 import com.griefcraft.scripting.event.LWCAccessEvent;
 
 public class LWCHook implements Listener{
@@ -40,13 +43,34 @@ public class LWCHook implements Listener{
 		return false;
 	}
 	
+	public static Type getLockType(Block block){
+		if(isActive()){
+			if(LWC.getInstance().findProtection(block) != null){
+				return LWC.getInstance().findProtection(block).getType();
+			}
+		}
+		return null;
+	}
+	
 	public static boolean unlock(Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null){
-				LWC.getInstance().findProtection(block).remove();
-				return true;
+				if(LWC.getInstance().findProtection(block).getType() == Type.PRIVATE){
+					LWC.getInstance().findProtection(block).remove();
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 		return false;
+	}
+
+	public static void tempUnlock(Block block, Player p) {
+		if(isActive()){
+			if(LWC.getInstance().findProtection(block) != null){
+				
+			}
+		}
 	}
 }

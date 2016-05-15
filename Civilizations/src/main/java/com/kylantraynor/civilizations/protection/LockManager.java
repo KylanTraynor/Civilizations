@@ -15,7 +15,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import com.griefcraft.model.Protection.Type;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.events.PlayerLockpickEvent;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
@@ -112,6 +114,11 @@ public class LockManager {
 			player.sendMessage("You can't pick locks in creative.");
 			return;
 		}
+		if(LWCHook.isActive()){
+			if(LWCHook.getLockType(block) == Type.PASSWORD){
+				player.sendMessage("This type of lock can't be picked.");
+			}
+		}
 		if(block.getLocation().distance(player.getLocation()) < 3.0){
 			PlayerLockpickEvent event = new PlayerLockpickEvent(player, block);
 			Civilizations.callEvent(event);
@@ -122,7 +129,8 @@ public class LockManager {
 			player.sendMessage("You're too far to try picking this lock.");
 		}
 	}
-	
+
+
 	public static void stopLockpicking(HumanEntity humanEntity){
 		if(sessions.containsKey(humanEntity)){
 			sessions.remove(humanEntity);
@@ -150,6 +158,7 @@ public class LockManager {
 		if(block.getType() == Material.DARK_OAK_DOOR) return 5;
 		if(block.getType() == Material.BIRCH_DOOR) return 5;
 		if(block.getType() == Material.SPRUCE_DOOR) return 5;
+		if(block.getType() == Material.JUNGLE_DOOR) return 5;
 		if(block.getType() == Material.IRON_DOOR) return 10;
 		if(block.getType() == Material.IRON_DOOR_BLOCK) return 10;
 		if(block.getType() == Material.FURNACE) return 1;
@@ -161,6 +170,7 @@ public class LockManager {
 		if(block.getType() == Material.DARK_OAK_FENCE_GATE) return 4;
 		if(block.getType() == Material.BIRCH_FENCE_GATE) return 4;
 		if(block.getType() == Material.ACACIA_FENCE_GATE) return 4;
+		if(block.getType() == Material.JUNGLE_FENCE_GATE) return 4;
 		return 0;
 	}
 }
