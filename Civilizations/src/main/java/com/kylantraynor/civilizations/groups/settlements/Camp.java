@@ -148,8 +148,8 @@ public class Camp extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		p.setPermissions(new GroupTarget(this), new Permission(this, resPerm));
-		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(this, serverPerm));
+		p.setPermissions(new GroupTarget(this), new Permission(resPerm));
+		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(serverPerm));
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.
