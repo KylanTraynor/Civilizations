@@ -46,6 +46,7 @@ import com.kylantraynor.civilizations.shops.Shop;
 import com.kylantraynor.civilizations.shops.ShopManager;
 import com.kylantraynor.civilizations.shops.ShopType;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.util.Util;
 
 public class MarketStall extends Plot{
 
@@ -141,12 +142,19 @@ public class MarketStall extends Plot{
 	public List<String> getWaresToString(){
 		List<String> result = new ArrayList<String>();
 		for(Entry<ItemStack, Double> e : getWares().entrySet()){
-			String name = e.getKey().getItemMeta().getDisplayName() != null ? e.getKey().getItemMeta().getDisplayName() : e.getKey().getType().toString().toLowerCase() + (e.getKey().getData().getData() != 0 ? e.getKey().getData().getData() : "");
-			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + name + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
+			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + getNameOf(e.getKey()) + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
 		}
 		return result;
 	}
 	
+	private String getNameOf(ItemStack item) {
+		if(item.getItemMeta().getDisplayName() != null){
+			return item.getItemMeta().getDisplayName();
+		} else {
+			return Util.prettifyText(Util.getMaterialName(item));
+		}
+	}
+
 	public OfflinePlayer getOwner(){
 		if(owner == null) return null;
 		return Bukkit.getOfflinePlayer(owner);

@@ -6,6 +6,15 @@ public class ChatTools {
 	
 	static String delimiter = ".oOo.__________________________________________________.oOo.";
 	
+	/**
+	 * Centers the Title in the chatbox and surrounds it with decoration.
+	 * @param title The title to center.
+	 * @param color The color of the title part.
+	 * @return The formated title.
+	 * 
+	 * @author Shade (xshade.ca)
+	 * @author Modified by KylanTraynor
+	 */
 	public static String formatTitle(String title, ChatColor color){
 		if(title == null) title = "";
 		if(color == null) color = ChatColor.GRAY;
