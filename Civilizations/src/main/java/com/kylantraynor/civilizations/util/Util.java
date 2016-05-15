@@ -1,9 +1,12 @@
 package com.kylantraynor.civilizations.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 
 public class Util {
 
@@ -156,41 +159,20 @@ public class Util {
 			}
 			return mat.toString();
 		case POTION:
-			//Special case,.. Why?
-			if(data == 0) return "WATER_BOTTLE";
-			
-			Potion pot;
+			PotionMeta pot;
 			try{
-				pot = Potion.fromDamage(data);
+				pot = (PotionMeta) Bukkit.getItemFactory().getItemMeta(mat);
 			}
 			catch(Exception e){ return "CUSTOM_POTION"; }
-			
-			String prefix = "";
-			String suffix = "";
-			if(pot.getLevel() > 0) suffix += "_" + pot.getLevel();
-			if(pot.hasExtendedDuration()) prefix += "EXTENDED_";
-			if(pot.isSplash()) prefix += "SPLASH_";
-			
-			
-			if(pot.getEffects().isEmpty()){
-				switch((int) pot.getNameId()){
-				case 0: return prefix + "MUNDANE_POTION" + suffix;
-				case 7: return prefix + "CLEAR_POTION" + suffix;
-				case 11: return prefix + "DIFFUSE_POTION" + suffix;
-				case 13: return prefix + "ARTLESS_POTION" + suffix;
-				case 15: return prefix + "THIN_POTION" + suffix;
-				case 16: return prefix + "AWKWARD_POTION" + suffix;
-				case 32: return prefix + "THICK_POTION" + suffix;
+			if(pot.getBasePotionData().getType() == PotionType.WATER){
+				return "WATER_BOTTLE";
+			} else {
+				if(pot.getBasePotionData().isExtended()){
+					return "EXTENDED_POTION_OF_" + pot.getBasePotionData().getType();
+				} else {
+					return "POTION_OF_" + pot.getBasePotionData().getType();
 				}
 			}
-			else{
-				String effects = "";
-				for(PotionEffect effect : pot.getEffects()){
-					effects += effect.toString().split(":")[0];
-				}
-				return prefix + effects + suffix;
-			}
-			return mat.toString();
 		case PRISMARINE:
 			switch((int) data){
 			case 0: return "PRISMARINE";
@@ -323,6 +305,8 @@ public class Util {
 			break;
 		case EXP_BOTTLE:
 			return "BOTTLE_O'_ENCHANTING";
+		default:
+			break;
 		}
 		
 		if(data == 0) return mat.toString();
