@@ -29,6 +29,7 @@ import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
+import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -147,7 +148,7 @@ public class Camp extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		p.setPermissions(new PermissionTarget(TargetType.MEMBERS), new Permission(this, resPerm));
+		p.setPermissions(new GroupTarget(this), new Permission(this, resPerm));
 		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(this, serverPerm));
 	}
 	/**

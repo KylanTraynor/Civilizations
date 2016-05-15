@@ -18,21 +18,18 @@ import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Protection {
-	private Group group;
 	Protection parent;
 	List<Shape> shapes;
 	private PermissionSet permissionSet;
 	List<Rank> ranks;
 	
-	public Protection(Group g){
-		setGroup(g);
+	public Protection(){
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
 		ranks = new ArrayList<Rank>();
 	}
 	
-	public Protection(Group g, Protection parent){
-		setGroup(g);
+	public Protection(Protection parent){
 		this.parent = parent;
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
@@ -160,7 +157,7 @@ public class Protection {
 		if(getRank(rank.getName()) != null){
 			return false;
 		} else {
-			setPermissions(rank, new Permission(getGroup(), new HashMap<PermissionType, Boolean>()));
+			setPermissions(rank, new Permission(new HashMap<PermissionType, Boolean>()));
 			return true;
 		}
 	}
@@ -200,29 +197,48 @@ public class Protection {
 	public void setPermissions(PermissionTarget target, Permission permission){
 		permissionSet.add(target, permission);
 	}
-	public boolean hasPermission(Player p, PermissionType type){
-		if(p.isOp()) return true;
-		PlayerTarget pt = new PlayerTarget(p);
+	
+	/**
+	 * Checks if the given players has the permission.
+	 * @param player
+	 * @param type
+	 * @return
+	 */
+	public boolean hasPermission(Player player, PermissionType type){
+		// First, check if the player is op
+		if(player.isOp()) return true;
+		// If not, check if the protection has a specific permission set for the player
+		PlayerTarget pt = new PlayerTarget(player);
 		if(hasPermissions(pt)){
 			return getPermission(type, pt);
 		}
-		Rank r = getRank(p);
-		if(hasPermissions(r)){
-			return getPermission(type, r);
-		}
-		if(getGroup().isMember(p)){
-			PermissionTarget m = new PermissionTarget(TargetType.MEMBERS);
-			if(hasPermissions(m)){
-				return getPermission(type, m);
-			}
-		} else {
-			PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
-			if(hasPermissions(o)){
-				return getPermission(type, o);
+		// If not, check if the protection has a specific permission set for the player's rank
+		Rank r = getRank(player);
+		if(r != null){
+			if(hasPermissions(r)){
+				return getPermission(type, r);
 			}
 		}
+		
+		// If not, check if the protection has a permission set for any group the player belongs to
+		for(PermissionTarget target : permissionSet.getTargets()){
+			if(target instanceof GroupTarget){
+				if(((GroupTarget) target).isPartOf(player)){
+					return getPermission(type, target);
+				}
+			}
+		}
+		
+		// If not, check if the protection has a permission set for outsiders
+		PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
+		if(hasPermissions(o)){
+			return getPermission(type, o);
+		}
+		
+		// If not, just return false.
 		return false;
 	}
+	
 	/**
 	 * Checks if this Protection has Permissions for the given target.
 	 * @param target
@@ -244,6 +260,12 @@ public class Protection {
 		return permissionSet.get(target);
 	}
 	
+	/**
+	 * Gets the value of the permission of a certain type for the given target.
+	 * @param type
+	 * @param target
+	 * @return
+	 */
 	public boolean getPermission(PermissionType type, PermissionTarget target){
 		Permission perm = getPermissions(target);
 		if(perm != null){
@@ -254,6 +276,11 @@ public class Protection {
 		if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
 	}
 	
+	/**
+	 * Checks if the given location is inside of the protection.
+	 * @param location
+	 * @return
+	 */
 	public boolean isInside(Location location){
 		for(Shape s : shapes){
 			if(s.isInside(location)) return true;
@@ -261,6 +288,11 @@ public class Protection {
 		return false;
 	}
 	
+	/**
+	 * Checks if the given shape intersects with the protection.
+	 * @param s
+	 * @return
+	 */
 	public boolean intersect(Shape s){
 		for(Shape s1 : shapes){
 			if(s1.intersect(s)) return true;
@@ -268,8 +300,6 @@ public class Protection {
 		return false;
 	}
 
-	public Group getGroup() { return group; }
-	public void setGroup(Group group) { this.group = group; }
 	public PermissionSet getPermissionSet(){
 		return permissionSet;
 	}
@@ -320,5 +350,13 @@ public class Protection {
 		}
 		if(w == null) return null;
 		return new Location(w, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+	}
+	
+	public Group getGroup(){
+		for(Group g : Group.getList())
+			if(g.getProtection().equals(this)){
+				return g;
+			}
+		return null;
 	}
 }

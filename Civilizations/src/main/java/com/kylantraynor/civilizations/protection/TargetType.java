@@ -11,5 +11,6 @@ public enum TargetType {
 	PLAYER,
 	WORLD,
 	SERVER,
-	RANK
+	RANK,
+	GROUP
 }

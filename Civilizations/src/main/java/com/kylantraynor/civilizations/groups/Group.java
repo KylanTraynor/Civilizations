@@ -55,7 +55,7 @@ public class Group {
 		members = new ArrayList<UUID>();
 		Cache.groupListChanged = true;
 		chatColor = ChatColor.WHITE;
-		protection = new Protection(this);
+		protection = new Protection();
 		setCreationDate(Instant.now());
 		setChanged(true);
 	}
@@ -161,10 +161,10 @@ public class Group {
 	}
 	/**
 	 * Checks if the given player is a member of this group.
-	 * @param p
+	 * @param player
 	 * @return true if the player is a member, false otherwise.
 	 */
-	public boolean isMember(Player p){return getMembers().contains(p.getUniqueId());}
+	public boolean isMember(OfflinePlayer player){return getMembers().contains(player.getUniqueId());}
 	/**
 	 * Checks if at least one players in this list of members of this group is online.
 	 * @return true if at least one player is online, false otehrwise.

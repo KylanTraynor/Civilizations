@@ -13,12 +13,10 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 
 public class Permission {
-	Group protectedEntity;
 	private Map<PermissionType, Boolean> types = new HashMap<PermissionType, Boolean>();
 	PermissionTarget target;
 	
-	public Permission(Group protectedEntity, Map<PermissionType, Boolean> types){
-		this.protectedEntity = protectedEntity;
+	public Permission(Map<PermissionType, Boolean> types){
 		if(types != null) this.setTypes(types);
 	}
 	
@@ -44,7 +42,7 @@ public class Permission {
 		this.target = target;
 		return true;
 	}
-	
+	/*
 	public boolean check(PermissionType type, Object request){
 		if(isTargetMatching(request)){
 			// Needs to check when permissions are valid
@@ -54,10 +52,10 @@ public class Permission {
 	
 	public boolean isTargetMatching(Object o){
 		switch(this.target.getType()){
-		case MEMBERS:
-			// Permission checking if a player is part of the settlement
+		case GROUP:
+			// Permission checking if a player is part of the group
 			if(o instanceof Player){
-				if(protectedEntity.isMember((Player) o)) return true;
+				if(((GroupTarget)target).isPartOf((Player) o)) return true;
 			}
 			break;
 		case OUTSIDERS:
@@ -104,7 +102,8 @@ public class Permission {
 		}
 		return false;
 	}
-
+	*/
+	
 	public Map<PermissionType, Boolean> getTypes() {
 		return types;
 	}
