@@ -141,7 +141,8 @@ public class MarketStall extends Plot{
 	public List<String> getWaresToString(){
 		List<String> result = new ArrayList<String>();
 		for(Entry<ItemStack, Double> e : getWares().entrySet()){
-			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + e.getKey().getItemMeta().getDisplayName() + " " + Economy.format(Math.abs(e.getValue())));
+			String name = e.getKey().getItemMeta().getDisplayName() != null ? e.getKey().getItemMeta().getDisplayName() : e.getKey().getType().toString().toLowerCase() + (e.getKey().getData().getData() != 0 ? e.getKey().getData().getData() : "");
+			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + name + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
 		}
 		return result;
 	}
