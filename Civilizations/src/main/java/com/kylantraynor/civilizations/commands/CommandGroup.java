@@ -7,6 +7,7 @@ import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,15 @@ public class CommandGroup implements CommandExecutor {
 					g.openMenu((Player) sender);
 				}
 				break;
+			case "REMOVE":
+				if(sender instanceof Player){
+					if(g instanceof MarketStall){
+						if(((MarketStall) g).isOwner((Player) sender)){
+							g.remove();
+							sender.sendMessage(ChatColor.GREEN + "Stall has been removed.");
+						}
+					}
+				}
 			case "SETNAME":
 				if(sender instanceof Player){
 					if(g instanceof MarketStall){

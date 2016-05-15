@@ -307,6 +307,8 @@ public class MarketStall extends Plot{
 			} else {
 				fm.then("Rentable").color(ChatColor.RED).tooltip("Toggle the rentable state of the stall.").command("/group " + getId() + " togglerentable");
 			}
+			fm.then(" - ").color(ChatColor.GRAY);
+			fm.then("Remove").color(ChatColor.GOLD).tooltip("Removes this stall and kicks anyone renting it.").suggest("/group " + getId() + " remove");
 		} else if(getRenter() == player){
 			fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Stall.").suggest("/group " + getId() + " setname NEW NAME");
 			fm.then(" - ").color(ChatColor.GRAY);

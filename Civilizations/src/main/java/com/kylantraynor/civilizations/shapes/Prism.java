@@ -51,9 +51,9 @@ public class Prism extends Shape {
 
 	@Override
 	boolean isInside(double x, double y, double z) {
-		if(x >= getLocation().getBlockX() && x <= getLocation().getBlockX() + width){
-			if(y >= getLocation().getBlockY() && y <= getLocation().getBlockY() + height){
-				if(z >= getLocation().getBlockZ() && z <= getLocation().getBlockZ() + length){
+		if(x >= getLocation().getBlockX() && x < getLocation().getBlockX() + width){
+			if(y >= getLocation().getBlockY() && y < getLocation().getBlockY() + height){
+				if(z >= getLocation().getBlockZ() && z < getLocation().getBlockZ() + length){
 					return true;
 				}
 			}
