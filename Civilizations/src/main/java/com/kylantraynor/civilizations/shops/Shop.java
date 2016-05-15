@@ -15,7 +15,7 @@ import com.kylantraynor.civilizations.settings.ShopSettings;
 
 public class Shop {
 	
-	public ShopSettings settings;
+	public ShopSettings settings = new ShopSettings();
 	private Location location;
 	private OfflinePlayer owner;
 	private List<Sign> signs;
