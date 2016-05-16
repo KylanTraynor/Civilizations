@@ -50,6 +50,7 @@ public class CommandGroup implements CommandExecutor {
 						}
 					}
 				}
+				break;
 			case "SETNAME":
 				if(sender instanceof Player){
 					if(g instanceof MarketStall){
@@ -190,6 +191,7 @@ public class CommandGroup implements CommandExecutor {
 					if(g instanceof MarketStall){
 						if(((MarketStall)g).getRenter() == p){
 							((MarketStall)g).setRenter(null);
+							sender.sendMessage(ChatColor.GREEN + "You are no longer renting " + g.getName() + ".");
 						}
 					}
 				}
