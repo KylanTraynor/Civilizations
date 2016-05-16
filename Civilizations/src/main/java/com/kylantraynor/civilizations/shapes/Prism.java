@@ -51,9 +51,9 @@ public class Prism extends Shape {
 
 	@Override
 	boolean isInside(double x, double y, double z) {
-		if(x >= getLocation().getBlockX() && x < getLocation().getBlockX() + width){
-			if(y >= getLocation().getBlockY() && y < getLocation().getBlockY() + height){
-				if(z >= getLocation().getBlockZ() && z < getLocation().getBlockZ() + length){
+		if(x >= getLocation().getBlockX() && x < getLocation().getBlockX() + width + 1){
+			if(y >= getLocation().getBlockY() && y < getLocation().getBlockY() + height + 1){
+				if(z >= getLocation().getBlockZ() && z < getLocation().getBlockZ() + length + 1){
 					return true;
 				}
 			}
@@ -85,9 +85,9 @@ public class Prism extends Shape {
 	@Override
 	public Location[] getBlockLocations() {
 		List<Location> list = new ArrayList<Location>();
-		for(int x = 0; x < width; x++){
-			for(int y = 0; y < height; y++){
-				for(int z = 0; z < length; z++){
+		for(int x = 0; x <= width; x++){
+			for(int y = 0; y <= height; y++){
+				for(int z = 0; z <= length; z++){
 					list.add(getLocation().clone().add(x, y, z));
 				}
 			}
@@ -98,10 +98,10 @@ public class Prism extends Shape {
 	@Override
 	public Block[] getBlockSurface() {
 		List<Block> list = new ArrayList<Block>();
-		for(int x = 0; x < width; x++){
-			for(int y = 0; y < height; y++){
-				for(int z = 0; z < length; z++){
-					if((x == 0 || x == width - 1) || (y == 0 || y == height - 1) || (z == 0 || z == length - 1)){
+		for(int x = 0; x <= width; x++){
+			for(int y = 0; y <= height; y++){
+				for(int z = 0; z <= length; z++){
+					if((x == 0 || x == width) || (y == 0 || y == height) || (z == 0 || z == length)){
 						list.add(getLocation().clone().add(x, y, z).getBlock());
 					}
 				}

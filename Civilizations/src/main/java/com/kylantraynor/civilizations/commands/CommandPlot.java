@@ -58,8 +58,8 @@ public class CommandPlot implements CommandExecutor {
 				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
 				
 				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
-				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
-				Shape s = new Prism(firstCorner, width + 1, height + 1, length + 1);
+				
+				Shape s = new Prism(firstCorner, width, height, length);
 				
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
@@ -104,7 +104,7 @@ public class CommandPlot implements CommandExecutor {
 				
 				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
 				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
-				Shape s = new Prism(firstCorner, width + 1, height + 1, length + 1);
+				Shape s = new Prism(firstCorner, width, height, length);
 				
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : Cache.getPlotList()){
