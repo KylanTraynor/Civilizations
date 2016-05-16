@@ -116,7 +116,6 @@ public class Plot extends Group {
 		this.settlement = settlement;
 		if(this.settlement != null){
 			this.settlement.addPlot(this);
-			getProtection().setParent(this.settlement.getProtection());
 		}
 		setChanged(true);
 	}

@@ -296,6 +296,8 @@ public class Util {
 				case 1: return "ENCHANTED_GOLDEN_APPLE";
 			}
 			break;
+		case NETHER_STALK:
+			return "NETHER_WART";
 		case ANVIL:
 			switch((int) data){
 				case 0: return "ANVIL";

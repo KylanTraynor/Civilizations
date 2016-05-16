@@ -244,6 +244,7 @@ public class Protection {
 	 * @param target
 	 * @return true if Permissions were found, false otherwise.
 	 */
+	@Deprecated
 	public boolean hasPermissions(PermissionTarget target){
 		if(permissionSet.hasTarget(target)){
 			return true;
@@ -256,8 +257,14 @@ public class Protection {
 	 * @param target
 	 * @return Permission
 	 */
+	@Deprecated
 	public Permission getPermissions(PermissionTarget target){
-		return permissionSet.get(target);
+		if(permissionSet.hasTarget(target)){
+			return permissionSet.get(target);
+		} else {
+			if(parent != null) return parent.getPermissions(target);
+		}
+		return null;
 	}
 	
 	/**
@@ -267,11 +274,10 @@ public class Protection {
 	 * @return
 	 */
 	public boolean getPermission(PermissionType type, PermissionTarget target){
-		Permission perm = getPermissions(target);
-		if(perm != null){
-			if(perm.contains(type)){
-				return perm.get(type);
-			}
+		if(permissionSet.isPermSetFor(type, target)){
+			return permissionSet.get(target).get(type);
+		} else if(parent != null) {
+			return parent.getPermission(type, target);
 		}
 		if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
 	}

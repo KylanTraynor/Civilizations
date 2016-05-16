@@ -26,6 +26,15 @@ public class PermissionSet {
 	public Set<PermissionTarget> getTargets(){
 		return permissions.keySet();
 	}
+	
+	public boolean isPermSetFor(PermissionType type, PermissionTarget target){
+		if(hasTarget(target)){
+			if(permissions.get(target).contains(type)){
+				return true;
+			}
+		}
+		return false;
+	}
 	/**
 	 * Adds a permission with the given target to the list of permissions.
 	 * @param target
