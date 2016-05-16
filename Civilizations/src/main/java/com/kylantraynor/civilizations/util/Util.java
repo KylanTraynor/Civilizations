@@ -1,8 +1,12 @@
 package com.kylantraynor.civilizations.util;
 
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -11,7 +15,7 @@ import org.bukkit.potion.PotionType;
 public class Util {
 
 	public static String getMaterialName(ItemStack item) {
-		return getDataName(item.getType(), item.getData().getData());
+		return getDataName(item.getType(), item.getData().getData(), item.getItemMeta());
 	}
 
 	/**
@@ -48,7 +52,7 @@ public class Util {
 	 * @author maxgamer
 	 * @author Modified by KylanTraynor
 	 */
-	private static String getDataName(Material mat, short data){
+	private static String getDataName(Material mat, short data, ItemMeta meta){
 		switch(mat){
 		case WOOL: 
 			switch((int) data){
@@ -161,7 +165,7 @@ public class Util {
 		case POTION:
 			PotionMeta pot;
 			try{
-				pot = (PotionMeta) Bukkit.getItemFactory().getItemMeta(mat);
+				pot = (PotionMeta) meta;
 			}
 			catch(Exception e){ return "CUSTOM_POTION"; }
 			if(pot.getBasePotionData().getType() == PotionType.WATER){
@@ -307,6 +311,18 @@ public class Util {
 			break;
 		case EXP_BOTTLE:
 			return "BOTTLE_O'_ENCHANTING";
+		case ENCHANTED_BOOK:
+			StringBuilder sb = new StringBuilder("BOOK_OF_");
+			int i = 0;
+			for(Entry<Enchantment, Integer> e : meta.getEnchants().entrySet()){
+				if(i != 0){
+					sb.append(",_");
+				}
+				sb.append(e.getKey().getName().toUpperCase());
+				sb.append("_" + e.getValue());
+				i += 1;
+			}
+			return sb.toString();
 		default:
 			break;
 		}
