@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
@@ -312,9 +313,18 @@ public class Util {
 		case EXP_BOTTLE:
 			return "BOTTLE_O'_ENCHANTING";
 		case ENCHANTED_BOOK:
+			EnchantmentStorageMeta book;
+			try{
+				book = (EnchantmentStorageMeta) meta;
+			} catch (Exception e){
+				return "NOT_SO_ENCHANTED_BOOK";
+			}
+			if(book.getStoredEnchants().size() == 0){
+				return "ENCHANTED_BOOK";
+			}
 			StringBuilder sb = new StringBuilder("BOOK_OF_");
 			int i = 0;
-			for(Entry<Enchantment, Integer> e : meta.getEnchants().entrySet()){
+			for(Entry<Enchantment, Integer> e : book.getStoredEnchants().entrySet()){
 				if(i != 0){
 					sb.append(",_");
 				}
