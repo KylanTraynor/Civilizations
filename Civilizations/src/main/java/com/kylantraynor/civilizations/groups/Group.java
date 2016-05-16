@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
@@ -37,6 +38,8 @@ public class Group {
 	public static ArrayList<Group> getList() {return list;}
 	public static void setList(ArrayList<Group> list) {Group.list = list;}
 	
+	public static Stack<Integer> availableIds = new Stack<Integer>();
+	
 	public static void clearAll(){
 		list.clear();
 		list = null;
@@ -51,7 +54,11 @@ public class Group {
 	
 	public Group(){
 		list.add(this);
-		this.setId(list.size() - 1);
+		if(availableIds.size() > 0){
+			this.setId(availableIds.pop());
+		} else {
+			this.setId(list.size() - 1);
+		}
 		members = new ArrayList<UUID>();
 		Cache.groupListChanged = true;
 		chatColor = ChatColor.WHITE;
@@ -59,6 +66,7 @@ public class Group {
 		setCreationDate(Instant.now());
 		setChanged(true);
 	}
+	
 	public String getChatHeader(){
 		return ChatColor.GOLD + "[" + getName() + "] "; 
 	}
@@ -202,6 +210,7 @@ public class Group {
 			if(f.exists()) f.delete();
 		}
 		Cache.groupListChanged = true;
+		availableIds.push(this.getId());
 		return list.remove(this);
 	}
 	/**
