@@ -112,9 +112,9 @@ public class MarketStall extends Plot{
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
 		Location current = this.getProtection().getCenter().clone();
 		for(Shape s : getProtection().getShapes()){
-			for(int x = s.getMinX() - 1; x < s.getMaxX() + 1; x++){
+			for(int x = s.getMinX(); x < s.getMaxX(); x++){
 				for(int y = s.getMinY(); y < s.getMaxY(); y++){
-					for(int z = s.getMinZ() - 1; z < s.getMaxZ() + 1; z++){
+					for(int z = s.getMinZ(); z < s.getMaxZ(); z++){
 						current.setX(x);
 						current.setY(y);
 						current.setZ(z);
