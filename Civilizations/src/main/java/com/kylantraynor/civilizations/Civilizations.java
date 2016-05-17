@@ -56,6 +56,7 @@ import com.kylantraynor.civilizations.listeners.CivilizationsListener;
 import com.kylantraynor.civilizations.listeners.MenuListener;
 import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
+import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
 import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -102,6 +103,7 @@ public class Civilizations extends JavaPlugin{
 	private static ProtectionListener protectionListener = new ProtectionListener();
 	private static WebListener webListener = new WebListener();
 	private static ChatListener chatListener = new ChatListener();
+	private static VehiclesListener vehiclesListener = new VehiclesListener();
 	
 	/**
 	 * Returns the main listener of Civilizations.
@@ -152,6 +154,7 @@ public class Civilizations extends JavaPlugin{
 		pm.registerEvents(getTerritoryListener(), this);
 		pm.registerEvents(getProtectionListener(), this);
 		pm.registerEvents(getChatListener(), this);
+		pm.registerEvents(getVehiclesListener(), this);
 		
 		registerAchievements();
 		
@@ -179,7 +182,7 @@ public class Civilizations extends JavaPlugin{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void registerAchievements() {
 		Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
 		createCamp.getDescription().add("Create a camp.");
@@ -198,14 +201,13 @@ public class Civilizations extends JavaPlugin{
 	private void createServerViews() {
 		
 	}
-	
+	Map<String, Settlement> loadedSettlements = new HashMap<String, Settlement>();
 	private void loadPlots() {
-		Map<String, Settlement> settlements = new HashMap<String, Settlement>();
-		loadKeeps(settlements);
-		loadStalls(settlements);
+		loadKeeps();
+		loadStalls();
 	}
 
-	private void loadKeeps(Map<String, Settlement> settlements) {
+	private void loadKeeps() {
 		File keepDir = getKeepDirectory();
 		if(keepDir.exists()){
 			log("INFO", "Loading Keeps...");
@@ -229,7 +231,7 @@ public class Civilizations extends JavaPlugin{
 				}
 				log("INFO", "Loading Keep from file: " + f.getPath());
 				f.delete();
-				Keep h = Keep.load(yaml, settlements);
+				Keep h = Keep.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -237,7 +239,7 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	
-	private void loadStalls(Map<String, Settlement> settlements) {
+	private void loadStalls() {
 		File stallDir = getMarketStallDirectory();
 		if(stallDir.exists()){
 			log("INFO", "Loading Stalls...");
@@ -261,7 +263,7 @@ public class Civilizations extends JavaPlugin{
 				}
 				log("INFO", "Loading Stall from file: " + f.getPath());
 				f.delete();
-				MarketStall h = MarketStall.load(yaml, settlements);
+				MarketStall h = MarketStall.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -871,6 +873,10 @@ public class Civilizations extends JavaPlugin{
 
 	public static ChatListener getChatListener() {
 		return chatListener;
+	}
+	
+	private static Listener getVehiclesListener() {
+		return vehiclesListener;
 	}
 
 	public static void callEvent(Event event) {

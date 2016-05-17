@@ -191,6 +191,14 @@ public class DynmapHook {
 		    	} else {
 		    		sb.append(m.getRenter().getName());
 		    	}
+	    	} else {
+	    		if(m.getOwner() != null){
+	    			sb.append(m.getOwner().getName());
+	    		} else {
+	    			if(m.getSettlement() != null){
+	    				sb.append(m.getSettlement().getName());
+	    			}
+	    		}
 	    	}
 	    	String rent = m.isForRent() ? Economy.format(m.getRent()) : "Not for rent";
 	    	description = description.replace("%RentStatus%", sb.toString());

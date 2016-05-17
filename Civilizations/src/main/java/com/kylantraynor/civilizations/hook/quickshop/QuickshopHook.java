@@ -28,17 +28,9 @@ public class QuickshopHook {
 	}
 	
 	public static QuickShopShop getShop(Location location){
-		QuickShopShop s = new QuickShopShop();
 		Shop shop = QuickShop.instance.getShopManager().getShop(location);
 		if(shop == null) return null;
-		s.setLocation(shop.getLocation());
-		s.setItem(shop.getItem());
-		s.setPrice(shop.getPrice());
-		if(shop.isBuying()){
-			s.setType(ShopType.BUYING);
-		} else {
-			s.setType(ShopType.SELLING);
-		}
+		QuickShopShop s = new QuickShopShop(shop);
 		return s;
 	}
 	
