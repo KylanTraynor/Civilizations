@@ -206,7 +206,7 @@ public class DynmapHook {
 	    	description = description.replace("%RentStatus%", sb.toString());
 	    	description = description.replace("%Rent%", rent);
 	    	// Taxes
-	    	String taxes = "Transaction Taxes: <br /><ul>";
+	    	String taxes = "Transaction Taxes:<ul>";
 	    	if(m.getSettlement() != null){
 	    		taxes += "<li>" + m.getSettlement().getName() + ": " + (m.getSettlement().getTransactionTax() * 100) + "%</li>";
 	    	}
