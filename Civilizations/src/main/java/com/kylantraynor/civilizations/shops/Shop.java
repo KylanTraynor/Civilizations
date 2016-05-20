@@ -11,7 +11,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.settings.ShopSettings;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class Shop {
 	
@@ -30,6 +35,26 @@ public class Shop {
 	public void setLocation(Location newLocation){
 		location = newLocation;
 		settings.setLocation(newLocation);
+	}
+	
+	public boolean isInMarketStall(){
+		Plot plot = Plot.getAt(location);
+		if(plot != null){
+			if(plot instanceof MarketStall){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Sends all the taxes to the different institutions from a taxed amount of money.
+	 * @param taxedAmount The amount of money subject to taxes.
+	 * @return The amount of money left untaxed.
+	 */
+	public double sendTransactionTaxesOn(double taxedAmount){
+		double remaining = taxedAmount;
+		return remaining;
 	}
 	
 	public OfflinePlayer getOwner(){
@@ -100,4 +125,15 @@ public class Shop {
 		return "";
 	}
 	
+	public Settlement getSettlement() {
+		Plot p = Plot.getAt(this.getLocation());
+		if(p != null){
+			return p.getSettlement();
+		}
+		return null;
+	}
+	
+	public Fort getFort(){
+		return InfluenceMap.getInfluentFortAt(this.getLocation());
+	}
 }

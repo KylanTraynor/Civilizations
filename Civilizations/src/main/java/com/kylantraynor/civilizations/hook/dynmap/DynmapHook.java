@@ -19,7 +19,9 @@ import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 public class DynmapHook {
 	private static Plugin plugin;
@@ -203,6 +205,17 @@ public class DynmapHook {
 	    	String rent = m.isForRent() ? Economy.format(m.getRent()) : "Not for rent";
 	    	description = description.replace("%RentStatus%", sb.toString());
 	    	description = description.replace("%Rent%", rent);
+	    	// Taxes
+	    	String taxes = "Transaction Taxes: <br />";
+	    	if(m.getSettlement() != null){
+	    		taxes += m.getSettlement().getName() + ": " + (m.getSettlement().getTransactionTax() * 100) + "%<br />";
+	    	}
+	    	Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
+	    	if(f != null){
+	    		taxes += f.getName() + ": " + (f.getTransactionTax() * 100) + "%<br />";
+	    	}
+	    	description = description.replace("%Taxes%", taxes);
+	    	// Wares
 	    	StringBuilder sb1 = new StringBuilder();
 	    	sb1.append("<ul>");
 	    	for(String s : m.getWaresToString()){

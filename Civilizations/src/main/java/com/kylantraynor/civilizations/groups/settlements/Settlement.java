@@ -240,9 +240,16 @@ public class Settlement extends Group {
 	
 	/**
 	 * Gets the tax percent on stalls rent.
-	 * @return Percent
+	 * @return double [0 - 1]
 	 */
 	public double getStallRentTax() {
+		return 0.01;
+	}
+	/**
+	 * Gets the tax percent on transactions.
+	 * @return double [0 - 1]
+	 */
+	public double getTransactionTax() {
 		return 0.01;
 	}
 }

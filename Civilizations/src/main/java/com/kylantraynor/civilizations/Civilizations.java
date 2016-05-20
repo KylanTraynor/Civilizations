@@ -875,7 +875,7 @@ public class Civilizations extends JavaPlugin{
 		return chatListener;
 	}
 	
-	private static Listener getVehiclesListener() {
+	public static Listener getVehiclesListener() {
 		return vehiclesListener;
 	}
 
