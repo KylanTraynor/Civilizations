@@ -79,6 +79,11 @@ public class MarketStall extends Plot{
 				setChanged(true);
 			}
 		}
+		if(getSettlement() == null){
+			if(Settlement.getAt(getProtection().getCenter()) != null){
+				setSettlement(Settlement.getAt(getProtection().getCenter()));
+			}
+		}
 		DynmapHook.updateMap(this);
 		super.update();
 	}
