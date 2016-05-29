@@ -204,19 +204,31 @@ public class Util {
 		case LOG:
 			switch(data){
 				case 0: return "OAK_LOG";
-				case 1: return "PINE_LOG";
+				case 1: return "SPRUCE_LOG";
 				case 2: return "BIRCH_LOG";
 				case 3: return "JUNGLE_LOG";
+			}
+			return mat.toString();
+		case LOG_2:
+			switch(data){
+				case 0: return "ACACIA_LOG";
+				case 1: return "DARK_OAK_LOG";
 			}
 			return mat.toString();
 		case LEAVES:
 			data = (short) (data%4);
 			switch(data){
 				case 0: return "OAK_LEAVES";
-				case 1: return "PINE_LEAVES";
+				case 1: return "SPRUCE_LEAVES";
 				case 2: return "BIRCH_LEAVES";
 				case 3: return "JUNGLE_LEAVES";
 			}
+		case LEAVES_2:
+			switch(data){
+				case 0: return "ACACIA_LEAVES";
+				case 1: return "DARK_OAK_LEAVES";
+			}
+			return mat.toString();
 		case COAL:
 			switch(data){
 				case 0: return "COAL";
