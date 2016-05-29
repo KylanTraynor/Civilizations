@@ -48,7 +48,11 @@ public class Button extends ItemStack{
 	public void run(){
 		if(isEnabled && this.runnable != null){
 			ButtonManager.buttons.remove(this);
-			this.runnable.runTask(Civilizations.currentInstance);
+			try{
+				this.runnable.runTask(Civilizations.currentInstance);
+			} catch (IllegalStateException e){
+				
+			}
 		}
 	}
 }
