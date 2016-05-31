@@ -17,6 +17,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.settings.ShopSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Shop {
 	
@@ -120,7 +121,7 @@ public class Shop {
 					return ChatColor.GOLD + getItem().getItemMeta().getDisplayName();
 				}
 			}
-			return getItem().getType().toString().replace("_", " ") + (getItem().getData().getData() != 0 ? (":" + getItem().getData().getData()) : "") ;
+			return Util.getMaterialName(getItem());
 		}
 		return "";
 	}

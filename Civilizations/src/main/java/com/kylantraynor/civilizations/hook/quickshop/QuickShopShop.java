@@ -1,6 +1,5 @@
 package com.kylantraynor.civilizations.hook.quickshop;
 
-import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.shops.Shop;
 import com.kylantraynor.civilizations.shops.ShopType;
 

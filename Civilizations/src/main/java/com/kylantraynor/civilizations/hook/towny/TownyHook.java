@@ -11,9 +11,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyHook {
@@ -111,6 +113,27 @@ public class TownyHook {
 			return true;
 		}else{
 			return true;
+		}
+	}
+
+	public static void bypassPermsFor(Block block) {
+		if(isActive()){
+			com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
+			if(tb != null){
+				if(tb.getPermissions() != null){
+					tb.getPermissions().setAll(true);
+					
+					BukkitRunnable bk = new BukkitRunnable(){
+
+						@Override
+						public void run() {
+							tb.getPermissions().reset();
+						}
+						
+					};
+					bk.runTaskLater(Civilizations.currentInstance, 1);
+				}
+			}
 		}
 	}
 }
