@@ -15,7 +15,6 @@ public class Warehouse extends Plot implements GroupInventory{
 
 	public Warehouse(String name, Shape shape, Settlement settlement) {
 		super(name, shape, settlement);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

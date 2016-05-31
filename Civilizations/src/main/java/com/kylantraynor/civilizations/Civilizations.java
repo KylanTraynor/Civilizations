@@ -733,6 +733,19 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 	/**
+	 * Get the directory the keep files are stored in.
+	 * @return File
+	 */
+	public static File getHousePlotDirectory() {
+		File f = new File(getPlotDirectory(), "Houses");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
 	 * Get the directory the stall files are stored in.
 	 * @return File
 	 */
