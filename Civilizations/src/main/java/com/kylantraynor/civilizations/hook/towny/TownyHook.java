@@ -118,7 +118,7 @@ public class TownyHook {
 
 	public static void bypassPermsFor(Block block) {
 		if(isActive()){
-			com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
+			final com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
 			if(tb != null){
 				if(tb.getPermissions() != null){
 					tb.getPermissions().setAll(true);
