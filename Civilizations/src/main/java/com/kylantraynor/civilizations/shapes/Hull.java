@@ -229,6 +229,12 @@ public class Hull extends Shape {
 	}
 
 	@Override
+	public double distance(Shape s) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
 	public boolean intersect(Shape s) {
 		// TODO Auto-generated method stub
 		return false;

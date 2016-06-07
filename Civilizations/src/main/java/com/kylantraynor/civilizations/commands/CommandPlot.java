@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,8 +19,11 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.selection.SelectionManager;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 
 public class CommandPlot implements CommandExecutor {
 
@@ -28,83 +34,51 @@ public class CommandPlot implements CommandExecutor {
 		
 		if(sender instanceof Player){
 			
-			if(args.length == 0) args = new String[]{"INFO"};
+			Player player = (Player) sender;
 			
-			boolean hasProtectionSelected = Civilizations.getSelectedProtections().containsKey(sender);
-			boolean hasSelectionPoints = Civilizations.getSelectionPoints().containsKey(sender);
+			if(args.length == 0) args = new String[]{"INFO"};
 			
 			/*
 			 * Merges the selection with the plot intersecting.
 			 */
-			if(args[0].equalsIgnoreCase("MERGE")){
-				if(!hasSelectionPoints){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection points set.");
+			if(args[0].equalsIgnoreCase("ADD")){
+				if(!SelectionManager.hasSelection(player)){
+					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection set.");
 					return true;
 				}
-
-				Location[] points = Civilizations.getSelectionPoints().get(sender);
-				
-				if(points[0] == null || points[1] == null){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Selection points are missing.");
-					return true;
-				}
-				
-				
-				int minX = Math.min(points[0].getBlockX(), points[1].getBlockX());
-				int minY = Math.min(points[0].getBlockY(), points[1].getBlockY());
-				int minZ = Math.min(points[0].getBlockZ(), points[1].getBlockZ());
-				int width = (int) Math.abs(points[1].getX() - points[0].getX());
-				int height = (int) Math.abs(points[1].getY() - points[0].getY());
-				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
-				
-				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
-				
-				Shape s = new Prism(firstCorner, width, height, length);
+				Shape s = SelectionManager.getSelection(player);
 				
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
+				Protection protection = null;
 				for(Plot plot : Cache.getPlotList()){
 					if(plot.getProtection().intersect(s)){
 						plotsIntersecting++;
-						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
-						return true;
+						protection = plot.getProtection();
 					}
 				}
 				if(plotsIntersecting > 1){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with to many plots.");
+					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects too many plots.");
+					return true;
+				} else if(plotsIntersecting == 0 || protection == null) {
+					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection doesn't intersect any plot.");
 					return true;
 				}
 				
+				protection.add(s);
+				player.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "The selection has been added to " + protection.getGroup().getName() + "!");
+				return true;
 			/*
 			 * Creates a new plot from the selection 
 			 */
 			} else if(args[0].equalsIgnoreCase("CREATE")){
 				
-				if(!hasSelectionPoints){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection points set.");
+				if(SelectionManager.hasSelection((Player) sender)){
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection set.");
 					return true;
 				}
-				
-				Location[] points = Civilizations.getSelectionPoints().get(sender);
-				
-				if(points[0] == null || points[1] == null){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Selection points are missing.");
-					return true;
-				}
-				
-				Location middlePoint = new Location(points[0].getWorld(), (points[0].getX() + points[1].getX())/2.0,
-						(points[0].getY() + points[1].getY()) /2.0, (points[0].getZ() + points[1].getZ()) / 2.0);
-				
-				int minX = Math.min(points[0].getBlockX(), points[1].getBlockX());
-				int minY = Math.min(points[0].getBlockY(), points[1].getBlockY());
-				int minZ = Math.min(points[0].getBlockZ(), points[1].getBlockZ());
-				int width = (int) Math.abs(points[1].getX() - points[0].getX());
-				int height = (int) Math.abs(points[1].getY() - points[0].getY());
-				int length = (int) Math.abs(points[1].getZ() - points[0].getZ());
-				
-				Location firstCorner = new Location(points[0].getWorld(), minX, minY, minZ);
 				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
-				Shape s = new Prism(firstCorner, width, height, length);
+				Shape s = SelectionManager.getSelection((Player) sender);
 				
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : Cache.getPlotList()){
@@ -114,23 +88,33 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				
-				Settlement set = Settlement.getClosest(middlePoint);
-				if(set != null && set.distance(middlePoint) > Civilizations.settlementMergeRadius){
-					set = null;
-				} else if(set != null && !set.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
-					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
-					return true;
+				Settlement set = Settlement.getClosest(s.getLocation());
+				if(set != null){
+					if(!set.canMergeWith(s)){
+						set = null;
+					}
+				}
+				if(set != null){
+					if(!set.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
+						return true;
+					}
 				}
 				
 				if(args.length >= 2){
+					List<String> arguments = new ArrayList<String>();
+					if(args.length >= 3){
+						for(int i = 2; i < args.length; i++){
+							arguments.add(args[i]);
+						}
+					}
 					switch(args[1].toUpperCase()){
 					case "HOUSE":
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A house cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new House("House", s, set);
-							Civilizations.getSelectionPoints().remove(sender);
+							Plot p = new House(args.length >= 3 ? Util.join(arguments, " ") : "House", s, set);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House created in " + set.getName() + "!");
 						}
@@ -140,8 +124,8 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A keep cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new Keep("Keep", s, set);
-							Civilizations.getSelectionPoints().remove(sender);
+							Plot p = new Keep(args.length >= 3 ? Util.join(arguments, " ") : "Keep", s, set);
+							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Keep created in " + set.getName() + "!");
 						}
@@ -151,8 +135,8 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A warehouse cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new Warehouse("Warehouse", s, set);
-							Civilizations.getSelectionPoints().remove(sender);
+							Plot p = new Warehouse(args.length >= 3 ? Util.join(arguments, " ") : "Warehouse", s, set);
+							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Warehouse created in " + set.getName() + "!");
 						}
@@ -162,8 +146,8 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A stall cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new MarketStall("Stall", s, set);
-							Civilizations.getSelectionPoints().remove(sender);
+							Plot p = new MarketStall(args.length >= 3 ? Util.join(arguments, " ") : "Stall", s, set);
+							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Market stall created in " + set.getName() + "!");
 						}
@@ -181,5 +165,4 @@ public class CommandPlot implements CommandExecutor {
 		
 		return false;
 	}
-
 }

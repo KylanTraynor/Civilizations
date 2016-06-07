@@ -60,6 +60,7 @@ import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
 import com.kylantraynor.civilizations.protection.LockManager;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.selection.SelectionManager;
 
 import fr.rhaz.webservers.WebServers;
 import fr.rhaz.webservers.WebServers.API;
@@ -87,7 +88,6 @@ public class Civilizations extends JavaPlugin{
 	private boolean clearing = false;
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
-	static private HashMap<Player, Location[]> selectionPoints = new HashMap<Player, Location[]>();
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
 	static private FileConfiguration config;
 	
@@ -169,7 +169,7 @@ public class Civilizations extends JavaPlugin{
 		startProtectionUpdater(40L);
 		startEconomyUpdater(20L * 60);
 		
-		LockManager.init();
+		initManagers();
 		
 		setupCommands();
 		
@@ -181,6 +181,15 @@ public class Civilizations extends JavaPlugin{
 			log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 			e.printStackTrace();
 		}
+	}
+
+	private void initManagers() {
+		LockManager.init();
+		SelectionManager.init();
+	}
+	
+	private void freesManagers(){
+		SelectionManager.free();
 	}
 
 	private void registerAchievements() {
@@ -231,7 +240,7 @@ public class Civilizations extends JavaPlugin{
 				}
 				log("INFO", "Loading Keep from file: " + f.getPath());
 				f.delete();
-				Keep h = Keep.load(yaml, loadedSettlements);
+				Keep.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -263,7 +272,7 @@ public class Civilizations extends JavaPlugin{
 				}
 				log("INFO", "Loading Stall from file: " + f.getPath());
 				f.delete();
-				MarketStall h = MarketStall.load(yaml, loadedSettlements);
+				MarketStall.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -328,7 +337,7 @@ public class Civilizations extends JavaPlugin{
 					log("WARNING", "Invalid file configuration.");
 				}
 				f.delete();
-				House h = House.load(yaml);
+				House.load(yaml);
 			}
 		}
 	}
@@ -520,6 +529,7 @@ public class Civilizations extends JavaPlugin{
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}
+		freesManagers();
 	}
 	
 	/**
@@ -845,14 +855,6 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static void setClearing(boolean clearing) {
 		currentInstance.clearing = clearing;
-	}
-
-	public static HashMap<Player, Location[]> getSelectionPoints() {
-		return selectionPoints;
-	}
-
-	public static void setSelectionPoints(HashMap<Player, Location[]> selectionPoints) {
-		Civilizations.selectionPoints = selectionPoints;
 	}
 
 	public static TerritoryListener getTerritoryListener() {

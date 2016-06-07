@@ -222,6 +222,19 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
+	public double distance(Shape s){
+		switch(operation.toUpperCase()){
+		case "UNION":
+			return Math.min(shape1.distance(s), shape2.distance(s));
+		case "INTERSECTION":
+			break;
+		case "DIFFERENCE":
+			break;
+		}
+		return 0;
+	}
+	
+	@Override
 	public boolean intersect(Shape s) {
 		switch(operation.toUpperCase()){
 		case "UNION":

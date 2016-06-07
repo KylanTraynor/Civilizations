@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.selection.SelectionManager;
 
 public class CommandBlueprint implements CommandExecutor{
 	
@@ -23,7 +24,7 @@ public class CommandBlueprint implements CommandExecutor{
 		}
 		Player player = (Player) sender;
 		
-		if(!Civilizations.getSelectionPoints().containsKey(player)){
+		if(!SelectionManager.hasSelection(player)){
 			player.sendMessage(messageHeader + ChatColor.RED + "You need to have a selection.");
 		}
 		

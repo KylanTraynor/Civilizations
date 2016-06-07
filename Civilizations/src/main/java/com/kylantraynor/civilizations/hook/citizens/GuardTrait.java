@@ -6,22 +6,26 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import com.kylantraynor.civilizations.Civilizations;
+
 import net.aufdemrand.sentry.Sentry;
 import net.aufdemrand.sentry.SentryInstance.Status;
 import net.aufdemrand.sentry.SentryTrait;
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.trait.Toggleable;
 
+@TraitName("guard")
 public class GuardTrait extends Trait implements Toggleable{
-	private Sentry plugin = null;
+	private Civilizations plugin = null;
 
 	private boolean isToggled = true;
 
 	public GuardTrait() {
 		super("guard");
-		plugin = (Sentry) Bukkit.getServer().getPluginManager().getPlugin("Sentry");
+		plugin = (Civilizations) Bukkit.getServer().getPluginManager().getPlugin("Civilizations");
 	}
 	private Guard thisInstance;
 
@@ -29,12 +33,13 @@ public class GuardTrait extends Trait implements Toggleable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void load(DataKey key) throws NPCLoadException {
-		plugin.debug(npc.getName() + " Load");
+		Civilizations.DEBUG(npc.getName() + " Load");
 		ensureInst();
 
 		if(key.keyExists("traits")) key = key.getRelative("traits");
 
 		isToggled=	key.getBoolean("toggled", isToggled());
+		/*
 		thisInstance.Retaliate=	key.getBoolean("Retaliate", plugin.getConfig().getBoolean("DefaultOptions.Retaliate",true));
 		thisInstance.Invincible=	key.getBoolean("Invincinble", plugin.getConfig().getBoolean("DefaultOptions.Invincible",false));
 		thisInstance.DropInventory=	key.getBoolean("DropInventory", plugin.getConfig().getBoolean("DefaultOptions.Drops",false));
@@ -57,7 +62,6 @@ public class GuardTrait extends Trait implements Toggleable{
 		thisInstance.KillsDropInventory = key.getBoolean("KillDrops", plugin.getConfig().getBoolean("DefaultOptions.KillDrops", true));
 		thisInstance.MountID = key.getInt("MountID", (int)-1);
 		thisInstance.Targetable = key.getBoolean("Targetable", plugin.getConfig().getBoolean("DefaultOptions.Targetable",true));
-		
 		if( key.keyExists("Spawn")){
 			try {
 				thisInstance.Spawn = new Location(plugin.getServer().getWorld(key.getString("Spawn.world")), key.getDouble("Spawn.x"),key.getDouble("Spawn.y"), key.getDouble("Spawn.z"), (float) key.getDouble("Spawn.yaw"), (float) key.getDouble("Spawn.pitch"));
@@ -100,7 +104,7 @@ public class GuardTrait extends Trait implements Toggleable{
 		thisInstance.loaded = true;
 
 		thisInstance.processTargets();
-
+		*/
 	}
 
 	public Guard getInstance(){
@@ -110,27 +114,29 @@ public class GuardTrait extends Trait implements Toggleable{
 
 	@Override
 	public void onSpawn() {
-		plugin.debug(npc.getName() + " onSpawn");
+		Civilizations.DEBUG(npc.getName() + " onSpawn");
 		ensureInst();
-
+		/*
 		if (!thisInstance.loaded){
 			try {
-				plugin.debug(npc.getName() + " onSpawn call load");
+				Civilizations.DEBUG(npc.getName() + " onSpawn call load");
 				load(new net.citizensnpcs.api.util.MemoryDataKey());
 			} catch (NPCLoadException e) {
 			}
 		}
 
-		if (!plugin.GroupsChecked) plugin.doGroups(); // lazy checking for lazy vault.
+		//if (!plugin.GroupsChecked) plugin.doGroups(); // lazy checking for lazy vault.
 
 		thisInstance.initialize();	
-
+		*/
 	}
 
 	private void ensureInst(){
 		if (thisInstance == null ) {
 			thisInstance = new Guard(plugin, null);
+			/*
 			thisInstance.myNPC = npc;
+			*/
 			thisInstance.myTrait = this;
 		}
 	}
@@ -142,10 +148,12 @@ public class GuardTrait extends Trait implements Toggleable{
 
 		if (thisInstance!=null){
 			//	plugin.getServer().broadcastMessage("onRemove");
+			/*
 			thisInstance.cancelRunnable();
+			*/
 		}
 
-		plugin.debug(npc.getName() + " onRemove");
+		Civilizations.DEBUG(npc.getName() + " onRemove");
 
 		thisInstance = null;
 		isToggled = false;
@@ -153,17 +161,19 @@ public class GuardTrait extends Trait implements Toggleable{
 
 	@Override
 	public void onAttach() {
-		plugin.debug(npc.getName() + " onAttach");
+		Civilizations.DEBUG(npc.getName() + " onAttach");
 		isToggled = true;
 	}
 
 	@Override
 	public void onDespawn() {
-		plugin.debug(npc.getName() + " onDespawn");
+		Civilizations.DEBUG(npc.getName() + " onDespawn");
 		if(thisInstance != null){
+			/*
 			thisInstance.isRespawnable = System.currentTimeMillis() + thisInstance.RespawnDelaySeconds * 1000;
 			thisInstance.sentryStatus = Status.isDEAD;
 			thisInstance.dismount();
+			*/
 		}
 	}
 
@@ -171,6 +181,7 @@ public class GuardTrait extends Trait implements Toggleable{
 	public void save(DataKey key) {
 		if (thisInstance==null) return;
 		key.setBoolean("toggled", isToggled);
+		/*
 		key.setBoolean("Retaliate", thisInstance.Retaliate);
 		key.setBoolean("Invincinble", thisInstance.Invincible);
 		key.setBoolean("DropInventory", thisInstance.DropInventory);
@@ -210,6 +221,7 @@ public class GuardTrait extends Trait implements Toggleable{
 
 		key.setString("Warning",thisInstance.WarningMessage);
 		key.setString("Greeting",thisInstance.GreetingMessage);
+		*/
 	}
 
 	@Override

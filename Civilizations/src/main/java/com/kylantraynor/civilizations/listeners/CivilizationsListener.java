@@ -22,6 +22,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.selection.SelectionManager;
 
 public class CivilizationsListener implements Listener{
 	
@@ -127,18 +128,12 @@ public class CivilizationsListener implements Listener{
 			}
 		} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
 			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
-			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
-				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
-			}
-			Civilizations.getSelectionPoints().get(event.getPlayer())[0] = event.getClickedBlock().getLocation();
+			SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
 			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
 			event.setCancelled(true);
 		} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
-			if(!Civilizations.getSelectionPoints().containsKey(event.getPlayer())){
-				Civilizations.getSelectionPoints().put(event.getPlayer(), new Location[2]);
-			}
-			Civilizations.getSelectionPoints().get(event.getPlayer())[1] = event.getClickedBlock().getLocation();
+			SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
 			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
 			event.setCancelled(true);
 		}

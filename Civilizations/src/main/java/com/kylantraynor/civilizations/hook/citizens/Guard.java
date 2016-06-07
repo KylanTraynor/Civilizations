@@ -1,26 +1,19 @@
 package com.kylantraynor.civilizations.hook.citizens;
 
-import org.bukkit.entity.LivingEntity;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 
-import net.aufdemrand.sentry.Sentry;
-import net.aufdemrand.sentry.SentryInstance;
-
-public class Guard extends SentryInstance{
+public class Guard{
 
 	Long isRespawnable = System.currentTimeMillis();
 	public Settlement settlement;
-	public GuardTrait myTrait; 
+	public GuardTrait myTrait;
+	private Civilizations plugin; 
 	
-	public Guard(Sentry plugin, Settlement settlement) {
-		super(plugin);
+	public Guard(Civilizations plugin, Settlement settlement) {
+		this.plugin = plugin;
 		this.settlement = settlement;
-	}
-	
-	@Override
-	public boolean isTarget(LivingEntity aTarget){
-		return false;
 	}
 	
 }

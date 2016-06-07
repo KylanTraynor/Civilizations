@@ -174,6 +174,19 @@ public class Sphere extends Shape {
 	}
 
 	@Override
+	public double distance(Shape s) {
+		if(this.intersect(s)) return 0;
+		
+		Location closest = new Location(s.getLocation().getWorld(),
+				Math.max(s.getMinX(), Math.min(s.getMaxX(), getLocation().getX())),
+				Math.max(s.getMinY(), Math.min(s.getMaxY(), getLocation().getY())),
+				Math.max(s.getMinZ(), Math.min(s.getMaxZ(), getLocation().getZ())));
+				
+		
+		return distance(closest);
+	}
+	
+	@Override
 	public double distance(Location l) {
 		return Math.max(getLocation().distance(l) - getRadius(), 0);
 	}

@@ -51,9 +51,9 @@ public class Prism extends Shape {
 
 	@Override
 	boolean isInside(double x, double y, double z) {
-		if(x >= getLocation().getBlockX() && x < getLocation().getBlockX() + width + 1){
-			if(y >= getLocation().getBlockY() && y < getLocation().getBlockY() + height + 1){
-				if(z >= getLocation().getBlockZ() && z < getLocation().getBlockZ() + length + 1){
+		if(Math.floor(x) >= getLocation().getBlockX() && Math.floor(x) <= getLocation().getBlockX() + width){
+			if(Math.floor(y) >= getLocation().getBlockY() && Math.floor(y) < getLocation().getBlockY() + height){
+				if(Math.floor(z) >= getLocation().getBlockZ() && Math.floor(z) < getLocation().getBlockZ() + length){
 					return true;
 				}
 			}
@@ -116,7 +116,7 @@ public class Prism extends Shape {
 				(this.getMinZ() <= p.getMaxZ() && this.getMaxZ() >= p.getMinZ());
 	}
 	
-public boolean intersect(Sphere s){
+	public boolean intersect(Sphere s){
 		
 		int sX = s.getLocation().getBlockX();
 		int sY = s.getLocation().getBlockY();
@@ -161,6 +161,19 @@ public boolean intersect(Sphere s){
 	@Override
 	public int getMaxZ() {
 		return getLocation().getBlockZ() + getLength();
+	}
+	
+	@Override
+	public double distance(Shape s) {
+		if(this.intersect(s)) return 0;
+		
+		Location closest = new Location(s.getLocation().getWorld(),
+				Math.max(s.getMinX(), Math.min(s.getMaxX(), getLocation().getX())),
+				Math.max(s.getMinY(), Math.min(s.getMaxY(), getLocation().getY())),
+				Math.max(s.getMinZ(), Math.min(s.getMaxZ(), getLocation().getZ())));
+				
+		
+		return distance(closest);
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
@@ -251,5 +252,15 @@ public class Settlement extends Group {
 	 */
 	public double getTransactionTax() {
 		return 0.01;
+	}
+	
+	public boolean canMergeWith(Shape s) {
+		double distance = s.getLocation().distance(this.getLocation());
+		for(Plot p : getPlots()){
+			for(Shape shape : p.getProtection().getShapes()){
+				distance = Math.min(shape.distance(s), distance);
+			}
+		}
+		return distance <= Civilizations.settlementMergeRadius;
 	}
 }

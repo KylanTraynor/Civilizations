@@ -21,6 +21,7 @@ public abstract class Shape implements Visualizable{
 	
 	public abstract boolean intersect(Shape s);
 	public abstract double distance(Location l);
+	public abstract double distance(Shape s);
 	public abstract int getMinX();
 	public abstract int getMinY();
 	public abstract int getMinZ();

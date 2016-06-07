@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.util;
 
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,18 @@ import org.bukkit.potion.PotionType;
 
 public class Util {
 
+	public static String join(Iterable<String> list, String link){
+		String result = "";
+		Iterator<String> it = list.iterator();
+		while(it.hasNext()){
+			result = result + it.next();
+			if(it.hasNext()){
+				result = result + link;
+			}
+		}
+		return result;
+	}
+	
 	public static String getMaterialName(ItemStack item) {
 		return getDataName(item.getType(), item.getData().getData(), item.getItemMeta());
 	}
