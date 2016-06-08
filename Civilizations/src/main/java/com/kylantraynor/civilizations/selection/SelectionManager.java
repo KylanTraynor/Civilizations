@@ -46,7 +46,8 @@ public class SelectionManager {
 		UUID id = p.getUniqueId();
 		if(!primaryPoints.containsKey(id)){
 			return;
-		} else if(!secondaryPoints.containsKey(id)){
+		}
+		if(!secondaryPoints.containsKey(id)){
 			return;
 		}
 		Location point1 = primaryPoints.get(id);

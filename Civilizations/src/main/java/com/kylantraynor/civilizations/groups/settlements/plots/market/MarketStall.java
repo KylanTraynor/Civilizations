@@ -33,6 +33,8 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.groups.ActionType;
+import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
@@ -267,6 +269,13 @@ public class MarketStall extends Plot{
 		return false;
 	}
 	
+	public boolean isRenter(OfflinePlayer player){
+		if(getRenter() != null){
+			return getRenter().equals(player);
+		}
+		return false;
+	}
+	
 	/**
 	 * Gets an interactive info panel of this Keep.
 	 * @param player Context
@@ -295,7 +304,9 @@ public class MarketStall extends Plot{
 		if(getRenter() == player){
 			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), this.nextPayment) + " hours").color(ChatColor.GOLD);
 		}
-		fm.then("\nActions: ").color(ChatColor.GRAY);
+		fm.then("\nActions: \n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
+		/*
 		if(isOwner(player)){
 			fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Stall.").suggest("/group " + getId() + " setname NEW NAME");
 			fm.then(" - ").color(ChatColor.GRAY);
@@ -321,9 +332,30 @@ public class MarketStall extends Plot{
 		} else if(getRenter() == null && isForRent()) {
 			fm.then("\nRent").color(ChatColor.GOLD).tooltip("Start renting this Stall").command("/group " + getId() + " join");
 		}
-		
+		*/
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
+	}
+	
+	@Override
+	public List<GroupAction> getGroupActionsFor(Player player){
+		List<GroupAction> list = new ArrayList<GroupAction>();
+		
+		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", isOwner(player) || isRenter(player)));
+		if(isOwner(player)){
+			list.add(new GroupAction("Rentable", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleRentable", isForRent()));
+			list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", getRenter() != null));
+		} else {
+			if(isRenter(player)){
+				list.add(new GroupAction("Leave", "Stop renting this Stall", ActionType.COMMAND, "/group " + getId() + " leave", true));
+			} else {
+				list.add(new GroupAction("Rent", "Start renting this Stall", ActionType.COMMAND, "/group " + getId() + " join", isForRent()));
+			}
+		}
+		list.add(new GroupAction("Price", "Set the rent of this stall", ActionType.SUGGEST, "/group " + getId() + " setRent " + getRent(), isOwner(player)));
+		list.add(new GroupAction("Remove", "Remove this stall and kick anyone renting it", ActionType.COMMAND, "/group " + getId() + " remove", isOwner(player)));
+		
+		return list;
 	}
 	
 	/**

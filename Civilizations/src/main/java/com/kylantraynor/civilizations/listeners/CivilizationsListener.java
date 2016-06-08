@@ -121,21 +121,20 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_AIR){
-			if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
+		if(event.getPlayer() == null) return;
+		if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
+			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_AIR){
 				Civilizations.selectTargetProtection(event.getPlayer());
 				event.setCancelled(true);
+			} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
+				SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
+				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
+				event.setCancelled(true);
+			} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+				SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
+				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
+				event.setCancelled(true);
 			}
-		} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
-			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
-			SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
-			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
-			event.setCancelled(true);
-		} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())) return;
-			SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
-			event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
-			event.setCancelled(true);
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.groups.ActionType;
+import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
@@ -137,6 +140,8 @@ public class Camp extends Settlement{
 		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
 		
+		resPerm.put(PermissionType.MANAGE, true);
+		resPerm.put(PermissionType.UPGRADE, true);
 		resPerm.put(PermissionType.BREAK, true);
 		resPerm.put(PermissionType.PLACE, true);
 		resPerm.put(PermissionType.FIRE, true);
@@ -165,11 +170,15 @@ public class Camp extends Settlement{
 			.command("/group " + this.getId() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
 			.command("/group " + this.getId() + " members")
-			.then("\nActions: ").color(ChatColor.GRAY);
+			.then("\nActions: \n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
+		/*
 		if(this.isMember(player)){
 			fm.then("\nClear").color(ChatColor.GOLD).tooltip("Clear camp").command("/camp clear");
 			fm.then(" - ").color(ChatColor.GRAY);
 			fm.then("Leave").color(ChatColor.GOLD).tooltip("Leave the camp").command("/camp leave");
+			fm.then(" - ").color(ChatColor.GRAY);
+			fm.then("Rename").color(ChatColor.GOLD).tooltip("Rename the camp").suggest("/group " + this.getId() + " rename");
 			fm.then(" - ").color(ChatColor.GRAY);
 			if(ChronoUnit.HOURS.between(Instant.now(), this.getExpireOn()) > 22){
 				fm.then("Renew").color(ChatColor.GRAY).tooltip("Wait for an hour before renewing");
@@ -190,9 +199,26 @@ public class Camp extends Settlement{
 				fm.color(ChatColor.RED).tooltip("One member needs to be online to join the camp.");
 			}
 		}
+		*/
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	} 
+	
+	@Override
+	public List<GroupAction> getGroupActionsFor(Player player){
+		List<GroupAction> list = new ArrayList<GroupAction>();
+		
+		list.add(new GroupAction("Clear", "Clear camp", ActionType.COMMAND, "/camp clear", this.hasPermission(PermissionType.MANAGE, null, player)));
+		if(isMember(player)){
+			list.add(new GroupAction("Leave", "Leaves this camp", ActionType.COMMAND, "/camp leave", true));
+		} else {
+			list.add(new GroupAction("Join", "Ask online members of this camp to join", ActionType.COMMAND, "/camp join", hasOneMemberOnline()));
+		}
+		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Renew", "Renew the camp for 24 hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getId() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player)));
+		return list;
+	}
 	/**
 	 * Gets the camp at the given location.
 	 * @param location

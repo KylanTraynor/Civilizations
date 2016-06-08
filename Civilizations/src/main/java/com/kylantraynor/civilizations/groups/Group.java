@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
@@ -325,8 +326,42 @@ public class Group {
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nActions: \n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
+	}
+
+	/**
+	 * Adds all the commands of this group to a clickable message.
+	 * @param fm Message to add the commands to
+	 * @param actions Actions to add
+	 * @return Same as fm, with the added commands
+	 */
+	public FancyMessage addCommandsTo(FancyMessage fm, List<GroupAction> actions){
+		if(actions.size() > 0){
+			Iterator<GroupAction> it = actions.iterator();
+			while(it.hasNext()){
+				fm = it.next().addTo(fm);
+				if(it.hasNext()){
+					fm.then(" - ").color(ChatColor.GRAY);
+				}
+			}
+		} else {
+			fm.then("You can't do anything right now").color(ChatColor.GRAY);
+		}
+		
+		return fm;
+	}
+	/**
+	 * Gets all the commands available to this group.
+	 * @param player
+	 * @return
+	 */
+	public List<GroupAction> getGroupActionsFor(Player player){
+		List<GroupAction> list = new ArrayList<GroupAction>();
+		
+		return list;
 	}
 	/**
 	 * Gets an interactive list of the members of this group.
