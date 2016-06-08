@@ -602,12 +602,12 @@ public class Civilizations extends JavaPlugin{
 			
 			if(!to.equals(from)){
 				if(to instanceof Camp){
-					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getType(), 10, 40, 10, player);
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
 				} else if(to instanceof SmallOutpost){
-					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getType(), 10, 40, 10, player);
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
