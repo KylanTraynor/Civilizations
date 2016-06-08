@@ -163,7 +163,7 @@ public class Camp extends Settlement{
 	 */
 	@Override
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("CAMP", ChatColor.GREEN))
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
 			.then("" + ChronoUnit.HOURS.between(Instant.now(), getExpireOn()) + " hours").color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
@@ -285,6 +285,7 @@ public class Camp extends Settlement{
 	 */
 	public static Camp load(YamlConfiguration cf){
 		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
+		String name = cf.getString("Name", "Camp");
 		double x = cf.getDouble("Location.X");
 		double y = cf.getDouble("Location.Y");
 		double z = cf.getDouble("Location.Z");
@@ -304,6 +305,7 @@ public class Camp extends Settlement{
 		}
 		
 		Camp c = new Camp(new Location(w, x, y, z));
+		c.setName(name);
 		c.setCreationDate(creation);
 		c.setExpireOn(expireOn);
 		
@@ -324,7 +326,7 @@ public class Camp extends Settlement{
 		File f = getFile();
 		if(f == null) return false;
 		YamlConfiguration fc = new YamlConfiguration();
-		
+		fc.set("Name", getName());
 		fc.set("Location.World", getLocation().getWorld().getName());
 		fc.set("Location.X", getLocation().getBlockX());
 		fc.set("Location.Y", getLocation().getBlockY());

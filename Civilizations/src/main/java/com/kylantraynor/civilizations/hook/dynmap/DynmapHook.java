@@ -251,13 +251,13 @@ public class DynmapHook {
 	    if(campIcon != null){
 	    	Marker camp = markerList.remove(id);
 	    	if (camp == null){
-	    		camp = campMarkerSet.createMarker(id, "Camp", c.getLocation().getWorld().getName(), c.getLocation().getBlockX(), c.getLocation().getBlockY(), c.getLocation().getBlockZ(), campIcon, false);
+	    		camp = campMarkerSet.createMarker(id, c.getName(), c.getLocation().getWorld().getName(), c.getLocation().getBlockX(), c.getLocation().getBlockY(), c.getLocation().getBlockZ(), campIcon, false);
 	    	} else {
 	    		camp.setLocation(c.getLocation().getWorld().getName(),
 	    				c.getLocation().getBlockX(),
 	    				c.getLocation().getBlockY(),
 	    				c.getLocation().getBlockZ());
-	            camp.setLabel("Camp");
+	            camp.setLabel(c.getName());
 	            camp.setMarkerIcon(campIcon);
 	    	}
 	    	StringBuilder sb = new StringBuilder();
