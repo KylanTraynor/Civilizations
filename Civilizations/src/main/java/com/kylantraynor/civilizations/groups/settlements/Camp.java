@@ -216,7 +216,7 @@ public class Camp extends Settlement{
 		}
 		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		list.add(new GroupAction("Renew", "Renew the camp for 24 hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
-		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getId() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player)));
+		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getId() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
 		return list;
 	}
 	/**
