@@ -262,10 +262,10 @@ public class DynmapHook {
 	    	}
 	    	StringBuilder sb = new StringBuilder();
 	    	for(UUID uid : c.getMembers()){
-	    		sb.append(Bukkit.getServer().getOfflinePlayer(uid).getName() + "\n");
+	    		sb.append("<br />" + Bukkit.getServer().getOfflinePlayer(uid).getName());
 	    	}
 	    	camp.setDescription("Expire in " + ChronoUnit.HOURS.between(Instant.now(), c.getExpireOn()) + " hours."
-	    			+ "\nMembers: " + sb.toString());
+	    			+ "<br />Members: " + sb.toString());
 	    	markerList.put(id, camp);
 	    }
 	}
