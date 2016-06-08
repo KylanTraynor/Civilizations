@@ -55,6 +55,7 @@ public class Camp extends Settlement{
 		this.getProtection().add(new Sphere(l, Camp.getSize()), false);
 		Cache.campListChanged = true;
 		setChatColor(ChatColor.GREEN);
+		setName("Camp");
 		setChanged(true);
 	}
 	
@@ -111,11 +112,6 @@ public class Camp extends Settlement{
 	@Override
 	public String getIcon(){
 		return "camp";
-	}
-	
-	@Override
-	public String getName(){
-		return "Camp";
 	}
 	
 	@Override
