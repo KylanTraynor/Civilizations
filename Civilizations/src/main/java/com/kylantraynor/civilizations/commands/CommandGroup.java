@@ -51,7 +51,7 @@ public class CommandGroup implements CommandExecutor {
 					}
 				}
 				break;
-			case "SETNAME":
+			case "SETNAME": case "RENAME":
 				if(sender instanceof Player){
 					if(g instanceof MarketStall){
 						if(((MarketStall)g).isOwner((Player) sender) || ((MarketStall)g).getRenter() == sender){
