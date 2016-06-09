@@ -59,6 +59,9 @@ public class PlayerData {
 	}
 	
 	public void update(){
+		if(Math.random() < 0.01){
+			
+		}
 		if(hasChanged){
 			try{save();} catch (Exception e){e.printStackTrace();}
 		}
