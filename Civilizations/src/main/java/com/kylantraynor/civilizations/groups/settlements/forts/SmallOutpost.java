@@ -23,8 +23,8 @@ import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.groups.settlements.plots.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 

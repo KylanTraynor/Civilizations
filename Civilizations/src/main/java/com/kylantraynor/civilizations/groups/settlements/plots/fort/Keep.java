@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations.groups.settlements.plots;
+package com.kylantraynor.civilizations.groups.settlements.plots.fort;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +20,13 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.groups.settlements.plots.FortComponent;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 
-public class Keep extends Plot{
+public class Keep extends Plot implements FortComponent{
 
 	public Keep(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Keep" : name, shape, settlement);
@@ -35,6 +38,14 @@ public class Keep extends Plot{
 	
 	public PlotType getPlotType(){
 		return PlotType.KEEP;
+	}
+	
+	@Override
+	public Fort getFort(){
+		if(getSettlement() instanceof Fort){
+			return (Fort) getSettlement();
+		}
+		return null;
 	}
 	
 	/**
