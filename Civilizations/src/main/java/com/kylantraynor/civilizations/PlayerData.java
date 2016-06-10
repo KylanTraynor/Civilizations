@@ -60,7 +60,7 @@ public class PlayerData {
 	
 	public void update(){
 		if(Math.random() < 0.01){
-			
+			takeSkillExperience("Alcohol", 1);
 		}
 		if(hasChanged){
 			try{save();} catch (Exception e){e.printStackTrace();}
@@ -133,6 +133,17 @@ public class PlayerData {
 
 	public int getSkillLevel(String skill) {
 		return getLevelForExperience(getSkillExperience(skill));
+	}
+	
+	public String getName(){
+		if(this.config.contains("general.name")){
+			return this.config.getString("general.name");
+		}
+		return null;
+	}
+	
+	public void setName(String newName){
+		this.config.set("general.name", newName);
 	}
 	
 	public int getCampsCreated(){
