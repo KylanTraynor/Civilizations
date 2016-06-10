@@ -61,6 +61,16 @@ public class House extends Plot {
 	}
 	
 
+	@Override
+	public void update(){
+		if(getSettlement() == null){
+			if(Settlement.getAt(getProtection().getCenter()) != null){
+				setSettlement(Settlement.getAt(getProtection().getCenter()));
+			}
+		}
+		super.update();
+	}
+	
 	/**
 	 * Gets the file where this keep is saved.
 	 * @return File
