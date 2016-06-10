@@ -73,7 +73,7 @@ public class CommandPlot implements CommandExecutor {
 			 */
 			} else if(args[0].equalsIgnoreCase("CREATE")){
 				
-				if(SelectionManager.hasSelection((Player) sender)){
+				if(!SelectionManager.hasSelection((Player) sender)){
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection set.");
 					return true;
 				}
