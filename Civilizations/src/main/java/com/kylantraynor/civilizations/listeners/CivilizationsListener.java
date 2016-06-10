@@ -131,7 +131,7 @@ public class CivilizationsListener implements Listener{
 				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
 				event.setCancelled(true);
 			} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-				SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
+				SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
 				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
 				event.setCancelled(true);
 			}
