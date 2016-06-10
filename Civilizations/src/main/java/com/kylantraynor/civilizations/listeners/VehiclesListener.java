@@ -4,6 +4,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 
 public class VehiclesListener implements Listener{
 	
@@ -16,6 +18,17 @@ public class VehiclesListener implements Listener{
 				if(distance < 1.5){
 				} else {
 					event.getPlayer().sendMessage("You're too far from that boat.");
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event){
+		if(event.getPlayer().getVehicle() != null){
+			if(event.getPlayer().getVehicle().getType() == EntityType.BOAT){
+				if(event.getTo().getBlock().getType().isSolid()){
 					event.setCancelled(true);
 				}
 			}
