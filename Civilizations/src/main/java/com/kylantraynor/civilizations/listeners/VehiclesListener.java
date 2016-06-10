@@ -14,8 +14,8 @@ public class VehiclesListener implements Listener{
 			if(event.getRightClicked().getType() == EntityType.BOAT){
 				double distance = event.getRightClicked().getLocation().distance(event.getPlayer().getLocation());
 				if(distance < 1.5){
-					
 				} else {
+					event.getPlayer().sendMessage("You're too far from that boat.");
 					event.setCancelled(true);
 				}
 			}
