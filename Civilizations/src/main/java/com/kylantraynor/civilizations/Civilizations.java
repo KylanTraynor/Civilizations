@@ -214,6 +214,7 @@ public class Civilizations extends JavaPlugin{
 	private void loadPlots() {
 		loadKeeps();
 		loadStalls();
+		loadPlotHouses();
 	}
 
 	private void loadKeeps() {
@@ -279,6 +280,39 @@ public class Civilizations extends JavaPlugin{
 			}
 		}
 	}
+	
+	private void loadPlotHouses() {
+		File plotHousesDir = getHousePlotDirectory();
+		if(plotHousesDir.exists()){
+			log("INFO", "Loading Houses...");
+			for(File f : plotHousesDir.listFiles()){
+				try{
+				if(!f.getName().split("\\.")[1].equals("yml")) continue;
+				if(isClearing() ){
+					log("INFO", "Cleared file " + f.getName());
+					f.delete();
+					continue;
+				}
+				YamlConfiguration yaml = new YamlConfiguration();
+				try {
+					yaml.load(f);
+				} catch (FileNotFoundException e) {
+					log("WARNING", "Couldn't find file " + f.getName());
+				} catch (IOException e) {
+					log("WARNING", "File " + f.getName() + " is in use in another application.");
+				} catch (InvalidConfigurationException e) {
+					log("WARNING", "Invalid file configuration.");
+				}
+				log("INFO", "Loading House from file: " + f.getPath());
+				f.delete();
+				com.kylantraynor.civilizations.groups.settlements.plots.House.load(yaml, loadedSettlements);
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	
 	public static Settlement loadSettlement(String path){
 		log("INFO", "Getting settlement from " + path);
