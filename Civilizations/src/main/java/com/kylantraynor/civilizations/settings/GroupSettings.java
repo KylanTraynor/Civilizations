@@ -1,12 +1,16 @@
 package com.kylantraynor.civilizations.settings;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class GroupSettings extends YamlConfiguration{
 	
 	private Instant creationDate;
+	private List<UUID> members;
 
 	/**
 	 * Gets the creation date of the group.
@@ -50,5 +54,39 @@ public class GroupSettings extends YamlConfiguration{
 	public void setName(String newName){
 		if(newName == null) return;
 		this.set("general.name", newName);
+	}
+	
+	/**
+	 * Gets the list of members of this group.
+	 * @return List<UUID>
+	 */
+	public List<UUID> getMembers(){
+		if(this.members == null) {
+			this.members = new ArrayList<UUID>();
+			if(this.contains("members")){
+				List<?> l = this.getList("members");
+				for(Object o : l){
+					if(o instanceof String){
+						this.members.add(UUID.fromString((String) o));
+					}
+				}
+			}
+		}
+		return this.members;
+	}
+	
+	/**
+	 * Sets the list of members of this group.
+	 * @param list
+	 */
+	public void setMembers(List<UUID> list){
+		List<String> l = new ArrayList<String>();
+		if(list != null){
+			for(UUID id : list){
+				l.add(id.toString());
+			}
+		}
+		this.members = list;
+		this.set("members", l);
 	}
 }

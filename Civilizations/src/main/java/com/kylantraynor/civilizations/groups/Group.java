@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -48,7 +49,7 @@ public class Group {
 	
 	private int id;
 	private List<UUID> members;
-	private boolean hasChanged;
+	private boolean hasChanged = true;
 	private Protection protection;
 	private ChatColor chatColor;
 	private GroupSettings settings = new GroupSettings();
@@ -135,13 +136,13 @@ public class Group {
 	 * Gets the list of all the members of this group.
 	 * @return List<UUID> of the members
 	 */
-	public List<UUID> getMembers() {return members;}
+	public List<UUID> getMembers() {return this.settings.getMembers();}
 	/**
 	 * Sets the list of all the members of this group.
 	 * @param members
 	 */
 	public void setMembers(List<UUID> members) {
-		this.members = members;
+		this.settings.setMembers(members);
 		setChanged(true);
 	}
 	/**
@@ -150,8 +151,9 @@ public class Group {
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
 	public boolean addMember(OfflinePlayer member){
-		if(this.members.contains(member.getUniqueId())) return false;
-		this.members.add(member.getUniqueId());
+		if(getMembers().contains(member.getUniqueId())) return false;
+		getMembers().add(member.getUniqueId());
+		setMembers(getMembers());
 		setChanged(true);
 		return true;
 	}
@@ -161,8 +163,9 @@ public class Group {
 	 * @return true if the player has been removed, false otherwise.
 	 */
 	public boolean removeMember(OfflinePlayer member){
-		if(this.members.contains(member.getUniqueId())){
-			this.members.remove(member.getUniqueId());
+		if(getMembers().contains(member.getUniqueId())){
+			getMembers().remove(member.getUniqueId());
+			setMembers(getMembers());
 			setChanged(true);
 			return true;
 		}
@@ -229,6 +232,24 @@ public class Group {
 		}
 		return f;
 	}
+	
+	/**
+	 * Loads the data from the file into the given group.
+	 * @param file
+	 * @param group
+	 * @return
+	 */
+	public static <T extends Group> T load(File file, T group){
+		if(file == null) return null;
+		try {
+			group.getSettings().load(file);
+			return group;
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * Loads group from its configuration file.
 	 * @param cf
@@ -262,6 +283,15 @@ public class Group {
 	public boolean save(){
 		File f = getFile();
 		if(f == null) return false;
+		try {
+			this.settings.save(f);
+			return true;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return false;
+		/*
 		YamlConfiguration fc = new YamlConfiguration();
 		
 		fc.set("Creation", getCreationDate().toString());
@@ -279,6 +309,7 @@ public class Group {
 		} catch (IOException e) {
 			return false;
 		}
+		*/
 	}
 	/**
 	 * Updates the group.

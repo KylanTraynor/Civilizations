@@ -126,11 +126,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.puharesource.mc</groupId>
-				<artifactId>TitleManager</artifactId>
-				<version>1.5.11</version>
-			</dependency>
-			<dependency>
 				<groupId>org.dynmap</groupId>
 				<artifactId>dynmap-api</artifactId>
 				<version>1.9</version>
@@ -189,6 +184,11 @@
 				<groupId>org.bukkit</groupId>
 				<artifactId>bukkit</artifactId>
 				<version>1.10-R0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>io.puharesource.mc</groupId>
+				<artifactId>TitleManager</artifactId>
+				<version>1.5.11</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

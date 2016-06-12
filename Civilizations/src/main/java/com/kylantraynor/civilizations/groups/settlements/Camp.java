@@ -38,6 +38,8 @@ import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.TargetType;
+import com.kylantraynor.civilizations.settings.CampSettings;
+import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
@@ -57,6 +59,11 @@ public class Camp extends Settlement{
 		setChatColor(ChatColor.GREEN);
 		setName("Camp");
 		setChanged(true);
+	}
+	
+	@Override
+	public CampSettings getSettings() {
+		return (CampSettings)super.getSettings();
 	}
 	
 	@Override
