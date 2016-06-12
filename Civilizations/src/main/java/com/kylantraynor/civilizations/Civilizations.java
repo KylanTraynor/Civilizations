@@ -439,7 +439,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			
 		};
-		br.runTaskTimer(this, 0, interval);
+		br.runTaskTimer(this, (long) (Math.random() * 20), interval);
 	}
 	
 	public static void updateAllGroups(){
@@ -462,7 +462,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			
 		};
-		br.runTaskTimer(this, 0, interval);
+		br.runTaskTimer(this, (long) (Math.random() * 20), interval);
 	}
 	
 	/**
@@ -484,7 +484,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			
 		};
-		pr.runTaskTimerAsynchronously(this, interval, interval);
+		pr.runTaskTimerAsynchronously(this, (long) (Math.random() * interval), interval);
 	}
 	
 	/**
