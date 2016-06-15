@@ -56,6 +56,7 @@ public class Camp extends Settlement{
 		super(l);
 		this.getProtection().add(new Sphere(l, Camp.getSize()), false);
 		Cache.campListChanged = true;
+		setSettings(new CampSettings());
 		setChatColor(ChatColor.GREEN);
 		setName("Camp");
 		setChanged(true);
