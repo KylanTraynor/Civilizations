@@ -48,6 +48,12 @@ public class CommandGroup implements CommandExecutor {
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + "Stall has been removed.");
 						}
+					} else {
+						if(g.hasPermission(PermissionType.MANAGE, null, (Player) sender)){
+							String name = g.getName();
+							g.remove();
+							sender.sendMessage(ChatColor.GREEN + name + " has been removed.");
+						}
 					}
 				}
 				break;
