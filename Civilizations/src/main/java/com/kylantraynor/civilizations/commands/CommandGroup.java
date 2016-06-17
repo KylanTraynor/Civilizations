@@ -47,15 +47,18 @@ public class CommandGroup implements CommandExecutor {
 						if(((MarketStall) g).isOwner((Player) sender)){
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + "Stall has been removed.");
+							return true;
 						}
 					} else {
 						if(g.hasPermission(PermissionType.MANAGE, null, (Player) sender)){
 							String name = g.getName();
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + name + " has been removed.");
+							return true;
 						}
 					}
 				}
+				sender.sendMessage(ChatColor.RED + "You can't remove " + g.getName() + ".");
 				break;
 			case "SETNAME": case "RENAME":
 				if(sender instanceof Player){
