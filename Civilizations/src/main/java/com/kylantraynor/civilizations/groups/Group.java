@@ -61,12 +61,16 @@ public class Group {
 		} else {
 			this.setId(list.size() - 1);
 		}
-		members = new ArrayList<UUID>();
+		init();
 		Cache.groupListChanged = true;
+		setChanged(true);
+	}
+	
+	public void init(){
+		members = new ArrayList<UUID>();
 		chatColor = ChatColor.WHITE;
 		protection = new Protection();
 		setCreationDate(Instant.now());
-		setChanged(true);
 	}
 	
 	public String getChatHeader(){
