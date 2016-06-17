@@ -156,8 +156,9 @@ public class Group {
 	 */
 	public boolean addMember(OfflinePlayer member){
 		if(getMembers().contains(member.getUniqueId())) return false;
-		getMembers().add(member.getUniqueId());
-		setMembers(getMembers());
+		List<UUID> members = getMembers();
+		members.add(member.getUniqueId());
+		setMembers(members);
 		setChanged(true);
 		return true;
 	}
@@ -168,8 +169,9 @@ public class Group {
 	 */
 	public boolean removeMember(OfflinePlayer member){
 		if(getMembers().contains(member.getUniqueId())){
-			getMembers().remove(member.getUniqueId());
-			setMembers(getMembers());
+			List<UUID> members = getMembers();
+			members.remove(member.getUniqueId());
+			setMembers(members);
 			setChanged(true);
 			return true;
 		}
