@@ -54,6 +54,7 @@ public class Camp extends Settlement{
 	
 	public Camp(Location l) {
 		super(l);
+		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		Cache.campListChanged = true;
 	}
 	
@@ -62,7 +63,6 @@ public class Camp extends Settlement{
 		setSettings(new CampSettings());
 		setName("Camp");
 		super.init();
-		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		setChatColor(ChatColor.GREEN);
 	}
 	

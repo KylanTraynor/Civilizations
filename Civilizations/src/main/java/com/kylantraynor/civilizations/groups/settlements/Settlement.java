@@ -35,6 +35,11 @@ public class Settlement extends Group {
 		super();
 		this.location = l;
 		Cache.settlementListChanged = true;
+	}
+	
+	@Override
+	public void init(){
+		super.init();
 		setChatColor(ChatColor.GRAY);
 	}
 	/**
