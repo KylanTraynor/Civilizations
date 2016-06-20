@@ -101,13 +101,13 @@ public class Settlement extends Group {
 	 * Gets the location of this settlement.
 	 * @return Location
 	 */
-	public Location getLocation() {return location;}
+	public Location getLocation() {return getSettings().getLocation();}
 	/**
 	 * Sets the location of this settlement.
 	 * @param location
 	 */
 	public void setLocation(Location location) {
-		this.location = location;
+		getSettings().setLocation(location);
 		setChanged(true);
 	}
 	/**
