@@ -266,7 +266,7 @@ public class Group {
 	 * Do things right after the settings of the group are loaded.
 	 */
 	public void postLoad(){
-		
+		this.setChanged(true);
 	}
 	
 	/**

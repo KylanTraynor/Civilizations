@@ -61,6 +61,7 @@ public class Camp extends Settlement{
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setDefaultPermissions();
 		Cache.campListChanged = true;
+		super.postLoad();
 	}
 	
 	public Camp(Location l) {
