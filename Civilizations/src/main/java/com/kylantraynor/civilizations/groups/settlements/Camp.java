@@ -60,10 +60,14 @@ public class Camp extends Settlement{
 	
 	@Override
 	public void init(){
-		setSettings(new CampSettings());
 		setName("Camp");
 		super.init();
 		setChatColor(ChatColor.GREEN);
+	}
+	
+	@Override
+	public void initSettings(){
+		setSettings(new CampSettings());
 	}
 	
 	@Override

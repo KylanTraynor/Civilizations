@@ -14,6 +14,8 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.settings.CampSettings;
+import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Settlement extends Group {
@@ -33,7 +35,7 @@ public class Settlement extends Group {
 	
 	public Settlement(Location l){
 		super();
-		this.location = l;
+		setLocation(l);
 		Cache.settlementListChanged = true;
 	}
 	
@@ -41,6 +43,16 @@ public class Settlement extends Group {
 	public void init(){
 		super.init();
 		setChatColor(ChatColor.GRAY);
+	}
+	
+	@Override
+	public void initSettings(){
+		setSettings(new SettlementSettings());
+	}
+	
+	@Override
+	public SettlementSettings getSettings() {
+		return (SettlementSettings)super.getSettings();
 	}
 	/**
 	 * Gets the list of plots of this settlement.

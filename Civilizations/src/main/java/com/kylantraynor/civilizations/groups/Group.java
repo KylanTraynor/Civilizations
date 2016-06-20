@@ -52,7 +52,7 @@ public class Group {
 	private boolean hasChanged = true;
 	private Protection protection;
 	private ChatColor chatColor;
-	private GroupSettings settings = new GroupSettings();
+	private GroupSettings settings;
 	
 	public Group(){
 		list.add(this);
@@ -61,6 +61,7 @@ public class Group {
 		} else {
 			this.setId(list.size() - 1);
 		}
+		initSettings();
 		init();
 		Cache.groupListChanged = true;
 		setChanged(true);
@@ -71,6 +72,10 @@ public class Group {
 		chatColor = ChatColor.WHITE;
 		protection = new Protection();
 		setCreationDate(Instant.now());
+	}
+	
+	public void initSettings(){
+		setSettings(new GroupSettings());
 	}
 	
 	public String getChatHeader(){
