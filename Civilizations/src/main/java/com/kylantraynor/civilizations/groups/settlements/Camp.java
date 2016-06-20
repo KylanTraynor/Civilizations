@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -26,6 +27,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -52,12 +54,22 @@ public class Camp extends Settlement{
 		return ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + getName() + ChatColor.GOLD + "] "; 
 	}
 	
-	public Camp(Location l) {
-		super(l);
+	public Camp() { super(); }
+	
+	@Override
+	public void postLoad(){
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
+		this.setDefaultPermissions();
 		Cache.campListChanged = true;
 	}
 	
+	public Camp(Location l) {
+		super(l);
+		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
+		this.setDefaultPermissions();
+		Cache.campListChanged = true;
+	}
+
 	@Override
 	public void init(){
 		setName("Camp");
@@ -74,6 +86,7 @@ public class Camp extends Settlement{
 	public CampSettings getSettings() {
 		return (CampSettings)super.getSettings();
 	}
+	
 	
 	@Override
 	public boolean isUpgradable(){

@@ -254,11 +254,19 @@ public class Group {
 		if(file == null) return null;
 		try {
 			group.getSettings().load(file);
+			group.postLoad();
 			return group;
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * Do things right after the settings of the group are loaded.
+	 */
+	public void postLoad(){
+		
 	}
 	
 	/**

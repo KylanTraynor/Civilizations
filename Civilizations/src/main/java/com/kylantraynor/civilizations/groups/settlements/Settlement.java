@@ -33,6 +33,8 @@ public class Settlement extends Group {
 	 */
 	public String getIcon(){return null;}
 	
+	public Settlement() { super(); }
+	
 	public Settlement(Location l){
 		super();
 		setLocation(l);

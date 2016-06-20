@@ -540,7 +540,8 @@ public class Civilizations extends JavaPlugin{
 					f.delete();
 					continue;
 				}
-				YamlConfiguration yaml = new YamlConfiguration();
+				Camp c = Group.load(f, new Camp());
+				/*YamlConfiguration yaml = new YamlConfiguration();
 				try {
 					yaml.load(f);
 				} catch (FileNotFoundException e) {
@@ -550,9 +551,8 @@ public class Civilizations extends JavaPlugin{
 				} catch (InvalidConfigurationException e) {
 					log("WARNING", "Invalid file configuration.");
 				}
+				*/
 				f.delete();
-				Camp c = Camp.load(yaml);
-				c.setDefaultPermissions();
 			}
 		}
 	}
