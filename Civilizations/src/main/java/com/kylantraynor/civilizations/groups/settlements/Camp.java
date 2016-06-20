@@ -325,10 +325,7 @@ public class Camp extends Settlement{
 		
 		return c;
 	}
-	/**
-	 * Saves the camp to its file.
-	 * @return true if the camp has been saved, false otherwise.
-	 */
+	/*
 	@Override
 	public boolean save(){
 		File f = getFile();
@@ -357,6 +354,7 @@ public class Camp extends Settlement{
 			return false;
 		}
 	}
+	*/
 	/**
 	 * Gets the closest camp around the given location.
 	 * @param l

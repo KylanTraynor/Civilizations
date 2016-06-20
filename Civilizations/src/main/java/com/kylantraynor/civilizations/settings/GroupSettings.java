@@ -19,9 +19,9 @@ public class GroupSettings extends YamlConfiguration{
 	public Instant getCreationDate() {
 		if(creationDate != null) return creationDate;
 		creationDate = Instant.now();
-		if(this.contains("general.creationDate")){
+		if(this.contains("General.CreationDate")){
 			try{
-				creationDate = Instant.parse(this.getString("general.creationDate"));
+				creationDate = Instant.parse(this.getString("General.CreationDate"));
 			} catch (Exception e){}
 		}
 		return creationDate;
@@ -33,7 +33,7 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public void setCreationDate(Instant date){
 		creationDate = date == null ? Instant.now() : date;
-		this.set("general.creationDate", creationDate.toString());
+		this.set("General.CreationDate", creationDate.toString());
 	}
 	
 	/**
@@ -41,8 +41,8 @@ public class GroupSettings extends YamlConfiguration{
 	 * @return String
 	 */
 	public String getName(){
-		if(this.contains("general.name")){
-			return this.getString("general.name");
+		if(this.contains("General.Name")){
+			return this.getString("General.Name");
 		}
 		return "Group";
 	}
@@ -53,7 +53,7 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public void setName(String newName){
 		if(newName == null) return;
-		this.set("general.name", newName);
+		this.set("General.Name", newName);
 	}
 	
 	/**
@@ -63,8 +63,8 @@ public class GroupSettings extends YamlConfiguration{
 	public List<UUID> getMembers(){
 		if(this.members == null) {
 			this.members = new ArrayList<UUID>();
-			if(this.contains("members")){
-				List<?> l = this.getList("members");
+			if(this.contains("Members")){
+				List<?> l = this.getList("Members");
 				for(Object o : l){
 					if(o instanceof String){
 						this.members.add(UUID.fromString((String) o));
@@ -87,6 +87,6 @@ public class GroupSettings extends YamlConfiguration{
 			}
 		}
 		this.members = list;
-		this.set("members", l);
+		this.set("Members", l);
 	}
 }

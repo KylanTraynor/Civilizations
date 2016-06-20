@@ -290,7 +290,8 @@ public class Group {
 		File f = getFile();
 		if(f == null) return false;
 		try {
-			this.settings.save(f);
+			getSettings().save(f);
+			setChanged(false);
 			return true;
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
