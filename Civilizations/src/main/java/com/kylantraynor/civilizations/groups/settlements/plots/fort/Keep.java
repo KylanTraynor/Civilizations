@@ -56,9 +56,9 @@ public class Keep extends Plot implements FortComponent{
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(getCreationDate() != null){
+		if(getSettings().getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		String houseInfoCommand = "/house " + ((Fort)getSettlement()).getHouse().getName() + " info";
 		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
@@ -126,7 +126,7 @@ public class Keep extends Plot implements FortComponent{
 			
 		}
 		Keep g = new Keep(name, Plot.parseShapes(shapes), settlement);
-		g.setCreationDate(creation);
+		g.getSettings().setCreationDate(creation);
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
@@ -152,7 +152,7 @@ public class Keep extends Plot implements FortComponent{
 			fc.set("SettlementPath", null);
 		}
 		fc.set("Shape", getShapesString());
-		fc.set("Creation", getCreationDate().toString());
+		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;
 		for(UUID id : getMembers()){

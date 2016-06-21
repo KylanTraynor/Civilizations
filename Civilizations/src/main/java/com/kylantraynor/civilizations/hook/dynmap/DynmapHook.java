@@ -208,11 +208,11 @@ public class DynmapHook {
 	    	// Taxes
 	    	String taxes = "Transaction Taxes:<ul>";
 	    	if(m.getSettlement() != null){
-	    		taxes += "<li>" + m.getSettlement().getName() + ": " + (m.getSettlement().getTransactionTax() * 100) + "%</li>";
+	    		taxes += "<li>" + m.getSettlement().getName() + ": " + (m.getSettlement().getSettings().getTransactionTax() * 100) + "%</li>";
 	    	}
 	    	Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
 	    	if(f != null){
-	    		taxes += "<li>" + f.getName() + ": " + (f.getTransactionTax() * 100) + "%</li>";
+	    		taxes += "<li>" + f.getName() + ": " + (f.getSettings().getTransactionTax() * 100) + "%</li>";
 	    	}
 	    	taxes += "</ul>";
 	    	description = description.replace("%Taxes%", taxes);

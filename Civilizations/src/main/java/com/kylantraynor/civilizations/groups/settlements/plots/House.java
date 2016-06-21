@@ -40,9 +40,9 @@ public class House extends Plot {
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(getCreationDate() != null){
+		if(getSettings().getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
@@ -93,6 +93,7 @@ public class House extends Plot {
 	 * @param cf
 	 * @return Group
 	 */
+	@Deprecated
 	public static House load(YamlConfiguration cf, Map<String, Settlement> settlements){
 		if(cf == null) return null;
 		Instant creation;
@@ -117,7 +118,7 @@ public class House extends Plot {
 			
 		}
 		House g = new House(name, Plot.parseShapes(shapes), settlement);
-		g.setCreationDate(creation);
+		g.getSettings().setCreationDate(creation);
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
@@ -143,7 +144,7 @@ public class House extends Plot {
 			fc.set("SettlementPath", null);
 		}
 		fc.set("Shape", getShapesString());
-		fc.set("Creation", getCreationDate().toString());
+		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;
 		for(UUID id : getMembers()){

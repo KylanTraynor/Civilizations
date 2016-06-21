@@ -37,6 +37,7 @@ public class SettlementSettings extends GroupSettings{
 			this.set("General.Location", null);
 		}
 		this.location = location;
+		this.setChanged(true);
 	}
 	
 }

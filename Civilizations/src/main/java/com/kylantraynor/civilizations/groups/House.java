@@ -110,9 +110,9 @@ public class House extends Group implements IHasBanner{
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("HOUSE " + getName().toUpperCase(), null));
 		fm.then("\nWords: ").color(ChatColor.GRAY).then(getWords()).color(ChatColor.GOLD);
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(getCreationDate() != null){
+		if(getSettings().getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("\nCurrent Lord: ").color(ChatColor.GRAY).
 			then("" + getLordName()).color(ChatColor.GOLD);
@@ -157,6 +157,7 @@ public class House extends Group implements IHasBanner{
 	 * @param cf
 	 * @return House
 	 */
+	@Deprecated
 	public static House load(YamlConfiguration cf){
 		String name;
 		String words;
@@ -173,7 +174,7 @@ public class House extends Group implements IHasBanner{
 		}
 		
 		House h = new House(name, Banner.parse(cf.getString("Banner")));
-		h.setCreationDate(creation);
+		h.getSettings().setCreationDate(creation);
 		if(words != null){
 			h.setWords(words);
 		}
@@ -232,7 +233,7 @@ public class House extends Group implements IHasBanner{
 		if(f == null) return false;
 		YamlConfiguration fc = new YamlConfiguration();
 		fc.set("Name", getName());
-		fc.set("Creation", getCreationDate().toString());
+		fc.set("Creation", getSettings().getCreationDate().toString());
 		fc.set("Banner", getBanner().toString());
 		fc.set("Words", getWords());
 		if(getLord() != null){

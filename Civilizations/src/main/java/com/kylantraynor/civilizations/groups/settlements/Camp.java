@@ -48,7 +48,6 @@ import com.kylantraynor.civilizations.shapes.Sphere;
 public class Camp extends Settlement{
 	
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + "CAMP" + ChatColor.GOLD + "] ";
-	private Instant expireOn;
 	
 	public String getChatHeader(){
 		return ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + getName() + ChatColor.GOLD + "] "; 
@@ -67,6 +66,7 @@ public class Camp extends Settlement{
 	public Camp(Location l) {
 		super(l);
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
+		this.setExpireOn(Instant.now());
 		this.setDefaultPermissions();
 		Cache.campListChanged = true;
 	}
@@ -146,7 +146,7 @@ public class Camp extends Settlement{
 	
 	@Override
 	public void update(){
-		if(Instant.now().isAfter(expireOn)) remove();
+		if(Instant.now().isAfter(getExpireOn())) remove();
 		super.update();
 	}
 	
@@ -270,14 +270,14 @@ public class Camp extends Settlement{
 	 * @return Instant
 	 */
 	public Instant getExpireOn() {
-		return expireOn;
+		return getSettings().getExpiryDate();
 	}
 	/**
 	 * Sets the date this camp will expire on.
 	 * @param expireOn
 	 */
 	public void setExpireOn(Instant expireOn) {
-		this.expireOn = expireOn;
+		getSettings().setExpiryDate(expireOn);
 		setChanged(true);
 	}
 	/**
@@ -309,6 +309,7 @@ public class Camp extends Settlement{
 	 * @param cf
 	 * @return Camp
 	 */
+	@Deprecated
 	public static Camp load(YamlConfiguration cf){
 		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
 		String name = cf.getString("Name", "Camp");
@@ -332,7 +333,7 @@ public class Camp extends Settlement{
 		
 		Camp c = new Camp(new Location(w, x, y, z));
 		c.setName(name);
-		c.setCreationDate(creation);
+		c.getSettings().setCreationDate(creation);
 		c.setExpireOn(expireOn);
 		
 		int i = 0;

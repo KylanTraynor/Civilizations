@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.settings;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 public class CampSettings extends SettlementSettings{
 	
@@ -12,7 +13,7 @@ public class CampSettings extends SettlementSettings{
 	 */
 	public Instant getExpiryDate() {
 		if(expiryDate != null) return expiryDate;
-		expiryDate = Instant.now();
+		expiryDate = Instant.now().plus(1, ChronoUnit.DAYS);
 		if(this.contains("General.ExpiryDate")){
 			try{
 				expiryDate = Instant.parse(this.getString("General.ExpiryDate"));
@@ -26,8 +27,9 @@ public class CampSettings extends SettlementSettings{
 	 * @param date
 	 */
 	public void setExpiryDate(Instant date){
-		expiryDate = date == null ? Instant.now() : date;
+		expiryDate = date == null ? Instant.now().plus(1, ChronoUnit.DAYS) : date;
 		this.set("General.ExpiryDate", expiryDate.toString());
+		this.setChanged(true);
 	}
 	
 }

@@ -73,9 +73,9 @@ public class SmallOutpost extends Fort{
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(getCreationDate() != null){
+		if(getSettings().getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		String houseInfoCommand = "/house " + this.getHouse().getName() + " info";
 		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
@@ -108,6 +108,7 @@ public class SmallOutpost extends Fort{
 	 * @param cf
 	 * @return SmallOutpost
 	 */
+	@Deprecated
 	public static SmallOutpost load(YamlConfiguration cf){
 		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
 		double x = cf.getDouble("Location.X");
@@ -123,7 +124,7 @@ public class SmallOutpost extends Fort{
 		}
 		House h = House.get(house);
 		SmallOutpost o = new SmallOutpost(new Location(w, x, y, z), House.get(house));
-		o.setCreationDate(creation);
+		o.getSettings().setCreationDate(creation);
 		o.setHouse(h);
 		
 		int i = 0;
@@ -150,7 +151,7 @@ public class SmallOutpost extends Fort{
 		fc.set("Location.Y", getLocation().getBlockY());
 		fc.set("Location.Z", getLocation().getBlockZ());
 		
-		fc.set("Creation", getCreationDate().toString());
+		fc.set("Creation", getSettings().getCreationDate().toString());
 		fc.set("House", getHouse().getName());
 		fc.set("Influence", getInfluence());
 		

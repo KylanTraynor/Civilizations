@@ -59,9 +59,9 @@ public class TaxationEvent extends Event implements Cancellable{
 	public double getRemainingAmount(){
 		switch(getType()){
 		case RENT:
-			return getTaxedAmount() * (1.0 - getTaxingGroup().getStallRentTax());
+			return getTaxedAmount() * (1.0 - getTaxingGroup().getSettings().getStallRentTax());
 		case TRANSACTION:
-			return getTaxedAmount() * (1.0 - getTaxingGroup().getTransactionTax());
+			return getTaxedAmount() * (1.0 - getTaxingGroup().getSettings().getTransactionTax());
 		default:
 			return getTaxedAmount();
 		}
@@ -70,9 +70,9 @@ public class TaxationEvent extends Event implements Cancellable{
 	public double getTaxes(){
 		switch(getType()){
 		case RENT:
-			return getTaxedAmount() * (getTaxingGroup().getStallRentTax());
+			return getTaxedAmount() * (getTaxingGroup().getSettings().getStallRentTax());
 		case TRANSACTION:
-			return getTaxedAmount() * (getTaxingGroup().getTransactionTax());
+			return getTaxedAmount() * (getTaxingGroup().getSettings().getTransactionTax());
 		default:
 			return 0;
 		}

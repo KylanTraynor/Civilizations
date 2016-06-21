@@ -522,7 +522,7 @@ public class Civilizations extends JavaPlugin{
 				} catch (InvalidConfigurationException e) {
 					log("WARNING", "Invalid file configuration.");
 				}
-				Group.load(yaml);
+				//Group.load(yaml);
 			}
 		}
 	}

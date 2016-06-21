@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.settings;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,24 @@ public class GroupSettings extends YamlConfiguration{
 	
 	private Instant creationDate;
 	private List<UUID> members;
+	private boolean changed = true;
 
+	/**
+	 * Checks if the settings need to be saved.
+	 * @return
+	 */
+	public boolean hasChanged() {
+		return changed;
+	}
+
+	/**
+	 * Sets whether or not the settings should be saved.
+	 * @param changed
+	 */
+	public void setChanged(boolean changed) {
+		this.changed = changed;
+	}
+	
 	/**
 	 * Gets the creation date of the group.
 	 * @return Instant
@@ -34,6 +53,7 @@ public class GroupSettings extends YamlConfiguration{
 	public void setCreationDate(Instant date){
 		creationDate = date == null ? Instant.now() : date;
 		this.set("General.CreationDate", creationDate.toString());
+		this.setChanged(true);
 	}
 	
 	/**
@@ -54,6 +74,7 @@ public class GroupSettings extends YamlConfiguration{
 	public void setName(String newName){
 		if(newName == null) return;
 		this.set("General.Name", newName);
+		this.setChanged(true);
 	}
 	
 	/**
@@ -88,5 +109,51 @@ public class GroupSettings extends YamlConfiguration{
 		}
 		this.members = list;
 		this.set("Members", l);
+		this.setChanged(true);
+	}
+
+	/**
+	 * Gets the tax on stalls rental.
+	 * @return
+	 */
+	public double getStallRentTax() {
+		return this.getDouble("Taxes.Rental.Stalls", 0.01);
+	}
+	
+	/**
+	 * Sets the tax on stalls rental.
+	 * @param newTax
+	 */
+	public void setStallRentTax(double newTax){
+		this.set("Taxes.Rental.Stalls", newTax);
+		this.setChanged(true);
+	}
+
+	/**
+	 * Gets the tax on shop transactions.
+	 * @return
+	 */
+	public double getTransactionTax() {
+		return this.getDouble("Taxes.Transactions", 0.01);
+	}
+	
+	/**
+	 * Sets the tax on shop transactions.
+	 * @param newTax
+	 */
+	public void setTransactionTax(double newTax){
+		this.set("Taxes.Transactions", newTax);
+		this.setChanged(true);
+	}
+	
+	@Override
+	public void save(File file){
+		if(file == null) return;
+		try{
+			super.save(file);
+			this.setChanged(false);
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 }

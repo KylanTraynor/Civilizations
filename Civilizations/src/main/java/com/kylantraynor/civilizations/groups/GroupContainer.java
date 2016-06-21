@@ -27,6 +27,11 @@ public class GroupContainer extends Group {
 		}
 		return list;
 	}
+	
+	@Override
+	public void setMembers(List<UUID> list){
+		return;
+	}
 
 	public List<Group> getGroups() {
 		return groups;

@@ -33,9 +33,6 @@ public class CommandCamp extends CommandGroup{
 				}
 				Camp c = new Camp(p.getLocation());
 				c.addMember(p);
-				c.setCreationDate(Instant.now());
-				c.setDefaultPermissions();
-				c.setExpireOn(Instant.now().plus(1, ChronoUnit.DAYS));
 				p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp created!");
 				p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camps only last a day. Make sure to Renew it on the " + ChatColor.GOLD + "/camp" + ChatColor.GREEN + " screen!");
 			}
@@ -49,7 +46,7 @@ public class CommandCamp extends CommandGroup{
 				} else if(!c.isMember(p)){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're not part of this camp.");
 				} else {
-					if(ChronoUnit.HOURS.between(Instant.now(), c.getExpireOn()) > 22){
+					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > 22){
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "You can only renew the camp once a day.");
 					} else {
 						c.setExpireOn(Instant.now().plus(1, ChronoUnit.DAYS));

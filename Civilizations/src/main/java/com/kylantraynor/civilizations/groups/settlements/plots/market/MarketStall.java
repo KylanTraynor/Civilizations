@@ -206,15 +206,15 @@ public class MarketStall extends Plot{
 				double payout = rent;
 				//Pay Settlement's Stall Tax
 				if(getSettlement() != null){
-					if(Economy.depositSettlement(getSettlement(), rent * getSettlement().getStallRentTax())){
-						payout -= rent * getSettlement().getStallRentTax();
+					if(Economy.depositSettlement(getSettlement(), rent * getSettlement().getSettings().getStallRentTax())){
+						payout -= rent * getSettlement().getSettings().getStallRentTax();
 					}
 				}
 				//Pay Fort's Stall Tax
 				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
-					if(Economy.depositSettlement(f, rent * f.getStallRentTax())){
-						payout -= rent * f.getStallRentTax();
+					if(Economy.depositSettlement(f, rent * f.getSettings().getStallRentTax())){
+						payout -= rent * f.getSettings().getStallRentTax();
 					}
 				}
 				//Pay Owner
@@ -234,8 +234,8 @@ public class MarketStall extends Plot{
 				//Pay Fort's Stall Tax
 				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
-					if(Economy.depositSettlement(f, rent * f.getStallRentTax())){
-						payout -= rent * f.getStallRentTax();
+					if(Economy.depositSettlement(f, rent * f.getSettings().getStallRentTax())){
+						payout -= rent * f.getSettings().getStallRentTax();
 					}
 				}
 				//Pay Settlement
@@ -407,7 +407,7 @@ public class MarketStall extends Plot{
 			
 		}
 		MarketStall g = new MarketStall(name, Plot.parseShapes(shapes), settlement);
-		g.setCreationDate(creation);
+		g.getSettings().setCreationDate(creation);
 		if(cf.contains("Owner")){
 			UUID id = UUID.fromString(cf.getString("Owner"));
 			if(id != null){
@@ -459,7 +459,7 @@ public class MarketStall extends Plot{
 		fc.set("IsForRent", isForRent());
 		fc.set("Rent", getRent());
 		fc.set("NextPayment", nextPayment.toString());
-		fc.set("Creation", getCreationDate().toString());
+		fc.set("Creation", getSettings().getCreationDate().toString());
 		if(owner != null){
 			fc.set("Owner", owner.toString());
 		}

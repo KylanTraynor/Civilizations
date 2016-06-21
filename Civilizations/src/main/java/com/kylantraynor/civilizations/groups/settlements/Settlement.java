@@ -259,20 +259,10 @@ public class Settlement extends Group {
 	}
 	
 	/**
-	 * Gets the tax percent on stalls rent.
-	 * @return double [0 - 1]
+	 * Checks if the given shape is within the merge distance of this settlement.
+	 * @param s
+	 * @return
 	 */
-	public double getStallRentTax() {
-		return 0.01;
-	}
-	/**
-	 * Gets the tax percent on transactions.
-	 * @return double [0 - 1]
-	 */
-	public double getTransactionTax() {
-		return 0.01;
-	}
-	
 	public boolean canMergeWith(Shape s) {
 		double distance = s.getLocation().distance(this.getLocation());
 		for(Plot p : getPlots()){

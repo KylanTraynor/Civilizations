@@ -34,6 +34,11 @@ import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.GroupSettings;
 
+/**
+ * A group contains members (players).
+ * @author Baptiste
+ *
+ */
 public class Group {
 	
 	private static ArrayList<Group> list = new ArrayList<Group>();
@@ -71,7 +76,7 @@ public class Group {
 		members = new ArrayList<UUID>();
 		chatColor = ChatColor.WHITE;
 		protection = new Protection();
-		setCreationDate(Instant.now());
+		getSettings().setCreationDate(Instant.now());
 	}
 	
 	public void initSettings(){
@@ -79,23 +84,18 @@ public class Group {
 	}
 	
 	public String getChatHeader(){
-		return ChatColor.GOLD + "[" + getName() + "] "; 
+		return ChatColor.GOLD + "[" + chatColor + getName() + ChatColor.GOLD + "] " + chatColor; 
 	}
 	/**
 	 * Gets the group's name.
 	 * @return String
 	 */
-	public String getName(){
-		return getSettings().getName();
-	}
+	public String getName(){ return getSettings().getName(); }
 	/**
 	 * Sets the group's name.
 	 * @param newName
 	 */
-	public void setName(String newName){
-		getSettings().setName(newName);
-		setChanged(true);
-	} 
+	public void setName(String newName){ getSettings().setName(newName); } 
 	
 	/**
 	 * Gets the color of this group's chat.
@@ -145,15 +145,12 @@ public class Group {
 	 * Gets the list of all the members of this group.
 	 * @return List<UUID> of the members
 	 */
-	public List<UUID> getMembers() {return this.settings.getMembers();}
+	public List<UUID> getMembers() {return this.getSettings().getMembers();}
 	/**
 	 * Sets the list of all the members of this group.
 	 * @param members
 	 */
-	public void setMembers(List<UUID> members) {
-		this.settings.setMembers(members);
-		setChanged(true);
-	}
+	public void setMembers(List<UUID> members) { this.getSettings().setMembers(members); }
 	/**
 	 * Adds the given player to the list of members of this group.
 	 * @param member
@@ -164,7 +161,6 @@ public class Group {
 		List<UUID> members = getMembers();
 		members.add(member.getUniqueId());
 		setMembers(members);
-		setChanged(true);
 		return true;
 	}
 	/**
@@ -177,7 +173,6 @@ public class Group {
 			List<UUID> members = getMembers();
 			members.remove(member.getUniqueId());
 			setMembers(members);
-			setChanged(true);
 			return true;
 		}
 		return false;
@@ -265,15 +260,9 @@ public class Group {
 	/**
 	 * Do things right after the settings of the group are loaded.
 	 */
-	public void postLoad(){
-		this.setChanged(true);
-	}
+	public void postLoad(){ }
 	
-	/**
-	 * Loads group from its configuration file.
-	 * @param cf
-	 * @return Group
-	 */
+	/*
 	public static Group load(YamlConfiguration cf){
 		if(cf == null) return null;
 		Instant creation;
@@ -285,7 +274,7 @@ public class Group {
 		}
 		
 		Group g = new Group();
-		g.setCreationDate(creation);
+		g.getSettings().setCreationDate(creation);
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
@@ -295,22 +284,15 @@ public class Group {
 		
 		return g;
 	}
+	*/
 	/**
 	 * Saves the group to its file.
 	 * @return true if the group has been saved, false otherwise.
 	 */
 	public boolean save(){
 		File f = getFile();
-		if(f == null) return false;
-		try {
-			getSettings().save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return false;
+		getSettings().save(f);
+		return !getSettings().hasChanged();
 		/*
 		YamlConfiguration fc = new YamlConfiguration();
 		
@@ -335,7 +317,7 @@ public class Group {
 	 * Updates the group.
 	 */
 	public void update(){
-		if(isChanged()){
+		if(isChanged() || getSettings().hasChanged()){
 			try{save();} catch (Exception e) {e.printStackTrace();};
 		}
 	}
@@ -354,16 +336,6 @@ public class Group {
 		this.hasChanged = hasChanged;
 	}
 	/**
-	 * Gets the creation date of this group.
-	 * @return Instant
-	 */
-	public Instant getCreationDate() {return getSettings().getCreationDate();}
-	/**
-	 * Sets the creation date of this group.
-	 * @param creationDate
-	 */
-	public void setCreationDate(Instant creationDate) {getSettings().setCreationDate(creationDate);}
-	/**
 	 * Gets an interactive info panel of this group.
 	 * @param player Context
 	 * @return FancyMessage
@@ -371,9 +343,9 @@ public class Group {
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
-		if(getCreationDate() != null){
+		if(getSettings().getCreationDate() != null){
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
-				then(format.format(Date.from(getCreationDate()))).color(ChatColor.GOLD);
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
@@ -548,6 +520,7 @@ public class Group {
 	public void getInteractiveRankPanel(Rank playerRank) {
 		
 	}
+	
 	public void openMenu(Player player){
 		MenuManager.openMenu(new GroupMenu(this), player);
 	}
