@@ -304,11 +304,7 @@ public class Camp extends Settlement{
 		}
 		return f;
 	}
-	/**
-	 * Loads a camp from its configuration file.
-	 * @param cf
-	 * @return Camp
-	 */
+	/*
 	@Deprecated
 	public static Camp load(YamlConfiguration cf){
 		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
@@ -344,6 +340,7 @@ public class Camp extends Settlement{
 		
 		return c;
 	}
+	*/
 	/*
 	@Override
 	public boolean save(){

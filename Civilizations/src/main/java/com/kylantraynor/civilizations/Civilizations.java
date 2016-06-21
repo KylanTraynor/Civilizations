@@ -324,27 +324,20 @@ public class Civilizations extends JavaPlugin{
 			File f = new File(path);
 			if(f.exists()){
 				if(!f.getName().split("\\.")[1].equals("yml")) return null;
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
-				f.delete();
+				Group g = null;
 				String[] pathSplit = path.split(File.separator);
 				log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
 				switch(pathSplit[pathSplit.length - 2]){
 				case "Camps":
 					log("INFO", "Loading camp from " + path);
-					return Camp.load(yaml);	
+					g = new Camp();
 				case "Small Outposts":
 					log("INFO", "Loading small outpost from " + path);
-					return SmallOutpost.load(yaml);
+					g = new SmallOutpost();
 				}
+				g = Group.load(f, g);
+				f.delete();
+				return (Settlement)g;
 			}
 		}
 		return null;

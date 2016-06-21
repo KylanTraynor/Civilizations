@@ -23,6 +23,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.IHasBanner;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.settings.HouseSettings;
 
 /**
  * Family House, with all the members of the family.
@@ -31,18 +32,30 @@ import com.kylantraynor.civilizations.chat.ChatTools;
  */
 public class House extends Group implements IHasBanner{
 	
-	private Banner banner;
-	private String words = "We don't know what to say, so we just don't say it.";
-	private UUID lord;
-	private List<String> unloadedVassals = new ArrayList<String>();
-	private List<House> vassals = new ArrayList<House>();
+	public String getWords() { return getSettings().getWords(); }
+	public void setWords(String words) { getSettings().setWords(words); }
+	
+	public List<House> getVassals(){ return getSettings().getVassals(); }
+	
+	public OfflinePlayer getLord(){ return getSettings().getLord(); }
+	public void setLord(OfflinePlayer p){ getSettings().setLord(p); }
 	
 	public House(String name, Banner b) {
 		super();
 		setName(name);
-		this.banner = b;
+		setBanner(b);
 		setChanged(true);
 		Cache.houseListChanged = true;
+	}
+	
+	@Override
+	public void initSettings(){
+		setSettings(new HouseSettings());
+	}
+	
+	@Override
+	public HouseSettings getSettings(){
+		return (HouseSettings)super.getSettings();
 	}
 	
 	public String getChatHeader(){
@@ -51,13 +64,12 @@ public class House extends Group implements IHasBanner{
 
 	@Override
 	public Banner getBanner() {
-		return banner;
+		return getSettings().getBanner();
 	}
 
 	@Override
 	public void setBanner(Banner newBanner) {
-		this.banner = newBanner;
-		setChanged(true);
+		getSettings().setBanner(newBanner);
 	}
 	
 	public static List<House> getAll(){
@@ -126,12 +138,9 @@ public class House extends Group implements IHasBanner{
 		return fm;
 	}
 	
-	private String getLordName() {
-		if(lord != null){
-			OfflinePlayer p = Bukkit.getOfflinePlayer(lord);
-			if(p != null){
-				return p.getName();
-			}
+	public String getLordName() {
+		if(getSettings().getLord() != null){
+			return getSettings().getLord().getName();
 		}
 		return "Unkown";
 	}
@@ -189,44 +198,36 @@ public class House extends Group implements IHasBanner{
 			h.addVassal(cf.getString("Vassals." + i));
 		}
 		if(lord != null){
-			h.setLord(Bukkit.getOfflinePlayer(UUID.fromString(lord)));
+			h.getSettings().setLord(Bukkit.getOfflinePlayer(UUID.fromString(lord)));
 		}
 		
 		return h;
 	}
 	
-	public void addVassal(String string) {
+	public boolean addVassal(String string) {
 		if(House.get(string) != null){
 			addVassal(House.get(string));
+			return true;
 		} else {
-			unloadedVassals.add(string);
+			return false;
 		}
 	}
 	
-	public void addVassal(House house){
-		vassals.add(house);
-		unloadedVassals.add(house.getName());
-		setChanged(true);
-	}
-
-	private void setLord(OfflinePlayer offlinePlayer) {
-		if(offlinePlayer == null){
-			lord = null;
+	public boolean addVassal(House house){
+		List<House> vassals = getSettings().getVassals();
+		if(vassals.contains(house)){
+			return false;
 		} else {
-			lord = offlinePlayer.getUniqueId();
+			if(vassals.add(house)){
+				getSettings().setVassals(vassals);
+				return true;
+			} else {
+				return false;
+			}
 		}
-		setChanged(true);
 	}
 	
-	public OfflinePlayer getLord(){
-		if(lord == null) return null;
-		return Bukkit.getOfflinePlayer(lord);
-	}
-
-	/**
-	 * Saves the camp to its file.
-	 * @return true if the camp has been saved, false otherwise.
-	 */
+	/*
 	@Override
 	public boolean save(){
 		File f = getFile();
@@ -236,8 +237,8 @@ public class House extends Group implements IHasBanner{
 		fc.set("Creation", getSettings().getCreationDate().toString());
 		fc.set("Banner", getBanner().toString());
 		fc.set("Words", getWords());
-		if(getLord() != null){
-			fc.set("Lord", getLord().getUniqueId().toString());
+		if(getSettings().getLord() != null){
+			fc.set("Lord", getSettings().getLord().getUniqueId().toString());
 		} else {fc.set("Lord", null);}
 		
 		for(int i = 0; i < getVassals().size(); i++){
@@ -258,27 +259,7 @@ public class House extends Group implements IHasBanner{
 			return false;
 		}
 	}
-
-	public String getWords() {
-		return words;
-	}
-
-	public void setWords(String words) {
-		this.words = words;
-	}
-	
-	public List<House> getVassals(){
-		if(vassals.size() != unloadedVassals.size()){
-			vassals = new ArrayList<House>();
-			for(String s : unloadedVassals){
-				if(House.get(s) != null){
-					vassals.add(House.get(s));
-				}
-			}
-			setChanged(true);
-		}
-		return vassals;
-	}
+	*/
 
 	public FancyMessage getInteractiveVassalsList() {
 		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " VASSALS ==========").color(ChatColor.GOLD);

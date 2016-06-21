@@ -45,6 +45,10 @@ public class SmallOutpost extends Fort{
 		setChanged(true);
 	}
 
+	public SmallOutpost() {
+		super();
+	}
+
 	@Override
 	public String getType(){
 		return "Small Outpost";
