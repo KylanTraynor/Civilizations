@@ -198,34 +198,6 @@ public class Camp extends Settlement{
 			.command("/group " + this.getId() + " members")
 			.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
-		/*
-		if(this.isMember(player)){
-			fm.then("\nClear").color(ChatColor.GOLD).tooltip("Clear camp").command("/camp clear");
-			fm.then(" - ").color(ChatColor.GRAY);
-			fm.then("Leave").color(ChatColor.GOLD).tooltip("Leave the camp").command("/camp leave");
-			fm.then(" - ").color(ChatColor.GRAY);
-			fm.then("Rename").color(ChatColor.GOLD).tooltip("Rename the camp").suggest("/group " + this.getId() + " rename");
-			fm.then(" - ").color(ChatColor.GRAY);
-			if(ChronoUnit.HOURS.between(Instant.now(), this.getExpireOn()) > 22){
-				fm.then("Renew").color(ChatColor.GRAY).tooltip("Wait for an hour before renewing");
-			} else {
-				fm.then("Renew").color(ChatColor.GOLD).tooltip("Keep the camp for one more day").command("/camp renew");
-			}
-			fm.then(" - ").color(ChatColor.GRAY);
-			if(isUpgradable()){
-				fm.then("Upgrade").color(ChatColor.GOLD).tooltip("Upgrade the camp").command("/group " + this.getId() + " upgrade");
-			} else {
-				fm.then("Upgrade").color(ChatColor.GRAY).tooltip("No upgrade available");
-			}
-		} else {
-			fm.then("\nJoin");
-			if(hasOneMemberOnline()){
-				fm.color(ChatColor.GOLD).tooltip("Ask members of the camp if you can join.").command("/camp join");
-			} else {
-				fm.color(ChatColor.RED).tooltip("One member needs to be online to join the camp.");
-			}
-		}
-		*/
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	} 
@@ -278,7 +250,6 @@ public class Camp extends Settlement{
 	 */
 	public void setExpireOn(Instant expireOn) {
 		getSettings().setExpiryDate(expireOn);
-		setChanged(true);
 	}
 	/**
 	 * Gets the cached list of camps.
@@ -304,73 +275,6 @@ public class Camp extends Settlement{
 		}
 		return f;
 	}
-	/*
-	@Deprecated
-	public static Camp load(YamlConfiguration cf){
-		World w = Civilizations.currentInstance.getServer().getWorld(cf.getString("Location.World"));
-		String name = cf.getString("Name", "Camp");
-		double x = cf.getDouble("Location.X");
-		double y = cf.getDouble("Location.Y");
-		double z = cf.getDouble("Location.Z");
-		Instant creation;
-		Instant expireOn;
-		if(cf.getString("Creation") != null){
-			creation = Instant.parse(cf.getString("Creation"));
-		} else {
-			creation = Instant.now();
-			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by NOW.");
-		}
-		if(cf.getString("ExpireOn") != null){
-			expireOn = Instant.parse(cf.getString("ExpireOn"));
-		} else {
-			expireOn = Instant.now().plus(1, ChronoUnit.DAYS);
-			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by 1 day from NOW.");
-		}
-		
-		Camp c = new Camp(new Location(w, x, y, z));
-		c.setName(name);
-		c.getSettings().setCreationDate(creation);
-		c.setExpireOn(expireOn);
-		
-		int i = 0;
-		while(cf.contains("Members." + i)){
-			c.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
-			i+=1;
-		}
-		
-		return c;
-	}
-	*/
-	/*
-	@Override
-	public boolean save(){
-		File f = getFile();
-		if(f == null) return false;
-		YamlConfiguration fc = new YamlConfiguration();
-		fc.set("Name", getName());
-		fc.set("Location.World", getLocation().getWorld().getName());
-		fc.set("Location.X", getLocation().getBlockX());
-		fc.set("Location.Y", getLocation().getBlockY());
-		fc.set("Location.Z", getLocation().getBlockZ());
-		
-		fc.set("Creation", getCreationDate().toString());
-		fc.set("ExpireOn", getExpireOn().toString());
-		
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
-		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	*/
 	/**
 	 * Gets the closest camp around the given location.
 	 * @param l

@@ -44,8 +44,11 @@ public class House extends Group implements IHasBanner{
 		super();
 		setName(name);
 		setBanner(b);
-		setChanged(true);
 		Cache.houseListChanged = true;
+	}
+	
+	public House() {
+		super();
 	}
 	
 	@Override
@@ -161,11 +164,7 @@ public class House extends Group implements IHasBanner{
 		}
 		return f;
 	}
-	/**
-	 * Loads a camp from its configuration file.
-	 * @param cf
-	 * @return House
-	 */
+	/*
 	@Deprecated
 	public static House load(YamlConfiguration cf){
 		String name;
@@ -203,6 +202,7 @@ public class House extends Group implements IHasBanner{
 		
 		return h;
 	}
+	*/
 	
 	public boolean addVassal(String string) {
 		if(House.get(string) != null){

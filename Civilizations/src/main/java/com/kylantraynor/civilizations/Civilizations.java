@@ -353,18 +353,10 @@ public class Civilizations extends JavaPlugin{
 					f.delete();
 					continue;
 				}
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
+				House h = new House();
+				Group.load(f, h);
+				
 				f.delete();
-				House.load(yaml);
 			}
 		}
 	}
