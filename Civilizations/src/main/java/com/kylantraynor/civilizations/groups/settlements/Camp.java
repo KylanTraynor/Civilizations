@@ -66,7 +66,7 @@ public class Camp extends Settlement{
 	public Camp(Location l) {
 		super(l);
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
-		this.setExpireOn(Instant.now());
+		this.setExpireOn(Instant.now().plus(2, ChronoUnit.DAYS));
 		this.setDefaultPermissions();
 		Cache.campListChanged = true;
 	}

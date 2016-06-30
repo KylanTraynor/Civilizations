@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class GroupSettings extends YamlConfiguration{
 	
+	private UUID uniqueId;
 	private Instant creationDate;
 	private List<UUID> members;
 	private boolean changed = true;
@@ -29,6 +30,30 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public void setChanged(boolean changed) {
 		this.changed = changed;
+	}
+	
+	/**
+	 * Gets the unique ID of the group.
+	 * @return
+	 */
+	public UUID getUniqueId(){
+		if(uniqueId != null) return uniqueId;
+		if(this.contains("General.UniqueId")){
+			uniqueId = UUID.fromString(this.getString("General.UniqueId"));
+		} else {
+			setUniqueId(null);
+		}
+		return uniqueId;
+	}
+	
+	/**
+	 * Sets the unique ID of the group. Null will set a new random Unique ID.
+	 * @param id
+	 */
+	protected void setUniqueId(UUID id){
+		if(id == null) id = UUID.randomUUID();
+		this.set("General.UniqueId", id.toString());
+		uniqueId = id;
 	}
 	
 	/**

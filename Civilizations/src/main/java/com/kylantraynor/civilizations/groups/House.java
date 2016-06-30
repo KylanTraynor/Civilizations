@@ -88,7 +88,7 @@ public class House extends Group implements IHasBanner{
 		return null;
 	}
 	
-	public static House get(Player p){
+	public static House get(OfflinePlayer p){
 		for(House h : getAll()){
 			if(h.isMember(p)){
 				return h;

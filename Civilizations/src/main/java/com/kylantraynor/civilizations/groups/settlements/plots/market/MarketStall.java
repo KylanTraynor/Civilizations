@@ -34,6 +34,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
@@ -397,14 +398,20 @@ public class MarketStall extends Plot{
 		}
 		Settlement settlement = null;
 		if(settlementPath != null){
-			if(settlements.get(settlementPath) == null){
-				Settlement s = Civilizations.loadSettlement(settlementPath);
-				if(s!= null){
-					settlements.put(settlementPath, s);
-					settlement = s;
+			if(settlementPath.contains("TOWNY")){
+				settlement = Civilizations.loadSettlement(settlementPath);
+			} else {
+				UUID id = null;
+				try{
+					id = UUID.fromString(settlementPath);
+					Group g = Group.get(id);
+					if(g instanceof Settlement){
+						settlement = (Settlement) g;
+					}
+				} catch (IllegalArgumentException e) {
+					Civilizations.DEBUG("Not a valid UUID for " + name + "'s settlement.");
 				}
 			}
-			
 		}
 		MarketStall g = new MarketStall(name, Plot.parseShapes(shapes), settlement);
 		g.getSettings().setCreationDate(creation);
@@ -450,7 +457,7 @@ public class MarketStall extends Plot{
 			if(getSettlement() instanceof TownyTown){
 				fc.set("SettlementPath", "TOWNY: " + getSettlement().getName());
 			} else {
-				fc.set("SettlementPath", getSettlement().getFile().getAbsolutePath());
+				fc.set("SettlementPath", getSettlement().getSettings().getUniqueId());
 			}
 		} else {
 			fc.set("SettlementPath", null);

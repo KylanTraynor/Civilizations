@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import com.kylantraynor.civilizations.banners.Banner;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 
 public class HouseSettings extends GroupSettings {
@@ -101,7 +102,11 @@ public class HouseSettings extends GroupSettings {
 			vassals = new ArrayList<House>();
 			for(Object o : list){
 				if(o instanceof String){
-					vassals.add(House.get((String) o));
+					UUID id = UUID.fromString((String) o);
+					Group g = Group.get(id);
+					if(g instanceof House){
+						vassals.add((House) g);
+					}
 				}
 			}
 		}
@@ -120,7 +125,7 @@ public class HouseSettings extends GroupSettings {
 			this.vassals = list;
 			List<String> slist = new ArrayList<String>();
 			for(House h : vassals){
-				slist.add(h.getName());
+				slist.add(h.getSettings().getUniqueId().toString());
 			}
 			this.set("Vassals", slist);
 		}

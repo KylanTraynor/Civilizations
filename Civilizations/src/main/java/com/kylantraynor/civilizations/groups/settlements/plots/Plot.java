@@ -14,12 +14,18 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Plot extends Group {
 	private PlotType type;
 	private Settlement settlement;
 	private boolean persistent = false;
+	
+	//Constructor for reloads from file
+	public Plot(){
+		super();
+	}
 	
 	public Plot(String name, Shape shape, Settlement settlement){
 		super();
@@ -47,6 +53,26 @@ public class Plot extends Group {
 		Cache.plotListChanged = true;
 		setChanged(true);
 	}
+	
+	@Override
+	public void postLoad(){
+		if(getSettlement() == null){
+			this.setProtection(new Protection());
+		} else {
+			this.setProtection(new Protection(getSettlement().getProtection()));
+		}
+	}
+	
+	@Override
+	public void initSettings(){
+		setSettings(new PlotSettings());
+	}
+	
+	@Override
+	public PlotSettings getSettings(){
+		return (PlotSettings) super.getSettings();
+	}
+	
 	@Override
 	public String getType() {
 		return "Plot";
@@ -103,19 +129,19 @@ public class Plot extends Group {
 	 * Gets the settlement owning this plot.
 	 * @return Settlement
 	 */
-	public Settlement getSettlement() { return settlement; }
+	public Settlement getSettlement() { return getSettings().getSettlement(); }
 	/**
 	 * Sets the settlement this plot belongs to.
 	 * @param settlement
 	 */
 	public void setSettlement(Settlement settlement) {
-		Settlement oldSettlement = this.settlement;
+		Settlement oldSettlement = getSettlement();
 		if(oldSettlement != null){
 			oldSettlement.removePlot(this);
 		}
-		this.settlement = settlement;
-		if(this.settlement != null){
-			this.settlement.addPlot(this);
+		getSettings().setSettlement(settlement);
+		if(getSettlement() != null){
+			getSettlement().addPlot(this);
 		}
 		setChanged(true);
 	}

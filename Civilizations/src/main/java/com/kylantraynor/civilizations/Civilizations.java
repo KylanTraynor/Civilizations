@@ -160,8 +160,8 @@ public class Civilizations extends JavaPlugin{
 		
 		loadGroups();
 		loadHouses();
-		loadPlots();
 		loadCamps();
+		loadPlots();
 		
 		loadHooks(pm);
 		
@@ -255,25 +255,25 @@ public class Civilizations extends JavaPlugin{
 			log("INFO", "Loading Stalls...");
 			for(File f : stallDir.listFiles()){
 				try{
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(isClearing() ){
-					log("INFO", "Cleared file " + f.getName());
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					if(isClearing() ){
+						log("INFO", "Cleared file " + f.getName());
+						f.delete();
+						continue;
+					}
+					YamlConfiguration yaml = new YamlConfiguration();
+					try {
+						yaml.load(f);
+					} catch (FileNotFoundException e) {
+						log("WARNING", "Couldn't find file " + f.getName());
+					} catch (IOException e) {
+						log("WARNING", "File " + f.getName() + " is in use in another application.");
+					} catch (InvalidConfigurationException e) {
+						log("WARNING", "Invalid file configuration.");
+					}
+					log("INFO", "Loading Stall from file: " + f.getPath());
 					f.delete();
-					continue;
-				}
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
-				log("INFO", "Loading Stall from file: " + f.getPath());
-				f.delete();
-				MarketStall.load(yaml, loadedSettlements);
+					MarketStall.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}

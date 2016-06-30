@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.achievements.Achievement;
+import com.kylantraynor.civilizations.groups.House;
 
 public class PlayerData {
 	
@@ -136,35 +137,47 @@ public class PlayerData {
 	}
 	
 	public String getName(){
-		if(this.config.contains("general.name")){
-			return this.config.getString("general.name");
+		if(this.config.contains("General.Name")){
+			return this.config.getString("General.Name");
 		}
 		return null;
 	}
 	
 	public void setName(String newName){
-		this.config.set("general.name", newName);
+		this.config.set("General.Name", newName);
+	}
+	
+	public String getSurname(){
+		House h = House.get(Bukkit.getOfflinePlayer(playerId));
+		if(h != null){
+			return h.getName();
+		} else {
+			if(this.config.contains("General.Surname")){
+				return this.config.getString("General.Surname");
+			}
+		}
+		return null;
 	}
 	
 	public int getCampsCreated(){
-		if(this.config.contains("general.stats.campsCreated")){
-			return this.config.getInt("general.stats.campsCreated");
+		if(this.config.contains("General.Stats.CampsCreated")){
+			return this.config.getInt("General.Stats.CampsCreated");
 		}
 		return 0;
 	}
 	
 	public void setCampsCreated(int newCount){
-		this.config.set("general.stats.campsCreated", newCount);
+		this.config.set("General.Stats.CampsCreated", newCount);
 		hasChanged = true;
 	}
 	
 	public boolean hasAchievement(Achievement a){
-		return this.config.contains("achievements." + a.getId());
+		return this.config.contains("Achievements." + a.getId());
 	}
 	
 	public boolean giveAchievement(Achievement a){
 		if(!hasAchievement(a)){
-			this.config.set("achievements." + a.getId(), Instant.now().toString());
+			this.config.set("Achievements." + a.getId(), Instant.now().toString());
 			hasChanged = true;
 			return true;
 		} else {

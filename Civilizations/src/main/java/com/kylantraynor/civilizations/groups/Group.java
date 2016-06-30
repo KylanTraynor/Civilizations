@@ -86,6 +86,7 @@ public class Group {
 	public String getChatHeader(){
 		return ChatColor.GOLD + "[" + chatColor + getName() + ChatColor.GOLD + "] " + chatColor; 
 	}
+	
 	/**
 	 * Gets the group's name.
 	 * @return String
@@ -108,12 +109,12 @@ public class Group {
 	 */
 	public void setChatColor(ChatColor newColor){chatColor = newColor;}
 	/**
-	 * Gets the unique ID of this group.
+	 * Gets the ID of this group.
 	 * @return Integer
 	 */
 	public int getId() {return id;}
 	/**
-	 * Sets the unique ID of this group.
+	 * Sets the ID of this group.
 	 * @param id
 	 */
 	public void setId(int id) {this.id = id;}
@@ -125,6 +126,19 @@ public class Group {
 	public static Group get(int id){
 		for(Group g : list){
 			if(g.getId() == id) return g;
+		}
+		return null;
+	}
+	/**
+	 * Gets the group with the given Unique ID.
+	 * @param uid
+	 * @return Group
+	 */
+	public static Group get(UUID uid){
+		for(Group g : list){
+			if(g.getSettings().getUniqueId().equals(uid)){
+				return g;
+			}
 		}
 		return null;
 	}

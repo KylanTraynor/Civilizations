@@ -49,7 +49,7 @@ public class CommandCamp extends CommandGroup{
 					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > 22){
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "You can only renew the camp once a day.");
 					} else {
-						c.setExpireOn(Instant.now().plus(1, ChronoUnit.DAYS));
+						c.setExpireOn(Instant.now().plus(2, ChronoUnit.DAYS));
 						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for a day!");
 					}
 				}
