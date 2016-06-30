@@ -1,11 +1,14 @@
 package com.kylantraynor.civilizations.listeners;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class VehiclesListener implements Listener{
 	
@@ -28,6 +31,32 @@ public class VehiclesListener implements Listener{
 	public void onPlayerMove(PlayerMoveEvent event){
 		if(event.getPlayer().getVehicle() != null){
 			if(event.getPlayer().getVehicle().getType() == EntityType.BOAT){
+				if(event.getFrom().getBlock().getType().isSolid() &&
+						event.getTo().getBlock().getType().isSolid() &&
+						event.getTo().add(0, 1, 0).getBlock().getType().isSolid()){
+					event.getPlayer().getVehicle().eject();
+					Boat boat = (Boat) event.getPlayer().getVehicle();
+					ItemStack item;
+					switch(boat.getWoodType()){
+					case ACACIA: item = new ItemStack(Material.BOAT_ACACIA);
+						break;
+					case BIRCH: item = new ItemStack(Material.BOAT_BIRCH);
+						break;
+					case DARK_OAK: item = new ItemStack(Material.BOAT_DARK_OAK);
+						break;
+					case GENERIC: item = new ItemStack(Material.BOAT);
+						break;
+					case JUNGLE: item = new ItemStack(Material.BOAT_JUNGLE);
+						break;
+					case REDWOOD: item = new ItemStack(Material.BOAT_SPRUCE);
+						break;
+					default: item = new ItemStack(Material.BOAT);
+						break;
+					
+					}
+					event.getPlayer().getVehicle().remove();
+					event.getPlayer().getWorld().dropItemNaturally(event.getFrom(), item);
+				}
 				if(event.getTo().getBlock().getType().isSolid()){
 					event.setCancelled(true);
 				}
