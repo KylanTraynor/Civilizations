@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionSet;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -260,6 +261,8 @@ public class GroupSettings extends YamlConfiguration{
 		for(PermissionTarget target : permissionSet.getTargets()){
 			if(target instanceof Rank){
 				this.set("Protection.Permissions.Ranks." + ((Rank) target).getName(), permissionSet.get(target).getTypesAsString());
+			} else if(target instanceof GroupTarget){
+				this.set("Protection.Permissions.Groups." + ((GroupTarget) target).getGroup().getSettings().getUniqueId().toString(), permissionSet.get(target).getTypesAsString());
 			} else {
 				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypesAsString());
 			}
