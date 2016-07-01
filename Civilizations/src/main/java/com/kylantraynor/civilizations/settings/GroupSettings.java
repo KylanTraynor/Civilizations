@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.kylantraynor.civilizations.protection.PermissionSet;
+import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -200,7 +202,11 @@ public class GroupSettings extends YamlConfiguration{
 		if(!prot.getRanks().isEmpty()){
 			setRanks(prot.getRanks());
 		}
+		if(prot.getPermissionSet() != null){
+			setPermissionSet(prot.getPermissionSet());
+		}
 	}
+
 	public void setShapes(List<Shape> shapes) {
 		if(shapes != null){
 			this.set("Protection.Shape", Util.getShapesString(shapes));
@@ -248,5 +254,15 @@ public class GroupSettings extends YamlConfiguration{
 		}
 		
 		return ranks;
+	}
+	
+	public void setPermissionSet(PermissionSet permissionSet) {
+		for(PermissionTarget target : permissionSet.getTargets()){
+			if(target instanceof Rank){
+				this.set("Protection.Permissions.Ranks." + ((Rank) target).getName(), permissionSet.get(target).getTypes());
+			} else {
+				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypes());
+			}
+		}
 	}
 }
