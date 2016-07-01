@@ -132,8 +132,8 @@ public class Civilizations extends JavaPlugin{
 	 * @see Level
 	 */
 	public static void log(String level, String message){
-		Level lvl = Level.parse(level);
-		if(lvl != null){
+		if(level != null){
+			Level lvl = Level.parse(level);
 			Bukkit.getServer().getLogger().log(lvl, message);
 		} else {
 			Bukkit.getServer().getLogger().log(Level.ALL, "["+level+"] " + message);
@@ -146,9 +146,13 @@ public class Civilizations extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		currentInstance = this;
+		
 		saveDefaultConfig();
+		
 		config = this.getConfig();
+		
 		PluginManager pm = getServer().getPluginManager();
+		
 		pm.registerEvents(getMainListener(), this);
 		pm.registerEvents(getMenuListener(), this);
 		pm.registerEvents(getTerritoryListener(), this);
@@ -223,25 +227,10 @@ public class Civilizations extends JavaPlugin{
 			log("INFO", "Loading Keeps...");
 			for(File f : keepDir.listFiles()){
 				try{
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(isClearing() ){
-					log("INFO", "Cleared file " + f.getName());
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					log("INFO", "Loading Keep from file: " + f.getPath());
+					Keep.load(f, new Keep());
 					f.delete();
-					continue;
-				}
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
-				log("INFO", "Loading Keep from file: " + f.getPath());
-				f.delete();
-				Keep.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -256,24 +245,9 @@ public class Civilizations extends JavaPlugin{
 			for(File f : stallDir.listFiles()){
 				try{
 					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					if(isClearing() ){
-						log("INFO", "Cleared file " + f.getName());
-						f.delete();
-						continue;
-					}
-					YamlConfiguration yaml = new YamlConfiguration();
-					try {
-						yaml.load(f);
-					} catch (FileNotFoundException e) {
-						log("WARNING", "Couldn't find file " + f.getName());
-					} catch (IOException e) {
-						log("WARNING", "File " + f.getName() + " is in use in another application.");
-					} catch (InvalidConfigurationException e) {
-						log("WARNING", "Invalid file configuration.");
-					}
 					log("INFO", "Loading Stall from file: " + f.getPath());
+					MarketStall.load(f, new MarketStall());
 					f.delete();
-					MarketStall.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -287,25 +261,10 @@ public class Civilizations extends JavaPlugin{
 			log("INFO", "Loading Houses...");
 			for(File f : plotHousesDir.listFiles()){
 				try{
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(isClearing() ){
-					log("INFO", "Cleared file " + f.getName());
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					log("INFO", "Loading House from file: " + f.getPath());
+					com.kylantraynor.civilizations.groups.settlements.plots.House.load(f, new com.kylantraynor.civilizations.groups.settlements.plots.House());
 					f.delete();
-					continue;
-				}
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
-				log("INFO", "Loading House from file: " + f.getPath());
-				f.delete();
-				com.kylantraynor.civilizations.groups.settlements.plots.House.load(yaml, loadedSettlements);
 				} catch (Exception e){
 					e.printStackTrace();
 				}

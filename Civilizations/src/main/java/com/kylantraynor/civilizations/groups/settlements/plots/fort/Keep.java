@@ -25,6 +25,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Keep extends Plot implements FortComponent{
 
@@ -36,6 +37,10 @@ public class Keep extends Plot implements FortComponent{
 		super(name.isEmpty() ? "Keep" : name, shapes, settlement);
 	}
 	
+	public Keep() {
+		super();
+	}
+
 	public PlotType getPlotType(){
 		return PlotType.KEEP;
 	}
@@ -125,7 +130,7 @@ public class Keep extends Plot implements FortComponent{
 			}
 			
 		}
-		Keep g = new Keep(name, Plot.parseShapes(shapes), settlement);
+		Keep g = new Keep(name, Util.parseShapes(shapes), settlement);
 		g.getSettings().setCreationDate(creation);
 		
 		int i = 0;
@@ -151,7 +156,7 @@ public class Keep extends Plot implements FortComponent{
 		} else {
 			fc.set("SettlementPath", null);
 		}
-		fc.set("Shape", getShapesString());
+		fc.set("Shape", Util.getShapesString(getProtection().getShapes()));
 		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;

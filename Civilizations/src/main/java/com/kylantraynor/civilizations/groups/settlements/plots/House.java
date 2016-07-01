@@ -22,6 +22,7 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 
 public class House extends Plot {
 
@@ -32,11 +33,11 @@ public class House extends Plot {
 		super(name.isEmpty() ? "House" : name, shapes, settlement);
 	}
 	
-	/**
-	 * Gets an interactive info panel of this House.
-	 * @param player Context
-	 * @return FancyMessage
-	 */
+	public House() {
+		super();
+	}
+	
+	/*
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
@@ -59,7 +60,12 @@ public class House extends Plot {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
+	*/
 	
+	@Override
+	public boolean isPersistent(){
+		return true;
+	}
 
 	@Override
 	public void update(){
@@ -86,78 +92,5 @@ public class House extends Plot {
 			}
 		}
 		return f;
-	}
-	
-	/**
-	 * Loads House from its configuration file.
-	 * @param cf
-	 * @return Group
-	 */
-	@Deprecated
-	public static House load(YamlConfiguration cf, Map<String, Settlement> settlements){
-		if(cf == null) return null;
-		Instant creation;
-		String name = cf.getString("Name");
-		String settlementPath = cf.getString("SettlementPath");
-		String shapes = cf.getString("Shape");
-		if(cf.getString("Creation") != null){
-			creation = Instant.parse(cf.getString("Creation"));
-		} else {
-			creation = Instant.now();
-			Civilizations.log("WARNING", "Couldn't find creation date for a house. Replacing it by NOW.");
-		}
-		Settlement settlement = null;
-		if(settlementPath != null){
-			if(settlements.get(settlementPath) == null){
-				Settlement s = Civilizations.loadSettlement(settlementPath);
-				if(s!= null){
-					settlements.put(settlementPath, s);
-					settlement = s;
-				}
-			}
-			
-		}
-		House g = new House(name, Plot.parseShapes(shapes), settlement);
-		g.getSettings().setCreationDate(creation);
-		
-		int i = 0;
-		while(cf.contains("Members." + i)){
-			g.getMembers().add(UUID.fromString((cf.getString("Members."+i))));
-			i+=1;
-		}
-		
-		return g;
-	}
-	/**
-	 * Saves the keep to its file.
-	 * @return true if the group has been saved, false otherwise.
-	 */
-	public boolean save(){
-		File f = getFile();
-		if(f == null) return false;
-		YamlConfiguration fc = new YamlConfiguration();
-		
-		fc.set("Name", getName());
-		if(getSettlement() != null){
-			fc.set("SettlementPath", getSettlement().getFile().getAbsolutePath());
-		} else {
-			fc.set("SettlementPath", null);
-		}
-		fc.set("Shape", getShapesString());
-		fc.set("Creation", getSettings().getCreationDate().toString());
-		
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
-		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.kylantraynor.civilizations.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -14,9 +16,48 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
+import com.kylantraynor.civilizations.shapes.Shape;
+
 public class Util {
 
+	/**
+	 * Gets a list of shapes from a string of the format returned by getShapesString.
+	 * @param str
+	 * @return
+	 */
+	public static List<Shape> parseShapes(String str){
+		String[] shapes = str.split(" ");
+		List<Shape> list = new ArrayList<Shape>();
+		for(String shape : shapes){
+			Shape s = Shape.parse(shape);
+			if(s != null){
+				list.add(s);
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * Gets a string describing the list of shapes.
+	 * @param list
+	 * @return
+	 */
+	public static String getShapesString(List<Shape> list){
+		StringBuilder sb = new StringBuilder();
+		for(Shape s : list){
+			sb.append(s.toString() + " ");
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Concatenates all the items of the list into a single string.
+	 * @param list
+	 * @param link
+	 * @return
+	 */
 	public static String join(Iterable<String> list, String link){
+		if(link == null) link = " ";
 		String result = "";
 		Iterator<String> it = list.iterator();
 		while(it.hasNext()){
@@ -28,6 +69,11 @@ public class Util {
 		return result;
 	}
 	
+	/**
+	 * Gets the material's name of the item.
+	 * @param item
+	 * @return
+	 */
 	public static String getMaterialName(ItemStack item) {
 		return getDataName(item.getType(), item.getData().getData(), item.getItemMeta());
 	}

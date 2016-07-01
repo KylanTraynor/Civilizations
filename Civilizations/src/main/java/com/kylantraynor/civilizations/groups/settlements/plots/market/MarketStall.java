@@ -52,12 +52,6 @@ import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.Util;
 
 public class MarketStall extends Plot{
-
-	private UUID owner;
-	private UUID renter;
-	private double rent = 1.0;
-	private Instant nextPayment = Instant.now();
-	private boolean forRent = true;
 	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
@@ -69,15 +63,37 @@ public class MarketStall extends Plot{
 		Cache.marketstallListChanged = true;
 	}
 	
+	public MarketStall() {
+		super();
+	}
+	
+	public OfflinePlayer getOwner(){ return getSettings().getOwner(); }
+	public void setOwner(OfflinePlayer player){ getSettings().setOwner(player); }
+	
+	public boolean isForRent() { return getSettings().isForRent(); }
+	public void setForRent(boolean forRent) { getSettings().setForRent(forRent); }
+	
+	public OfflinePlayer getRenter(){ return getSettings().getRenter(); }
+	public void setRenter(OfflinePlayer player){ getSettings().setRenter(player); }
+	
+	public double getRent(){ return getSettings().getRent(); }
+	public void setRent(double newRent){ getSettings().setRent(newRent); }
+	
+	private void setNextPayment(Instant instant) { getSettings().setNextPayment(instant); }
+
 	public String getIcon(){
 		return "scales";
 	}
 	
+	@Override
+	public boolean isPersistent(){
+		return true;
+	}
 	
 	@Override
 	public void update(){
 		if(getRenter() != null){
-			if(Instant.now().isAfter(nextPayment)){
+			if(Instant.now().isAfter(getSettings().getNextPayment())){
 				payRent();
 				setChanged(true);
 			}
@@ -103,15 +119,6 @@ public class MarketStall extends Plot{
 	@Override
 	public String getType() {
 		return "Market Stall";
-	}
-	
-	public double getRent(){
-		return rent;
-	}
-	
-	public void setRent(double newRent){
-		rent = newRent;
-		setChanged(true);
 	}
 	
 	public Map<ItemStack, Double> getWares(){
@@ -163,80 +170,50 @@ public class MarketStall extends Plot{
 		}
 	}
 
-	public OfflinePlayer getOwner(){
-		if(owner == null) return null;
-		return Bukkit.getOfflinePlayer(owner);
-	}
-	
-	public void setOwner(OfflinePlayer player){
-		if(player == null){
-			owner = null;
-		} else {
-			owner = player.getUniqueId();
-		}
-		setChanged(true);
-	}
-	
-	public OfflinePlayer getRenter(){
-		if(renter == null) return null;
-		return Bukkit.getOfflinePlayer(renter);
-	}
-	
-	public void setRenter(OfflinePlayer player){
-		if(player == null){
-			renter = null;
-		} else {
-			renter = player.getUniqueId();
-		}
-		setChanged(true);
-	}
-
 	public void payRent() {
-		if(this.renter == null){
+		if(getRenter() == null){
 			return;
 		}
-		nextPayment = Instant.now().plus(1, ChronoUnit.DAYS);
-		OfflinePlayer renter = Bukkit.getOfflinePlayer(this.renter);
-		if(this.owner != null){
-			OfflinePlayer owner = Bukkit.getOfflinePlayer(this.owner);
-			if(Economy.withdrawPlayer(renter, rent)){
-				if(renter.isOnline()){
-					renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
-					Economy.playPaySound(renter.getPlayer());
+		setNextPayment(Instant.now().plus(1, ChronoUnit.DAYS));
+		if(getOwner() != null){
+			if(Economy.withdrawPlayer(getRenter(), getRent())){
+				if(getRenter().isOnline()){
+					getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.");
+					Economy.playPaySound(getRenter().getPlayer());
 				}
-				double payout = rent;
+				double payout = getRent();
 				//Pay Settlement's Stall Tax
 				if(getSettlement() != null){
-					if(Economy.depositSettlement(getSettlement(), rent * getSettlement().getSettings().getStallRentTax())){
-						payout -= rent * getSettlement().getSettings().getStallRentTax();
+					if(Economy.depositSettlement(getSettlement(), getRent() * getSettlement().getSettings().getStallRentTax())){
+						payout -= getRent() * getSettlement().getSettings().getStallRentTax();
 					}
 				}
 				//Pay Fort's Stall Tax
 				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
-					if(Economy.depositSettlement(f, rent * f.getSettings().getStallRentTax())){
-						payout -= rent * f.getSettings().getStallRentTax();
+					if(Economy.depositSettlement(f, getRent() * f.getSettings().getStallRentTax())){
+						payout -= getRent() * f.getSettings().getStallRentTax();
 					}
 				}
 				//Pay Owner
-				Economy.depositPlayer(owner, payout);
-				if(owner.isOnline()){
-					owner.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(rent) + " for the rent.");
-					Economy.playCashinSound(owner.getPlayer());
+				Economy.depositPlayer(getOwner(), payout);
+				if(getOwner().isOnline()){
+					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(getRent()) + " for the rent.");
+					Economy.playCashinSound(getOwner().getPlayer());
 				}
 			}
 		} else if(getSettlement() != null) {
-			if(Economy.withdrawPlayer(renter, rent)){
-				if(renter.isOnline()){
-					renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
-					Economy.playPaySound(renter.getPlayer());
+			if(Economy.withdrawPlayer(getRenter(), getRent())){
+				if(getRenter().isOnline()){
+					getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.");
+					Economy.playPaySound(getRenter().getPlayer());
 				}
-				double payout = rent;
+				double payout = getRent();
 				//Pay Fort's Stall Tax
 				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
-					if(Economy.depositSettlement(f, rent * f.getSettings().getStallRentTax())){
-						payout -= rent * f.getSettings().getStallRentTax();
+					if(Economy.depositSettlement(f, getRent() * f.getSettings().getStallRentTax())){
+						payout -= getRent() * f.getSettings().getStallRentTax();
 					}
 				}
 				//Pay Settlement
@@ -246,12 +223,12 @@ public class MarketStall extends Plot{
 			//Pay Fort
 			Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 			if(f != null){
-				if(Economy.withdrawPlayer(renter, rent)){
-					if(renter.isOnline()){
-						renter.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(rent) + " in rent.");
-						Economy.playPaySound(renter.getPlayer());
+				if(Economy.withdrawPlayer(getRenter(), getRent())){
+					if(getRenter().isOnline()){
+						getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.");
+						Economy.playPaySound(getRenter().getPlayer());
 					}
-					Economy.depositSettlement(f, rent);
+					Economy.depositSettlement(f, getRent());
 				}
 			}
 		}
@@ -303,7 +280,7 @@ public class MarketStall extends Plot{
 			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
 		}
 		if(getRenter() == player){
-			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), this.nextPayment) + " hours").color(ChatColor.GOLD);
+			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), getSettings().getNextPayment()) + " hours").color(ChatColor.GOLD);
 		}
 		fm.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
@@ -375,12 +352,7 @@ public class MarketStall extends Plot{
 		}
 		return f;
 	}
-	
-	/**
-	 * Loads Stall from its configuration file.
-	 * @param cf
-	 * @return Group
-	 */
+	/*
 	public static MarketStall load(YamlConfiguration cf, Map<String, Settlement> settlements){
 		if(cf == null) return null;
 		Instant creation;
@@ -413,7 +385,7 @@ public class MarketStall extends Plot{
 				}
 			}
 		}
-		MarketStall g = new MarketStall(name, Plot.parseShapes(shapes), settlement);
+		MarketStall g = new MarketStall(name, Util.parseShapes(shapes), settlement);
 		g.getSettings().setCreationDate(creation);
 		if(cf.contains("Owner")){
 			UUID id = UUID.fromString(cf.getString("Owner"));
@@ -439,57 +411,5 @@ public class MarketStall extends Plot{
 		
 		return g;
 	}
-	private void setNextPayment(Instant instant) {
-		nextPayment = instant;
-	}
-
-	/**
-	 * Saves the Stall to its file.
-	 * @return true if the group has been saved, false otherwise.
-	 */
-	public boolean save(){
-		File f = getFile();
-		if(f == null) return false;
-		YamlConfiguration fc = new YamlConfiguration();
-		
-		fc.set("Name", getName());
-		if(getSettlement() != null){
-			if(getSettlement() instanceof TownyTown){
-				fc.set("SettlementPath", "TOWNY: " + getSettlement().getName());
-			} else {
-				fc.set("SettlementPath", getSettlement().getSettings().getUniqueId());
-			}
-		} else {
-			fc.set("SettlementPath", null);
-		}
-		fc.set("Shape", getShapesString());
-		fc.set("IsForRent", isForRent());
-		fc.set("Rent", getRent());
-		fc.set("NextPayment", nextPayment.toString());
-		fc.set("Creation", getSettings().getCreationDate().toString());
-		if(owner != null){
-			fc.set("Owner", owner.toString());
-		}
-		if(renter != null){
-			fc.set("Renter", renter.toString());
-		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	public boolean isForRent() {
-		return forRent;
-	}
-
-	public void setForRent(boolean forRent) {
-		this.forRent = forRent;
-		setChanged(true);
-	}
-	
+	*/
 }

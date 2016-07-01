@@ -9,6 +9,9 @@ import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
+
 public class GroupSettings extends YamlConfiguration{
 	
 	private UUID uniqueId;
@@ -180,5 +183,20 @@ public class GroupSettings extends YamlConfiguration{
 		} catch (IOException e){
 			e.printStackTrace();
 		}
+	}
+
+	public void setShapes(List<Shape> shapes) {
+		if(shapes != null){
+			this.set("Shape", Util.getShapesString(shapes));
+		} else {
+			this.set("Shape", null);
+		}
+	}
+	
+	public List<Shape> getShapes(){
+		if(this.contains("Shape")){
+			return Util.parseShapes(this.getString("Shape"));
+		}
+		return new ArrayList<Shape>();
 	}
 }

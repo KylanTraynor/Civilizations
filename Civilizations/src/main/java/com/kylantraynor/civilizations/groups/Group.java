@@ -305,6 +305,11 @@ public class Group {
 	 */
 	public boolean save(){
 		File f = getFile();
+		if(getProtection() != null){
+			if(!getProtection().getShapes().isEmpty()){
+				getSettings().setShapes(getProtection().getShapes());
+			}
+		}
 		getSettings().save(f);
 		return !getSettings().hasChanged();
 		/*

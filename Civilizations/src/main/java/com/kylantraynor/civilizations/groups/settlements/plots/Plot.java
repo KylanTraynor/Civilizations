@@ -19,7 +19,6 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Plot extends Group {
 	private PlotType type;
-	private Settlement settlement;
 	private boolean persistent = false;
 	
 	//Constructor for reloads from file
@@ -61,6 +60,7 @@ public class Plot extends Group {
 		} else {
 			this.setProtection(new Protection(getSettlement().getProtection()));
 		}
+		this.getProtection().setShapes(getSettings().getShapes());
 	}
 	
 	@Override
@@ -77,16 +77,19 @@ public class Plot extends Group {
 	public String getType() {
 		return "Plot";
 	}
+	
 	/**
 	 * Gets the type of this plot.
 	 * @return PlotType
 	 */
 	public PlotType getPlotType() { return type; }
+	
 	/**
 	 * Sets the type of this plot.
 	 * @param type
 	 */
 	public void setPlotType(PlotType type) { this.type = type; }
+	
 	/**
 	 * Destroys this plot.
 	 * @return true if the plot has been removed, false otherwise.
@@ -123,7 +126,11 @@ public class Plot extends Group {
 	
 	@Override
 	public boolean save(){
-		return false;
+		if(isPersistent()){
+			return super.save();
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * Gets the settlement owning this plot.
@@ -163,26 +170,6 @@ public class Plot extends Group {
 			if(p.protects(location)) return p;
 		}
 		return null;
-	}
-	
-	public static List<Shape> parseShapes(String str){
-		String[] shapes = str.split(" ");
-		List<Shape> list = new ArrayList<Shape>();
-		for(String shape : shapes){
-			Shape s = Shape.parse(shape);
-			if(s != null){
-				list.add(s);
-			}
-		}
-		return list;
-	}
-	
-	public String getShapesString(){
-		StringBuilder sb = new StringBuilder();
-		for(Shape s : getProtection().getShapes()){
-			sb.append(s.toString() + " ");
-		}
-		return sb.toString();
 	}
 
 	public boolean isPersistent() {
