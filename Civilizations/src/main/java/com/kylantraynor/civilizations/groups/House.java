@@ -49,6 +49,7 @@ public class House extends Group implements IHasBanner{
 	
 	public House() {
 		super();
+		Cache.houseListChanged = true;
 	}
 	
 	@Override

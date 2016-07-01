@@ -53,7 +53,10 @@ public class Camp extends Settlement{
 		return ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + getName() + ChatColor.GOLD + "] "; 
 	}
 	
-	public Camp() { super(); }
+	public Camp() {
+		super();
+		Cache.campListChanged = true;
+	}
 	
 	@Override
 	public void postLoad(){

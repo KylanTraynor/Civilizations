@@ -65,6 +65,7 @@ public class MarketStall extends Plot{
 	
 	public MarketStall() {
 		super();
+		Cache.marketstallListChanged = true;
 	}
 	
 	public OfflinePlayer getOwner(){ return getSettings().getOwner(); }

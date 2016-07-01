@@ -24,6 +24,7 @@ public class Plot extends Group {
 	//Constructor for reloads from file
 	public Plot(){
 		super();
+		Cache.plotListChanged = true;
 	}
 	
 	public Plot(String name, Shape shape, Settlement settlement){

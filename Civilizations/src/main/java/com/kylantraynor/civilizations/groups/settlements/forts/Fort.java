@@ -31,6 +31,7 @@ public class Fort extends Settlement implements IHasBanner{
 	
 	public Fort() {
 		super();
+		Cache.fortListChanged = true;
 	}
 
 	@Override

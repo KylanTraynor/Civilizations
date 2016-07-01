@@ -258,16 +258,14 @@ public class TownyTown extends Settlement{
 			if(townyTown.getPermissions().residentSwitch &&
 					townyTown.getPermissions().allySwitch &&
 					townyTown.getPermissions().outsiderSwitch &&
-					townyTown.getPermissions().residentItemUse &&
-					townyTown.getPermissions().allyItemUse &&
-					townyTown.getPermissions().outsiderItemUse) return;
+					townyTown.getPermissions().residentItemUse) return;
 			
 			townyTown.getPermissions().residentSwitch = true;
 			townyTown.getPermissions().allySwitch = true;
 			townyTown.getPermissions().outsiderSwitch = true;
 			townyTown.getPermissions().residentItemUse = true;
-			townyTown.getPermissions().allyItemUse = true;
-			townyTown.getPermissions().outsiderItemUse = true;
+			//townyTown.getPermissions().allyItemUse = true;
+			//townyTown.getPermissions().outsiderItemUse = true;
 			
 			// Propagate perms to all unchanged, town owned, townblocks
 			for (TownBlock townBlock : townyTown.getTownBlocks()) {
