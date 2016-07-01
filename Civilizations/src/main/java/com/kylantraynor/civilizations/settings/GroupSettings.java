@@ -259,9 +259,9 @@ public class GroupSettings extends YamlConfiguration{
 	public void setPermissionSet(PermissionSet permissionSet) {
 		for(PermissionTarget target : permissionSet.getTargets()){
 			if(target instanceof Rank){
-				this.set("Protection.Permissions.Ranks." + ((Rank) target).getName(), permissionSet.get(target).getTypes());
+				this.set("Protection.Permissions.Ranks." + ((Rank) target).getName(), permissionSet.get(target).getTypesAsString());
 			} else {
-				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypes());
+				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypesAsString());
 			}
 		}
 	}

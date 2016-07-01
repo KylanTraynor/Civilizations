@@ -110,7 +110,6 @@ public class Settlement extends Group {
 	 */
 	public void setLocation(Location location) {
 		getSettings().setLocation(location);
-		setChanged(true);
 	}
 	/**
 	 * Gets the distance between the closest element of the settlement and the given location.

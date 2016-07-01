@@ -136,4 +136,12 @@ public class Permission {
 		}
 		return sb.toString();
 	}
+
+	public Object getTypesAsString() {
+		Map<String, Boolean> output = new HashMap<String, Boolean>();
+		for(Entry<PermissionType, Boolean> e : getTypes().entrySet()){
+			output.put(e.getKey().toString(), e.getValue());
+		}
+		return output;
+	}
 }
