@@ -178,7 +178,7 @@ public class TownyTown extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		Rank mayor = new Rank("Mayor", null);
+		Rank mayor = new Rank("Mayor", (Rank)null);
 		mayor.addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
 		
 		Rank assistant = new Rank("Assistant", mayor);

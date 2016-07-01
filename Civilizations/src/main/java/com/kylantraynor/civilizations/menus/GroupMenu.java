@@ -256,7 +256,7 @@ public class GroupMenu extends Menu{
 	public Button getParentButton(Rank rank){
 		List<String> lore = new ArrayList<String>();
 		if(rank.getParent() != null){
-			lore.add("Current: " + rank.getParent().getName());
+			lore.add("Current: " + rank.getParent());
 		} else {
 			lore.add("None");
 		}
@@ -289,7 +289,7 @@ public class GroupMenu extends Menu{
 		List<String> lore = new ArrayList<String>();
 		String parentName = "None";
 		if(r.getParent() != null){
-			parentName = r.getParent().getName();
+			parentName = r.getParent();
 		}
 		lore.add("Parent: " + parentName);
 		Button rankButton = new Button(player, Material.GOLD_BLOCK, r.getName(), lore,
@@ -371,7 +371,7 @@ public class GroupMenu extends Menu{
 			changePage(Page.RANK);
 			break;
 		case "RANK_NEW":
-			group.getProtection().addRank(new Rank(result, null));
+			group.getProtection().addRank(new Rank(result, (Rank)null));
 			changePage(Page.RANKS_SELECTION);
 			break;
 		}

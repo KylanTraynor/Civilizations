@@ -9,14 +9,22 @@ import org.bukkit.OfflinePlayer;
 
 public class Rank extends PermissionTarget{
 	private String name = "";
-	private Rank parent;
+	private String parent;
 	private List<UUID> players = new ArrayList<UUID>();
 	private int level = 1000;
+	
+	public Rank(String name, String string){
+		super(TargetType.RANK);
+		this.name = name;
+		this.parent = string;
+	}
 	
 	public Rank(String name, Rank parent){
 		super(TargetType.RANK);
 		this.name = name;
-		this.parent = parent;
+		if(parent != null){
+			this.parent = parent.getName();
+		}
 	}
 
 	public String getName() { return name; }
@@ -25,11 +33,19 @@ public class Rank extends PermissionTarget{
 	public int getLevel() { return level; }
 	public void setLevel(int level) { this.level  = level; }
 	
-	public Rank getParent(){ return parent; }
-	public void setParent(Rank parent) { this.parent = parent; }
+	public String getParent(){ return parent; }
+	public void setParent(Rank parent) { this.parent = parent.getName(); }
+	
 	public boolean includes(OfflinePlayer player){
 		return players.contains(player.getUniqueId());
 	}
+	
+	public void addId(UUID id){
+		if(!players.contains(id)){
+			players.add(id);
+		}
+	}
+	
 	public void addPlayer(OfflinePlayer player){
 		if(players.contains(player.getUniqueId())){
 			
@@ -50,5 +66,9 @@ public class Rank extends PermissionTarget{
 			list.add(Bukkit.getServer().getOfflinePlayer(id));
 		}
 		return list;
+	}
+	
+	public List<UUID> getUniqueIds(){
+		return players;
 	}
 }

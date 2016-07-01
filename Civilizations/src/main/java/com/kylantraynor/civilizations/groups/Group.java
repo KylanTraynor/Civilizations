@@ -276,29 +276,6 @@ public class Group {
 	 */
 	public void postLoad(){ }
 	
-	/*
-	public static Group load(YamlConfiguration cf){
-		if(cf == null) return null;
-		Instant creation;
-		if(cf.getString("Creation") != null){
-			creation = Instant.parse(cf.getString("Creation"));
-		} else {
-			creation = Instant.now();
-			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by NOW.");
-		}
-		
-		Group g = new Group();
-		g.getSettings().setCreationDate(creation);
-		
-		int i = 0;
-		while(cf.contains("Members." + i)){
-			g.getMembers().add(UUID.fromString((cf.getString("Members."+i))));
-			i+=1;
-		}
-		
-		return g;
-	}
-	*/
 	/**
 	 * Saves the group to its file.
 	 * @return true if the group has been saved, false otherwise.
@@ -306,32 +283,12 @@ public class Group {
 	public boolean save(){
 		File f = getFile();
 		if(getProtection() != null){
-			if(!getProtection().getShapes().isEmpty()){
-				getSettings().setShapes(getProtection().getShapes());
-			}
+			getSettings().saveProtection(getProtection());
 		}
 		getSettings().save(f);
 		return !getSettings().hasChanged();
-		/*
-		YamlConfiguration fc = new YamlConfiguration();
-		
-		fc.set("Creation", getCreationDate().toString());
-		
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
-		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-		*/
 	}
+	
 	/**
 	 * Updates the group.
 	 */

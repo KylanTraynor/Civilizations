@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -184,19 +187,66 @@ public class GroupSettings extends YamlConfiguration{
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Saves the protection. Should be used each time the protection is changed, or
+	 * once before saving the settings.
+	 * @param prot
+	 */
+	public void saveProtection(Protection prot){
+		if(!prot.getShapes().isEmpty()){
+			setShapes(prot.getShapes());
+		}
+		if(!prot.getRanks().isEmpty()){
+			setRanks(prot.getRanks());
+		}
+	}
 	public void setShapes(List<Shape> shapes) {
 		if(shapes != null){
-			this.set("Shape", Util.getShapesString(shapes));
+			this.set("Protection.Shape", Util.getShapesString(shapes));
 		} else {
-			this.set("Shape", null);
+			this.set("Protection.Shape", null);
 		}
 	}
 	
 	public List<Shape> getShapes(){
-		if(this.contains("Shape")){
-			return Util.parseShapes(this.getString("Shape"));
+		if(this.contains("Protection.Shape")){
+			return Util.parseShapes(this.getString("Protection.Shape"));
 		}
 		return new ArrayList<Shape>();
+	}
+	
+	public void setRanks(List<Rank> ranks){
+		if(ranks != null){
+			for(Rank r : ranks){
+				List<String> idList = new ArrayList<String>();
+				for(UUID id : r.getUniqueIds()){
+					idList.add(id.toString());
+				}
+				this.set("Protection.Ranks." + r.getName() + ".Parent", r.getParent());
+				this.set("Protection.Ranks." + r.getName() + ".Level", r.getLevel());
+				this.set("Protection.Ranks." + r.getName() + ".Members", idList);
+			}
+		}
+	}
+	
+	public List<Rank> getRanks(){
+		List<Rank> ranks = new ArrayList<Rank>();
+		
+		if(this.contains("Protection.Ranks")){
+			ConfigurationSection cs = this.getConfigurationSection("Protection.Ranks");
+			for(String s : cs.getKeys(false)){
+				Rank r = new Rank(s, cs.getString(s + ".Parent"));
+				r.setLevel(cs.getInt(s + ".Level"));
+				for(Object o : cs.getList(s + ".Members")){
+					if(o instanceof String){
+						r.addId(UUID.fromString((String) o));
+					}
+				}
+				ranks.add(r);
+			}
+		}
+		
+		return ranks;
 	}
 }

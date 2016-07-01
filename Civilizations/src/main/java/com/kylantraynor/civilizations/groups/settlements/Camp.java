@@ -167,6 +167,8 @@ public class Camp extends Settlement{
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
 		
 		resPerm.put(PermissionType.MANAGE, true);
+		resPerm.put(PermissionType.MANAGE_RANKS, true);
+		resPerm.put(PermissionType.MANAGE_PLOTS, true);
 		resPerm.put(PermissionType.UPGRADE, true);
 		resPerm.put(PermissionType.BREAK, true);
 		resPerm.put(PermissionType.PLACE, true);

@@ -209,14 +209,20 @@ public class Protection {
 		if(player.isOp()) return true;
 		// If not, check if the protection has a specific permission set for the player
 		PlayerTarget pt = new PlayerTarget(player);
-		if(hasPermissions(pt)){
+		if(hasTarget(pt)){
 			return getPermission(type, pt);
 		}
 		// If not, check if the protection has a specific permission set for the player's rank
 		Rank r = getRank(player);
+		Rank rParent = null;
+		if(r.getParent() != null){
+			rParent = getRank(r.getParent());
+		}
 		if(r != null){
-			if(hasPermissions(r)){
+			if(hasTarget(r)){
 				return getPermission(type, r);
+			} else if(hasTarget(rParent)){
+				return getPermission(type, rParent);
 			}
 		}
 		
@@ -231,7 +237,7 @@ public class Protection {
 		
 		// If not, check if the protection has a permission set for outsiders
 		PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
-		if(hasPermissions(o)){
+		if(hasTarget(o)){
 			return getPermission(type, o);
 		}
 		
@@ -244,12 +250,11 @@ public class Protection {
 	 * @param target
 	 * @return true if Permissions were found, false otherwise.
 	 */
-	@Deprecated
-	public boolean hasPermissions(PermissionTarget target){
+	public boolean hasTarget(PermissionTarget target){
 		if(permissionSet.hasTarget(target)){
 			return true;
 		}
-		if(parent != null) return parent.hasPermissions(target);
+		if(parent != null) return parent.hasTarget(target);
 		return false;
 	}
 	/**
