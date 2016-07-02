@@ -214,11 +214,11 @@ public class Protection {
 		}
 		// If not, check if the protection has a specific permission set for the player's rank
 		Rank r = getRank(player);
-		Rank rParent = null;
-		if(r.getParent() != null){
-			rParent = getRank(r.getParent());
-		}
 		if(r != null){
+			Rank rParent = null;
+			if(r.getParent() != null){
+				rParent = getRank(r.getParent());
+			}
 			if(hasTarget(r)){
 				return getPermission(type, r);
 			} else if(hasTarget(rParent)){
