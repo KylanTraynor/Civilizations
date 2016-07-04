@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.util;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +22,43 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Util {
 
+	/**
+	 * Turns a difference between two instants into a readable string.
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public static String durationToString(Instant from, Instant to){
+		long years = ChronoUnit.YEARS.between(from, to);
+		long months = ChronoUnit.MONTHS.between(from, to);
+		long days = ChronoUnit.DAYS.between(from, to);
+		long hours = ChronoUnit.HOURS.between(from, to);
+		long minutes = ChronoUnit.MINUTES.between(from, to);
+		if(years > 1){
+			return "" + years + " years";
+		} else if(years == 1){
+			return "a year";
+		} else if(months > 1){
+			return "" + months + " months";
+		} else if(months == 1){
+			return "a month";
+		} else if(days > 1){
+			return "" + days + " days";
+		} else if(days == 1){
+			return "a day";
+		} else if(hours > 1){
+			return "" + hours + " hours";
+		} else if(hours == 1){
+			return "an hour";
+		} else if(minutes > 1){
+			return "" + minutes + " minutes";
+		} else if(minutes == 1){
+			return "a minute";
+		} else {
+			return "less than a minute";
+		}
+	}
+	
 	/**
 	 * Gets a list of shapes from a string of the format returned by getShapesString.
 	 * @param str

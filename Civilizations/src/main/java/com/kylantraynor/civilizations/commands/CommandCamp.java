@@ -14,6 +14,7 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.questions.ClearQuestion;
 import com.kylantraynor.civilizations.questions.JoinQuestion;
 import com.kylantraynor.civilizations.questions.LeaveQuestion;
+import com.kylantraynor.civilizations.util.Util;
 
 public class CommandCamp extends CommandGroup{
 
@@ -49,8 +50,8 @@ public class CommandCamp extends CommandGroup{
 					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > 22){
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "You can only renew the camp once a day.");
 					} else {
-						c.setExpireOn(Instant.now().plus(2, ChronoUnit.DAYS));
-						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for a day!");
+						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
+						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for " + Util.durationToString(Instant.now(), c.getExpireOn())+ "!");
 					}
 				}
 			}

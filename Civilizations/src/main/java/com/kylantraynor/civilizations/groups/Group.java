@@ -325,7 +325,7 @@ public class Group {
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
-		fm.then("\nActions: \n").color(ChatColor.GRAY);
+		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
@@ -347,7 +347,7 @@ public class Group {
 				}
 			}
 		} else {
-			fm.then("You can't do anything right now").color(ChatColor.GRAY);
+			fm.then("You can't do anything to this right now").color(ChatColor.GRAY);
 		}
 		
 		return fm;

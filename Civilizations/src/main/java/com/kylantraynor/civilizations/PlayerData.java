@@ -62,6 +62,7 @@ public class PlayerData {
 	public void update(){
 		if(Math.random() < 0.01){
 			takeSkillExperience("Alcohol", 1);
+			takeSkillExperience("Lock Picking", 1);
 		}
 		if(hasChanged){
 			try{save();} catch (Exception e){e.printStackTrace();}

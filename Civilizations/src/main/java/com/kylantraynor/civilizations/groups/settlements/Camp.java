@@ -44,9 +44,11 @@ import com.kylantraynor.civilizations.settings.CampSettings;
 import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Camp extends Settlement{
 	
+	public static int campDuration = 48;
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GREEN + ChatColor.BOLD + "CAMP" + ChatColor.GOLD + "] ";
 	
 	public String getChatHeader(){
@@ -69,7 +71,7 @@ public class Camp extends Settlement{
 	public Camp(Location l) {
 		super(l);
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
-		this.setExpireOn(Instant.now().plus(2, ChronoUnit.DAYS));
+		this.setExpireOn(Instant.now().plus(campDuration, ChronoUnit.HOURS));
 		this.setDefaultPermissions();
 		Cache.campListChanged = true;
 	}
@@ -196,7 +198,7 @@ public class Camp extends Settlement{
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
-			.then("" + ChronoUnit.HOURS.between(Instant.now(), getExpireOn()) + " hours").color(ChatColor.GOLD)
+			.then(Util.durationToString(Instant.now(), getSettings().getExpiryDate())).color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
 			.command("/group " + this.getId() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
@@ -205,7 +207,7 @@ public class Camp extends Settlement{
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
-	} 
+	}
 	
 	@Override
 	public List<GroupAction> getGroupActionsFor(Player player){
@@ -218,7 +220,7 @@ public class Camp extends Settlement{
 			list.add(new GroupAction("Join", "Ask online members of this camp to join", ActionType.COMMAND, "/camp join", hasOneMemberOnline()));
 		}
 		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
-		list.add(new GroupAction("Renew", "Renew the camp for 24 hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Renew", "Renew the camp for " + campDuration + " hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
 		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getId() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
 		return list;
 	}
