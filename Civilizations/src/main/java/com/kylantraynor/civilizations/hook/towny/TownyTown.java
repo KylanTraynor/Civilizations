@@ -119,8 +119,6 @@ public class TownyTown extends Settlement{
 		tb.getPermissions().allySwitch = true;
 		tb.getPermissions().outsiderSwitch = true;
 		tb.getPermissions().residentItemUse = true;
-		tb.getPermissions().allyItemUse = true;
-		tb.getPermissions().outsiderItemUse = true;
 		
 		if(bypassPlotLoading ){
 			return false;
