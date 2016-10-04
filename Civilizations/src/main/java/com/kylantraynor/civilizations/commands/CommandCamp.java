@@ -47,7 +47,7 @@ public class CommandCamp extends CommandGroup{
 				} else if(!c.isMember(p)){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're not part of this camp.");
 				} else {
-					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > 22){
+					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > Camp.campDuration - 1){
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "You can only renew the camp once a day.");
 					} else {
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));

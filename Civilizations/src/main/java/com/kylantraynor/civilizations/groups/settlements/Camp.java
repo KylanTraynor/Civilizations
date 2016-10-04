@@ -199,6 +199,7 @@ public class Camp extends Settlement{
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
 			.then(Util.durationToString(Instant.now(), getSettings().getExpiryDate())).color(ChatColor.GOLD)
+			.then(".").color(ChatColor.GRAY)
 			.then("\nMembers: ").color(ChatColor.GRAY)
 			.command("/group " + this.getId() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
