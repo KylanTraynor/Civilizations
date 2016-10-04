@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.managers.GroupManager;
 
 public class CommandCivilizations implements CommandExecutor{
 
@@ -14,7 +15,7 @@ public class CommandCivilizations implements CommandExecutor{
 			switch(args[0].toUpperCase()){
 			case "UPDATEGROUPS":
 				if(sender.isOp()){
-					Civilizations.updateAllGroups();
+					GroupManager.updateAllGroups();
 				}
 				break;
 			case "TOGGLE":

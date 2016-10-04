@@ -54,6 +54,12 @@
 			<artifactId>worldedit-bukkit</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<!-- DraggyRPG -->
+		<dependency>
+			<groupId>com.kylantraynor</groupId>
+			<artifactId>DraggyRPG</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- LWC -->
 		<dependency>
 			<groupId>com.griefcraft</groupId>
@@ -189,6 +195,11 @@
 				<groupId>io.puharesource.mc</groupId>
 				<artifactId>TitleManager</artifactId>
 				<version>1.5.11</version>
+			</dependency>
+			<dependency>
+				<groupId>com.kylantraynor</groupId>
+				<artifactId>DraggyRPG</artifactId>
+				<version>0.0.21</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

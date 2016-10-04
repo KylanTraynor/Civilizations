@@ -23,6 +23,7 @@ import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.FortComponent;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
@@ -122,7 +123,7 @@ public class Keep extends Plot implements FortComponent{
 		Settlement settlement = null;
 		if(settlementPath != null){
 			if(settlements.get(settlementPath) == null){
-				Settlement s = Civilizations.loadSettlement(settlementPath);
+				Settlement s = GroupManager.loadSettlement(settlementPath);
 				if(s!= null){
 					settlements.put(settlementPath, s);
 					settlement = s;

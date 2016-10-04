@@ -45,6 +45,7 @@ import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
@@ -58,6 +59,7 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.selection.SelectionManager;
@@ -162,10 +164,7 @@ public class Civilizations extends JavaPlugin{
 		
 		registerAchievements();
 		
-		loadGroups();
-		loadHouses();
-		loadCamps();
-		loadPlots();
+		GroupManager.loadAll();
 		
 		loadHooks(pm);
 		
@@ -214,111 +213,6 @@ public class Civilizations extends JavaPlugin{
 	private void createServerViews() {
 		
 	}
-	Map<String, Settlement> loadedSettlements = new HashMap<String, Settlement>();
-	private void loadPlots() {
-		loadKeeps();
-		loadStalls();
-		loadPlotHouses();
-	}
-
-	private void loadKeeps() {
-		File keepDir = getKeepDirectory();
-		if(keepDir.exists()){
-			log("INFO", "Loading Keeps...");
-			for(File f : keepDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					log("INFO", "Loading Keep from file: " + f.getPath());
-					Keep.load(f, new Keep());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private void loadStalls() {
-		File stallDir = getMarketStallDirectory();
-		if(stallDir.exists()){
-			log("INFO", "Loading Stalls...");
-			for(File f : stallDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					log("INFO", "Loading Stall from file: " + f.getPath());
-					MarketStall.load(f, new MarketStall());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private void loadPlotHouses() {
-		File plotHousesDir = getHousePlotDirectory();
-		if(plotHousesDir.exists()){
-			log("INFO", "Loading Houses...");
-			for(File f : plotHousesDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					log("INFO", "Loading House from file: " + f.getPath());
-					com.kylantraynor.civilizations.groups.settlements.plots.House.load(f, new com.kylantraynor.civilizations.groups.settlements.plots.House());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	
-	public static Settlement loadSettlement(String path){
-		log("INFO", "Getting settlement from " + path);
-		if(path.contains("TOWNY: ")){
-			if(TownyHook.isActive()){
-				return TownyHook.loadTownyTown(path.replace("TOWNY: ", ""));
-			} else { return null;}
-		} else {
-			File f = new File(path);
-			if(f.exists()){
-				if(!f.getName().split("\\.")[1].equals("yml")) return null;
-				Group g = null;
-				String[] pathSplit = path.split(File.separator);
-				log("INFO", "Settlement type: " + pathSplit[pathSplit.length - 2]);
-				switch(pathSplit[pathSplit.length - 2]){
-				case "Camps":
-					log("INFO", "Loading camp from " + path);
-					g = new Camp();
-				case "Small Outposts":
-					log("INFO", "Loading small outpost from " + path);
-					g = new SmallOutpost();
-				}
-				g = Group.load(f, g);
-				f.delete();
-				return (Settlement)g;
-			}
-		}
-		return null;
-	}
-
-	private void loadHouses() {
-		File houseDir = getHouseDirectory();
-		if(houseDir.exists()){
-			for(File f : houseDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(isClearing() ){
-					log("INFO", "Cleared file " + f.getName());
-					f.delete();
-					continue;
-				}
-				House h = new House();
-				Group.load(f, h);
-				
-				f.delete();
-			}
-		}
-	}
 
 	private Listener getMenuListener() {
 		return Civilizations.menuListener;
@@ -342,6 +236,11 @@ public class Civilizations extends JavaPlugin{
 		} else { log("WARNING", "Economy: NO, " + PLUGIN_NAME + " will not be working properly."); }
 		
 		if(LWCHook.isActive()) {log("INFO", "LWC: OK"); } else {log("INFO", "LWC: NO"); }
+		
+		if(DraggyRPGHook.isActive()) {
+			log("INFO", "DraggyRPG: OK");
+			DraggyRPGHook.loadLevelCenters();
+		} else {log("INFO", "DraggyRPG: NO");}
 		
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
 		if(TownyHook.isActive()) TownyHook.loadTownyTowns();
@@ -378,19 +277,12 @@ public class Civilizations extends JavaPlugin{
 
 			@Override
 			public void run() {
-				updateAllGroups();
+				GroupManager.updateAllGroups();
 				PlayerData.updateAll();
 			}
 			
 		};
 		br.runTaskTimer(this, (long) (Math.random() * 20), interval);
-	}
-	
-	public static void updateAllGroups(){
-		for(Group g : Cache.getGroupList()){
-			g.update();
-		}
-		log("INFO", "Files saved!");
 	}
 	
 	/**
@@ -448,51 +340,9 @@ public class Civilizations extends JavaPlugin{
 		}
 	}
 
-	/**
-	 * Loads the Groups from their files.
-	 */
-	private void loadGroups() {
-		File groupDir = getCampDirectory();
-		if(groupDir.exists()){
-			for(File f : groupDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					log("WARNING", "Invalid file configuration.");
-				}
-				//Group.load(yaml);
-			}
-		}
-	}
-
-	/**
-	 * Loads the Camps from their files.
-	 */
-	private void loadCamps() {
-		File campDir = getCampDirectory();
-		if(campDir.exists()){
-			for(File f : campDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(isClearing() ){
-					log("INFO", "Cleared file " + f.getName());
-					f.delete();
-					continue;
-				}
-				Camp c = Group.load(f, new Camp());
-				f.delete();
-			}
-		}
-	}
-
 	@Override
 	public void onDisable(){
-		updateAllGroups();
+		GroupManager.updateAllGroups();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}
