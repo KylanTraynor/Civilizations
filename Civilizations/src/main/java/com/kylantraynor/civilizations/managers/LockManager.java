@@ -28,7 +28,7 @@ import com.kylantraynor.civilizations.protection.LockpickSession;
 
 public class LockManager {
 	
-	private static long minutesAfterLogout = 30;
+	private static long minutesAfterLogout = 15;
 	private static long daysSinceLastSeen = 15;
 	
 	private static Map<Player, LockpickSession> sessions = new HashMap<Player, LockpickSession>();
