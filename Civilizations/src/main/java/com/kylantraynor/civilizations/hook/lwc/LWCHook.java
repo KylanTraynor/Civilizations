@@ -1,7 +1,10 @@
 package com.kylantraynor.civilizations.hook.lwc;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -36,7 +39,7 @@ public class LWCHook implements Listener{
 		}
 	}
 	
-	public static boolean hasPortection(Block block){
+	public static boolean hasProtection(Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null) return true;
 		}
@@ -64,6 +67,17 @@ public class LWCHook implements Listener{
 			}
 		}
 		return false;
+	}
+	
+	public static OfflinePlayer getLockOwner(Block block){
+		if(!hasProtection(block)) return null;
+		String ownerName = LWC.getInstance().findProtection(block).getOwner();
+		try{
+			UUID id = UUID.fromString(ownerName);
+			return Bukkit.getOfflinePlayer(id);
+		} catch (IllegalArgumentException ex){
+			return Bukkit.getOfflinePlayer(ownerName);
+		}
 	}
 
 	public static void tempUnlock(Block block, Player p) {

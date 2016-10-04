@@ -1,5 +1,7 @@
-package com.kylantraynor.civilizations.protection;
+package com.kylantraynor.civilizations.managers;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +24,12 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.events.PlayerLockpickEvent;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
+import com.kylantraynor.civilizations.protection.LockpickSession;
 
 public class LockManager {
+	
+	private static long minutesAfterLogout = 30;
+	private static long daysSinceLastSeen = 15;
 	
 	private static Map<Player, LockpickSession> sessions = new HashMap<Player, LockpickSession>();
 	
@@ -64,7 +70,7 @@ public class LockManager {
 
 	public static boolean isLocked(Block block) {
 		if(LWCHook.isActive()){
-			return LWCHook.hasPortection(block);
+			return LWCHook.hasProtection(block);
 		}
 		return false;
 	}
@@ -117,6 +123,17 @@ public class LockManager {
 		if(LWCHook.isActive()){
 			if(LWCHook.getLockType(block) == Type.PASSWORD){
 				player.sendMessage("This type of lock can't be picked.");
+				return;
+			}
+			if(!LWCHook.getLockOwner(block).isOnline()){
+				if(Instant.ofEpochMilli(LWCHook.getLockOwner(block).getLastPlayed())
+						.isBefore(Instant.now().minus(minutesAfterLogout, ChronoUnit.MINUTES))){
+					if(!Instant.ofEpochMilli(LWCHook.getLockOwner(block).getLastPlayed())
+							.isBefore(Instant.now().minus(daysSinceLastSeen, ChronoUnit.DAYS))){
+						player.sendMessage("You can only unlock a chest if its owner is online, or past "+ daysSinceLastSeen +" days of absence.");
+						return;
+					}
+				}
 			}
 		}
 		if(block.getLocation().distance(player.getLocation()) < 3.0){

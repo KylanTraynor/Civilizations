@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.menus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -17,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.PlayerData;
-import com.kylantraynor.civilizations.protection.LockManager;
+import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.LockpickSession;
 
 public class LockpickMenu extends Menu{
@@ -55,7 +56,7 @@ public class LockpickMenu extends Menu{
 	 * Updates the Menu depending on the active page.
 	 */
 	@Override
-	public void update(){
+	public synchronized void update(){
 		ButtonManager.clearButtons(player);
 		currentHighlight = (currentHighlight + 1) % 9;
 		
@@ -75,7 +76,7 @@ public class LockpickMenu extends Menu{
 		top.setItem(pos(8,1), getPickButton());
 		top.setItem(pos(0,1), getPickingLevelButton());
 		player.updateInventory();
-		
+		/*
 		BukkitRunnable bk = new BukkitRunnable(){
 			@Override
 			public void run() {
@@ -84,9 +85,19 @@ public class LockpickMenu extends Menu{
 				}
 			}
 		};
+		*/
 		if(MenuManager.getMenus().get(player) != null){
 			PlayerData pd = PlayerData.get(player.getUniqueId());
-			bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10));
+			Timer timer = new Timer();
+			timer.schedule (new TimerTask() {
+				public void run()
+		        {
+					if(MenuManager.getMenus().get(player) != null){
+						((LockpickMenu)MenuManager.getMenus().get(player)).update();
+					};
+		        }
+		    }, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10) * 50, 0);
+			//bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10));
 		}
 	}
 	

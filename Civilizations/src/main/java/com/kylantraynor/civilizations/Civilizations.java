@@ -58,7 +58,7 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
-import com.kylantraynor.civilizations.protection.LockManager;
+import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.selection.SelectionManager;
 

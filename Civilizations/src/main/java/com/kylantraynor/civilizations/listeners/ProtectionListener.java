@@ -20,7 +20,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
-import com.kylantraynor.civilizations.protection.LockManager;
+import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class ProtectionListener implements Listener{

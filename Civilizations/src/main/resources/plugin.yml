@@ -1,7 +1,7 @@
 name: Civilizations
 main: com.kylantraynor.civilizations.Civilizations
 version: ${project.version}
-softdepend: [dynmap, TitleManager, Towny, Vault, LWC, Quickshop]
+softdepend: [dynmap, TitleManager, Towny, Vault, LWC, Quickshop, DraggyRPG]
 commands:
   civilizationsanswer:
     description: Used to answer questions.
