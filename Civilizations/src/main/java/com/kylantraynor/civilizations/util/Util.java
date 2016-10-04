@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.util;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -29,11 +30,18 @@ public class Util {
 	 * @return
 	 */
 	public static String durationToString(Instant from, Instant to){
-		long years = ChronoUnit.YEARS.between(from, to);
-		long months = ChronoUnit.MONTHS.between(from, to);
-		long days = ChronoUnit.DAYS.between(from, to);
-		long hours = ChronoUnit.HOURS.between(from, to);
-		long minutes = ChronoUnit.MINUTES.between(from, to);
+		Duration duration = Duration.between(from, to);
+		long years = 0;
+		long months = 0;
+		long days = duration.toDays();
+		if(days > 30){
+			months = days / 30;
+		}
+		if(months > 12){
+			years = months / 12;
+		}
+		long hours = duration.toHours();
+		long minutes = duration.toMinutes();
 		if(years > 1){
 			return "" + years + " years";
 		} else if(years == 1){
