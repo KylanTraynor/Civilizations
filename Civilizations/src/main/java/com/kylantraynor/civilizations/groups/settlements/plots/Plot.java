@@ -2,20 +2,26 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import mkremins.fanciful.FancyMessage;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Plot extends Group {
 	private PlotType type;
@@ -152,6 +158,29 @@ public class Plot extends Group {
 			getSettlement().addPlot(this);
 		}
 		setChanged(true);
+	}
+	/**
+	 * Gets an interactive info panel adapted to the given player.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	@Override
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
+			.then("\nBelongs to ").color(ChatColor.GRAY)
+			.then(getNameOf(getSettlement())).color(ChatColor.GOLD);
+		if(getSettlement() != null){
+			fm.command("/group " + getSettlement().getId() + " info");
+		}
+		fm.then(".").color(ChatColor.GRAY)
+			.then("\nMembers: ").color(ChatColor.GRAY)
+			.command("/group " + this.getId() + " members")
+			.then("" + getMembers().size()).color(ChatColor.GOLD)
+			.command("/group " + this.getId() + " members")
+			.then("\nActions: \n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
+		return fm;
 	}
 	/**
 	 * Checks if this plot protects the given location.

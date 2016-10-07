@@ -254,6 +254,19 @@ public class Group {
 	}
 	
 	/**
+	 * Gets the name of the given group.
+	 * @param g
+	 * @return "None" if the given group is Null.
+	 */
+	public static String getNameOf(Group g){
+		if(g == null){
+			return "None";
+		} else {
+			return g.getName();
+		}
+	}
+	
+	/**
 	 * Loads the data from the file into the given group.
 	 * @param file
 	 * @param group
@@ -411,6 +424,7 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
+	
 	public FancyMessage getInteractiveRankMembers(Rank r, int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(r.getName().toUpperCase(), null));
@@ -442,6 +456,7 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GOLD);
 		return fm;
 	}
+	
 	/**
 	 * Sends a message to the members of the group with the given permission.
 	 * @param message
@@ -455,6 +470,7 @@ public class Group {
 			message.send(p);
 		}
 	}
+	
 	/**
 	 * Sends a message to the members of the group with the given permission.
 	 * @param message
@@ -468,6 +484,7 @@ public class Group {
 			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
 	}
+	
 	/**
 	 * Checks if the given player has a certain permission.
 	 * @param perm
@@ -484,6 +501,7 @@ public class Group {
 		}
 		return result;
 	}
+	
 	/**
 	 * Checks if the given player has a certain rank.
 	 * @param targetId of the rank.
@@ -493,22 +511,33 @@ public class Group {
 	public boolean hasRank(String targetId, Player player) {
 		return getProtection().getRank(targetId).includes(player);
 	}
-	public void getInteractiveRankPanel(Rank playerRank) {
-		
+	
+	public FancyMessage getInteractiveRankPanel(Rank playerRank) {
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(playerRank.getName().toUpperCase(), null));
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " rank " + playerRank.getName() + " members");
+		//fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
+		//fm = addCommandsTo(fm, getGroupActionsFor(player));
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
+		return fm;
 	}
 	
 	public void openMenu(Player player){
 		MenuManager.openMenu(new GroupMenu(this), player);
 	}
+	
 	public String getType() {
 		return "Group";
 	}
+	
 	public boolean upgrade() {
 		return false;
 	}
+	
 	public GroupSettings getSettings() {
 		return settings;
 	}
+	
 	public void setSettings(GroupSettings settings) {
 		this.settings = settings;
 	}

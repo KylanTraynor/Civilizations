@@ -61,8 +61,8 @@ import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
+import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.selection.SelectionManager;
 
 import fr.rhaz.webservers.WebServers;
 import fr.rhaz.webservers.WebServers.API;

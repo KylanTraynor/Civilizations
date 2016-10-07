@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.selection.SelectionManager;
+import com.kylantraynor.civilizations.managers.SelectionManager;
 
 public class CommandBlueprint implements CommandExecutor{
 	

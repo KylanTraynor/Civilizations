@@ -239,7 +239,7 @@ public class CommandGroup implements CommandExecutor {
 		case 1:
 			Rank playerRank = g.getProtection().getRank(p);
 			if(playerRank != null){
-				g.getInteractiveRankPanel(playerRank);
+				g.getInteractiveRankPanel(playerRank).send(p);
 			} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");};
 			break;
 		default:

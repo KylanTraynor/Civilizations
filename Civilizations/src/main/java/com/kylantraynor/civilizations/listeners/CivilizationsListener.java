@@ -21,8 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
+import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.selection.SelectionManager;
 
 public class CivilizationsListener implements Listener{
 	

@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations.selection;
+package com.kylantraynor.civilizations.managers;
 
 import java.util.HashMap;
 import java.util.Map;

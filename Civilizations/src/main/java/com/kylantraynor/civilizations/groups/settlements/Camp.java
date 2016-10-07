@@ -158,9 +158,6 @@ public class Camp extends Settlement{
 	@Override
 	public boolean remove(){
 		Cache.campListChanged = true;
-		for(Plot p : getPlots()){
-			p.remove();
-		}
 		return super.remove();
 	}
 	/**
