@@ -10,9 +10,12 @@ import java.util.TreeSet;
 
 public class VCell{
 	
-	public VSite site;
-	public TreeSet<VHalfEdge> edges = new TreeSet<VHalfEdge>(getCheapEdgeSorter());
-	public VTriangle[] triangles;
+	VSite site;
+	TreeSet<VHalfEdge> edges = new TreeSet<VHalfEdge>(getCheapEdgeSorter());
+	VTriangle[] triangles;
+	double[] xVertices;
+	double[] zVertices;
+	
 	public String getName(){
 		return "p" + site.id;
 	}
@@ -159,7 +162,7 @@ public class VCell{
 		}
 	}
 	
-	public Polygon getPolygon(){
+	public void createPolygon(){
 		ArrayList<VectorXZ> vertices = new ArrayList<VectorXZ>();
 		for(VHalfEdge e : edges){
 			if(!vertices.contains(e.getStartPoint()))
@@ -169,15 +172,17 @@ public class VCell{
 		}
 		
 		vertices.sort(getCheapComp());
-		Polygon p = new Polygon();
-		for(VectorXZ e : vertices){
-			p.addPoint((int) e.x, (int) e.z);
+		xVertices = new double[vertices.size()];
+		zVertices = new double[vertices.size()];
+		for(int i = 0; i < vertices.size(); i++){
+			xVertices[i] = vertices.get(i).getX();
+			zVertices[i] = vertices.get(i).getZ();
 		}
-		return p;
 	}
 
 	public void fill(Graphics g){
-		g.fillPolygon(getPolygon());
+		//NOT IMPLEMENTED
+		//g.fillPolygon(Polygon());
 	}
 	
 	public void generateTriangles(){
@@ -188,6 +193,18 @@ public class VCell{
 			triangles[i] = new VTriangle(iter.next());
 			i++;
 		}
+	}
+	
+	public double[] getVerticesX(){
+		if(xVertices == null)
+			createPolygon();
+		return xVertices;
+	}
+	
+	public double[] getVerticesZ(){
+		if(zVertices == null)
+			createPolygon();
+		return zVertices;
 	}
 	
 	public VTriangle[] getTriangles(){
@@ -277,5 +294,9 @@ public class VCell{
 			if(angle < 0) return -1;
 			return 0;
 		};
+	}
+
+	public VSite getSite() {
+		return this.site;
 	}
 }

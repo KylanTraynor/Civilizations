@@ -186,4 +186,12 @@ public class VectorXZ {
 		float z1 = this.z - v.z;
 		return new VectorXZ(x1, z1);
 	}
+	
+	public float getX(){
+		return x;
+	}
+	
+	public float getZ(){
+		return z;
+	}
 }

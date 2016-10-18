@@ -1,63 +1,78 @@
 package com.kylantraynor.civilizations.territories;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-
-import javax.imageio.ImageIO;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 
-import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.worldborder.WorldBorderHook;
+import com.kylantraynor.voronoi.VCell;
+import com.kylantraynor.voronoi.VSite;
+import com.kylantraynor.voronoi.VectorXZ;
+import com.kylantraynor.voronoi.Voronoi;
 
 public class InfluenceMap {
 	
-	private static int oceanLevel = 48;
-	private static int precision = 64; // (1 px = 128 blocks)
-	private static Map<Fort, BufferedImage> image = new HashMap<Fort, BufferedImage>();
+	private Voronoi voronoi;
+	private int oceanLevel = 48;
+	private Map<VSite, InfluentSite> influentSites = new HashMap<VSite, InfluentSite>();
 	
-	
-	public static BufferedImage getImage(Fort f){
-		if(!image.containsKey(f)){
-			if(WorldBorderHook.isActive()){
-				if(WorldBorderHook.getWorldRadiusX(f.getLocation().getWorld()) == 0) return null;
-				image.put(f, new BufferedImage(
-						WorldBorderHook.getWorldRadiusX(f.getLocation().getWorld()) * 2 / precision,
-						WorldBorderHook.getWorldRadiusZ(f.getLocation().getWorld()) * 2 / precision,
-						BufferedImage.TYPE_BYTE_GRAY));
-				return image.get(f);
-			} else {
-				return null;
+	public void generateFull(){
+		for(Settlement s : Settlement.getSettlementList())
+			if(s instanceof InfluentSite){
+				influentSites.put(
+						new VSite(
+								((InfluentSite) s).getX(),
+								((InfluentSite) s).getZ(),
+								((InfluentSite) s).getInfluence()),
+								(InfluentSite) s);
 			}
-		} else {
-			return image.get(f);
-		}
-	}
-	/**
-	 * Saves the influence Map.
-	 * @param f
-	 */
-	public static void saveInfluenceMap(Fort f){
-		BufferedImage img = getImage(f);
-		if(img != null){
-			File file = new File(Civilizations.currentInstance.getDataFolder(), f.getName() + " Influence.jpg");
-			try {
-				ImageIO.write(img, "JPEG", file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		World w = Bukkit.getWorld("world");
+		VSite[] a = influentSites.keySet().toArray(new VSite[influentSites.size()]);
+		if(w == null) return;
+		float xCenter = (float) WorldBorderHook.getWorldCenter(w).getX();
+		float xRadius = WorldBorderHook.getWorldRadiusX(w);
+		float zCenter = (float) WorldBorderHook.getWorldCenter(w).getZ();
+		float zRadius = WorldBorderHook.getWorldRadiusZ(w);
+		float xmin = xCenter - xRadius;
+		float zmin = zCenter - zRadius;
+		float xmax = xCenter + xRadius;
+		float zmax = zCenter + zRadius;
+		voronoi =  new Voronoi(a, xmin, zmin, xmax, zmax);
+		voronoi.generate();
+		if(DynmapHook.isEnabled()){
+			DynmapHook.updateInfluenceMap(this);
 		}
 	}
 	
-	public static Fort getInfluentFortAt(Location l){
+	public boolean isGenerated(){
+		if(voronoi == null)
+			return false;
+		else
+			return voronoi.isDone();
+	}
+	
+	public InfluentSite getInfluentSiteAt(Location l){
+		VectorXZ location = new VectorXZ((float) l.getX(), (float)l.getZ());
+		if(isGenerated()){
+			VCell c = voronoi.getCellAt(location);
+			VSite s = null;
+			if(c != null)
+				s = c.getSite();
+			if(s != null)
+				return influentSites.get(s);
+		}
+		return null;
+	}
+	
+	/*public Fort getInfluentFortAt(Location l){
 		Fort influent = null;
 		double influence = 0.0;
 		for(Fort f : Fort.getAll()){
@@ -71,8 +86,9 @@ public class InfluenceMap {
 			return influent;
 		} else {return null;}
 	}
+	*/
 	
-	public static double getFortInfluenceAt(Fort f, Location l){
+	public double getFortInfluenceAt(Fort f, Location l){
 		if(!f.getLocation().getWorld().equals(l.getWorld())) return 0.0;
 		l = l.clone();
 		l.setY(255);
@@ -94,40 +110,14 @@ public class InfluenceMap {
 		
 		double totalCoeff = xzCoeff - yCoeff;
 		double result = Math.max(((double)f.getInfluence()) - totalCoeff * 0.001, 0.0);
-		BufferedImage img = getImage(f);
-		if(img != null){
-			imgSetGrayscaleAtLocation(l, img, result / Math.max(f.getInfluence(), 1));
-		}
 		return result;
 	}
 	
-	public static void imgSetGrayscaleAtLocation(Location l, BufferedImage img, double data){
-		if(!WorldBorderHook.isActive()) return;
-		if(img == null) return;
-		if(l == null) return;
-		
-		int imgX = 0;
-		int imgY = 0;
-		
-		int imgMinX = -WorldBorderHook.getWorldRadiusX(l.getWorld());
-		imgMinX += WorldBorderHook.getWorldCenter(l.getWorld()).getBlockX();
-		
-		int imgMinZ = -WorldBorderHook.getWorldRadiusZ(l.getWorld());
-		imgMinZ += WorldBorderHook.getWorldCenter(l.getWorld()).getBlockZ();
-		
-		imgX = l.getBlockX() - imgMinX;
-		imgY = l.getBlockZ() - imgMinZ;
-		
-		imgX /= precision;
-		imgY /= precision;
-		int r = (int) (255 * data);// red component 0...255
-	    int g = (int) (255 * data);// green component 0...255
-		int b = (int) (255 * data);// blue component 0...255
-		int col = (r << 16) | (g << 8) | b;
-		
-		if(imgX >= 0 && imgX < img.getWidth() && imgY >= 0 && imgY < img.getHeight()){
-			img.setRGB(imgX, imgY, col);
+	public VCell[] getCells(){
+		if(isGenerated()){
+			return voronoi.getCells();
+		} else {
+			return null;
 		}
 	}
-	
 }

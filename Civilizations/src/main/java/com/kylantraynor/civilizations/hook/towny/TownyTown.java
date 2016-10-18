@@ -25,6 +25,7 @@ import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -34,7 +35,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyTown extends Settlement{
+public class TownyTown extends Settlement implements InfluentSite{
 	
 	static TownyTown get(String string) {
 		for(TownyTown t : getTownyTownList()){
@@ -47,6 +48,7 @@ public class TownyTown extends Settlement{
 
 	Town townyTown;
 	private boolean bypassPlotLoading = true;
+	private float influence = 1;
 	/**
 	 * Gets the cached list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -277,5 +279,35 @@ public class TownyTown extends Settlement{
 			
 			Towny.plugin.resetCache();
 		}
+	}
+
+	@Override
+	public float getInfluence() {
+		return this.influence;
+	}
+
+	@Override
+	public void setInfluence(float newInfluence) {
+		this.influence = (newInfluence >= 1 ? newInfluence : 1);
+	}
+
+	@Override
+	public void addInfluence(float addedInfluence) {
+		setInfluence(getInfluence() + addedInfluence);
+	}
+
+	@Override
+	public void removeInfluence(float removedInfluence) {
+		setInfluence(getInfluence() - removedInfluence);
+	}
+
+	@Override
+	public float getX() {
+		return (float) getLocation().getX();
+	}
+
+	@Override
+	public float getZ() {
+		return (float) getLocation().getZ();
 	}
 }

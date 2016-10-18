@@ -4,11 +4,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.dynmap.DynmapAPI;
+import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
@@ -22,6 +24,7 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.voronoi.VCell;
 
 public class DynmapHook {
 	private static Plugin plugin;
@@ -30,6 +33,7 @@ public class DynmapHook {
 	private static boolean reload;
 	private static MarkerSet campMarkerSet;
 	private static MarkerSet stallsMarkerSet;
+	private static MarkerSet regionsMarkerSet;
 	private static HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	/**
 	 * Tries to load the dynmap plugin. Returns true if successfully loaded, returns false otherwise.
@@ -210,10 +214,10 @@ public class DynmapHook {
 	    	if(m.getSettlement() != null){
 	    		taxes += "<li>" + m.getSettlement().getName() + ": " + (m.getSettlement().getSettings().getTransactionTax() * 100) + "%</li>";
 	    	}
-	    	Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
+	    	/*Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
 	    	if(f != null){
 	    		taxes += "<li>" + f.getName() + ": " + (f.getSettings().getTransactionTax() * 100) + "%</li>";
-	    	}
+	    	}*/
 	    	taxes += "</ul>";
 	    	description = description.replace("%Taxes%", taxes);
 	    	// Wares
@@ -268,6 +272,40 @@ public class DynmapHook {
 	    			+ "<br />Members: " + sb.toString());
 	    	markerList.put(id, camp);
 	    }
+	}
+	
+	public static void updateInfluenceMap(InfluenceMap influenceMap) {
+	}
+	
+	public static void updateRegion(VCell region){
+		String polyID = "region_";
+		polyID = polyID + region.getSite().getX() + "_" + region.getSite().getZ();
+		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, "", false, "world", region.getVerticesX(), region.getVerticesZ(), false);
+		if(m == null){
+			m = regionsMarkerSet.findAreaMarker(polyID);
+			if(m == null){
+				Civilizations.log("SEVERE", "Failed to create marker area.");
+				return;
+			}
+		}
+		m.setLabel("");
+		/*if(region.getNation() != null){
+			if(nationColors.containsKey(t.getNation())){
+				m.setFillStyle(0.25, nationColors.get(t.getNation()));
+				m.setLineStyle(1, 0.25, nationColors.get(t.getNation()));
+			} else {
+				String fill = getConfig().getString("Dynmap.Nations." + t.getNation().getName() + ".fill", null);
+				if(fill != null){
+					int fillColor = Integer.parseInt(fill.substring(1), 16);
+					nationColors.put(t.getNation(), fillColor);
+				} else {
+					nationColors.put(t.getNation(), 0xff0000);
+				}
+			}
+		} else {*/
+			m.setFillStyle(0.1, 0x999999);
+			m.setLineStyle(1 ,1, 0x999999);
+		//}
 	}
 	
 	/**

@@ -27,6 +27,18 @@ public class Voronoi {
 		maxZBound = z1 < z2 ? z2 : z1;
 	}
 	
+	public Voronoi(VSite[] sites, float x1, float z1, float x2, float z2){
+		for(int i = 0; i < sites.length; i++){
+			sites[i].id = i;
+			this.cells[i] = new VCell(sites[i]);
+		}
+		
+		minXBound = x1 < x2 ? x1 : x2;
+		maxXBound = x1 < x2 ? x2 : x1;
+		minZBound = z1 < z2 ? z1 : z2;
+		maxZBound = z1 < z2 ? z2 : z1;
+	}
+	
 	public void generate(){
 		this.done = false;
 		PriorityQueue<VEvent> q = new PriorityQueue<VEvent>(getComp());
@@ -270,6 +282,22 @@ public class Voronoi {
 		}
 		return null;
 	}
+	
+	public VCell getCellAt(VectorXZ v){
+		for(VCell c : cells){
+			if(c.isInside(v)) return c;
+		}
+		return null;
+	}
+	
+	public VTriangle getTriangleAt(VectorXZ v){
+		for(VCell c: cells){
+			for(VTriangle t : c.getTriangles()){
+				if(t.isInside(v)) return t;
+			}
+		}
+		return null;
+	}
 
 	private Comparator<VEvent> getComp(){
 		return (a, b) ->{
@@ -279,5 +307,13 @@ public class Voronoi {
 			if(a.getX() > b.getX()) return 1;
 			return 0;
 		};
+	}
+
+	public boolean isDone() {
+		return this.done;
+	}
+
+	public VCell[] getCells() {
+		return this.cells;
 	}
 }
