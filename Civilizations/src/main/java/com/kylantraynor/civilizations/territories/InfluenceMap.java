@@ -20,27 +20,36 @@ import com.kylantraynor.voronoi.Voronoi;
 
 public class InfluenceMap {
 	
+	private World world;
 	private Voronoi voronoi;
 	private int oceanLevel = 48;
 	private Map<VSite, InfluentSite> influentSites = new HashMap<VSite, InfluentSite>();
 	
+	public InfluenceMap(World w) {
+		world = w;
+	}
+	
+	public World getWorld(){
+		return world;
+	}
+
 	public void generateFull(){
 		for(Settlement s : Settlement.getSettlementList())
 			if(s instanceof InfluentSite){
-				influentSites.put(
-						new VSite(
-								((InfluentSite) s).getX(),
-								((InfluentSite) s).getZ(),
-								((InfluentSite) s).getInfluence()),
-								(InfluentSite) s);
+				if(s.getLocation().getWorld() == world)
+					influentSites.put(
+							new VSite(
+									((InfluentSite) s).getX(),
+									((InfluentSite) s).getZ(),
+									((InfluentSite) s).getInfluence()),
+									(InfluentSite) s);
 			}
-		World w = Bukkit.getWorld("world");
 		VSite[] a = influentSites.keySet().toArray(new VSite[influentSites.size()]);
-		if(w == null) return;
-		float xCenter = (float) WorldBorderHook.getWorldCenter(w).getX();
-		float xRadius = WorldBorderHook.getWorldRadiusX(w);
-		float zCenter = (float) WorldBorderHook.getWorldCenter(w).getZ();
-		float zRadius = WorldBorderHook.getWorldRadiusZ(w);
+		if(world == null) return;
+		float xCenter = (float) WorldBorderHook.getWorldCenter(world).getX();
+		float xRadius = WorldBorderHook.getWorldRadiusX(world);
+		float zCenter = (float) WorldBorderHook.getWorldCenter(world).getZ();
+		float zRadius = WorldBorderHook.getWorldRadiusZ(world);
 		float xmin = xCenter - xRadius;
 		float zmin = zCenter - zRadius;
 		float xmax = xCenter + xRadius;

@@ -20,6 +20,7 @@ public class TerritoryListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
+		/*
 		if(event.isCancelled()) return;
 		if(event.getTo().getBlock().equals(event.getFrom().getBlock())) return;
 		
@@ -56,6 +57,7 @@ public class TerritoryListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
+		*/
 	}
 
 }

@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -63,6 +64,7 @@ import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 import fr.rhaz.webservers.WebServers;
 import fr.rhaz.webservers.WebServers.API;
@@ -106,6 +108,10 @@ public class Civilizations extends JavaPlugin{
 	private static WebListener webListener = new WebListener();
 	private static ChatListener chatListener = new ChatListener();
 	private static VehiclesListener vehiclesListener = new VehiclesListener();
+	/*
+	 * InfluenceMaps
+	 */
+	private static Map<World, InfluenceMap> influenceMaps = new HashMap<World, InfluenceMap>();
 	
 	/**
 	 * Returns the main listener of Civilizations.
@@ -168,6 +174,8 @@ public class Civilizations extends JavaPlugin{
 		
 		loadHooks(pm);
 		
+		loadInfluenceMaps();
+		
 		startGroupUpdater(20L * 60 * 5);
 		startProtectionUpdater(40L);
 		startEconomyUpdater(20L * 60);
@@ -183,6 +191,18 @@ public class Civilizations extends JavaPlugin{
 		} catch (Exception e) {
 			log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 			e.printStackTrace();
+		}
+	}
+
+	private void loadInfluenceMaps() {
+		List<String> enabledWorlds = getConfig().getStringList("EnabledWorlds");
+		for(World w : Bukkit.getServer().getWorlds()){
+			if(enabledWorlds.contains(w.getName()))
+				influenceMaps.put(w, new InfluenceMap(w));
+		}
+		
+		for(InfluenceMap map : influenceMaps.values()){
+			map.generateFull();
 		}
 	}
 

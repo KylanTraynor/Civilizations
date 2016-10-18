@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.dynmap.DynmapAPI;
@@ -303,12 +304,14 @@ public class DynmapHook {
 	}
 	
 	public static void updateInfluenceMap(InfluenceMap influenceMap) {
+		for(VCell c : influenceMap.getCells())
+			updateRegion(influenceMap.getWorld(), c);
 	}
 	
-	public static void updateRegion(VCell region){
+	public static void updateRegion(World world, VCell region){
 		String polyID = "region_";
 		polyID = polyID + region.getSite().getX() + "_" + region.getSite().getZ();
-		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, "", false, "world", region.getVerticesX(), region.getVerticesZ(), false);
+		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, "", false, world.getName(), region.getVerticesX(), region.getVerticesZ(), false);
 		if(m == null){
 			m = regionsMarkerSet.findAreaMarker(polyID);
 			if(m == null){
