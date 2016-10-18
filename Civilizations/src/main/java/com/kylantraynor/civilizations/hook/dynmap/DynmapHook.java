@@ -80,17 +80,45 @@ public class DynmapHook {
 					stallsMarkerSet.deleteMarkerSet();
 					stallsMarkerSet = null;
 				}
+				if(regionsMarkerSet != null){
+					regionsMarkerSet.deleteMarkerSet();
+					regionsMarkerSet = null;
+				}
 		    } else {
 		    	reload = true;
 		    }
 			loadCampMarkerSet();
 			loadStallsMarkerSet();
+			loadRegionsMarkerSet();
 		} catch (Exception e) {
 			Civilizations.log("SEVERE", "Something went wrong activating Dynmap for Civilizations. Is it up to date?");
 			e.printStackTrace();
 		}
 	}
 	
+	
+	/**
+	 * Loads the marker set for Regions.
+	 */
+	private static void loadRegionsMarkerSet() {
+		if(!isEnabled()) return;
+		regionsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.regions");
+		if(regionsMarkerSet == null)
+			regionsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.regions", Civilizations.getInstanceConfig().getString("Dynmap.layer.Regions.Name", "Regions"), null, false);
+		else
+			regionsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Regions.Name", "Regions"));
+		if(regionsMarkerSet == null){
+			Civilizations.log("SEVERE", "Error creating Regions MarkerSet.");
+			return;
+		}
+		int minZoom = Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.MinZoom", 0);
+		if(minZoom > 0){
+			regionsMarkerSet.setMinZoom(minZoom);
+		}
+		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 10));
+		regionsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Regions.HideByDefault", false));
+	}
+
 	/**
 	 * Loads the marker set for Camps
 	 */
@@ -98,7 +126,7 @@ public class DynmapHook {
 		if(!isEnabled()) return;
 		campMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.camps");
 		if (campMarkerSet == null) {
-			campMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.camps", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Name", "Camps"), null, false);
+			campMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.camps", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Camp.Name", "Camps"), null, false);
 		} else {
 			campMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Camp.Name", "Camps"));
 		}
