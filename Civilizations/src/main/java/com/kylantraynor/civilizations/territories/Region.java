@@ -18,8 +18,8 @@ public class Region {
 		this.site = site;
 	}
 	
-	public VCell getCell(Voronoi voronoi){
-		VCell cell = voronoi.getCellAt(new VectorXZ(site.getX(), site.getZ()));
+	public VCell getCell(InfluenceMap map){
+		VCell cell = map.getCell(site);
 		if(cell == null)
 			Civilizations.log("SEVERE", "Couldn't find voronoi cell!");
 		return cell;

@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.territories;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -130,6 +131,13 @@ public class InfluenceMap {
 		} else {
 			return null;
 		}
+	}
+	
+	public VCell getCell(InfluentSite site){
+		for(Entry<VSite, InfluentSite> e : influentSites.entrySet()){
+			if(e.getValue() == site) return voronoi.getCell(e.getKey());
+		}
+		return null;
 	}
 
 	public Collection<InfluentSite> getSites() {

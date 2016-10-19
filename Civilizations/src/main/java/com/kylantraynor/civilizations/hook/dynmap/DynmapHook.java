@@ -313,7 +313,7 @@ public class DynmapHook {
 	public static void updateRegion(InfluenceMap influenceMap, Region region){
 		String polyID = "region_";
 		polyID = polyID + region.getSite().getX() + "_" + region.getSite().getZ();
-		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, region.getName(), false, influenceMap.getWorld().getName(), region.getCell(influenceMap.getData()).getVerticesX(), region.getCell(influenceMap.getData()).getVerticesZ(), false);
+		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, region.getName(), false, influenceMap.getWorld().getName(), region.getCell(influenceMap).getVerticesX(), region.getCell(influenceMap).getVerticesZ(), false);
 		if(m == null){
 			m = regionsMarkerSet.findAreaMarker(polyID);
 			if(m == null){
