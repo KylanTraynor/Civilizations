@@ -4,24 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
-import com.kylantraynor.civilizations.banners.IHasBanner;
+import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.settings.HouseSettings;
 
@@ -30,7 +25,7 @@ import com.kylantraynor.civilizations.settings.HouseSettings;
  * @author Baptiste
  *
  */
-public class House extends Group implements IHasBanner{
+public class House extends Group implements BannerOwner{
 	
 	public String getWords() { return getSettings().getWords(); }
 	public void setWords(String words) { getSettings().setWords(words); }
