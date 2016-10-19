@@ -28,6 +28,7 @@ public class Voronoi {
 	}
 	
 	public Voronoi(VSite[] sites, float x1, float z1, float x2, float z2){
+		this.cells = new VCell[sites.length];
 		for(int i = 0; i < sites.length; i++){
 			sites[i].id = i;
 			this.cells[i] = new VCell(sites[i]);
