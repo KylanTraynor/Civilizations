@@ -202,7 +202,9 @@ public class Civilizations extends JavaPlugin{
 		}
 		
 		for(InfluenceMap map : influenceMaps.values()){
+			log("INFO", "Generating influence map for " + map.getWorld().getName() + ".");
 			map.generateFull();
+			log("INFO", "Map was generated with " + map.getCells().length + " cells.");
 		}
 	}
 
