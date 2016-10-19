@@ -17,7 +17,7 @@ public class Territory {
 	}
 	
 	public Fort getFort(){
-		return InfluenceMap.getInfluentFortAt(this.getCenter());
+		return null;//InfluenceMap.getInfluentFortAt(this.getCenter());
 	}
 	
 	public Location getCenter(){

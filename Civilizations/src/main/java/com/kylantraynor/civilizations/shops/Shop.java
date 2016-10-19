@@ -135,6 +135,6 @@ public class Shop {
 	}
 	
 	public Fort getFort(){
-		return InfluenceMap.getInfluentFortAt(this.getLocation());
+		return null;//InfluenceMap.getInfluentFortAt(this.getLocation());
 	}
 }
