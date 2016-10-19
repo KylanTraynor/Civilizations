@@ -4,20 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
-import com.kylantraynor.civilizations.banners.IHasBanner;
+import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.territories.InfluenceMap;
 
-public class Fort extends Settlement implements IHasBanner{
+public class Fort extends Settlement implements BannerOwner{
 
 	private int influence = 10;
 	private House house;

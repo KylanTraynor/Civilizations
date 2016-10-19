@@ -1,7 +1,9 @@
 package com.kylantraynor.civilizations.territories;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -128,5 +130,14 @@ public class InfluenceMap {
 		} else {
 			return null;
 		}
+	}
+
+	public Collection<InfluentSite> getSites() {
+		// TODO Auto-generated method stub
+		return influentSites.values();
+	}
+
+	public Voronoi getData() {
+		return this.voronoi;
 	}
 }

@@ -25,6 +25,8 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.territories.InfluentSite;
+import com.kylantraynor.civilizations.territories.Region;
 import com.kylantraynor.voronoi.VCell;
 
 public class DynmapHook {
@@ -304,14 +306,14 @@ public class DynmapHook {
 	}
 	
 	public static void updateInfluenceMap(InfluenceMap influenceMap) {
-		for(VCell c : influenceMap.getCells())
-			updateRegion(influenceMap.getWorld(), c);
+		for(InfluentSite c : influenceMap.getSites())
+			updateRegion(influenceMap, c.getRegion());
 	}
 	
-	public static void updateRegion(World world, VCell region){
+	public static void updateRegion(InfluenceMap influenceMap, Region region){
 		String polyID = "region_";
 		polyID = polyID + region.getSite().getX() + "_" + region.getSite().getZ();
-		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, "", false, world.getName(), region.getVerticesX(), region.getVerticesZ(), false);
+		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, region.getName(), false, influenceMap.getWorld().getName(), region.getCell(influenceMap.getData()).getVerticesX(), region.getCell(influenceMap.getData()).getVerticesZ(), false);
 		if(m == null){
 			m = regionsMarkerSet.findAreaMarker(polyID);
 			if(m == null){
@@ -319,24 +321,16 @@ public class DynmapHook {
 				return;
 			}
 		}
-		m.setLabel("");
-		/*if(region.getNation() != null){
-			if(nationColors.containsKey(t.getNation())){
-				m.setFillStyle(0.25, nationColors.get(t.getNation()));
-				m.setLineStyle(1, 0.25, nationColors.get(t.getNation()));
-			} else {
-				String fill = getConfig().getString("Dynmap.Nations." + t.getNation().getName() + ".fill", null);
-				if(fill != null){
-					int fillColor = Integer.parseInt(fill.substring(1), 16);
-					nationColors.put(t.getNation(), fillColor);
-				} else {
-					nationColors.put(t.getNation(), 0xff0000);
-				}
+		m.setLabel(region.getName());
+		if(region.getNation() != null){
+			if(region.getNation().getBanner() != null){
+				m.setFillStyle(0.1, region.getNation().getBanner().getBaseColor().getColor().asRGB());
+				m.setLineStyle(2,  1, region.getNation().getBanner().getBaseColor().getColor().asRGB());
 			}
-		} else {*/
+		} else {
 			m.setFillStyle(0.1, 0x999999);
 			m.setLineStyle(1 ,1, 0x999999);
-		//}
+		}
 	}
 	
 	/**

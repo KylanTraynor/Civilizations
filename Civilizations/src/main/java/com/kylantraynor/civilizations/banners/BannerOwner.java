@@ -1,6 +1,6 @@
 package com.kylantraynor.civilizations.banners;
 
-public interface IHasBanner {
+public interface BannerOwner {
 	public Banner getBanner();
 	public void setBanner(Banner newBanner);
 }

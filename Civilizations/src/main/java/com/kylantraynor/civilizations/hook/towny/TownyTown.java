@@ -26,6 +26,7 @@ import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.territories.InfluentSite;
+import com.kylantraynor.civilizations.territories.Region;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -49,6 +50,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 	Town townyTown;
 	private boolean bypassPlotLoading = true;
 	private float influence = 1;
+	private Region region;
 	/**
 	 * Gets the cached list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -64,6 +66,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 	
 	public TownyTown(Town t) throws TownyException{
 		super(t.getSpawn());
+		this.region = new Region(this);
 		this.townyTown = t;
 		List<TownBlock> tl = t.getTownBlocks();
 		importTownPermissions();
@@ -309,5 +312,10 @@ public class TownyTown extends Settlement implements InfluentSite{
 	@Override
 	public float getZ() {
 		return (float) getLocation().getZ();
+	}
+	
+	@Override
+	public Region getRegion(){
+		return this.region;
 	}
 }
