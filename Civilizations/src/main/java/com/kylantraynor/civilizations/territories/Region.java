@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.territories;
 
 import org.dynmap.markers.Marker;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Nation;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.voronoi.VCell;
@@ -18,7 +19,10 @@ public class Region {
 	}
 	
 	public VCell getCell(Voronoi voronoi){
-		return voronoi.getCellAt(new VectorXZ(site.getX(), site.getZ()));
+		VCell cell = voronoi.getCellAt(new VectorXZ(site.getX(), site.getZ()));
+		if(cell == null)
+			Civilizations.log("SEVERE", "Couldn't find voronoi cell!");
+		return cell;
 	}
 	
 	public String getName(){
