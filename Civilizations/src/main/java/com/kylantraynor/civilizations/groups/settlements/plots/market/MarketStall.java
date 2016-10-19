@@ -190,12 +190,12 @@ public class MarketStall extends Plot{
 					}
 				}
 				//Pay Fort's Stall Tax
-				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
+				/*Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
 					if(Economy.depositSettlement(f, getRent() * f.getSettings().getStallRentTax())){
 						payout -= getRent() * f.getSettings().getStallRentTax();
 					}
-				}
+				}*/
 				//Pay Owner
 				Economy.depositPlayer(getOwner(), payout);
 				if(getOwner().isOnline()){
@@ -211,18 +211,18 @@ public class MarketStall extends Plot{
 				}
 				double payout = getRent();
 				//Pay Fort's Stall Tax
-				Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
+				/*Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 				if(f != null){
 					if(Economy.depositSettlement(f, getRent() * f.getSettings().getStallRentTax())){
 						payout -= getRent() * f.getSettings().getStallRentTax();
 					}
-				}
+				}*/
 				//Pay Settlement
 				Economy.depositSettlement(getSettlement(), payout);
 			}
 		} else {
 			//Pay Fort
-			Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
+			/*Fort f = InfluenceMap.getInfluentFortAt(getProtection().getCenter());
 			if(f != null){
 				if(Economy.withdrawPlayer(getRenter(), getRent())){
 					if(getRenter().isOnline()){
@@ -231,7 +231,7 @@ public class MarketStall extends Plot{
 					}
 					Economy.depositSettlement(f, getRent());
 				}
-			}
+			}*/
 		}
 	}
 	

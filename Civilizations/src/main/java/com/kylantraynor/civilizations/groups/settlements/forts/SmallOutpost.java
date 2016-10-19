@@ -145,7 +145,7 @@ public class SmallOutpost extends Fort{
 	 */
 	@Override
 	public boolean save(){
-		InfluenceMap.saveInfluenceMap(this);
+		//InfluenceMap.saveInfluenceMap(this);
 		File f = getFile();
 		if(f == null) return false;
 		YamlConfiguration fc = new YamlConfiguration();
