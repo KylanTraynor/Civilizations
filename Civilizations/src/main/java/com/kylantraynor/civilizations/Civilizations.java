@@ -1,8 +1,6 @@
 package com.kylantraynor.civilizations;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -38,14 +34,10 @@ import com.kylantraynor.civilizations.commands.CommandHouse;
 import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandSelection;
 import com.kylantraynor.civilizations.commands.CommandStall;
-import com.kylantraynor.civilizations.groups.Group;
-import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
@@ -66,9 +58,7 @@ import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 
-import fr.rhaz.webservers.WebServers;
 import fr.rhaz.webservers.WebServers.API;
-import fr.rhaz.webservers.WebServers.API.WebServer;
 
 public class Civilizations extends JavaPlugin{
 	
@@ -600,12 +590,20 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getMarketStallDirectory() {
 		File f = new File(getPlotDirectory(), "Stalls");
-		if(f.exists()){
-			return f;
-		} else {
+		if(!f.exists())
 			f.mkdir();
-			return f;
-		}
+		return f;
+	}
+	
+	/**
+	 * Get the directory in which the nation files are stored.
+	 * @return File
+	 */
+	public static File getNationDirectory(){
+		File f = new File(currentInstance.getDataFolder(), "Nations");
+		if(!f.exists())
+			f.mkdir();
+		return f;
 	}
 	
 	public static File getPlayerDataDirectory() {
@@ -736,5 +734,8 @@ public class Civilizations extends JavaPlugin{
 	public static void callEvent(Event event) {
 		currentInstance.getServer().getPluginManager().callEvent(event);
 	}
-
+	
+	public static void getInfluenceMap(World w){
+		influenceMaps.get(w);
+	}
 }

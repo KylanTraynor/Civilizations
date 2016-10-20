@@ -1,13 +1,11 @@
 package com.kylantraynor.civilizations.territories;
 
-import org.dynmap.markers.Marker;
-
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Nation;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.voronoi.VCell;
-import com.kylantraynor.voronoi.VectorXZ;
-import com.kylantraynor.voronoi.Voronoi;
+
+// TODO Add titles when moving from one region to another.
 
 public class Region {
 	
