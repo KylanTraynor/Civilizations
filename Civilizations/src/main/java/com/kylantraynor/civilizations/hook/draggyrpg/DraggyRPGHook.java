@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.draggyrpg.entities.RPGLevelCenter;
@@ -68,7 +68,7 @@ public class DraggyRPGHook {
 	}
 
 	public static void loadLevelCenters() {
-		for(Settlement s : Cache.getSettlementList()){
+		for(Settlement s : CacheManager.getSettlementList()){
 			int number = s.getMembers().size();
 			if(number > 0){
 				createTaggedLevelCenter(s, s.getLocation(), 1, 0, 0.01 / number, 0, false);
@@ -78,7 +78,7 @@ public class DraggyRPGHook {
 	}
 	
 	public static void updateLevelCenters(){
-		for(Settlement s : Cache.getSettlementList()){
+		for(Settlement s : CacheManager.getSettlementList()){
 			if(levelCenters.containsKey(s)){
 				int number = s.getMembers().size();
 				if(number > 0){

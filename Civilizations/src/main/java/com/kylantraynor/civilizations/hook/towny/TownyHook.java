@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -58,7 +58,7 @@ public class TownyHook {
 	}
 	
 	public static boolean isTownLoaded(String name){
-		for(TownyTown t : Cache.getTownyTownList()){
+		for(TownyTown t : CacheManager.getTownyTownList()){
 			if(t.getName().equalsIgnoreCase(name)){
 				return true;
 			}
@@ -68,7 +68,7 @@ public class TownyHook {
 	
 	public static TownyTown loadTownyTown(String name){
 		if(isActive()){
-			for(TownyTown t : Cache.getTownyTownList()){
+			for(TownyTown t : CacheManager.getTownyTownList()){
 				if(t.getName().equalsIgnoreCase(name)){
 					return t;
 				}
@@ -83,15 +83,15 @@ public class TownyHook {
 		} else { return null;}
 	}
 
-	private static Map<com.palmergames.bukkit.towny.object.Resident, UUID> residentCache = new HashMap<com.palmergames.bukkit.towny.object.Resident, UUID>();
+	private static Map<com.palmergames.bukkit.towny.object.Resident, UUID> residentCacheManager = new HashMap<com.palmergames.bukkit.towny.object.Resident, UUID>();
 	
 	public static OfflinePlayer getPlayer(com.palmergames.bukkit.towny.object.Resident res){
-		if(residentCache.containsKey(res)){
-			return Bukkit.getServer().getOfflinePlayer(residentCache.get(res));
+		if(residentCacheManager.containsKey(res)){
+			return Bukkit.getServer().getOfflinePlayer(residentCacheManager.get(res));
 		} else {
 			OfflinePlayer p = Bukkit.getServer().getOfflinePlayer((res.getName()));
 			if(p != null){
-				residentCache.put(res, p.getUniqueId());
+				residentCacheManager.put(res, p.getUniqueId());
 				return p;
 			} else {
 				Civilizations.log("WARNING", "Couldn't find player for resident " + res.getName() + ".");

@@ -13,7 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -21,7 +21,6 @@ import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStal
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.LockManager;
-import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class ProtectionListener implements Listener{
 	
@@ -31,7 +30,7 @@ public class ProtectionListener implements Listener{
 		if(Settlement.isProtected(event.getBlock().getLocation())){
 			
 			// Checks if the protection belongs to a Market Stall.
-			for(MarketStall ms : Cache.getMarketstallList()){
+			for(MarketStall ms : CacheManager.getMarketstallList()){
 				if(ms.protects(event.getBlock().getLocation())){
 					if(ms.isOwner(event.getPlayer())){
 						event.setCancelled(false);
@@ -62,7 +61,7 @@ public class ProtectionListener implements Listener{
 		if(Settlement.isProtected(event.getBlock().getLocation())){
 			
 			// Checks if the protection belongs to a Market Stall.
-			for(MarketStall ms : Cache.getMarketstallList()){
+			for(MarketStall ms : CacheManager.getMarketstallList()){
 				if(ms.protects(event.getBlock().getLocation())){
 					if(ms.isOwner(event.getPlayer())){
 						event.setCancelled(false);

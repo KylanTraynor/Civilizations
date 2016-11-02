@@ -9,7 +9,6 @@ import java.util.Map;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
@@ -204,7 +203,7 @@ public class GroupManager {
 	}
 	
 	public static void updateAllGroups(){
-		for(Group g : Cache.getGroupList()){
+		for(Group g : CacheManager.getGroupList()){
 			g.update();
 		}
 		if(DraggyRPGHook.isActive()){
