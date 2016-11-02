@@ -178,6 +178,8 @@ public class InfluenceMap {
 		if(oldTriangle != null) cellFrom = oldTriangle.getOwner();
 		if(newTriangle != null) cellTo = newTriangle.getOwner();
 		
+		CacheManager.setPlayerTriangulation(p, newTriangle == null ? oldTriangle : newTriangle);
+		
 		if(cellFrom != null) regionFrom = influentSites.get(cellFrom.getSite()).getRegion();
 		if(cellTo != null) regionTo = influentSites.get(cellTo.getSite()).getRegion();
 		return new PlayerMoveData(p, regionFrom, regionTo, this);
