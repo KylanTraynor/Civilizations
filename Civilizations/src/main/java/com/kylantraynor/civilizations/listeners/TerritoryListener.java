@@ -1,15 +1,12 @@
 package com.kylantraynor.civilizations.listeners;
 
-import java.util.HashMap;
-import java.util.Map;
+import net.md_5.bungee.api.ChatColor;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.PlayerMoveData;
@@ -23,13 +20,15 @@ public class TerritoryListener implements Listener {
 		
 		InfluenceMap map = Civilizations.getInfluenceMap(event.getTo().getWorld());
 		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom().getBlock().getLocation(), event.getTo().getBlock().getLocation());
-		if(Civilizations.currentInstance.isDEBUG()){
-			String from = data.getFrom() == null ? "NullRegion" : data.getFrom().getName();
-			String to = data.getTo() == null ? "NullRegion" : data.getTo().getName();
-			Civilizations.DEBUG("Moving from " + from + " to " + to + ".");
-		}
+		
 		if(data.changedRegion() && data.getTo() != null){
-			TitleManagerHook.sendTitle("", data.getTo().getName(), 0, 1, 5, event.getPlayer());
+			ChatColor color = ChatColor.WHITE;
+			if(data.getTo().getNation() == null){
+				TitleManagerHook.sendActionBar("Independant Territory", event.getPlayer(), false);
+			} else {
+				//data.getTo().getNation().getBanner().getBaseColor();
+			}
+			TitleManagerHook.sendTitle("", "" + color + data.getTo().getName(), 5, 30, 10, event.getPlayer());
 		}
 		/*Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
 		/Fort oldFort = null;
