@@ -165,6 +165,24 @@ public class InfluenceMap {
 		return null;
 	}
 	
+	public PlayerMoveData processPlayerMove(Player p, Location from, Location to){
+		VTriangle oldTriangle = getData().getTriangleAt(
+				new VectorXZ((float) from.getX(), (float) from.getZ()),
+				CacheManager.getPlayerTriangulation(p));
+		VTriangle newTriangle = getData().getTriangleAt(
+				new VectorXZ((float) to.getX(), (float) to.getZ()), oldTriangle);
+		VCell cellFrom = null;
+		VCell cellTo = null;
+		Region regionFrom = null;
+		Region regionTo = null;
+		if(oldTriangle != null) cellFrom = oldTriangle.getOwner();
+		if(newTriangle != null) cellTo = newTriangle.getOwner();
+		
+		if(cellFrom != null) regionFrom = influentSites.get(cellFrom.getSite()).getRegion();
+		if(cellTo != null) regionTo = influentSites.get(cellTo.getSite()).getRegion();
+		return new PlayerMoveData(p, regionFrom, regionTo, this);
+	}
+	
 	public VCell getCell(Location l){
 		return getData().getCellAt(new VectorXZ((float) l.getX(), (float) l.getZ()));
 	}

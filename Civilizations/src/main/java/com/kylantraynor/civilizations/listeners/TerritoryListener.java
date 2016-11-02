@@ -9,23 +9,26 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.events.PlayerTerritoryChangeEvent;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.territories.PlayerMoveData;
 
 public class TerritoryListener implements Listener {
 	
-	Map<Player, Fort> playerLocations = new HashMap<Player, Fort>();
-	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
-		/*
 		if(event.isCancelled()) return;
 		if(event.getTo().getBlock().equals(event.getFrom().getBlock())) return;
 		
-		Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
-		Fort oldFort = null;
+		InfluenceMap map = Civilizations.getInfluenceMap(event.getTo().getWorld());
+		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom(), event.getTo());
+		
+		if(data.changedRegion() && data.getTo() != null){
+			TitleManagerHook.sendTitle("", data.getTo().getName(), 0, 1, 5, event.getPlayer());
+		}
+		/*Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
+		/Fort oldFort = null;
 		if(playerLocations.containsKey(event.getPlayer())){
 			oldFort = playerLocations.get(event.getPlayer());
 		}

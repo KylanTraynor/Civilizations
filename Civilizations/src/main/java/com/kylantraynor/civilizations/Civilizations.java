@@ -737,7 +737,7 @@ public class Civilizations extends JavaPlugin{
 		currentInstance.getServer().getPluginManager().callEvent(event);
 	}
 	
-	public static void getInfluenceMap(World w){
-		influenceMaps.get(w);
+	public static InfluenceMap getInfluenceMap(World w){
+		return influenceMaps.get(w);
 	}
 }
