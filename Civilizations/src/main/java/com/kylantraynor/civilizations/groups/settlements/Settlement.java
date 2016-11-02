@@ -9,12 +9,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.settings.CampSettings;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
@@ -35,13 +34,13 @@ public class Settlement extends Group {
 	
 	public Settlement() {
 		super();
-		Cache.settlementListChanged = true;
+		CacheManager.settlementListChanged = true;
 	}
 	
 	public Settlement(Location l){
 		super();
 		setLocation(l);
-		Cache.settlementListChanged = true;
+		CacheManager.settlementListChanged = true;
 	}
 	
 	@Override
@@ -169,7 +168,7 @@ public class Settlement extends Group {
 		for(Plot p : getPlots()){
 			p.remove();
 		}
-		Cache.settlementListChanged = true;
+		CacheManager.settlementListChanged = true;
 		return super.remove();
 	}
 	/**
@@ -178,7 +177,7 @@ public class Settlement extends Group {
 	 * @see Cache
 	 */
 	public static List<Settlement> getSettlementList() {
-		return Cache.getSettlementList();
+		return CacheManager.getSettlementList();
 	}
 	/**
 	 * Checks if the given location is under the protection of this settlement.
@@ -272,6 +271,6 @@ public class Settlement extends Group {
 				distance = Math.min(shape.distance(s), distance);
 			}
 		}
-		return distance <= Civilizations.settlementMergeRadius;
+		return distance <= Civilizations.SETTLEMENT_MERGE_RADIUS;
 	}
 }

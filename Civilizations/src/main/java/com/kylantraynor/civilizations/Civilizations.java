@@ -52,6 +52,7 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
@@ -67,7 +68,7 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static final String MC_SERVER_VERSION = org.bukkit.Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 	public static final String PLUGIN_NAME = "Civilizations";
-	public static final int settlementMergeRadius = 25;
+	public static final int SETTLEMENT_MERGE_RADIUS = 25;
 	
 	/**
 	 * Currently running instance of Civilizations
@@ -201,6 +202,7 @@ public class Civilizations extends JavaPlugin{
 	private void initManagers() {
 		LockManager.init();
 		SelectionManager.init();
+		CacheManager.init();
 	}
 	
 	private void freesManagers(){
@@ -379,7 +381,7 @@ public class Civilizations extends JavaPlugin{
 			//Try getting a plot
 			Plot plot = null;
 			Protection newProt = null;
-			for(Plot p : Cache.getPlotList()){
+			for(Plot p : CacheManager.getPlotList()){
 				if(p.protects(l)){
 					plot = p;
 					newProt = p.getProtection();
@@ -448,7 +450,7 @@ public class Civilizations extends JavaPlugin{
 				}
 			} else {
 				Plot p = null;
-				for(Plot plot : Cache.getPlotList()){
+				for(Plot plot : CacheManager.getPlotList()){
 					if(plot.protects(toL)) p = plot;
 				}
 				if(p == null) return;

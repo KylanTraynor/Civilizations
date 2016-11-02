@@ -1,8 +1,20 @@
-package com.kylantraynor.civilizations;
+package com.kylantraynor.civilizations.managers;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+
+import com.kylantraynor.cache.Cache;
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
@@ -11,8 +23,13 @@ import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
+import com.kylantraynor.voronoi.VTriangle;
 
-public class Cache {
+public class CacheManager {
+	
+	private final static int CACHE_CAPACITY = 1000;
+	private final static long CACHE_TIMER = 1l;
+	private final static long CACHE_LIFESPAN = 30l * 60l;
 	
 	public static boolean groupListChanged = true;
 	public static boolean settlementListChanged = true;
@@ -32,6 +49,12 @@ public class Cache {
 	private static List<Fort> fortList;
 	private static List<MarketStall> marketstallList;
 	
+	private static Cache<UUID, VTriangle> playerLocations;
+	
+	public static void init(){
+		playerLocations = new Cache<UUID, VTriangle>(CACHE_LIFESPAN, CACHE_TIMER, CACHE_CAPACITY);
+	}
+
 	/**
 	 * Gets the list of Groups.
 	 * @return List<Group> of cached groups.
@@ -171,5 +194,24 @@ public class Cache {
 			}
 		}
 		return marketstallList;
+	}
+	
+	/**
+	 * Gets the location of the given player that was cached from the influence map.
+	 * @param p
+	 * @return
+	 */
+	public static VTriangle getPlayerTriangulation(Player p){
+		return playerLocations.get(p.getUniqueId());
+	}
+	
+	/**
+	 * Sets the location of the given player on the influence map to the cache.
+	 * @param p
+	 * @param t
+	 * @return The old value, or Null.
+	 */
+	public static VTriangle setPlayerTriangulation(Player p, VTriangle t){
+		return playerLocations.put(p.getUniqueId(), t);
 	}
 }

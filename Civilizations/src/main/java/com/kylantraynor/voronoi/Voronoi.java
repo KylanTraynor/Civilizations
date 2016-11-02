@@ -18,7 +18,7 @@ public class Voronoi {
 		for(int i = 0; i < sites.length; i++){
 			VSite s = new VSite(sites[i].x, sites[i].z, ws[i]);
 			s.id = i;
-			this.cells[i] = new VCell(s);
+			this.cells[i] = new VCell(s, this);
 		}
 		
 		minXBound = x1 < x2 ? x1 : x2;
@@ -31,7 +31,7 @@ public class Voronoi {
 		this.cells = new VCell[sites.length];
 		for(int i = 0; i < sites.length; i++){
 			sites[i].id = i;
-			this.cells[i] = new VCell(sites[i]);
+			this.cells[i] = new VCell(sites[i], this);
 		}
 		
 		minXBound = x1 < x2 ? x1 : x2;
@@ -298,6 +298,20 @@ public class Voronoi {
 			}
 		}
 		return null;
+	}
+	
+	public VTriangle getTriangleAt(VectorXZ v, VTriangle lastKnown){
+		if(lastKnown == null) return getTriangleAt(v);
+		if(lastKnown.isInside(v)) return lastKnown;
+		for(VTriangle t : lastKnown.getOwner().getTriangles()){
+			if(t.isInside(v)) return t;
+		}
+		for(VCell c : lastKnown.getOwner().getNeighbours()){
+			for(VTriangle t : c.getTriangles()){
+				if(t.isInside(v)) return t;
+			}
+		}
+		return getTriangleAt(v);
 	}
 
 	private Comparator<VEvent> getComp(){

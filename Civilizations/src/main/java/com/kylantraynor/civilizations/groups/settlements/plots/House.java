@@ -2,27 +2,11 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import mkremins.fanciful.FancyMessage;
-
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
-import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
 
 public class House extends Plot {
 

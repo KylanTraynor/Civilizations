@@ -8,32 +8,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.BlockState;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
-import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -41,7 +35,6 @@ import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.CampSettings;
-import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 import com.kylantraynor.civilizations.util.Util;
@@ -57,14 +50,14 @@ public class Camp extends Settlement{
 	
 	public Camp() {
 		super();
-		Cache.campListChanged = true;
+		CacheManager.campListChanged = true;
 	}
 	
 	@Override
 	public void postLoad(){
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setDefaultPermissions();
-		Cache.campListChanged = true;
+		CacheManager.campListChanged = true;
 		super.postLoad();
 	}
 	
@@ -73,7 +66,7 @@ public class Camp extends Settlement{
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setExpireOn(Instant.now().plus(campDuration, ChronoUnit.HOURS));
 		this.setDefaultPermissions();
-		Cache.campListChanged = true;
+		CacheManager.campListChanged = true;
 	}
 
 	@Override
@@ -157,7 +150,7 @@ public class Camp extends Settlement{
 	
 	@Override
 	public boolean remove(){
-		Cache.campListChanged = true;
+		CacheManager.campListChanged = true;
 		return super.remove();
 	}
 	/**
@@ -257,12 +250,12 @@ public class Camp extends Settlement{
 		getSettings().setExpiryDate(expireOn);
 	}
 	/**
-	 * Gets the cached list of camps.
+	 * Gets the CacheManagerd list of camps.
 	 * @return List<Camp> of camps.
-	 * @see Cache
+	 * @see CacheManager
 	 */
 	public static List<Camp> getCampList(){
-		return Cache.getCampList();
+		return CacheManager.getCampList();
 	}
 	/**
 	 * Gets the file where this camp is saved.

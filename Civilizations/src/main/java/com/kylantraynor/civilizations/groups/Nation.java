@@ -2,9 +2,7 @@ package com.kylantraynor.civilizations.groups;
 
 import org.bukkit.entity.Player;
 
-import net.md_5.bungee.api.ChatColor;
-
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.settings.NationSettings;
@@ -18,7 +16,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 	}
 
 	public static Nation get(String string) {
-		for(Group g : Cache.getGroupList()){
+		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
 				if(g.getName().equalsIgnoreCase(string)){
 					return (Nation) g;
@@ -52,7 +50,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 	}
 
 	public static Nation get(Banner banner) {
-		for(Group g : Cache.getGroupList()){
+		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
 				if(((Nation) g).getBanner().isSimilar(banner)) return (Nation) g;
 			}
@@ -61,7 +59,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 	}
 
 	public static Nation get(Player p) {
-		for(Group g : Cache.getGroupList()){
+		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
 				if(g.isMember(p)) return (Nation) g;
 			}

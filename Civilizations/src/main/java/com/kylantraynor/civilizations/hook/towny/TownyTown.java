@@ -13,7 +13,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -33,7 +33,6 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyTown extends Settlement implements InfluentSite{
@@ -52,16 +51,16 @@ public class TownyTown extends Settlement implements InfluentSite{
 	private float influence = 1;
 	private Region region;
 	/**
-	 * Gets the cached list of Towns from Towny.
+	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
 	 */
 	public static List<TownyTown> getTownyTownList(){
-		return Cache.getTownyTownList();
+		return CacheManager.getTownyTownList();
 	}
 
 	public TownyTown(Location l) {
 		super(l);
-		Cache.townyTownListChanged = true;
+		CacheManager.townyTownListChanged = true;
 	}
 	
 	public TownyTown(Town t) throws TownyException{
@@ -112,7 +111,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 				Civilizations.log("INFO", "Loading " + t.getName() + ": " + Math.round(((double)i/tl.size())*100) + "% (" + i + "/"+ tl.size()+ ")");
 			}
 		}
-		Cache.townyTownListChanged = true;
+		CacheManager.townyTownListChanged = true;
 	}
 	/**
 	 * Checks if the given TownBlock is a plot or just part of the town's protection.
@@ -224,7 +223,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 	
 	@Override
 	public boolean remove(){
-		Cache.townyTownListChanged = true;
+		CacheManager.townyTownListChanged = true;
 		return super.remove();
 	}
 	

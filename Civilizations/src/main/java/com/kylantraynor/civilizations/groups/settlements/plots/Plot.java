@@ -2,8 +2,6 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import mkremins.fanciful.FancyMessage;
@@ -13,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
@@ -21,7 +19,6 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
 
 public class Plot extends Group {
 	private PlotType type;
@@ -30,7 +27,7 @@ public class Plot extends Group {
 	//Constructor for reloads from file
 	public Plot(){
 		super();
-		Cache.plotListChanged = true;
+		CacheManager.plotListChanged = true;
 	}
 	
 	public Plot(String name, Shape shape, Settlement settlement){
@@ -38,7 +35,7 @@ public class Plot extends Group {
 		this.setName(name);
 		setSettlement(settlement);
 		this.getProtection().add(shape);
-		Cache.plotListChanged = true;
+		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -47,7 +44,7 @@ public class Plot extends Group {
 		this.setName(name);
 		setSettlement(settlement);
 		this.getProtection().setShapes(shapes);
-		Cache.plotListChanged = true;
+		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -56,7 +53,7 @@ public class Plot extends Group {
 		this.setProtection(new Protection(settlement.getProtection()));
 		setSettlement(settlement);
 		this.getProtection().add(shape);
-		Cache.plotListChanged = true;
+		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -106,7 +103,7 @@ public class Plot extends Group {
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
 			getProtection().hide(p);
 		}
-		Cache.plotListChanged = true;
+		CacheManager.plotListChanged = true;
 		return super.remove();
 	}
 	
@@ -192,7 +189,7 @@ public class Plot extends Group {
 	}
 	
 	public static List<Plot> getAll(){
-		return Cache.getPlotList();
+		return CacheManager.getPlotList();
 	}
 	
 	public static Plot getAt(Location location){

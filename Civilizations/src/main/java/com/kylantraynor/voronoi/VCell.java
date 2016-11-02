@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 public class VCell{
-	
+	Voronoi voronoi;
 	VSite site;
 	TreeSet<VHalfEdge> edges = new TreeSet<VHalfEdge>(getCheapEdgeSorter());
 	VTriangle[] triangles;
@@ -20,8 +20,9 @@ public class VCell{
 		return "p" + site.id;
 	}
 	
-	public VCell(VSite site) {
+	public VCell(VSite site, Voronoi v) {
 		this.site = site;
+		this.voronoi = v;
 	}
 
 	/**
@@ -298,5 +299,9 @@ public class VCell{
 
 	public VSite getSite() {
 		return this.site;
+	}
+	
+	public Voronoi getVoronoi(){
+		return voronoi;
 	}
 }

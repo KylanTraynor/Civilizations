@@ -2,70 +2,54 @@ package com.kylantraynor.civilizations.groups.settlements.plots.market;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import mkremins.fanciful.FancyMessage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
-import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.hook.quickshop.QuickshopHook;
-import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;
 import com.kylantraynor.civilizations.shops.ShopManager;
 import com.kylantraynor.civilizations.shops.ShopType;
-import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.Util;
 
 public class MarketStall extends Plot{
 	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
-		Cache.marketstallListChanged = true;
+		CacheManager.marketstallListChanged = true;
 	}
 	
 	public MarketStall(String name, List<Shape> shapes, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shapes, settlement);
-		Cache.marketstallListChanged = true;
+		CacheManager.marketstallListChanged = true;
 	}
 	
 	public MarketStall() {
 		super();
-		Cache.marketstallListChanged = true;
+		CacheManager.marketstallListChanged = true;
 	}
 	
 	public OfflinePlayer getOwner(){ return getSettings().getOwner(); }
@@ -113,7 +97,7 @@ public class MarketStall extends Plot{
 	 */
 	@Override
 	public boolean remove(){
-		Cache.marketstallListChanged = true;
+		CacheManager.marketstallListChanged = true;
 		return super.remove();
 	}
 	

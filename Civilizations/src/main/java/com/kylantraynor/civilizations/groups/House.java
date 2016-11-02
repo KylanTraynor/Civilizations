@@ -13,7 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
@@ -39,12 +39,12 @@ public class House extends Group implements BannerOwner{
 		super();
 		setName(name);
 		setBanner(b);
-		Cache.houseListChanged = true;
+		CacheManager.houseListChanged = true;
 	}
 	
 	public House() {
 		super();
-		Cache.houseListChanged = true;
+		CacheManager.houseListChanged = true;
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class House extends Group implements BannerOwner{
 	}
 	
 	public static List<House> getAll(){
-		return Cache.getHouseList();
+		return CacheManager.getHouseList();
 	}
 
 	public static House get(Banner banner) {
@@ -108,7 +108,7 @@ public class House extends Group implements BannerOwner{
 	 */
 	@Override
 	public boolean remove(){
-		Cache.houseListChanged = true;
+		CacheManager.houseListChanged = true;
 		return super.remove();
 	}
 	

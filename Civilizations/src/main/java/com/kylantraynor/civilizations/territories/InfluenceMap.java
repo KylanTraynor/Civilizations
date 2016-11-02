@@ -11,13 +11,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.worldborder.WorldBorderHook;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.voronoi.VCell;
 import com.kylantraynor.voronoi.VSite;
+import com.kylantraynor.voronoi.VTriangle;
 import com.kylantraynor.voronoi.VectorXZ;
 import com.kylantraynor.voronoi.Voronoi;
 
@@ -147,5 +150,22 @@ public class InfluenceMap {
 
 	public Voronoi getData() {
 		return this.voronoi;
+	}
+	
+	public VCell getCell(Player p){
+		VTriangle oldTriangle = CacheManager.getPlayerTriangulation(p);
+		VTriangle t = getData().getTriangleAt(
+				new VectorXZ((float) p.getLocation().getX(), (float) p.getLocation().getZ()),
+				oldTriangle);
+		if(t != null){
+			if(t != oldTriangle)
+				CacheManager.setPlayerTriangulation(p, t);
+			return t.getOwner();
+		}
+		return null;
+	}
+	
+	public VCell getCell(Location l){
+		return getData().getCellAt(new VectorXZ((float) l.getX(), (float) l.getZ()));
 	}
 }

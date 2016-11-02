@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.House;
@@ -18,10 +16,10 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -51,7 +49,7 @@ public class CommandPlot implements CommandExecutor {
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
 				Protection protection = null;
-				for(Plot plot : Cache.getPlotList()){
+				for(Plot plot : CacheManager.getPlotList()){
 					if(plot.getProtection().intersect(s)){
 						plotsIntersecting++;
 						protection = plot.getProtection();
@@ -81,7 +79,7 @@ public class CommandPlot implements CommandExecutor {
 				Shape s = SelectionManager.getSelection((Player) sender);
 				
 				// Checks if the shape intersects with another plot.
-				for(Plot plot : Cache.getPlotList()){
+				for(Plot plot : CacheManager.getPlotList()){
 					if(plot.getProtection().intersect(s)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
 						return true;

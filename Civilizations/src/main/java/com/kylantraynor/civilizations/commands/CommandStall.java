@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 
@@ -25,7 +25,7 @@ public class CommandStall implements CommandExecutor{
 		
 		Civilizations.DEBUG("Trying to find Stall.");
 		MarketStall stall = null;
-		for(MarketStall s : Cache.getMarketstallList()){
+		for(MarketStall s : CacheManager.getMarketstallList()){
 			if(s.protects(player.getLocation())){
 				stall = s;
 				break;

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 
-import com.kylantraynor.civilizations.Cache;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
@@ -22,12 +22,12 @@ public class Fort extends Settlement implements BannerOwner{
 		super(l);
 		this.house = house;
 		setName("Fort");
-		Cache.fortListChanged = true;
+		CacheManager.fortListChanged = true;
 	}
 	
 	public Fort() {
 		super();
-		Cache.fortListChanged = true;
+		CacheManager.fortListChanged = true;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class Fort extends Settlement implements BannerOwner{
 	}
 	
 	public static List<Fort> getAll(){
-		return Cache.getFortList();
+		return CacheManager.getFortList();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class Fort extends Settlement implements BannerOwner{
 	 */
 	@Override
 	public boolean remove(){
-		Cache.fortListChanged = true;
+		CacheManager.fortListChanged = true;
 		return super.remove();
 	}
 	

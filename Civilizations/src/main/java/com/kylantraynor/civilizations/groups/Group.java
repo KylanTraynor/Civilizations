@@ -19,12 +19,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.Cache;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.MenuManager;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -68,7 +67,7 @@ public class Group {
 		}
 		initSettings();
 		init();
-		Cache.groupListChanged = true;
+		CacheManager.groupListChanged = true;
 		setChanged(true);
 	}
 	
@@ -233,7 +232,7 @@ public class Group {
 		if(f != null){
 			if(f.exists()) f.delete();
 		}
-		Cache.groupListChanged = true;
+		CacheManager.groupListChanged = true;
 		availableIds.push(this.getId());
 		return list.remove(this);
 	}
