@@ -22,7 +22,7 @@ public class TerritoryListener implements Listener {
 		if(event.getTo().getBlock().equals(event.getFrom().getBlock())) return;
 		
 		InfluenceMap map = Civilizations.getInfluenceMap(event.getTo().getWorld());
-		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom(), event.getTo());
+		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom().getBlock().getLocation(), event.getTo().getBlock().getLocation());
 		if(Civilizations.currentInstance.isDEBUG()){
 			String from = data.getFrom() == null ? "NullRegion" : data.getFrom().getName();
 			String to = data.getTo() == null ? "NullRegion" : data.getTo().getName();
