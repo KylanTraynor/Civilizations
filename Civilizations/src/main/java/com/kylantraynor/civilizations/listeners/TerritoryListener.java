@@ -23,7 +23,11 @@ public class TerritoryListener implements Listener {
 		
 		InfluenceMap map = Civilizations.getInfluenceMap(event.getTo().getWorld());
 		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom(), event.getTo());
-		
+		if(Civilizations.currentInstance.isDEBUG()){
+			String from = data.getFrom() == null ? "NullRegion" : data.getFrom().getName();
+			String to = data.getTo() == null ? "NullRegion" : data.getTo().getName();
+			Civilizations.DEBUG("Moving from " + from + " to " + to + ".");
+		}
 		if(data.changedRegion() && data.getTo() != null){
 			TitleManagerHook.sendTitle("", data.getTo().getName(), 0, 1, 5, event.getPlayer());
 		}
