@@ -387,8 +387,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir) {
 		if(!canBuild()) return false;
 		BuildProject bp = new BuildProject(selection.getLocation(), cbp, true);
-		getBuilder().getProjects().add(bp);
-		return false;
+		return getBuilder().getProjects().add(bp);
 	}
 
 	@Override
