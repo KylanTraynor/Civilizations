@@ -13,6 +13,9 @@ commands:
   camp:
     description: Access all Camp commands.
     permission: civilizations.camp
+  region:
+    description: Access all Region commands.
+    permission: civilizations.region
   selection:
     description: Access all commands related to the current selection.
     permission: civilizations.selection

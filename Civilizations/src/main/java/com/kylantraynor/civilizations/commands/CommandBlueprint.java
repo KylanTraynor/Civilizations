@@ -98,6 +98,10 @@ public class CommandBlueprint implements CommandExecutor{
 			for(String s1 : args){
 				if(s1.equalsIgnoreCase("-h")) checkHeight = false;
 				if(s1.equalsIgnoreCase("-a")) setAir = false;
+				if(s1.equalsIgnoreCase("-ha") || s1.equalsIgnoreCase("-ah")){
+					checkHeight = false;
+					setAir = false;
+				}
 			}
 			Selection selection = SelectionManager.getSelection(player);
 			if(selection == null){
