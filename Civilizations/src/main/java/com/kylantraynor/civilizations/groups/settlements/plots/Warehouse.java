@@ -54,8 +54,8 @@ public class Warehouse extends Plot implements HasInventory{
 						if(l.getBlock().getType() == Material.CHEST ||
 								l.getBlock().getType() == Material.TRAPPED_CHEST){
 							BlockState state = l.getBlock().getState();
-							if(state.getData() instanceof Chest){
-								list.add((Chest) state.getData());
+							if(state instanceof Chest){
+								list.add((Chest) state);
 							}
 						}
 					}
