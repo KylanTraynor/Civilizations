@@ -172,9 +172,8 @@ public class Blueprint{
 			Code c = data[x][y][z];
 			Material m = getMaterialCodes().get(c.material);
 			byte data = c.data;
-			ItemStack result = new ItemStack(m);
-			result.setData(new MaterialData(m, data));
-			return result;
+			MaterialData md = new MaterialData(m, data);
+			return md.toItemStack(1);
 		}
 		return null;
 	}

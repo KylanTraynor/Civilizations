@@ -361,10 +361,12 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public ItemStack getSuppliesAndRemove(ItemStack supply) {
 		if(!canBuild()) return null;
+		Civilizations.DEBUG("Checking if warehouse contains " + supply.getData().getItemType().toString() + ":" + supply.getData().getData());
 		for(Plot p : getPlots()){
 			if(p instanceof Warehouse){
 				Warehouse wh = (Warehouse) p;
 				if(wh.getInventory().containsAtLeast(supply, 1)){
+					Civilizations.DEBUG("Found!");
 					wh.removeItem(supply);
 					return supply;
 				}/*
@@ -385,6 +387,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				*/
 			}
 		}
+		Civilizations.DEBUG("Not Found!");
 		return null;
 	}
 
