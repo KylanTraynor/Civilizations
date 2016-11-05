@@ -419,6 +419,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		} else {
 			fm.then("No Warehouses");
 		}
+		fm.then("\nBuild Projects: ").color(ChatColor.GRAY);
+		fm.then("" + getBuilder().getProjects().size()).color(ChatColor.GOLD);
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
