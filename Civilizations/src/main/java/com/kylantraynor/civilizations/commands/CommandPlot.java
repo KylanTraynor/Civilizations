@@ -20,6 +20,7 @@ import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -76,7 +77,7 @@ public class CommandPlot implements CommandExecutor {
 					return true;
 				}
 				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
-				Shape s = SelectionManager.getSelection((Player) sender);
+				Selection s = SelectionManager.getSelection((Player) sender);
 				
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : CacheManager.getPlotList()){
@@ -86,8 +87,9 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				
-				Settlement set = Settlement.getAt(s.getLocation());
-				if(set == null) set = Settlement.getClosest(s.getLocation());
+				//Settlement set = Settlement.getAt(s.getLocation());
+				//if(set != null) Civilizations.DEBUG("Distance to " + set.getName() + ": " + set.distance(s));
+				Settlement set = Settlement.getClosest(s.getLocation());
 				if(set != null){
 					if(!set.canMergeWith(s)){
 						set = null;

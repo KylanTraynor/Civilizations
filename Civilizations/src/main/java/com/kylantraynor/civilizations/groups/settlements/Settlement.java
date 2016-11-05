@@ -262,6 +262,9 @@ public class Settlement extends Group {
 	
 	public double distance(Shape s){
 		double distance = s.getLocation().distance(this.getLocation());
+		for(Shape shape : this.getProtection().getShapes()){
+			distance = Math.min(shape.distance(s), distance);
+		}
 		for(Plot p : getPlots()){
 			for(Shape shape : p.getProtection().getShapes()){
 				distance = Math.min(shape.distance(s), distance);
