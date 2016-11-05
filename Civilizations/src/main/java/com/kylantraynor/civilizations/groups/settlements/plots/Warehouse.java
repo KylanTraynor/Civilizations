@@ -88,6 +88,7 @@ public class Warehouse extends Plot implements HasInventory{
 		int used = 0;
 		for(Chest c : chests){
 			for(ItemStack is : c.getBlockInventory().getContents()){
+				if(is == null) continue;
 				used += is.getAmount() * (64 / is.getMaxStackSize());
 			}
 		}
