@@ -150,17 +150,17 @@ public class Prism extends Shape {
 
 	@Override
 	public int getMaxX() {
-		return getLocation().getBlockX() + getWidth();
+		return getLocation().getBlockX() + this.width;
 	}
 
 	@Override
 	public int getMaxY() {
-		return getLocation().getBlockY() + getHeight();
+		return getLocation().getBlockY() + this.height;
 	}
 
 	@Override
 	public int getMaxZ() {
-		return getLocation().getBlockZ() + getLength();
+		return getLocation().getBlockZ() + this.length;
 	}
 	
 	@Override

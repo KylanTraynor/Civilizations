@@ -23,4 +23,18 @@ public class Selection extends Prism{
 				Math.min(corner1.getBlockZ(), corner2.getBlockZ()));
 	}
 	
+	@Override
+	public int getWidth(){
+		return getMaxX() - getMinX() + 1;
+	}
+	
+	@Override
+	public int getLength(){
+		return getMaxZ() - getMinZ() + 1;
+	}
+	
+	@Override
+	public int getHeight(){
+		return getMaxY() - getMinY() + 1;
+	}
 }

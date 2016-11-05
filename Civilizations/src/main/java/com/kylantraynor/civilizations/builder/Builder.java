@@ -27,6 +27,7 @@ public class Builder {
 		if(currentProject.isDone()){
 			projects.remove(currentProject);
 			currentProject = null;
+			return;
 		}
 		
 		ItemStack plan = currentProject.getNext();
