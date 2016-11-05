@@ -26,6 +26,10 @@ public class Warehouse extends Plot implements HasInventory{
 		super(name, shape, settlement);
 	}
 	
+	public Warehouse() {
+		super();
+	}
+	
 	public String getIcon(){
 		return "bricks";
 	}
