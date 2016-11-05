@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
@@ -272,5 +273,39 @@ public class Settlement extends Group {
 			}
 		}
 		return distance <= Civilizations.SETTLEMENT_MERGE_RADIUS;
+	}
+	
+	public int getAmountOfWarehouses(){
+		int count = 0;
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int getTotalWarehousesSpace(){
+		int space = 0;
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				space += ((Warehouse) p).getSize();
+			}
+		}
+		return space;
+	}
+	
+	public int getTotalUsedWarehousesSpace(){
+		int space = 0;
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				space += ((Warehouse) p).usedSize();
+			}
+		}
+		return space;
+	}
+	
+	public int getTotalAvailableWarehousesSpace(){
+		return getTotalWarehousesSpace() - getTotalUsedWarehousesSpace();
 	}
 }

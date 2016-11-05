@@ -1,12 +1,18 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import mkremins.fanciful.FancyMessage;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -21,6 +27,7 @@ import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
@@ -392,5 +399,32 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Gets an interactive info panel of this group.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	@Override
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), null));
+		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
+		if(getSettings().getCreationDate() != null){
+			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
+				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
+		}
+		fm.then("\nInventory: ").color(ChatColor.GRAY);
+		if(getAmountOfWarehouses() > 0){
+			fm.then("" + getTotalUsedWarehousesSpace() + "/" + getTotalWarehousesSpace()).color(ChatColor.GOLD);
+		} else {
+			fm.then("No Warehouses");
+		}
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
+		return fm;
 	}
 }
