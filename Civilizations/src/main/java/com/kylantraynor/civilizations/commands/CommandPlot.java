@@ -86,7 +86,8 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				
-				Settlement set = Settlement.getClosest(s.getLocation());
+				Settlement set = Settlement.getAt(s.getLocation());
+				if(set == null) set = Settlement.getClosest(s.getLocation());
 				if(set != null){
 					if(!set.canMergeWith(s)){
 						set = null;

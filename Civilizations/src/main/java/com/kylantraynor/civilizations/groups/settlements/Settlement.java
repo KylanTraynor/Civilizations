@@ -260,19 +260,23 @@ public class Settlement extends Group {
 		return list;
 	}
 	
-	/**
-	 * Checks if the given shape is within the merge distance of this settlement.
-	 * @param s
-	 * @return
-	 */
-	public boolean canMergeWith(Shape s) {
+	public double distance(Shape s){
 		double distance = s.getLocation().distance(this.getLocation());
 		for(Plot p : getPlots()){
 			for(Shape shape : p.getProtection().getShapes()){
 				distance = Math.min(shape.distance(s), distance);
 			}
 		}
-		return distance <= Civilizations.SETTLEMENT_MERGE_RADIUS;
+		return distance;
+	}
+	
+	/**
+	 * Checks if the given shape is within the merge distance of this settlement.
+	 * @param s
+	 * @return
+	 */
+	public boolean canMergeWith(Shape s) {
+		return distance(s) <= Civilizations.SETTLEMENT_MERGE_RADIUS;
 	}
 	
 	public int getAmountOfWarehouses(){
