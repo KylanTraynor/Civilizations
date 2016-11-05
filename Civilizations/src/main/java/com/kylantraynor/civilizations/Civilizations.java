@@ -170,6 +170,7 @@ public class Civilizations extends JavaPlugin{
 		startGroupUpdater(20L * 60 * 5);
 		startProtectionUpdater(40L);
 		startEconomyUpdater(20L * 60);
+		startBuilderUpdater(20L * 2);
 		
 		initManagers();
 		
@@ -335,6 +336,22 @@ public class Civilizations extends JavaPlugin{
 			
 		};
 		pr.runTaskTimerAsynchronously(this, (long) (Math.random() * interval), interval);
+	}
+	
+	/**
+	 * Starts process updating the builders.
+	 * @param interval in ticks between updates.
+	 */
+	private void startBuilderUpdater(long interval) {
+		BukkitRunnable br = new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				GroupManager.updateAllBuilders();
+			}
+			
+		};
+		br.runTaskTimer(this, (long) (Math.random() * 20), interval);
 	}
 	
 	/**

@@ -1,3 +1,4 @@
+
 package com.kylantraynor.civilizations.groups;
 
 import java.util.ArrayList;

@@ -19,7 +19,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
@@ -28,6 +27,7 @@ import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;

@@ -28,12 +28,12 @@ public abstract class Shape implements Visualizable{
 	public abstract int getMaxX();
 	public abstract int getMaxY();
 	public abstract int getMaxZ();
-	abstract int getWidth();
-	abstract int getHeight();
-	abstract int getLength();
-	abstract int getVolume();
-	abstract int getArea();
-	abstract boolean isInside(double x, double y, double z);
+	public abstract int getWidth();
+	public abstract int getHeight();
+	public abstract int getLength();
+	public abstract int getVolume();
+	public abstract int getArea();
+	public abstract boolean isInside(double x, double y, double z);
 	public abstract String toString();
 	public abstract Location[] getBlockLocations();
 	public abstract Block[] getBlockSurface();

@@ -13,33 +13,33 @@ public class Prism extends Shape {
 	
 	public Prism(Location location, int width, int height, int length) {
 		super(new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
-		this.width = width;
-		this.height = height;
-		this.length = length;
+		this.width = (width > 0 ? width : -width);
+		this.height = (height > 0 ? height : -height);
+		this.length = (length > 0 ? length : -length);
 	}
 
 	@Override
-	int getWidth() {
+	public int getWidth() {
 		return this.width;
 	}
 
 	@Override
-	int getHeight() {
+	public int getHeight() {
 		return this.height;
 	}
 
 	@Override
-	int getLength() {
+	public int getLength() {
 		return this.length;
 	}
 
 	@Override
-	int getVolume() {
+	public int getVolume() {
 		return getWidth() * getHeight() * getLength();
 	}
 
 	@Override
-	int getArea() {
+	public int getArea() {
 		return getWidth() * getLength();
 	}
 	
@@ -50,10 +50,10 @@ public class Prism extends Shape {
 	}
 
 	@Override
-	boolean isInside(double x, double y, double z) {
+	public boolean isInside(double x, double y, double z) {
 		if(Math.floor(x) >= getLocation().getBlockX() && Math.floor(x) <= getLocation().getBlockX() + width){
-			if(Math.floor(y) >= getLocation().getBlockY() && Math.floor(y) < getLocation().getBlockY() + height){
-				if(Math.floor(z) >= getLocation().getBlockZ() && Math.floor(z) < getLocation().getBlockZ() + length){
+			if(Math.floor(y) >= getLocation().getBlockY() && Math.floor(y) <= getLocation().getBlockY() + height){
+				if(Math.floor(z) >= getLocation().getBlockZ() && Math.floor(z) <= getLocation().getBlockZ() + length){
 					return true;
 				}
 			}

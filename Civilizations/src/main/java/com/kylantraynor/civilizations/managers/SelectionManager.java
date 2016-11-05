@@ -7,16 +7,17 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class SelectionManager {
-	static private Map<UUID, Shape> selections;
+	static private Map<UUID, Selection> selections;
 	static private Map<UUID, Location> primaryPoints;
 	static private Map<UUID, Location> secondaryPoints;
 	
 	public static void init() {
-		selections = new HashMap<UUID, Shape>();
+		selections = new HashMap<UUID, Selection>();
 		primaryPoints = new HashMap<UUID, Location>();
 		secondaryPoints = new HashMap<UUID, Location>();
 	}
@@ -50,21 +51,10 @@ public class SelectionManager {
 		if(!secondaryPoints.containsKey(id)){
 			return;
 		}
-		Location point1 = primaryPoints.get(id);
-		Location point2 = secondaryPoints.get(id);
-		
-		int minX = Math.min(point1.getBlockX(), point2.getBlockX());
-		int minY = Math.min(point1.getBlockY(), point2.getBlockY());
-		int minZ = Math.min(point1.getBlockZ(), point2.getBlockZ());
-		int width = (int) Math.abs(point2.getBlockX() - point1.getBlockX());
-		int height = (int) Math.abs(point2.getBlockY() - point1.getBlockY());
-		int length = (int) Math.abs(point2.getBlockZ() - point1.getBlockZ());
-		
-		Location firstCorner = new Location(point1.getWorld(), minX, minY, minZ);
-		selections.put(id, new Prism(firstCorner, width, height, length));
+		selections.put(id, new Selection(primaryPoints.get(id), secondaryPoints.get(id)));
 	}
 	
-	public static Shape getSelection(Player p){
+	public static Selection getSelection(Player p){
 		if(hasSelection(p)){
 			return selections.get(p.getUniqueId());
 		}

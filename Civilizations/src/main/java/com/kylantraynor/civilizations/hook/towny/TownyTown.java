@@ -8,21 +8,29 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.builder.Blueprint;
+import com.kylantraynor.civilizations.builder.BuildProject;
+import com.kylantraynor.civilizations.builder.Builder;
+import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.TargetType;
+import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.territories.InfluentSite;
@@ -35,7 +43,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyTown extends Settlement implements InfluentSite{
+public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	static TownyTown get(String string) {
 		for(TownyTown t : getTownyTownList()){
@@ -50,6 +58,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 	private boolean bypassPlotLoading = true;
 	private float influence = 1;
 	private Region region;
+	private Builder builder;
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -67,6 +76,7 @@ public class TownyTown extends Settlement implements InfluentSite{
 		super(t.getSpawn());
 		this.region = new Region(this);
 		this.townyTown = t;
+		this.builder = new Builder();
 		List<TownBlock> tl = t.getTownBlocks();
 		importTownPermissions();
 		int i = 0;
@@ -316,5 +326,71 @@ public class TownyTown extends Settlement implements InfluentSite{
 	@Override
 	public Region getRegion(){
 		return this.region;
+	}
+
+	@Override
+	public Builder getBuilder() {
+		return builder;
+	}
+
+	@Override
+	public ItemStack getSupplies(Material material, short data) {
+		if(!canBuild()) return null;
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				Warehouse wh = (Warehouse) p;
+				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);
+				if(hm.isEmpty()) continue;
+				for(ItemStack is : hm.values()){
+					if(is.getType() == material && is.getData().getData() == data && is.getAmount() >= 1){
+						return is;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public ItemStack getSuppliesAndRemove(Material material, short data) {
+		if(!canBuild()) return null;
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				Warehouse wh = (Warehouse) p;
+				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);
+				if(hm.isEmpty()) continue;
+				for(ItemStack is : hm.values()){
+					if(is.getType() == material && is.getData().getData() == data && is.getAmount() >= 1){
+						ItemStack result = is.clone();
+						result.setAmount(1);
+						if(is.getAmount() == 1){
+							wh.getInventory().remove(is);
+						} else {
+							is.setAmount(is.getAmount() - 1);
+						}
+						return result;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir) {
+		if(!canBuild()) return false;
+		BuildProject bp = new BuildProject(selection.getLocation(), cbp, true);
+		getBuilder().getProjects().add(bp);
+		return false;
+	}
+
+	@Override
+	public boolean canBuild() {
+		for(Plot p : getPlots()){
+			if(p instanceof Warehouse){
+				return true;
+			}
+		}
+		return false;
 	}
 }

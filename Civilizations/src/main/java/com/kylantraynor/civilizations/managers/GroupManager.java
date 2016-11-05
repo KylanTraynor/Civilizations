@@ -6,19 +6,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
+import com.kylantraynor.civilizations.selection.Selection;
+import com.kylantraynor.civilizations.shapes.Shape;
 
 public class GroupManager {
 	
@@ -202,6 +207,9 @@ public class GroupManager {
 		}
 	}
 	
+	/**
+	 * Update each individual group in the group list.
+	 */
 	public static void updateAllGroups(){
 		for(Group g : CacheManager.getGroupList()){
 			g.update();
@@ -210,5 +218,47 @@ public class GroupManager {
 			DraggyRPGHook.updateLevelCenters();
 		}
 		Civilizations.log("INFO", "Files saved!");
+	}
+	
+	/**
+	 * Creates a new camp at the given location.
+	 * @param l Location of the new camp.
+	 * @return The camp created.
+	 */
+	public static Camp createCamp(Location l){
+		return new Camp(l);
+	}
+	
+	/**
+	 * Creates a new MarketStall at the given location.
+	 * @param s The selection.
+	 * @return The new Market Stall.
+	 */
+	public static MarketStall createMarketStall(Selection s){
+		Settlement set = Settlement.getClosest(s.getLocation());
+		boolean canMerge = false;
+		for(Plot p : set.getPlots()){
+			if(!canMerge){
+				for(Shape shape : p.getSettings().getShapes()){
+					if(shape.distance(s) <= Civilizations.SETTLEMENT_MERGE_RADIUS){
+						canMerge = true;
+						break;
+					}
+				}
+			}
+		}
+		if(!canMerge) return null;
+		return new MarketStall("Stall", s, set);
+	}
+
+	/**
+	 * Updates all the builders, in all concerned groups.
+	 */
+	public static void updateAllBuilders() {
+		for(Group g : CacheManager.getGroupList()){
+			if(g instanceof HasBuilder){
+				((HasBuilder) g).getBuilder().update();
+			}
+		}
 	}
 }

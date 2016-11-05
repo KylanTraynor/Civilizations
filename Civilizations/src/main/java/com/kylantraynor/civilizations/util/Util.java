@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -154,6 +156,7 @@ public class Util {
 	 * Upper case, with underscores.  Includes material name in result.
 	 * @param mat The base material.
 	 * @param data The date of the material.
+	 * @param meta The ItemMeta of the item.
 	 * @return A string with the name of the item.
 	 * 
 	 * @author maxgamer
@@ -425,7 +428,7 @@ public class Util {
 			switch((int) data){
 				case 0: return "ANVIL";
 				case 1: return "SLIGHTLY_DAMAGED_ANVIL";
-				case 2: return "VERY_DAMAGED:ANVIL";
+				case 2: return "VERY_DAMAGED_ANVIL";
 			}
 			break;
 		case EXP_BOTTLE:
@@ -457,5 +460,33 @@ public class Util {
 		
 		if(data == 0) return mat.toString();
 		return mat.toString()+ ":" + data;
+	}
+	
+	/**
+	 * Get the text color that is as close as possible to the dye color.
+	 * @param c
+	 * @return
+	 */
+	public ChatColor getChatColor(DyeColor c){
+		switch(c){
+		case BLACK: return ChatColor.BLACK;
+		case BLUE: return ChatColor.DARK_BLUE;
+		case BROWN: return ChatColor.GOLD;
+		case CYAN: return ChatColor.AQUA;
+		case GRAY: return ChatColor.DARK_GRAY;
+		case GREEN: return ChatColor.DARK_GREEN;
+		case LIGHT_BLUE: return ChatColor.BLUE;
+		case LIME: return ChatColor.GREEN;
+		case MAGENTA: return ChatColor.LIGHT_PURPLE;
+		case ORANGE: return ChatColor.GOLD;
+		case PINK: return ChatColor.LIGHT_PURPLE;
+		case PURPLE: return ChatColor.DARK_PURPLE;
+		case RED: return ChatColor.DARK_RED;
+		case SILVER: return ChatColor.GRAY;
+		case WHITE: return ChatColor.WHITE;
+		case YELLOW: return ChatColor.YELLOW;
+		default:
+			return null;
+		}
 	}
 }

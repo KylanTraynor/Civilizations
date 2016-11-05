@@ -18,32 +18,32 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	int getWidth() {
+	public int getWidth() {
 		return this.radius * 2;
 	}
 
 	@Override
-	int getHeight() {
+	public int getHeight() {
 		return this.radius * 2;
 	}
 
 	@Override
-	int getLength() {
+	public int getLength() {
 		return this.radius * 2;
 	}
 
 	@Override
-	int getVolume() {
+	public int getVolume() {
 		return (int) ((4.0/3.0) * (Math.PI * this.radius * this.radius * this.radius));
 	}
 
 	@Override
-	int getArea() {
+	public int getArea() {
 		return (int)(Math.PI * this.radius * this.radius);
 	}
 
 	@Override
-	boolean isInside(double x, double y, double z) {
+	public boolean isInside(double x, double y, double z) {
 		x = x - this.getLocation().getX();
 		y = y - this.getLocation().getY();
 		z = z - this.getLocation().getZ();

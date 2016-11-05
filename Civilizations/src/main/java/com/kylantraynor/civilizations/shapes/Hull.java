@@ -22,34 +22,34 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	int getWidth() {
+	public int getWidth() {
 		return getMaxX() - getMinX();
 	}
 
 	@Override
-	int getHeight() {
+	public int getHeight() {
 		return getMaxY() - getMinY();
 	}
 
 	@Override
-	int getLength() {
+	public int getLength() {
 		return getMaxZ() - getMinZ();
 	}
 
 	@Override
-	int getVolume() {
+	public int getVolume() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	int getArea() {
+	public int getArea() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	boolean isInside(double x, double y, double z) {
+	public boolean isInside(double x, double y, double z) {
 		// TODO Auto-generated method stub
 		return false;
 	}

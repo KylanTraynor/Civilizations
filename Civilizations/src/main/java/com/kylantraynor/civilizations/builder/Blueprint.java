@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations;
+package com.kylantraynor.civilizations.builder;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,11 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import com.google.common.io.Files;
+import com.kylantraynor.civilizations.selection.Selection;
 
 public class Blueprint{
 	
@@ -28,7 +31,12 @@ public class Blueprint{
 	private int depth = 1;
 	private List<Material> materialCodes = new ArrayList<Material>();
 	private Code[][][] data;
+	private String name;
 
+	public Blueprint(){
+		
+	}
+	
 	public Blueprint(int width, int height, int depth) {
 		data = new Code[width][height][depth];
 		this.width = width;
@@ -70,6 +78,7 @@ public class Blueprint{
 	public static Blueprint load(File f){
 		// load list of materials
 		List<Material> materialCodes = new ArrayList<Material>();
+		String name = f.getName().replace(".bpt", "");
 		String s;
 		try {
 			s = Files.readFirstLine(f, Charset.defaultCharset());
@@ -117,11 +126,16 @@ public class Blueprint{
 		Blueprint bp = new Blueprint(width, height, depth);
 		bp.data = data;
 		bp.materialCodes = materialCodes;
+		bp.setName(name);
 		return bp;
 	}
 	
 	public List<Material> getMaterialCodes(){
 		return materialCodes;
+	}
+	
+	public void fillDataFrom(Selection s){
+		fillDataFrom(s.getLocation(), s.getWidth(), s.getHeight(), s.getLength());
 	}
 	
 	public void fillDataFrom(Location l, int width, int height, int depth){
@@ -151,5 +165,36 @@ public class Blueprint{
 				}
 			}
 		}
+	}
+
+	public ItemStack getDataAt(int x, int y, int z) {
+		if(x < width && y < height && z < depth){
+			Code c = data[x][y][z];
+			Material m = getMaterialCodes().get(c.material);
+			byte data = c.data;
+			ItemStack result = new ItemStack(m);
+			result.setData(new MaterialData(m, data));
+			return result;
+		}
+		return null;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	public int getDepth() {
+		return depth;
+	}
+
+	public void setName(String string) {
+		this.name = string;
+	}
+
+	public String getName() {
+		return name;
 	}
 }
