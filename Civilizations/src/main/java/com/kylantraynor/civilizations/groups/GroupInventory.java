@@ -58,6 +58,7 @@ public class GroupInventory implements Inventory {
 		HashMap<Integer, ItemStack> result = new HashMap<Integer, ItemStack>();
 		for(int j = 0; j < items.length; j++){
 			for(int i = 0; i < getSize(); i++){
+				if(contents[i] == null) continue;
 				if(contents[i].isSimilar(items[j])){
 					int max = contents[i].getMaxStackSize();
 					int dif = max - contents[i].getAmount();
@@ -83,6 +84,7 @@ public class GroupInventory implements Inventory {
 		HashMap<Integer, ItemStack> result = new HashMap<Integer, ItemStack>();
 		for(int j = 0; j < items.length; j++){
 			for(int i = 0; i < getSize(); i++){
+				if(contents[i] == null) continue;
 				if(contents[i].isSimilar(items[j])){
 					int dif = contents[i].getAmount();
 					if(dif <= 0) continue;
@@ -128,6 +130,7 @@ public class GroupInventory implements Inventory {
 	@Deprecated
 	public boolean contains(int materialId) {
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.getTypeId() == materialId) return true;
 		}
 		return false;
@@ -136,6 +139,7 @@ public class GroupInventory implements Inventory {
 	@Override
 	public boolean contains(Material material) throws IllegalArgumentException {
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.getType() == material) return true;
 		}
 		return false;
@@ -153,6 +157,7 @@ public class GroupInventory implements Inventory {
 	@Deprecated
 	public boolean contains(int materialId, int amount) {
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.getTypeId() == materialId && s.getAmount() == amount) return true;
 		}
 		return false;
@@ -162,6 +167,7 @@ public class GroupInventory implements Inventory {
 	public boolean contains(Material material, int amount)
 			throws IllegalArgumentException {
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.getType() == material && s.getAmount() == amount) return true;
 		}
 		return false;
@@ -170,6 +176,7 @@ public class GroupInventory implements Inventory {
 	@Override
 	public boolean contains(ItemStack item, int amount) {
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.getType() == item.getType() && s.getAmount() == amount) return true;
 		}
 		return false;
@@ -179,6 +186,7 @@ public class GroupInventory implements Inventory {
 	public boolean containsAtLeast(ItemStack item, int amount) {
 		int count = 0;
 		for(ItemStack s : contents){
+			if(s == null) continue;
 			if(s.isSimilar(item) && count + s.getAmount() >= amount) return true;
 			else if(s.isSimilar(item)) count += s.getAmount();
 		}
