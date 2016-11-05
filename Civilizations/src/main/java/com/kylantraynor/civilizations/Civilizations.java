@@ -640,12 +640,16 @@ public class Civilizations extends JavaPlugin{
 	
 	public static File getBlueprintDirectory(){
 		File f = new File(currentInstance.getDataFolder(), "Blueprints");
-		if(f.exists()){
-			return f;
-		} else {
+		if(!f.exists())
 			f.mkdir();
-			return f;
-		}
+		return f;
+	}
+	
+	public static File getWarehousesDirectory() {
+		File f = new File(getPlotDirectory(), "Warehouses");
+		if(!f.exists())
+			f.mkdir();
+		return f;
 	}
 	
 	public static File getWebDirectory() {
