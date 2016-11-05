@@ -83,7 +83,7 @@ public class Warehouse extends Plot implements HasInventory{
 		return inv;
 	}
 	
-	public int usedSize(){
+	public int getUsedSize(){
 		if(chests == null) chests = getAllChests();
 		int used = 0;
 		for(Chest c : chests){

@@ -306,7 +306,7 @@ public class Settlement extends Group {
 		int space = 0;
 		for(Plot p : getPlots()){
 			if(p instanceof Warehouse){
-				space += ((Warehouse) p).usedSize();
+				space += ((Warehouse) p).getUsedSize();
 			}
 		}
 		return space;
