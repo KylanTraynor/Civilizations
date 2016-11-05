@@ -18,6 +18,7 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
@@ -86,9 +87,30 @@ public class GroupManager {
 	}
 	
 	private static void loadPlots() {
-		loadKeeps();
-		loadStalls();
-		loadPlotHouses();
+		loadDirectory(Keep.class, Civilizations.getKeepDirectory());
+		//loadKeeps();
+		loadDirectory(MarketStall.class, Civilizations.getMarketStallDirectory());
+		//loadStalls();
+		loadDirectory(com.kylantraynor.civilizations.groups.settlements.plots.House.class, Civilizations.getHousePlotDirectory());
+		//loadPlotHouses();
+		loadDirectory(Warehouse.class, Civilizations.getWarehousesDirectory());
+		//loadWarehouses();
+	}
+
+	private static void loadDirectory(Class c, File directory){
+		if(directory.exists()){
+			Civilizations.log("INFO", "Loading " + c.getSimpleName() + "...");
+			for(File f : directory.listFiles()){
+				try{
+					if(!f.getName().split("\\.")[1].equalsIgnoreCase("yml")) continue;
+					Civilizations.log("INFO", "Loading " + c.getSimpleName() + " from file: " + f.getPath());
+					load(f, (Group) c.newInstance());
+					f.delete();
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private static void loadKeeps() {
