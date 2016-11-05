@@ -113,58 +113,6 @@ public class GroupManager {
 		}
 	}
 
-	private static void loadKeeps() {
-		File keepDir = Civilizations.getKeepDirectory();
-		if(keepDir.exists()){
-			Civilizations.log("INFO", "Loading Keeps...");
-			for(File f : keepDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					Civilizations.log("INFO", "Loading Keep from file: " + f.getPath());
-					load(f, new Keep());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private static void loadStalls() {
-		File stallDir = Civilizations.getMarketStallDirectory();
-		if(stallDir.exists()){
-			Civilizations.log("INFO", "Loading Stalls...");
-			for(File f : stallDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					Civilizations.log("INFO", "Loading Stall from file: " + f.getPath());
-					load(f, new MarketStall());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private static void loadPlotHouses() {
-		File plotHousesDir = Civilizations.getHousePlotDirectory();
-		if(plotHousesDir.exists()){
-			Civilizations.log("INFO", "Loading Houses...");
-			for(File f : plotHousesDir.listFiles()){
-				try{
-					if(!f.getName().split("\\.")[1].equals("yml")) continue;
-					Civilizations.log("INFO", "Loading House from file: " + f.getPath());
-					load(f, new com.kylantraynor.civilizations.groups.settlements.plots.House());
-					f.delete();
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	
 	public static Settlement loadSettlement(String path){
 		Civilizations.log("INFO", "Getting settlement from " + path);
 		if(path.contains("TOWNY: ")){

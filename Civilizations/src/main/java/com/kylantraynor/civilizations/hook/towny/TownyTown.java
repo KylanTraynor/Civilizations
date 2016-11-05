@@ -83,7 +83,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		super(t.getSpawn());
 		this.region = new Region(this);
 		this.townyTown = t;
-		this.builder = new Builder();
+		this.builder = new Builder(this);
 		List<TownBlock> tl = t.getTownBlocks();
 		importTownPermissions();
 		int i = 0;
@@ -359,11 +359,15 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 
 	@Override
-	public ItemStack getSuppliesAndRemove(Material material, short data) {
+	public ItemStack getSuppliesAndRemove(ItemStack supply) {
 		if(!canBuild()) return null;
 		for(Plot p : getPlots()){
 			if(p instanceof Warehouse){
 				Warehouse wh = (Warehouse) p;
+				if(wh.getInventory().containsAtLeast(supply, 1)){
+					wh.removeItem(supply);
+					return supply;
+				}/*
 				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);
 				if(hm.isEmpty()) continue;
 				for(ItemStack is : hm.values()){
@@ -378,6 +382,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 						return result;
 					}
 				}
+				*/
 			}
 		}
 		return null;

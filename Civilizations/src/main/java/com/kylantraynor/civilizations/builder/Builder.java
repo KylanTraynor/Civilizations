@@ -11,9 +11,13 @@ public class Builder {
 	private List<BuildProject> projects = new ArrayList<BuildProject>();
 	private BuildProject currentProject;
 
-	public ItemStack getSupplies(Material material, short data){
+	public Builder(HasBuilder group) {
+		this.owner = group;
+	}
+
+	public ItemStack getSupplies(ItemStack is){
 		if(owner == null) return null;
-		return owner.getSuppliesAndRemove(material, data);
+		return owner.getSuppliesAndRemove(is);
 	}
 	
 	public void update(){
@@ -33,7 +37,7 @@ public class Builder {
 			currentProject.buildNext();
 			return;
 		}
-		ItemStack supply = getSupplies(plan.getType(), plan.getData().getData());
+		ItemStack supply = getSupplies(plan);
 		if(supply == null){
 			//TODO Warn about lack of supplies.
 			currentProject = null;
