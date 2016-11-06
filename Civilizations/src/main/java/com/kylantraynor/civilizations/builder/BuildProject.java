@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.util.Util;
+
 public class BuildProject {
 	private Location location;
 	private Blueprint blueprint;
@@ -33,10 +35,12 @@ public class BuildProject {
 		Location l = location.clone().add(currentX, currentY, currentZ);
 		if(setAir && getNext().getType() == Material.AIR){
 			l.getBlock().breakNaturally();
+			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getType()), 1, 1);
 		} else if(getNext().getType() != Material.AIR) {
 			l.getBlock().breakNaturally();
 			l.getBlock().setType(getNext().getType());
 			l.getBlock().setData(getNext().getData().getData());
+			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(getNext().getType()), 1, 1);
 		}
 		
 		increment();

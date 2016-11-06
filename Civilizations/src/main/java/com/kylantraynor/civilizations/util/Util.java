@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -829,5 +830,55 @@ public class Util {
 			return true;
 		}
 		return false;
+	}
+
+	public static Sound getBreakSoundFromMaterial(Material type) {
+		switch(type){
+		case WOOL:
+			return Sound.BLOCK_CLOTH_BREAK;
+		case SLIME_BLOCK:
+			return Sound.BLOCK_SLIME_BREAK;
+		case SAND:
+			return Sound.BLOCK_SAND_BREAK;
+		case GRAVEL:
+			return Sound.BLOCK_GRAVEL_BREAK;
+		case GRASS:
+			return Sound.BLOCK_GRASS_BREAK;
+		case GLASS: case STAINED_GLASS: case THIN_GLASS: case STAINED_GLASS_PANE:
+			return Sound.BLOCK_GLASS_BREAK;
+		case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
+			return Sound.BLOCK_METAL_BREAK;
+		case SNOW_BLOCK: case SNOW:
+			return Sound.BLOCK_SNOW_BREAK;
+		case LOG: case LOG_2: case WOOD:
+			return Sound.BLOCK_WOOD_BREAK;
+		default:
+			return Sound.BLOCK_STONE_BREAK;
+		}
+	}
+	
+	public static Sound getPlaceSoundFromMaterial(Material type) {
+		switch(type){
+		case WOOL:
+			return Sound.BLOCK_CLOTH_PLACE;
+		case SLIME_BLOCK:
+			return Sound.BLOCK_SLIME_PLACE;
+		case SAND:
+			return Sound.BLOCK_SAND_PLACE;
+		case GRAVEL:
+			return Sound.BLOCK_GRAVEL_PLACE;
+		case GRASS:
+			return Sound.BLOCK_GRASS_PLACE;
+		case GLASS: case STAINED_GLASS: case THIN_GLASS: case STAINED_GLASS_PANE:
+			return Sound.BLOCK_GLASS_PLACE;
+		case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
+			return Sound.BLOCK_METAL_PLACE;
+		case SNOW_BLOCK: case SNOW:
+			return Sound.BLOCK_SNOW_PLACE;
+		case LOG: case LOG_2: case WOOD:
+			return Sound.BLOCK_WOOD_PLACE;
+		default:
+			return Sound.BLOCK_STONE_PLACE;
+		}
 	}
 }
