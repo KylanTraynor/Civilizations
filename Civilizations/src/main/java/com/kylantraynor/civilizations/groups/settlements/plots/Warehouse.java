@@ -17,6 +17,7 @@ import com.kylantraynor.civilizations.groups.GroupInventory;
 import com.kylantraynor.civilizations.groups.HasInventory;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Warehouse extends Plot implements HasInventory{
 	
@@ -118,8 +119,18 @@ public class Warehouse extends Plot implements HasInventory{
 		if(chests == null) chests = getAllChests();
 		for(Chest c : chests){
 			if(items.length == 0) return;
-			HashMap<Integer, ItemStack> result = c.getBlockInventory().removeItem(items);
-			items = result.values().toArray(new ItemStack[result.size()]);
+			for(ItemStack is : c.getBlockInventory().getContents()){
+				if(is == null) continue;
+				for(ItemStack item : items){
+					if(Util.isSameBlock(item, is)){
+						ItemStack temp = is.clone();
+						temp.setAmount(item.getAmount());
+						c.getBlockInventory().removeItem(temp);
+					}
+				}
+			}
+			/*HashMap<Integer, ItemStack> result = c.getBlockInventory().removeItem(items);
+			items = result.values().toArray(new ItemStack[result.size()]);*/
 		}
 	}
 	
