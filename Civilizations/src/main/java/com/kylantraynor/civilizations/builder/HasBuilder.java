@@ -11,4 +11,5 @@ public interface HasBuilder {
 	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir);
 	public boolean canBuild();
 	public ItemStack getSuppliesAndRemove(ItemStack is);
+	public void sendNotification(String message);
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.util.Util;
+
 public class Builder {
 	private HasBuilder owner;
 	private List<BuildProject> projects = new ArrayList<BuildProject>();
@@ -40,7 +42,7 @@ public class Builder {
 		}
 		ItemStack supply = getSupplies(plan);
 		if(supply == null){
-			//TODO Warn about lack of supplies.
+			warnLackOfSupplies(plan);
 			currentProject = null;
 		} else {
 			currentProject.buildNext();
@@ -61,5 +63,11 @@ public class Builder {
 	
 	public BuildProject getCurrentProject(){
 		return currentProject;
+	}
+	
+	public void warnLackOfSupplies(ItemStack supply){
+		if(this.owner != null){
+			this.owner.sendNotification("Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
+		}
 	}
 }

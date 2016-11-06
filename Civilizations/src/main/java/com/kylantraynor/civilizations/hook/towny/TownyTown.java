@@ -436,4 +436,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
+
+	@Override
+	public void sendNotification(String message) {
+		this.sendMessage(message, null);
+	}
 }
