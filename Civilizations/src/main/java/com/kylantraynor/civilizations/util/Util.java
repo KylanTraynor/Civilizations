@@ -492,6 +492,14 @@ public class Util {
 	
 	public static boolean isSameBlock(ItemStack block, ItemStack item){
 		if(block.getType() != item.getType()){
+			if(block.getType() == Material.DAYLIGHT_DETECTOR_INVERTED && item.getType() == Material.DAYLIGHT_DETECTOR) return true;
+			if(block.getType() == Material.REDSTONE_WIRE && item.getType() == Material.REDSTONE) return true;
+			if(block.getType() == Material.TRIPWIRE && item.getType() == Material.STRING) return true;
+			if(block.getType() == Material.SUGAR_CANE_BLOCK && item.getType() == Material.SUGAR_CANE) return true;
+			if((block.getType() == Material.REDSTONE_TORCH_OFF || block.getType() == Material.REDSTONE_TORCH_ON) && (item.getType() == Material.REDSTONE_TORCH_OFF || item.getType() == Material.REDSTONE_TORCH_ON)) return true;
+			if((block.getType() == Material.REDSTONE_LAMP_OFF || block.getType() == Material.REDSTONE_LAMP_ON) && (item.getType() == Material.REDSTONE_LAMP_OFF || item.getType() == Material.REDSTONE_LAMP_ON)) return true;
+			if((block.getType() == Material.REDSTONE_COMPARATOR_OFF || block.getType() == Material.REDSTONE_COMPARATOR_ON) && item.getType() == Material.REDSTONE_COMPARATOR) return true;
+			if(block.getType() == Material.BURNING_FURNACE && item.getType() == Material.FURNACE) return true;
 			if((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) && item.getType() == Material.SIGN) return true;
 			if(block.getType() == Material.SKULL && item.getType() == Material.SKULL_ITEM) return true;
 			if(block.getType() == Material.PUMPKIN_STEM && item.getType() == Material.PUMPKIN_SEEDS) return true;
@@ -523,7 +531,6 @@ public class Util {
 		case BANNER:
 			break;
 		case BARRIER:
-			return true;
 		case BEACON:
 			return true;
 		case BED:
@@ -550,8 +557,6 @@ public class Util {
 		case BRICK_STAIRS:
 			return true;
 		case BROWN_MUSHROOM:
-			break;
-		case BURNING_FURNACE:
 			break;
 		case CACTUS:
 			break;
@@ -594,15 +599,10 @@ public class Util {
 		case DARK_OAK_FENCE:
 		case DARK_OAK_FENCE_GATE:
 		case DARK_OAK_STAIRS:
-			return true;
 		case DAYLIGHT_DETECTOR:
-			break;
-		case DAYLIGHT_DETECTOR_INVERTED:
-			break;
 		case DEAD_BUSH:
-			break;
 		case DETECTOR_RAIL:
-			break;
+			return true;
 		case DIAMOND_BARDING:
 			break;
 		case DIAMOND_BLOCK:
@@ -622,11 +622,7 @@ public class Util {
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
 		case DRAGON_EGG:
-			return true;
 		case DROPPER:
-			break;
-		case EGG:
-			break;
 		case EMERALD_BLOCK:
 		case EMERALD_ORE:
 			return true;
@@ -651,17 +647,9 @@ public class Util {
 		case GLASS:
 			return true;
 		case GLOWING_REDSTONE_ORE:
-			break;
+			return true;
 		case GLOWSTONE:
-			break;
-		case GLOWSTONE_DUST:
-			break;
-		case GOLDEN_APPLE:
-			break;
-		case GOLDEN_CARROT:
-			break;
-		case GOLD_AXE:
-			break;
+			return true;
 		case GOLD_BARDING:
 			break;
 		case GOLD_BLOCK:
@@ -738,10 +726,6 @@ public class Util {
 			break;
 		case PISTON_STICKY_BASE:
 			break;
-		case POISONOUS_POTATO:
-			break;
-		case PORK:
-			break;
 		case PORTAL:
 			break;
 		case POTATO:
@@ -749,13 +733,7 @@ public class Util {
 		case POTATO_ITEM:
 			break;
 		case POWERED_RAIL:
-			break;
 		case PRISMARINE:
-			break;
-		case PRISMARINE_CRYSTALS:
-			break;
-		case PRISMARINE_SHARD:
-			break;
 		case PURPUR_BLOCK:
 		case PURPUR_DOUBLE_SLAB:
 		case PURPUR_PILLAR:
@@ -769,29 +747,13 @@ public class Util {
 		case REDSTONE:
 			break;
 		case REDSTONE_BLOCK:
-			return true;
-		case REDSTONE_COMPARATOR:
-			break;
-		case REDSTONE_COMPARATOR_OFF:
-			break;
-		case REDSTONE_COMPARATOR_ON:
-			break;
-		case REDSTONE_LAMP_OFF:
-			break;
-		case REDSTONE_LAMP_ON:
-			break;
 		case REDSTONE_ORE:
-			break;
-		case REDSTONE_TORCH_OFF:
-			break;
-		case REDSTONE_TORCH_ON:
-			break;
+			return true;
 		case REDSTONE_WIRE:
-			break;
+			return true;
 		case RED_MUSHROOM:
-			break;
 		case RED_ROSE:
-			break;
+			return true;
 		case RED_SANDSTONE:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
@@ -804,11 +766,6 @@ public class Util {
 		case SANDSTONE_STAIRS:
 		case SAPLING:
 		case SEA_LANTERN:
-			return true;
-		case SIGN:
-			break;
-		case SIGN_POST:
-			break;
 		case SLIME_BLOCK:
 		case SMOOTH_BRICK:
 		case SMOOTH_STAIRS:
@@ -821,11 +778,7 @@ public class Util {
 		case SPRUCE_WOOD_STAIRS:
 			return true;
 		case STAINED_CLAY:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
 		case STAINED_GLASS:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
 		case STAINED_GLASS_PANE:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
@@ -836,8 +789,6 @@ public class Util {
 		case STATIONARY_WATER:
 			break;
 		case STEP:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
 		case STONE:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
@@ -846,56 +797,34 @@ public class Util {
 		case STONE_SLAB2:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
-		case STRING:
-			break;
 		case STRUCTURE_BLOCK:
-		case SUGAR_CANE:
-			break;
-		case SUGAR_CANE_BLOCK:
-			break;
 		case THIN_GLASS:
 		case TNT:
 		case TORCH:
 		case TRAPPED_CHEST:
 		case TRAP_DOOR:
-			return true;
-		case TRIPWIRE:
-			break;
 		case TRIPWIRE_HOOK:
-			break;
 		case VINE:
 			return true;
 		case WALL_BANNER:
 			break;
-		case WALL_SIGN:
-			break;
 		case WATER:
 			break;
-		case WATER_BUCKET:
-			break;
 		case WATER_LILY:
-			break;
 		case WEB:
-			break;
-		case WHEAT:
-			break;
+			return true;
 		case WOOD:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
 		case WOOD_BUTTON:
 			return true;
 		case WOOD_DOUBLE_STEP:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
 		case WOOL:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
 		case WORKBENCH:
-			return true;
-		case WRITTEN_BOOK:
-			break;
 		case YELLOW_FLOWER:
-			break;
+			return true;
 		default:
 			return true;
 		}
