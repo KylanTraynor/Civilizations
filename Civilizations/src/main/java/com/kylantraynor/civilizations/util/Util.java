@@ -489,4 +489,416 @@ public class Util {
 			return null;
 		}
 	}
+	
+	public static boolean isSameBlock(ItemStack block, ItemStack item){
+		if(block.getType() != item.getType()){
+			if((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) && item.getType() == Material.SIGN) return true;
+			if(block.getType() == Material.SKULL && item.getType() == Material.SKULL_ITEM) return true;
+			if(block.getType() == Material.PUMPKIN_STEM && item.getType() == Material.PUMPKIN_SEEDS) return true;
+			if(block.getType() == Material.MELON_STEM && item.getType() == Material.MELON_SEEDS) return true;
+			if(block.getType() == Material.CAKE_BLOCK && item.getType() == Material.CAKE) return true;
+			if(block.getType() == Material.FLOWER_POT && item.getType() == Material.FLOWER_POT_ITEM) return true;
+			if(block.getType() == Material.BREWING_STAND && item.getType() == Material.BREWING_STAND_ITEM) return true;
+			if(block.getType() == Material.CROPS && item.getType() == Material.SEEDS) return true;
+			if(block.getType() == Material.IRON_DOOR_BLOCK && item.getType() == Material.IRON_DOOR && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.BIRCH_DOOR && item.getType() == Material.BIRCH_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.WOOD_DOOR && item.getType() == Material.WOODEN_DOOR && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.ACACIA_DOOR && item.getType() == Material.ACACIA_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.SPRUCE_DOOR && item.getType() == Material.SPRUCE_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.JUNGLE_DOOR && item.getType() == Material.JUNGLE_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.DARK_OAK_DOOR && item.getType() == Material.DARK_OAK_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if((block.getType() == Material.DIODE_BLOCK_ON || block.getType() == Material.DIODE_BLOCK_OFF) && item.getType() == Material.DIODE) return true;
+			if(block.getType() == Material.CAULDRON && item.getType() == Material.CAULDRON_ITEM) return true;
+			return false;
+		}
+		switch(block.getType()){
+		case ACACIA_FENCE:
+		case ACACIA_FENCE_GATE:
+		case ACACIA_STAIRS:
+		case ACTIVATOR_RAIL:
+		case AIR:
+		case ANVIL:
+		case ARMOR_STAND:
+			return true;
+		case BANNER:
+			break;
+		case BARRIER:
+			return true;
+		case BEACON:
+			return true;
+		case BED:
+			break;
+		case BEDROCK:
+			break;
+		case BED_BLOCK:
+			break;
+		case BEETROOT:
+			break;
+		case BEETROOT_BLOCK:
+			break;
+		case BEETROOT_SEEDS:
+			break;
+		case BEETROOT_SOUP:
+			break;
+		case BIRCH_FENCE:
+		case BIRCH_FENCE_GATE:
+		case BIRCH_WOOD_STAIRS:
+		case BOOKSHELF:
+			return true;
+		case BRICK:
+			break;
+		case BRICK_STAIRS:
+			return true;
+		case BROWN_MUSHROOM:
+			break;
+		case BURNING_FURNACE:
+			break;
+		case CACTUS:
+			break;
+		case CARPET:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case CARROT:
+			break;
+		case CARROT_ITEM:
+			break;
+		case CHEST:
+			return true;
+		case CHORUS_FLOWER:
+			return true;
+		case CHORUS_FRUIT:
+			break;
+		case CHORUS_FRUIT_POPPED:
+			break;
+		case CHORUS_PLANT:
+			break;
+		case CLAY:
+		case COAL_BLOCK:
+		case COAL_ORE:
+		case COBBLESTONE:
+			return true;
+		case COBBLESTONE_STAIRS:
+			return true;
+		case COBBLE_WALL:
+			break;
+		case COCOA:
+			break;
+		case COMMAND:
+			break;
+		case COMMAND_CHAIN:
+			break;
+		case COMMAND_MINECART:
+			break;
+		case COMMAND_REPEATING:
+			break;
+		case DARK_OAK_FENCE:
+		case DARK_OAK_FENCE_GATE:
+		case DARK_OAK_STAIRS:
+			return true;
+		case DAYLIGHT_DETECTOR:
+			break;
+		case DAYLIGHT_DETECTOR_INVERTED:
+			break;
+		case DEAD_BUSH:
+			break;
+		case DETECTOR_RAIL:
+			break;
+		case DIAMOND_BARDING:
+			break;
+		case DIAMOND_BLOCK:
+		case DIAMOND_ORE:
+			return true;
+		case DIRT:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case DISPENSER:
+			return true;
+		case DOUBLE_PLANT:
+			break;
+		case DOUBLE_STEP:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case DOUBLE_STONE_SLAB2:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case DRAGON_EGG:
+			return true;
+		case DROPPER:
+			break;
+		case EGG:
+			break;
+		case EMERALD_BLOCK:
+		case EMERALD_ORE:
+			return true;
+		case EMPTY_MAP:
+			break;
+		case ENCHANTMENT_TABLE:
+		case ENDER_CHEST:
+		case ENDER_PORTAL:
+		case ENDER_PORTAL_FRAME:
+		case ENDER_STONE:
+		case END_BRICKS:
+			return true;
+		case END_CRYSTAL:
+			break;
+		case END_GATEWAY:
+			break;
+		case END_ROD:
+		case FENCE:
+		case FENCE_GATE:
+		case FROSTED_ICE:
+		case FURNACE:
+		case GLASS:
+			return true;
+		case GLOWING_REDSTONE_ORE:
+			break;
+		case GLOWSTONE:
+			break;
+		case GLOWSTONE_DUST:
+			break;
+		case GOLDEN_APPLE:
+			break;
+		case GOLDEN_CARROT:
+			break;
+		case GOLD_AXE:
+			break;
+		case GOLD_BARDING:
+			break;
+		case GOLD_BLOCK:
+		case GOLD_ORE:
+		case GRASS:
+			return true;
+		case GRASS_PATH:
+			break;
+		case GRAVEL:
+		case HARD_CLAY:
+		case HAY_BLOCK:
+		case HOPPER:
+		case HUGE_MUSHROOM_1:
+		case HUGE_MUSHROOM_2:
+		case ICE:
+			return true;
+		case IRON_BARDING:
+			break;
+		case IRON_BLOCK:
+		case IRON_FENCE:
+		case IRON_ORE:
+		case IRON_TRAPDOOR:
+		case ITEM_FRAME:
+		case JACK_O_LANTERN:
+		case JUKEBOX:
+		case JUNGLE_FENCE:
+		case JUNGLE_FENCE_GATE:
+		case JUNGLE_WOOD_STAIRS:
+		case LADDER:
+		case LAPIS_BLOCK:
+		case LAPIS_ORE:
+		case LAVA:
+			return true;
+		case LAVA_BUCKET:
+			return true;
+		case LEAVES:
+		case LEAVES_2:
+		case LEVER:
+			return true;
+		case LOG:
+		case LOG_2:
+			if(block.getData().getData() % 4 == item.getData().getData()) return true;
+			return false;
+		case LONG_GRASS:
+			break;
+		case MAP:
+			break;
+		case MOB_SPAWNER:
+		case MOSSY_COBBLESTONE:
+		case MYCEL:
+		case NETHERRACK:
+			return true;
+		case NETHER_BRICK:
+			break;
+		case NETHER_BRICK_ITEM:
+			break;
+		case NETHER_BRICK_STAIRS:
+		case NETHER_FENCE:
+			return true;
+		case NETHER_STALK:
+			break;
+		case NETHER_WARTS:
+			break;
+		case NOTE_BLOCK:
+		case OBSIDIAN:
+		case PACKED_ICE:
+		case PAINTING:
+			return true;
+		case PISTON_BASE:
+			break;
+		case PISTON_EXTENSION:
+			break;
+		case PISTON_MOVING_PIECE:
+			break;
+		case PISTON_STICKY_BASE:
+			break;
+		case POISONOUS_POTATO:
+			break;
+		case PORK:
+			break;
+		case PORTAL:
+			break;
+		case POTATO:
+			break;
+		case POTATO_ITEM:
+			break;
+		case POWERED_RAIL:
+			break;
+		case PRISMARINE:
+			break;
+		case PRISMARINE_CRYSTALS:
+			break;
+		case PRISMARINE_SHARD:
+			break;
+		case PURPUR_BLOCK:
+		case PURPUR_DOUBLE_SLAB:
+		case PURPUR_PILLAR:
+		case PURPUR_SLAB:
+		case PURPUR_STAIRS:
+		case QUARTZ_BLOCK:
+		case QUARTZ_ORE:
+		case QUARTZ_STAIRS:
+		case RAILS:
+			return true;
+		case REDSTONE:
+			break;
+		case REDSTONE_BLOCK:
+			return true;
+		case REDSTONE_COMPARATOR:
+			break;
+		case REDSTONE_COMPARATOR_OFF:
+			break;
+		case REDSTONE_COMPARATOR_ON:
+			break;
+		case REDSTONE_LAMP_OFF:
+			break;
+		case REDSTONE_LAMP_ON:
+			break;
+		case REDSTONE_ORE:
+			break;
+		case REDSTONE_TORCH_OFF:
+			break;
+		case REDSTONE_TORCH_ON:
+			break;
+		case REDSTONE_WIRE:
+			break;
+		case RED_MUSHROOM:
+			break;
+		case RED_ROSE:
+			break;
+		case RED_SANDSTONE:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case RED_SANDSTONE_STAIRS:
+		case SAND:
+			return true;
+		case SANDSTONE:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case SANDSTONE_STAIRS:
+		case SAPLING:
+		case SEA_LANTERN:
+			return true;
+		case SIGN:
+			break;
+		case SIGN_POST:
+			break;
+		case SLIME_BLOCK:
+		case SMOOTH_BRICK:
+		case SMOOTH_STAIRS:
+		case SNOW_BLOCK:
+		case SOIL:
+		case SOUL_SAND:
+		case SPONGE:
+		case SPRUCE_FENCE:
+		case SPRUCE_FENCE_GATE:
+		case SPRUCE_WOOD_STAIRS:
+			return true;
+		case STAINED_CLAY:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STAINED_GLASS:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STAINED_GLASS_PANE:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STANDING_BANNER:
+			break;
+		case STATIONARY_LAVA:
+			break;
+		case STATIONARY_WATER:
+			break;
+		case STEP:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STONE:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STONE_BUTTON:
+			return true;
+		case STONE_SLAB2:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case STRING:
+			break;
+		case STRUCTURE_BLOCK:
+		case SUGAR_CANE:
+			break;
+		case SUGAR_CANE_BLOCK:
+			break;
+		case THIN_GLASS:
+		case TNT:
+		case TORCH:
+		case TRAPPED_CHEST:
+		case TRAP_DOOR:
+			return true;
+		case TRIPWIRE:
+			break;
+		case TRIPWIRE_HOOK:
+			break;
+		case VINE:
+			return true;
+		case WALL_BANNER:
+			break;
+		case WALL_SIGN:
+			break;
+		case WATER:
+			break;
+		case WATER_BUCKET:
+			break;
+		case WATER_LILY:
+			break;
+		case WEB:
+			break;
+		case WHEAT:
+			break;
+		case WOOD:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case WOOD_BUTTON:
+			return true;
+		case WOOD_DOUBLE_STEP:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case WOOL:
+			if(block.getData().getData() == item.getData().getData()) return true;
+			return false;
+		case WORKBENCH:
+			return true;
+		case WRITTEN_BOOK:
+			break;
+		case YELLOW_FLOWER:
+			break;
+		default:
+			return true;
+		}
+		return false;
+	}
 }

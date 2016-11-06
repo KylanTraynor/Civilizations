@@ -437,8 +437,11 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return fm;
 	}
 
+	private String lastNotification = "";
 	@Override
 	public void sendNotification(String message) {
+		if(lastNotification.equalsIgnoreCase(message)) return;
 		this.sendMessage(message, null);
+		lastNotification = message;
 	}
 }

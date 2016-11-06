@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.util.Util;
+
 public class GroupInventory implements Inventory {
 	
 	private ItemStack[] contents;
@@ -187,8 +189,8 @@ public class GroupInventory implements Inventory {
 		int count = 0;
 		for(ItemStack s : contents){
 			if(s == null) continue;
-			if(s.isSimilar(item) && count + s.getAmount() >= amount) return true;
-			else if(s.isSimilar(item)) count += s.getAmount();
+			if(Util.isSameBlock(item, s) && count + s.getAmount() >= amount) return true;
+			else if(Util.isSameBlock(item, s)) count += s.getAmount();
 		}
 		return false;
 	}
