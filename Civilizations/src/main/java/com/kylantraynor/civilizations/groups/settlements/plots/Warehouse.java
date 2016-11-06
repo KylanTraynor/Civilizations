@@ -124,6 +124,15 @@ public class Warehouse extends Plot implements HasInventory{
 	}
 	
 	@Override
+	public boolean containsAtLeast(ItemStack item, int amount){
+		if(chests == null) chests = getAllChests();
+		for(Chest c : chests){
+			if(c.getBlockInventory().containsAtLeast(item, amount)) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public void update(){
 		if(getSettlement() == null){
 			if(Settlement.getAt(getProtection().getCenter()) != null){

@@ -365,7 +365,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		for(Plot p : getPlots()){
 			if(p instanceof Warehouse){
 				Warehouse wh = (Warehouse) p;
-				if(wh.getInventory().containsAtLeast(supply, 1)){
+				if(wh.containsAtLeast(supply, 1)){
 					Civilizations.DEBUG("Found!");
 					wh.removeItem(supply);
 					return supply;

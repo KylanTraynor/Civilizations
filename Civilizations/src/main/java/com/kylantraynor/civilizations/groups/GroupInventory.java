@@ -177,7 +177,7 @@ public class GroupInventory implements Inventory {
 	public boolean contains(ItemStack item, int amount) {
 		for(ItemStack s : contents){
 			if(s == null) continue;
-			if(s.getType() == item.getType() && s.getAmount() == amount) return true;
+			if(s.isSimilar(item) && s.getAmount() >= amount) return true;
 		}
 		return false;
 	}

@@ -17,4 +17,6 @@ public interface HasInventory {
 	 * @param itemStack
 	 */
 	public void removeItem(ItemStack... items);
+	
+	boolean containsAtLeast(ItemStack item, int amount);
 }
