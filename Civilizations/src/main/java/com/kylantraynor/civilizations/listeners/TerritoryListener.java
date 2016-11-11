@@ -19,6 +19,7 @@ public class TerritoryListener implements Listener {
 		if(event.getTo().getBlock().equals(event.getFrom().getBlock())) return;
 		
 		InfluenceMap map = Civilizations.getInfluenceMap(event.getTo().getWorld());
+		if(map == null) return;
 		PlayerMoveData data = map.processPlayerMove(event.getPlayer(), event.getFrom().getBlock().getLocation(), event.getTo().getBlock().getLocation());
 		
 		if(data.changedRegion() && data.getTo() != null){

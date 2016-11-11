@@ -304,7 +304,7 @@ public class MarketStall extends Plot{
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
 		
-		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", isOwner(player) || isRenter(player)));
+		list.add(new GroupAction("Rename", "Rename this stall", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", isOwner(player) || isRenter(player)));
 		if(isOwner(player)){
 			list.add(new GroupAction("Rentable", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleRentable", isForRent()));
 			list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", getRenter() != null));

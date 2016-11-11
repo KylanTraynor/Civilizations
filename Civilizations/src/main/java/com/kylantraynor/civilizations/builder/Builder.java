@@ -28,6 +28,7 @@ public class Builder {
 		
 		if(currentProject.isDone()){
 			projects.remove(currentProject);
+			warnProjectComleted(currentProject);
 			currentProject = null;
 			return;
 		}
@@ -48,7 +49,7 @@ public class Builder {
 			currentProject.buildNext();
 		}
 	}
-	
+
 	public HasBuilder getOwner() {
 		return owner;
 	}
@@ -65,9 +66,15 @@ public class Builder {
 		return currentProject;
 	}
 	
-	public void warnLackOfSupplies(ItemStack supply){
+	private void warnLackOfSupplies(ItemStack supply){
 		if(this.owner != null){
 			this.owner.sendNotification("Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
+		}
+	}
+	
+	private void warnProjectComleted(BuildProject currentProject2) {
+		if(this.owner != null){
+			this.owner.sendNotification("Build project completed!");
 		}
 	}
 }

@@ -14,17 +14,6 @@ public class Nation extends GroupContainer implements BannerOwner{
 		setName(name);
 		setBanner(banner);
 	}
-
-	public static Nation get(String string) {
-		for(Group g : CacheManager.getGroupList()){
-			if(g instanceof Nation){
-				if(g.getName().equalsIgnoreCase(string)){
-					return (Nation) g;
-				}
-			}
-		}
-		return null;
-	}
 	
 	@Override
 	public Banner getBanner() {
@@ -48,11 +37,24 @@ public class Nation extends GroupContainer implements BannerOwner{
 	public void setWords(String words) {
 		this.getSettings().setWords(words);
 	}
+	
+	//===============================================
+	// Static Methods
+	//===============================================
 
 	public static Nation get(Banner banner) {
 		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
 				if(((Nation) g).getBanner().isSimilar(banner)) return (Nation) g;
+			}
+		}
+		return null;
+	}
+	
+	public static Nation get(String name){
+		for(Group g : CacheManager.getGroupList()){
+			if(g instanceof Nation){
+				if(g.getName().equalsIgnoreCase(name)) return (Nation) g;
 			}
 		}
 		return null;
