@@ -18,7 +18,7 @@ public class TownyTownSettings extends SettlementSettings{
 			if(ids == null) return null;
 			UUID id = UUID.fromString(ids);
 			return Builder.get(id);
-		} catch(IllegalArgumentException e){
+		} catch(Exception e){
 			e.printStackTrace();
 			return null;
 		}
@@ -26,7 +26,7 @@ public class TownyTownSettings extends SettlementSettings{
 	}
 	
 	public void setBuilder(Builder builder){
-		this.set("Builder", builder.getSettings().getUniqueId());
+		this.set("Builder", builder.getSettings().getUniqueId().toString());
 		this.builder = builder;
 	}
 	
