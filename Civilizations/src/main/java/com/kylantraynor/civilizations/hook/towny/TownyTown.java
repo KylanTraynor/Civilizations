@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -65,7 +68,6 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private boolean bypassPlotLoading = true;
 	private float influence = 1;
 	private Region region;
-	private Builder builder;
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -83,7 +85,18 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		super(t.getSpawn());
 		this.region = new Region(this);
 		this.townyTown = t;
-		this.builder = new Builder(this);
+		TownyTownSettings settings = new TownyTownSettings();
+		if(getFile().exists())
+			try {
+				settings.load(getFile());
+			} catch (IOException | InvalidConfigurationException e) {
+				e.printStackTrace();
+			}
+		this.setSettings(settings);
+		if(getBuilder() == null){
+			((TownyTownSettings) getSettings()).setBuilder(new Builder(this));
+		}
+		
 		List<TownBlock> tl = t.getTownBlocks();
 		importTownPermissions();
 		int i = 0;
@@ -240,6 +253,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public void update(){
 		removeUnusedTownyPerms();
+		if(this.getBuilder() != null)
+			if(this.getBuilder().getSettings().hasChanged()) this.getBuilder().getSettings().save(); 
 		super.update();
 	}
 	
@@ -250,8 +265,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 	
 	@Override
-	public boolean save(){
-		return false;
+	public File getFile(){
+		return new File(Civilizations.getTownyTownsDirectory(), this.getName());
 	}
 	
 	@Override
@@ -342,7 +357,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 
 	@Override
 	public Builder getBuilder() {
-		return builder;
+		return ((TownyTownSettings) getSettings()).getBuilder();
 	}
 
 	@Override
@@ -400,7 +415,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir) {
 		if(!canBuild()) return false;
 		BuildProject bp = new BuildProject(selection.getLocation(), cbp, true);
-		return getBuilder().getProjects().add(bp);
+		return getBuilder().addProject(bp);
 	}
 
 	@Override

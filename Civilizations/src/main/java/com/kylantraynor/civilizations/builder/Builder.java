@@ -1,35 +1,45 @@
 package com.kylantraynor.civilizations.builder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.settings.BuilderSettings;
+import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Builder {
-	private HasBuilder owner;
-	private List<BuildProject> projects = new ArrayList<BuildProject>();
+	private static List<Builder> builders = new ArrayList<Builder>();
 	private BuildProject currentProject;
 	private BuilderSettings settings;
-
+	
 	public Builder(HasBuilder group) {
-		this.owner = group;
+		settings = new BuilderSettings();
+		getSettings().setOwner(group);
+		builders.add(this);
+	}
+	
+	public Builder(BuilderSettings settings){
+		this.settings = settings;
+		builders.add(this);
 	}
 
 	public ItemStack getSupplies(ItemStack is){
-		if(owner == null) return null;
-		return owner.getSuppliesAndRemove(is);
+		if(getOwner() == null) return null;
+		return getOwner().getSuppliesAndRemove(is);
 	}
 	
 	public void update(){
-		if(projects.isEmpty()) return;
-		if(currentProject == null) currentProject = projects.get((int) Math.floor((Math.random() * projects.size())));
+		if(getProjects().isEmpty()) return;
+		if(currentProject == null) currentProject = getProjects().get((int) Math.floor((Math.random() * getProjects().size())));
 		
 		if(currentProject.isDone()){
-			projects.remove(currentProject);
+			removeProject(currentProject);
 			warnProjectComleted(currentProject);
 			currentProject = null;
 			return;
@@ -52,16 +62,35 @@ public class Builder {
 		}
 	}
 
+	public boolean removeProject(BuildProject project) {
+		List<BuildProject> projects = getProjects();
+		if(projects.remove(project)){
+			getSettings().setProjects(projects);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addProject(BuildProject project){
+		List<BuildProject> projects = getProjects();
+		if(!projects.contains(project)){
+			projects.add(project);
+			getSettings().setProjects(projects);
+			return true;
+		}
+		return false;
+	}
+
 	public HasBuilder getOwner() {
-		return owner;
+		return getSettings().getOwner();
 	}
 
 	public void setOwner(HasBuilder owner) {
-		this.owner = owner;
+		getSettings().setOwner(owner);
 	}
 	
 	public List<BuildProject> getProjects(){
-		return projects;
+		return getSettings().getProjects();
 	}
 	
 	public BuildProject getCurrentProject(){
@@ -69,14 +98,29 @@ public class Builder {
 	}
 	
 	private void warnLackOfSupplies(ItemStack supply){
-		if(this.owner != null){
-			this.owner.sendNotification("Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
+		if(getOwner() != null){
+			getOwner().sendNotification("Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
 		}
 	}
 	
 	private void warnProjectComleted(BuildProject currentProject2) {
-		if(this.owner != null){
-			this.owner.sendNotification("Build project completed!");
+		if(getOwner() != null){
+			getOwner().sendNotification("Build project completed!");
 		}
+	}
+
+	public BuilderSettings getSettings() {
+		return settings;
+	}
+
+	public static Builder get(UUID id) {
+		Iterator<Builder> it = builders.iterator();
+		while(it.hasNext()){
+			Builder b = it.next();
+			if(b!=null){
+				if(b.getSettings().getUniqueId().equals(id)) return b;
+			}
+		}
+		return null;
 	}
 }

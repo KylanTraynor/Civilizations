@@ -779,4 +779,11 @@ public class Civilizations extends JavaPlugin{
 			f.mkdir();
 		return f;
 	}
+
+	public static File getTownyTownsDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Towny");
+		if(!f.exists())
+			f.mkdir();
+		return f;
+	}
 }

@@ -16,11 +16,14 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.groups.Group;
 
 public class BuilderSettings extends YamlConfiguration{
 	
 	private List<BuildProject> projects;
 	private boolean hasChanged = true;
+	private HasBuilder owner = null;
+	private UUID id;
 
 	public void setOwner(HasBuilder owner){
 		if(owner == null){
@@ -28,16 +31,39 @@ public class BuilderSettings extends YamlConfiguration{
 		} else {
 			this.set("Owner", owner.getUniqueId().toString());
 		}
+		this.owner = owner;
 		setChanged(true);
+	}
+	
+	public HasBuilder getOwner(){
+		if(owner != null) return owner;
+		try {
+			UUID id = UUID.fromString(this.getString("Owner"));
+			for(Group g : Group.getList()){
+				if(g instanceof HasBuilder){
+					if(g.getUniqueId().equals(id)) return (HasBuilder)g;
+				}
+			}
+			return null;
+		} catch (IllegalArgumentException e){
+			return null;
+		}
 	}
 	
 	public void setUniqueId(UUID id){
 		this.set("ID", id.toString());
+		this.id = id;
 		setChanged(true);
 	}
 	
 	public UUID getUniqueId(){
-		return UUID.fromString(this.getString("ID"));
+		if(id != null) return id;
+		try{
+			return UUID.fromString(this.getString("ID"));
+		} catch(IllegalArgumentException e){
+			setUniqueId(UUID.randomUUID());
+			return id;
+		}
 	}
 	
 	/**
@@ -104,7 +130,7 @@ public class BuilderSettings extends YamlConfiguration{
 	}
 	
 	public void save(){
-		File f = new File(Civilizations.getBuilderDirectory(), this.getUniqueId().toString());
+		File f = new File(Civilizations.getBuilderDirectory(), this.getUniqueId().toString() + ".yml");
 		this.save(f);
 	}
 	

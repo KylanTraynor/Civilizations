@@ -1,0 +1,36 @@
+package com.kylantraynor.civilizations.hook.towny;
+
+import java.io.File;
+import java.util.UUID;
+
+import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.builder.Builder;
+import com.kylantraynor.civilizations.settings.SettlementSettings;
+
+public class TownyTownSettings extends SettlementSettings{
+	
+	private Builder builder;
+	
+	public Builder getBuilder(){
+		if(builder !=null) return builder;
+		try{
+			UUID id = UUID.fromString(this.getString("Builder"));
+			return Builder.get(id);
+		} catch(IllegalArgumentException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public void setBuilder(Builder builder){
+		this.set("Builder", builder.getSettings().getUniqueId());
+		this.builder = builder;
+	}
+	
+	public void save(){
+		File f = new File(Civilizations.getTownyTownsDirectory(), getName() + ".yml");
+		save(f);
+	}
+	
+}

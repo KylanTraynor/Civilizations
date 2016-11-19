@@ -11,6 +11,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
@@ -24,6 +25,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStal
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.selection.Selection;
+import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class GroupManager {
@@ -39,12 +41,26 @@ public class GroupManager {
 	}
 	
 	public static void loadAll(){
+		loadBuilders();
 		loadGroups();
 		loadHouses();
 		loadCamps();
 		loadPlots();
 	}
 	
+	private static void loadBuilders() {
+		File dir = Civilizations.getTownyTownsDirectory();
+		for(File f : dir.listFiles()){
+			BuilderSettings s = new BuilderSettings();
+			try {
+				s.load(f);
+				new Builder(s);
+			} catch (IOException | InvalidConfigurationException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	/**
 	 * Loads the data from the file into the given group.
 	 * @param file
