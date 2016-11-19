@@ -63,12 +63,13 @@ public class BuilderSettings extends YamlConfiguration{
 	
 	public UUID getUniqueId(){
 		if(id != null) return id;
+		String ids = this.getString("ID");
 		try{
-			return UUID.fromString(this.getString("ID"));
+			return UUID.fromString(ids);
 		} catch(IllegalArgumentException e){
-			setUniqueId(UUID.randomUUID());
-			return id;
 		}
+		setUniqueId(UUID.randomUUID());
+		return id;
 	}
 	
 	/**
