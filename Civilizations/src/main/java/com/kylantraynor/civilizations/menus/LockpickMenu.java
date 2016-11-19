@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.md_5.bungee.api.ChatColor;
-
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
@@ -16,10 +15,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.PlayerData;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.LockpickSession;
+import com.kylantraynor.draggydata.PlayerData;
 
 public class LockpickMenu extends Menu{
 

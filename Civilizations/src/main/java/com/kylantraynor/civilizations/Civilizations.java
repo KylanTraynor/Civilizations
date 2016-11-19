@@ -1,6 +1,8 @@
 package com.kylantraynor.civilizations;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -23,8 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.jetty.server.Server;
 
-import com.kylantraynor.civilizations.achievements.Achievement;
-import com.kylantraynor.civilizations.achievements.AchievementManager;
 import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandBlueprint;
 import com.kylantraynor.civilizations.commands.CommandCamp;
@@ -58,6 +59,7 @@ import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 
 import fr.rhaz.webservers.WebServers.API;
@@ -149,6 +151,13 @@ public class Civilizations extends JavaPlugin{
 		
 		saveDefaultConfig();
 		
+		File f = new File(this.getDataFolder(), "config.yml");
+		CivilizationsSettings settings = new CivilizationsSettings();
+		try {
+			settings.load(f);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		config = this.getConfig();
 		
 		PluginManager pm = getServer().getPluginManager();
@@ -212,9 +221,9 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private void registerAchievements() {
-		Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
+		/*Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
 		createCamp.getDescription().add("Create a camp.");
-		AchievementManager.registerAchievement(createCamp);
+		AchievementManager.registerAchievement(createCamp);*/
 	}
 
 	private void startWebServer(int port) throws Exception {
@@ -296,7 +305,6 @@ public class Civilizations extends JavaPlugin{
 			@Override
 			public void run() {
 				GroupManager.updateAllGroups();
-				PlayerData.updateAll();
 			}
 			
 		};
@@ -763,5 +771,12 @@ public class Civilizations extends JavaPlugin{
 	
 	public static InfluenceMap getInfluenceMap(World w){
 		return influenceMaps.get(w);
+	}
+
+	public static File getBuilderDirectory() {
+		File f = new File(currentInstance.getDataFolder(), "Builders");
+		if(!f.exists())
+			f.mkdir();
+		return f;
 	}
 }

@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,9 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import com.google.common.io.Files;
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.selection.Selection;
 
 public class Blueprint{
+	
+	private static Map<UUID, Blueprint> loadedBlueprints = new HashMap<UUID, Blueprint>();
 	
 	public static class Code{
 		public int material;
@@ -32,6 +38,7 @@ public class Blueprint{
 	private List<Material> materialCodes = new ArrayList<Material>();
 	private Code[][][] data;
 	private String name;
+	private UUID id;
 
 	public Blueprint(){
 		
@@ -42,13 +49,18 @@ public class Blueprint{
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
-		
+		this.id = UUID.randomUUID();
 	}
 	
 	public boolean save(File f){
 		StringBuilder sb = new StringBuilder();
 		// Save list of materials
-		sb.append("" + width + "," + height + "," + depth + ",");
+		if(name != null)
+			sb.append(name);
+		else
+			sb.append("");
+		
+		sb.append("," + width + "," + height + "," + depth + ",");
 		for(Material m : materialCodes){
 			sb.append(m.toString());
 			sb.append(",");
@@ -78,7 +90,7 @@ public class Blueprint{
 	public static Blueprint load(File f){
 		// load list of materials
 		List<Material> materialCodes = new ArrayList<Material>();
-		String name = f.getName().replace(".bpt", "");
+		String id = f.getName().replace(".bpt", "");
 		String s;
 		try {
 			s = Files.readFirstLine(f, Charset.defaultCharset());
@@ -87,14 +99,15 @@ public class Blueprint{
 			return null;
 		}
 		String[] sa = s.split(",");
-		int width = Integer.getInteger(sa[0]);
-		int height = Integer.getInteger(sa[1]);
-		int depth = Integer.getInteger(sa[2]);
+		String name = sa[0];
+		int width = Integer.getInteger(sa[1]);
+		int height = Integer.getInteger(sa[2]);
+		int depth = Integer.getInteger(sa[3]);
 		
 		Code[][][] data = new Code[width][height][depth];
 		
 		materialCodes.add(Material.AIR);
-		for(int i = 3; i < sa.length; i++){
+		for(int i = 4; i < sa.length; i++){
 			materialCodes.add(Material.getMaterial(sa[i]));
 		}
 		
@@ -126,10 +139,17 @@ public class Blueprint{
 		Blueprint bp = new Blueprint(width, height, depth);
 		bp.data = data;
 		bp.materialCodes = materialCodes;
-		bp.setName(name);
+		if(!name.isEmpty())
+			bp.setName(name);
+		
+		bp.setUniqueId(UUID.fromString(id));
 		return bp;
 	}
 	
+	private void setUniqueId(UUID id) {
+		this.id = id;
+	}
+
 	public List<Material> getMaterialCodes(){
 		return materialCodes;
 	}
@@ -195,5 +215,30 @@ public class Blueprint{
 
 	public String getName() {
 		return name;
+	}
+
+	public UUID getUniqueId() {
+		return id;
+	}
+
+	public static Blueprint get(UUID bpId) {
+		Blueprint bp = loadedBlueprints.get(bpId);
+		if(bp != null) return bp;
+		for(File f : Civilizations.getBlueprintDirectory().listFiles()){
+			if(f.getName().replace(".bpt", "").equalsIgnoreCase(bpId.toString())){
+				bp = Blueprint.load(f);
+				if(bp != null) return bp;
+			}
+		}
+		return null;
+	}
+	
+	public static Blueprint get(String name){
+		for(Blueprint bp : loadedBlueprints.values()){
+			if(bp.getName() != null){
+				if(bp.getName().equalsIgnoreCase(name)) return bp;
+			}
+		}
+		return null;
 	}
 }

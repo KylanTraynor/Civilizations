@@ -6,12 +6,14 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Builder {
 	private HasBuilder owner;
 	private List<BuildProject> projects = new ArrayList<BuildProject>();
 	private BuildProject currentProject;
+	private BuilderSettings settings;
 
 	public Builder(HasBuilder group) {
 		this.owner = group;

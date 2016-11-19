@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import com.kylantraynor.voronoitest.voronoi.VEdge;
+
 public class VCell{
 	Voronoi voronoi;
 	VSite site;
@@ -226,7 +228,12 @@ public class VCell{
 		int i = 0;
 		
 		while(iter.hasNext()){
-			result[i] = iter.next().cell;
+			VEdge e = iter.next().edge;
+			if(e.childCell == this){
+				result[i] = e.parentCell;
+			} else {
+				result[i] = e.childCell;
+			}
 			i++;
 		}
 		

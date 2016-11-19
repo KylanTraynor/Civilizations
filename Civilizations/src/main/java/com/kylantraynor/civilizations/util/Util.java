@@ -468,7 +468,7 @@ public class Util {
 	 * @param c
 	 * @return
 	 */
-	public ChatColor getChatColor(DyeColor c){
+	public static ChatColor getChatColor(DyeColor c){
 		switch(c){
 		case BLACK: return ChatColor.BLACK;
 		case BLUE: return ChatColor.DARK_BLUE;

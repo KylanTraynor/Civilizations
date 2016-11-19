@@ -60,6 +60,12 @@
 			<artifactId>DraggyRPG</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<!-- DraggyData -->
+		<dependency>
+			<groupId>com.kylantraynor</groupId>
+			<artifactId>DraggyData</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- LWC -->
 		<dependency>
 			<groupId>com.griefcraft</groupId>
@@ -104,16 +110,22 @@
  		 	<groupId>io.puharesource.mc</groupId>
   			<artifactId>TitleManager</artifactId>
 		</dependency>
-    	<!-- Spigot API -->
+    	<!--Spigot API-->
     	<dependency>
            <groupId>org.spigotmc</groupId>
            <artifactId>spigot-api</artifactId>
            <scope>provided</scope>
     	</dependency>
-    	<!-- Bukkit API -->
+    	<!--Bukkit API-->
     	<dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
+            <scope>provided</scope>
+    	</dependency>
+    	<!--CraftBukkit-->
+    	<dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
             <scope>provided</scope>
     	</dependency>
     	<!-- World Border -->
@@ -172,11 +184,6 @@
 				<version>1.6.4</version>
 			</dependency>
 			<dependency>
-				<groupId>org.spigotmc</groupId>
-				<artifactId>spigot-api</artifactId>
-				<version>1.9-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
 				<groupId>org.maxgamer</groupId>
 				<artifactId>QuickShop</artifactId>
 				<version>4.5</version>
@@ -187,11 +194,6 @@
 				<version>6.1.3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.10-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
 				<groupId>io.puharesource.mc</groupId>
 				<artifactId>TitleManager</artifactId>
 				<version>1.5.11</version>
@@ -200,6 +202,26 @@
 				<groupId>com.kylantraynor</groupId>
 				<artifactId>DraggyRPG</artifactId>
 				<version>0.0.21</version>
+			</dependency>
+			<dependency>
+				<groupId>com.kylantraynor</groupId>
+				<artifactId>DraggyData</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.spigotmc</groupId>
+				<artifactId>spigot-api</artifactId>
+				<version>1.11-R0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bukkit</groupId>
+				<artifactId>bukkit</artifactId>
+				<version>1.11-R0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bukkit</groupId>
+				<artifactId>craftbukkit</artifactId>
+				<version>1.11-R0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

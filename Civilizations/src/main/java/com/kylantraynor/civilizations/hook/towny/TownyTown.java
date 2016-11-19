@@ -130,6 +130,11 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		}
 		CacheManager.townyTownListChanged = true;
 	}
+	public TownyTown(Town t, UUID uuid) throws TownyException {
+		this(t);
+		this.getSettings().setUniqueId(uuid);
+	}
+
 	/**
 	 * Checks if the given TownBlock is a plot or just part of the town's protection.
 	 * @param tb

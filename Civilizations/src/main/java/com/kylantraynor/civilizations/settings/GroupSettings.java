@@ -59,7 +59,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * Sets the unique ID of the group. Null will set a new random Unique ID.
 	 * @param id
 	 */
-	protected void setUniqueId(UUID id){
+	public void setUniqueId(UUID id){
 		if(id == null) id = UUID.randomUUID();
 		this.set("General.UniqueId", id.toString());
 		uniqueId = id;

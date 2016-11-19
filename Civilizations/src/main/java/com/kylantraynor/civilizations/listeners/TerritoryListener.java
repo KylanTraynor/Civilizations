@@ -1,7 +1,6 @@
 package com.kylantraynor.civilizations.listeners;
 
-import net.md_5.bungee.api.ChatColor;
-
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -10,6 +9,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.PlayerMoveData;
+import com.kylantraynor.civilizations.util.Util;
 
 public class TerritoryListener implements Listener {
 	
@@ -27,6 +27,8 @@ public class TerritoryListener implements Listener {
 			if(data.getTo().getNation() == null){
 				TitleManagerHook.sendActionBar("Independant Territory", event.getPlayer(), false);
 			} else {
+				color = Util.getChatColor(data.getTo().getNation().getBanner().getBaseColor());
+				TitleManagerHook.sendActionBar(color + data.getTo().getNation().getName() + " Nation", event.getPlayer(), false);
 				//data.getTo().getNation().getBanner().getBaseColor();
 			}
 			TitleManagerHook.sendTitle("", "" + color + data.getTo().getName(), 5, 30, 10, event.getPlayer());

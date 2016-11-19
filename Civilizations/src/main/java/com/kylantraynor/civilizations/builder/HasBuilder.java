@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.builder;
 
+import java.util.UUID;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,4 +14,5 @@ public interface HasBuilder {
 	public boolean canBuild();
 	public ItemStack getSuppliesAndRemove(ItemStack is);
 	public void sendNotification(String message);
+	public UUID getUniqueId();
 }

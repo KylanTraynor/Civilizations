@@ -14,6 +14,7 @@ public class BuildProject {
 	private int currentZ;
 	private boolean done;
 	private boolean setAir;
+	private int rotation;
 	
 	public BuildProject(Location l, Blueprint bp, boolean setAir){
 		this.location = l;
@@ -64,6 +65,44 @@ public class BuildProject {
 
 	public boolean isDone() {
 		return done;
+	}
+
+	public Blueprint getBlueprint() {
+		return blueprint;
+	}
+
+	public int getCurrentX() {
+		return currentX;
+	}
+	
+	public int getCurrentY() {
+		return currentY;
+	}
+	
+	public int getCurrentZ() {
+		return currentZ;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public Object getRotation() {
+		return rotation % 4;
+	}
+
+	public boolean setAir() {
+		return setAir;
+	}
+
+	public void setCurrent(int cx, int cy, int cz) {
+		currentX = cx;
+		currentY = cy;
+		currentZ = cz;
+	}
+
+	public void setRotation(int r) {
+		rotation = r % 4;
 	}
 
 }

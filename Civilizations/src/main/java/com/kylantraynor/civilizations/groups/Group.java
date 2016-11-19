@@ -78,6 +78,10 @@ public class Group {
 		getSettings().setCreationDate(Instant.now());
 	}
 	
+	public UUID getUniqueId(){
+		return getSettings().getUniqueId();
+	}
+	
 	public void initSettings(){
 		setSettings(new GroupSettings());
 	}

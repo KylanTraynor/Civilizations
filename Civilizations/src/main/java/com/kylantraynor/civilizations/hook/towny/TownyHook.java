@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.hook.towny;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -21,6 +23,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class TownyHook {
 	
 	private static Plugin plugin;
+	private static Map<String, UUID> uniqueIds = new HashMap<String, UUID>();
 
 	/**
 	 * Gets the state of the TitleManager hook. Returns true if the plugin is loaded and enabled, returns false otherwise.
@@ -48,11 +51,36 @@ public class TownyHook {
 				Civilizations.log("INFO", "Loading " + t.getName() + ".");
 				try {
 					if(!isTownLoaded(t.getName())){
-						new TownyTown(t);
+						if(uniqueIds.containsKey(t.getName())){
+							new TownyTown(t, uniqueIds.get(t.getName()));
+						} else {
+							new TownyTown(t);
+						}
 					}
 				} catch (Exception e) {
 					Civilizations.log("WARNING", t.getName() + " couldn't be loaded.");
 				}
+			}
+		}
+	}
+	
+	public static void saveUniqueIds(){
+		Iterator<String> it = uniqueIds.keySet().iterator();
+		while(it.hasNext()){
+			String key = it.next();
+			Civilizations.currentInstance.getConfig().set("IDConversions.Towny." + key, uniqueIds.get(key).toString());
+		}
+	}
+	
+	public static void loadUniqueIds(){
+		uniqueIds.clear();
+		ConfigurationSection cs = Civilizations.currentInstance.getConfig().getConfigurationSection("IDConversions.Towny");
+		if(cs == null) return;
+		for(String s : cs.getKeys(false)){
+			try{
+				uniqueIds.put(s, UUID.fromString(cs.getString(s)));
+			} catch (IllegalArgumentException e){
+				e.printStackTrace();
 			}
 		}
 	}
