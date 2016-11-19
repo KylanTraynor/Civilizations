@@ -2,13 +2,10 @@ package com.kylantraynor.voronoi;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
-
-import com.kylantraynor.voronoitest.voronoi.VEdge;
 
 public class VCell{
 	Voronoi voronoi;
