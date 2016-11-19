@@ -83,7 +83,7 @@ public class DraggyRPGHook {
 				int number = s.getMembers().size();
 				if(number > 0){
 					if(updateTaggedLevelCenter(s, s.getLocation(), 1, 0, 0.01 / number, 0)){
-						Civilizations.log("INFO", "Updated LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
+						Civilizations.DEBUG("Updated LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 					}
 				}
 			}
