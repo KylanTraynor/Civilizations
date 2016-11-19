@@ -38,10 +38,15 @@ public class BuilderSettings extends YamlConfiguration{
 	public HasBuilder getOwner(){
 		if(owner != null) return owner;
 		try {
-			UUID id = UUID.fromString(this.getString("Owner"));
+			String ids = this.getString("Owner");
+			if(ids == null) return null;
+			UUID id = UUID.fromString(ids);
 			for(Group g : Group.getList()){
 				if(g instanceof HasBuilder){
-					if(g.getUniqueId().equals(id)) return (HasBuilder)g;
+					if(g.getUniqueId().equals(id)){
+						owner = (HasBuilder) g;
+						return (HasBuilder)g;
+					}
 				}
 			}
 			return null;
