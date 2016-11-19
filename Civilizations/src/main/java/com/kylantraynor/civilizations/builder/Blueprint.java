@@ -241,4 +241,9 @@ public class Blueprint{
 		}
 		return null;
 	}
+
+	public boolean save() {
+		File f = new File(Civilizations.getBlueprintDirectory(), this.getUniqueId().toString() + ".yml");
+		return save(f);
+	}
 }

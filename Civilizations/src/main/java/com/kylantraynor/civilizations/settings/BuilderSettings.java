@@ -96,6 +96,7 @@ public class BuilderSettings extends YamlConfiguration{
 				this.set("Projects." + i + ".currentZ", projects.get(i).getCurrentZ());
 				this.set("Projects." + i + ".rotation", projects.get(i).getRotation());
 				this.set("Projects." + i + ".setAir", projects.get(i).setAir());
+				projects.get(i).getBlueprint().save();
 			}
 		}
 		setChanged(true);
