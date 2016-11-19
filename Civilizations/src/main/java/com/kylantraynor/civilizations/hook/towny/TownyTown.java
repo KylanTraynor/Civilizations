@@ -81,18 +81,21 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		CacheManager.townyTownListChanged = true;
 	}
 	
+	@Override
+	public void initSettings(){
+		this.setSettings(new TownyTownSettings());
+	}
+	
 	public TownyTown(Town t) throws TownyException{
 		super(t.getSpawn());
 		this.region = new Region(this);
 		this.townyTown = t;
-		TownyTownSettings settings = new TownyTownSettings();
 		if(getFile().exists())
 			try {
-				settings.load(getFile());
+				getSettings().load(getFile());
 			} catch (IOException | InvalidConfigurationException e) {
 				e.printStackTrace();
 			}
-		this.setSettings(settings);
 		if(getBuilder() == null){
 			((TownyTownSettings) getSettings()).setBuilder(new Builder(this));
 		}
