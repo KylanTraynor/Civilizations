@@ -59,6 +59,7 @@ public class TownyHook {
 					}
 				} catch (Exception e) {
 					Civilizations.log("WARNING", t.getName() + " couldn't be loaded.");
+					e.printStackTrace();
 				}
 			}
 		}
