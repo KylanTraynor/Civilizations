@@ -226,6 +226,10 @@ public class VCell{
 		
 		while(iter.hasNext()){
 			VEdge e = iter.next().edge;
+			if(e == null){
+				i++;
+				continue;
+			}
 			if(e.childCell == this){
 				result[i] = e.parentCell;
 			} else {

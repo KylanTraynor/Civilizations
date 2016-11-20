@@ -307,6 +307,7 @@ public class Voronoi {
 			if(t.isInside(v)) return t;
 		}
 		for(VCell c : lastKnown.getOwner().getNeighbours()){
+			if(c == null) continue;
 			for(VTriangle t : c.getTriangles()){
 				if(t.isInside(v)) return t;
 			}
