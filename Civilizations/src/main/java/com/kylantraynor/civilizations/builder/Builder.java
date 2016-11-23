@@ -51,6 +51,7 @@ public class Builder {
 			return;
 		} else if(plan.getType() == Material.AIR){
 			currentProject.buildNext();
+			this.getSettings().setChanged(true);
 			return;
 		}
 		ItemStack supply = getSupplies(plan);
@@ -59,6 +60,7 @@ public class Builder {
 			currentProject = null;
 		} else {
 			currentProject.buildNext();
+			this.getSettings().setChanged(true);
 		}
 	}
 

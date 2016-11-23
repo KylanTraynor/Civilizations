@@ -131,7 +131,7 @@ public class BuilderSettings extends YamlConfiguration{
 		return projects;
 	}
 	
-	private void setChanged(boolean b) {
+	public void setChanged(boolean b) {
 		hasChanged = b;
 	}
 	
@@ -140,6 +140,7 @@ public class BuilderSettings extends YamlConfiguration{
 	}
 	
 	public void save(){
+		setProjects(getProjects());
 		File f = new File(Civilizations.getBuilderDirectory(), this.getUniqueId().toString() + ".yml");
 		this.save(f);
 	}

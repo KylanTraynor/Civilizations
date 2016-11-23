@@ -256,8 +256,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public void update(){
 		removeUnusedTownyPerms();
-		if(this.getBuilder() != null)
+		if(this.getBuilder() != null){
 			if(this.getBuilder().getSettings().hasChanged()) this.getBuilder().getSettings().save(); 
+		}
 		super.update();
 	}
 	
