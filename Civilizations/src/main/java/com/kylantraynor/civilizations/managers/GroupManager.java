@@ -49,7 +49,7 @@ public class GroupManager {
 	}
 	
 	private static void loadBuilders() {
-		File dir = Civilizations.getTownyTownsDirectory();
+		File dir = Civilizations.getBuilderDirectory();
 		for(File f : dir.listFiles()){
 			BuilderSettings s = new BuilderSettings();
 			try {
