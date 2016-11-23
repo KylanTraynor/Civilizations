@@ -68,6 +68,7 @@ public class BuilderSettings extends YamlConfiguration{
 			try{
 				return UUID.fromString(ids);
 			} catch(IllegalArgumentException e){
+				e.printStackTrace();
 			}
 		}
 		setUniqueId(UUID.randomUUID());
@@ -129,7 +130,7 @@ public class BuilderSettings extends YamlConfiguration{
 		}
 		return projects;
 	}
-
+	
 	private void setChanged(boolean b) {
 		hasChanged = b;
 	}

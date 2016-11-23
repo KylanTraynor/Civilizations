@@ -55,6 +55,7 @@ public class GroupManager {
 			try {
 				s.load(f);
 				new Builder(s);
+				f.delete();
 			} catch (IOException | InvalidConfigurationException e) {
 				e.printStackTrace();
 			}
