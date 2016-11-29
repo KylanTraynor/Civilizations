@@ -67,9 +67,9 @@ public class Blueprint{
 		}
 		sb.deleteCharAt(sb.lastIndexOf(","));
 		// Save list of blocks
-		for(int y = 0; y < width; y ++){
+		for(int y = 0; y < height; y ++){
 			sb.append("\n\n");
-			for(int x = 0; x < height; x++){
+			for(int x = 0; x < width; x++){
 				sb.append("\n");
 				for(int z = 0; z < depth; z++){
 					sb.append("" + data[x][y][z].material + ":" + data[x][y][z].data);
@@ -121,9 +121,9 @@ public class Blueprint{
 		}
 		try{
 			lines.remove(0);
-			for(int y = 0; y < width; y ++){
+			for(int y = 0; y < height; y ++){
 				lines.remove(0);
-				for(int x = 0; x < height; x++){
+				for(int x = 0; x < width; x++){
 					String current = lines.get(0);
 					String[] codes = current.split(",");
 					for(int z = 0; z < codes.length; z++){
