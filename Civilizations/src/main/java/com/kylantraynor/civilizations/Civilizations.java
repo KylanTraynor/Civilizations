@@ -175,6 +175,8 @@ public class Civilizations extends JavaPlugin{
 		
 		loadHooks(pm);
 		
+		GroupManager.ensurePlotsAreLinked();
+		
 		loadInfluenceMaps();
 		
 		startGroupUpdater(20L * 60 * 5);

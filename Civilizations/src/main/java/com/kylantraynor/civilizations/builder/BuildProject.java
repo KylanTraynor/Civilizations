@@ -34,7 +34,9 @@ public class BuildProject {
 	public void buildNext() {
 		if(done == true) return;
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(setAir && getNext().getType() == Material.AIR){
+		if(l.getBlock().getType() == getNext().getType() && l.getBlock().getData() == getNext().getData().getData()){
+			
+		} else if(setAir && getNext().getType() == Material.AIR){
 			l.getBlock().breakNaturally();
 			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getType()), 1, 1);
 		} else if(getNext().getType() != Material.AIR) {

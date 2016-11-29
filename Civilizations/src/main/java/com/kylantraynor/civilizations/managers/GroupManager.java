@@ -61,6 +61,15 @@ public class GroupManager {
 			}
 		}
 	}
+	
+	public static void ensurePlotsAreLinked(){
+		for(Plot p : CacheManager.getPlotList()){
+			if(p.getSettlement() != null){
+				//Will not add the plot if it's already included, so it's all good.
+				p.getSettlement().addPlot(p);
+			}
+		}
+	}
 
 	/**
 	 * Loads the data from the file into the given group.
