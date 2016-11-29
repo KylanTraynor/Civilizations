@@ -41,7 +41,7 @@ public class Blueprint{
 	private UUID id;
 
 	public Blueprint(){
-		
+		this.id = UUID.randomUUID();
 	}
 	
 	public Blueprint(int width, int height, int depth) {
