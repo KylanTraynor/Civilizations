@@ -23,6 +23,7 @@ public class BuildProject {
 		currentX = 0;
 		currentY = 0;
 		currentZ = 0;
+		rotation = 0;
 		done = false;
 	}
 	
