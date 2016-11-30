@@ -2,7 +2,7 @@ package com.kylantraynor.civilizations.groups;
 
 import org.bukkit.ChatColor;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 public class GroupAction {
 	private String name;

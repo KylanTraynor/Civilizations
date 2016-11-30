@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;

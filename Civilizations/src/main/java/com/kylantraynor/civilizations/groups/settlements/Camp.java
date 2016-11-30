@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

@@ -1,4 +1,4 @@
-package mkremins.fanciful;
+package mkremins.fanciful.civilizations;
 
 import java.io.IOException;
 import java.util.HashMap;

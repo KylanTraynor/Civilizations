@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;

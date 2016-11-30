@@ -2,7 +2,7 @@ package com.kylantraynor.civilizations.hook.titlemanager;
 
 import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
 import io.puharesource.mc.titlemanager.api.TitleObject;
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package mkremins.fanciful;
+package mkremins.fanciful.civilizations;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;

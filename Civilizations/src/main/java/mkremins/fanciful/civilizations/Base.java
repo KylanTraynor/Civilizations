@@ -1,4 +1,4 @@
-package mkremins.fanciful;
+package mkremins.fanciful.civilizations;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

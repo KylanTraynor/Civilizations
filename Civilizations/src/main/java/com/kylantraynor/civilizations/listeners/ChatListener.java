@@ -1,6 +1,6 @@
 package com.kylantraynor.civilizations.listeners;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

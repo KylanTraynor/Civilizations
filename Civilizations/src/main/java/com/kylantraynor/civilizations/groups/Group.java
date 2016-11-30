@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

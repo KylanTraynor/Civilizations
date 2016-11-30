@@ -1,6 +1,6 @@
 package com.kylantraynor.civilizations.questions;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.entity.Player;
 

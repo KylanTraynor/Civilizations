@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-import mkremins.fanciful.FancyMessage;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
