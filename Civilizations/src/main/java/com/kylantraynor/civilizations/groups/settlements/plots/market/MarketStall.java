@@ -239,6 +239,14 @@ public class MarketStall extends Plot{
 		return false;
 	}
 	
+	@Override
+	public String getName(){
+		if(isForRent() && getRenter() == null)
+			return super.getName() + ChatColor.GOLD + " (Available!)";
+		
+		return super.getName();
+	}
+	
 	/**
 	 * Gets an interactive info panel of this Keep.
 	 * @param player Context
