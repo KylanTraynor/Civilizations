@@ -23,19 +23,30 @@ public class GroupAction {
 	
 	public FancyMessage addTo(FancyMessage fm){
 		fm.then(this.name);
-		if(this.enabled){
-			fm.color(ChatColor.GOLD);
-		} else {
-			fm.color(ChatColor.GRAY);
-		}
-		fm.tooltip(this.tooltip);
-		if(command != null && this.enabled){
-			if(this.type == ActionType.SUGGEST){
-				fm.suggest(command);
+		if(type == ActionType.TOGGLE){
+			if(this.enabled){
+				fm.color(ChatColor.GREEN);
 			} else {
+				fm.color(ChatColor.RED);
+			}
+			if(command != null){
 				fm.command(command);
+			}	
+		} else {
+			if(this.enabled){
+				fm.color(ChatColor.GOLD);
+			} else {
+				fm.color(ChatColor.GRAY);
+			}
+			if(command != null && this.enabled){
+				if(this.type == ActionType.SUGGEST){
+					fm.suggest(command);
+				} else {
+					fm.command(command);
+				}
 			}
 		}
+		fm.tooltip(this.tooltip);
 		return fm;
 	}
 }
