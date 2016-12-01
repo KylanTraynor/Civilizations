@@ -255,7 +255,6 @@ public class Group {
 		}
 		return f;
 	}
-	
 	/**
 	 * Gets the name of the given group.
 	 * @param g
@@ -268,7 +267,6 @@ public class Group {
 			return g.getName();
 		}
 	}
-	
 	/**
 	 * Loads the data from the file into the given group.
 	 * @param file
@@ -286,12 +284,10 @@ public class Group {
 			return null;
 		}
 	}
-	
 	/**
 	 * Do things right after the settings of the group are loaded.
 	 */
 	public void postLoad(){ }
-	
 	/**
 	 * Saves the group to its file.
 	 * @return true if the group has been saved, false otherwise.
@@ -304,7 +300,6 @@ public class Group {
 		getSettings().save(f);
 		return !getSettings().hasChanged();
 	}
-	
 	/**
 	 * Updates the group.
 	 */
@@ -346,7 +341,6 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-
 	/**
 	 * Adds all the commands of this group to a clickable message.
 	 * @param fm Message to add the commands to
@@ -427,7 +421,12 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	
+	/**
+	 * Gets a fancy message showing the list of rank members for the given rank.
+	 * @param r
+	 * @param page
+	 * @return
+	 */
 	public FancyMessage getInteractiveRankMembers(Rank r, int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(r.getName().toUpperCase(), null));
@@ -459,7 +458,6 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GOLD);
 		return fm;
 	}
-	
 	/**
 	 * Sends a message to the members of the group with the given permission.
 	 * @param message
@@ -473,7 +471,6 @@ public class Group {
 			message.send(p);
 		}
 	}
-	
 	/**
 	 * Sends a message to the members of the group with the given permission.
 	 * @param message
@@ -487,7 +484,6 @@ public class Group {
 			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
 	}
-	
 	/**
 	 * Checks if the given player has a certain permission.
 	 * @param perm
@@ -504,7 +500,6 @@ public class Group {
 		}
 		return result;
 	}
-	
 	/**
 	 * Checks if the given player has a certain rank.
 	 * @param targetId of the rank.
@@ -514,7 +509,11 @@ public class Group {
 	public boolean hasRank(String targetId, Player player) {
 		return getProtection().getRank(targetId).includes(player);
 	}
-	
+	/**
+	 * Gets the main info panel for the given rank.
+	 * @param playerRank
+	 * @return
+	 */
 	public FancyMessage getInteractiveRankPanel(Rank playerRank) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(playerRank.getName().toUpperCase(), null));
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
@@ -524,7 +523,10 @@ public class Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	
+	/**
+	 * Opens an inventory menu for the given player.
+	 * @param player
+	 */
 	public void openMenu(Player player){
 		MenuManager.openMenu(new GroupMenu(this), player);
 	}

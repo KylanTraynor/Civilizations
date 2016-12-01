@@ -5,10 +5,11 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
+import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.settings.NationSettings;
 
-public class Nation extends GroupContainer implements BannerOwner{
-
+public class Nation extends GroupContainer<Settlement> implements BannerOwner{
+	
 	public Nation(String name, Banner banner) {
 		super();
 		setName(name);
@@ -19,7 +20,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 	public Banner getBanner() {
 		return this.getSettings().getBanner();
 	}
-
+	
 	@Override
 	public void setBanner(Banner newBanner) {
 		this.getSettings().setBanner(newBanner);
@@ -29,11 +30,11 @@ public class Nation extends GroupContainer implements BannerOwner{
 	public NationSettings getSettings() {
 		return (NationSettings)super.getSettings();
 	}
-
+	
 	public String getWords() {
 		return this.getSettings().getWords();
 	}
-
+	
 	public void setWords(String words) {
 		this.getSettings().setWords(words);
 	}
@@ -41,7 +42,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 	//===============================================
 	// Static Methods
 	//===============================================
-
+	
 	public static Nation get(Banner banner) {
 		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
@@ -59,7 +60,7 @@ public class Nation extends GroupContainer implements BannerOwner{
 		}
 		return null;
 	}
-
+	
 	public static Nation get(Player p) {
 		for(Group g : CacheManager.getGroupList()){
 			if(g instanceof Nation){
@@ -68,6 +69,4 @@ public class Nation extends GroupContainer implements BannerOwner{
 		}
 		return null;
 	}
-
-	
 }

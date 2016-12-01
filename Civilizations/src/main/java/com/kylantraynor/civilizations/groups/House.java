@@ -60,21 +60,32 @@ public class House extends Group implements BannerOwner{
 	public String getChatHeader(){
 		return ChatColor.GOLD + "[" + ChatColor.BLUE + ChatColor.BOLD + getName() + ChatColor.GOLD + "] "; 
 	}
-
+	/**
+	 * Gets this House's banner.
+	 */
 	@Override
 	public Banner getBanner() {
 		return getSettings().getBanner();
 	}
-
+	/**
+	 * Sets this House's banner.
+	 */
 	@Override
 	public void setBanner(Banner newBanner) {
 		getSettings().setBanner(newBanner);
 	}
-	
+	/**
+	 * Gets the list of all Houses.
+	 * @return
+	 */
 	public static List<House> getAll(){
 		return CacheManager.getHouseList();
 	}
-
+	/**
+	 * Gets the house the given banner represents.
+	 * @param banner
+	 * @return
+	 */
 	public static House get(Banner banner) {
 		for(House h : getAll()){
 			if(h.getBanner().equals(banner)){
@@ -83,7 +94,11 @@ public class House extends Group implements BannerOwner{
 		}
 		return null;
 	}
-	
+	/**
+	 * Gets the house the given player belongs to.
+	 * @param p
+	 * @return
+	 */
 	public static House get(OfflinePlayer p){
 		for(House h : getAll()){
 			if(h.isMember(p)){
@@ -92,7 +107,11 @@ public class House extends Group implements BannerOwner{
 		}
 		return null;
 	}
-	
+	/**
+	 * Gets the House with the given name.
+	 * @param name
+	 * @return
+	 */
 	public static House get(String name){
 		for(House h : getAll()){
 			if(h.getName().equalsIgnoreCase(name)){
@@ -101,7 +120,6 @@ public class House extends Group implements BannerOwner{
 		}
 		return null;
 	}
-	
 	/**
 	 * Destroys this house.
 	 * @return true if the house has been removed, false otherwise.
@@ -111,7 +129,6 @@ public class House extends Group implements BannerOwner{
 		CacheManager.houseListChanged = true;
 		return super.remove();
 	}
-	
 	/**
 	 * Gets an interactive info panel of this group.
 	 * @param player Context
@@ -136,14 +153,16 @@ public class House extends Group implements BannerOwner{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	
+	/**
+	 * Gets the lord name of this House.
+	 * @return Unknown if there is no lord.
+	 */
 	public String getLordName() {
 		if(getSettings().getLord() != null){
 			return getSettings().getLord().getName();
 		}
-		return "Unkown";
+		return "Unknown";
 	}
-
 	/**
 	 * Gets the file where this camp is saved.
 	 * @return File
@@ -160,46 +179,11 @@ public class House extends Group implements BannerOwner{
 		}
 		return f;
 	}
-	/*
-	@Deprecated
-	public static House load(YamlConfiguration cf){
-		String name;
-		String words;
-		String lord;
-		Instant creation;
-		name = cf.getString("Name");
-		words = cf.getString("Words");
-		lord = cf.getString("Lord");
-		if(cf.getString("Creation") != null){
-			creation = Instant.parse(cf.getString("Creation"));
-		} else {
-			creation = Instant.now();
-			Civilizations.log("WARNING", "Couldn't find creation date for a group. Replacing it by NOW.");
-		}
-		
-		House h = new House(name, Banner.parse(cf.getString("Banner")));
-		h.getSettings().setCreationDate(creation);
-		if(words != null){
-			h.setWords(words);
-		}
-		int i = 0;
-		while(cf.contains("Members." + i)){
-			h.addMember(Bukkit.getServer().getOfflinePlayer(UUID.fromString((cf.getString("Members."+i)))));
-			i+=1;
-		}
-		
-		i = 0;
-		while(cf.contains("Vassals." + i)){
-			h.addVassal(cf.getString("Vassals." + i));
-		}
-		if(lord != null){
-			h.getSettings().setLord(Bukkit.getOfflinePlayer(UUID.fromString(lord)));
-		}
-		
-		return h;
-	}
-	*/
-	
+	/**
+	 * Adds the given house to the list of vassals.
+	 * @param string
+	 * @return
+	 */
 	public boolean addVassal(String string) {
 		if(House.get(string) != null){
 			addVassal(House.get(string));
@@ -208,7 +192,11 @@ public class House extends Group implements BannerOwner{
 			return false;
 		}
 	}
-	
+	/**
+	 * Adds the given house to the list of vassals.
+	 * @param house
+	 * @return
+	 */
 	public boolean addVassal(House house){
 		List<House> vassals = getSettings().getVassals();
 		if(vassals.contains(house)){
@@ -222,41 +210,10 @@ public class House extends Group implements BannerOwner{
 			}
 		}
 	}
-	
-	/*
-	@Override
-	public boolean save(){
-		File f = getFile();
-		if(f == null) return false;
-		YamlConfiguration fc = new YamlConfiguration();
-		fc.set("Name", getName());
-		fc.set("Creation", getSettings().getCreationDate().toString());
-		fc.set("Banner", getBanner().toString());
-		fc.set("Words", getWords());
-		if(getSettings().getLord() != null){
-			fc.set("Lord", getSettings().getLord().getUniqueId().toString());
-		} else {fc.set("Lord", null);}
-		
-		for(int i = 0; i < getVassals().size(); i++){
-			fc.set("Vassals." + i, getVassals().get(i).getName());
-		}
-		
-		int i = 0;
-		for(UUID id : getMembers()){
-			fc.set("Members." + i, id.toString());
-			i += 1;
-		}
-		
-		try {
-			fc.save(f);
-			setChanged(false);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	*/
-
+	/**
+	 * Gets a FancyMessage showing the list of vassals.
+	 * @return
+	 */
 	public FancyMessage getInteractiveVassalsList() {
 		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " VASSALS ==========").color(ChatColor.GOLD);
 		for(House h : getVassals()){

@@ -243,7 +243,7 @@ public class Blueprint{
 	}
 
 	public boolean save() {
-		File f = new File(Civilizations.getBlueprintDirectory(), this.getUniqueId().toString() + ".yml");
+		File f = new File(Civilizations.getBlueprintDirectory(), this.getUniqueId().toString() + ".bpt");
 		return save(f);
 	}
 }
