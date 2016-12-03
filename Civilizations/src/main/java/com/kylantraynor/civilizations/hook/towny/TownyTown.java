@@ -31,6 +31,7 @@ import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
@@ -68,6 +69,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private boolean bypassPlotLoading = true;
 	private float influence = 1;
 	private Region region;
+	private String lastNotification = "";
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -382,6 +384,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return null;
 	}
 
+	/**
+	 * Get supplies and remove it from the warehouses.
+	 */
 	@Override
 	public ItemStack getSuppliesAndRemove(ItemStack supply) {
 		if(!canBuild()) return null;
@@ -415,6 +420,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return null;
 	}
 
+	/**
+	 * Adds the given build project to the list of autobuild projects.
+	 */
 	@Override
 	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir) {
 		if(!canBuild()) return false;
@@ -422,6 +430,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return getBuilder().addProject(bp);
 	}
 
+	/**
+	 * Checks if the town is able to autobuild.
+	 */
 	@Override
 	public boolean canBuild() {
 		for(Plot p : getPlots()){
@@ -461,7 +472,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return fm;
 	}
 
-	private String lastNotification = "";
+	/**
+	 * Sends a notification to all town members.
+	 */
 	@Override
 	public void sendNotification(String message) {
 		if(lastNotification.equalsIgnoreCase(message)) return;

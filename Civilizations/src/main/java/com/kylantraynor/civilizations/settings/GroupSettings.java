@@ -66,6 +66,25 @@ public class GroupSettings extends YamlConfiguration{
 	}
 	
 	/**
+	 * Gets the group's balance.
+	 * @return
+	 */
+	public double getBalance(){
+		if(this.contains("Economy.Balance")){
+			return this.getDouble("Economy.Balance");
+		} else {
+			return 0;
+		}
+	}
+	/**
+	 * Sets the group's balance.
+	 * @param newBalance
+	 */
+	public void setBalance(double newBalance){
+		this.set("Economy.Balance", newBalance);
+	}
+	
+	/**
 	 * Gets the creation date of the group.
 	 * @return Instant
 	 */
@@ -151,7 +170,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * @return
 	 */
 	public double getStallRentTax() {
-		return this.getDouble("Taxes.Rental.Stalls", 0.01);
+		return this.getDouble("Economy.Taxes.Rental.Stalls", 0.01);
 	}
 	
 	/**
@@ -159,7 +178,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * @param newTax
 	 */
 	public void setStallRentTax(double newTax){
-		this.set("Taxes.Rental.Stalls", newTax);
+		this.set("Economy.Taxes.Rental.Stalls", newTax);
 		this.setChanged(true);
 	}
 
@@ -168,7 +187,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * @return
 	 */
 	public double getTransactionTax() {
-		return this.getDouble("Taxes.Transactions", 0.01);
+		return this.getDouble("Economy.Taxes.Transactions", 0.01);
 	}
 	
 	/**
@@ -176,7 +195,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * @param newTax
 	 */
 	public void setTransactionTax(double newTax){
-		this.set("Taxes.Transactions", newTax);
+		this.set("Economy.Taxes.Transactions", newTax);
 		this.setChanged(true);
 	}
 	
