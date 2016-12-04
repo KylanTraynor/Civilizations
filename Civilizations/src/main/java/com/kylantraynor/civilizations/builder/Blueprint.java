@@ -127,7 +127,12 @@ public class Blueprint{
 					String current = lines.get(0);
 					String[] codes = current.split(",");
 					for(int z = 0; z < codes.length; z++){
-						data[x][y][z] = new Code(Integer.parseInt(codes[z].split(":")[0]), Byte.valueOf(codes[z].split(":")[1]));
+						try{
+							data[x][y][z] = new Code(Integer.parseInt(codes[z].split(":")[0]), Byte.valueOf(codes[z].split(":")[1]));
+						} catch (Exception e){
+							e.printStackTrace();
+							data[x][y][z] = new Code(0,(byte)0);
+						}
 					}
 					lines.remove(0);
 				}
