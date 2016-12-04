@@ -32,14 +32,17 @@ public class BuildProject {
 		return blueprint.getDataAt(currentX, currentY, currentZ);
 	}
 	
-	public void buildNext() {
-		if(done == true) return;
+	public boolean buildNext() {
+		if(done == true) return false;
 		Location l = location.clone().add(currentX, currentY, currentZ);
 		if(l.getBlock().getType() == getNext().getType() && l.getBlock().getData() == getNext().getData().getData()){
-			
+			increment();
+			return false;
 		} else if(setAir && getNext().getType() == Material.AIR){
 			l.getBlock().breakNaturally();
 			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getType()), 1, 1);
+			increment();
+			return false;
 		} else if(getNext().getType() != Material.AIR) {
 			l.getBlock().breakNaturally();
 			l.getBlock().setType(getNext().getType());
@@ -48,6 +51,7 @@ public class BuildProject {
 		}
 		
 		increment();
+		return true;
 	}
 
 	private void increment() {
@@ -106,6 +110,15 @@ public class BuildProject {
 
 	public void setRotation(int r) {
 		rotation = r % 4;
+	}
+
+	public boolean trySkipNext() {
+		Location l = location.clone().add(currentX, currentY, currentZ);
+		if(l.getBlock().getType() == getNext().getType() && l.getBlock().getData() == getNext().getData().getData()){
+			increment();
+			return true;
+		}
+		return false;
 	}
 
 }

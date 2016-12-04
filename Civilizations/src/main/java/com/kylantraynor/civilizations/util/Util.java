@@ -22,6 +22,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Util {
@@ -512,6 +513,7 @@ public class Util {
 	}
 	
 	public static boolean isSameBlock(ItemStack block, ItemStack item){
+		Civilizations.DEBUG("Looking for " + getMaterialName(block) + ", found " + getMaterialName(item) + ".");
 		if(block.getType() != item.getType()){
 			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS) || item.getType() == Material.DIRT) return true;
 			if(block.getType() == Material.DAYLIGHT_DETECTOR_INVERTED && item.getType() == Material.DAYLIGHT_DETECTOR) return true;
@@ -539,6 +541,38 @@ public class Util {
 			if(block.getType() == Material.DARK_OAK_DOOR && item.getType() == Material.DARK_OAK_DOOR_ITEM && block.getData().getData() < 8) return true;
 			if((block.getType() == Material.DIODE_BLOCK_ON || block.getType() == Material.DIODE_BLOCK_OFF) && item.getType() == Material.DIODE) return true;
 			if(block.getType() == Material.CAULDRON && item.getType() == Material.CAULDRON_ITEM) return true;
+			if(block.getType() == Material.DOUBLE_STEP){
+				switch(block.getData().getData()){
+				case 0: if(item.getType() == Material.STONE && item.getData().getData() == 0) return true;
+					break;
+				case 1: if(item.getType() == Material.SANDSTONE) return true;
+					break;
+				case 2:
+					break;
+				case 3: if(item.getType() == Material.COBBLESTONE) return true;
+					break;
+				case 4: if(item.getType() == Material.BRICK) return true;
+					break;
+				case 5: if(item.getType() == Material.SMOOTH_BRICK) return true;
+					break;
+				case 6: if(item.getType() == Material.NETHER_BRICK) return true;
+					break;
+				case 7: if(item.getType() == Material.QUARTZ_BLOCK) return true;
+					break;
+				case 8: if(item.getType() == Material.STONE && item.getData().getData() == 0) return true;
+					break;
+				case 9: if(item.getType() == Material.SANDSTONE) return true;
+					break;
+				case 15: if(item.getType() == Material.QUARTZ_BLOCK) return true;
+					break;
+				}
+			} else if(block.getType() == Material.DOUBLE_STONE_SLAB2){
+				if(item.getType() == Material.RED_SANDSTONE) return true;
+			} else if(block.getType() == Material.WOOD_DOUBLE_STEP){
+				if(item.getType() == Material.WOOD && item.getData().getData() == block.getData().getData()) return true;
+			} else if(block.getType() == Material.PURPUR_DOUBLE_SLAB){
+				if(item.getType() == Material.PURPUR_BLOCK) return true;
+			}
 			return false;
 		}
 		switch(block.getType()){
@@ -638,11 +672,9 @@ public class Util {
 		case DOUBLE_PLANT:
 			break;
 		case DOUBLE_STEP:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
+			break;
 		case DOUBLE_STONE_SLAB2:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
+			break;
 		case DRAGON_EGG:
 		case DROPPER:
 		case EMERALD_BLOCK:
@@ -809,13 +841,15 @@ public class Util {
 		case STATIONARY_WATER:
 			break;
 		case STEP:
+			if((block.getData().getData() % 8) == item.getData().getData()) return true;
+			return false;
 		case STONE:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;
 		case STONE_BUTTON:
 			return true;
 		case STONE_SLAB2:
-			if(block.getData().getData() == item.getData().getData()) return true;
+			if((block.getData().getData() % 8) == item.getData().getData()) return true;
 			return false;
 		case STRUCTURE_BLOCK:
 		case THIN_GLASS:
@@ -839,6 +873,7 @@ public class Util {
 		case WOOD_BUTTON:
 			return true;
 		case WOOD_DOUBLE_STEP:
+			break;
 		case WOOL:
 			if(block.getData().getData() == item.getData().getData()) return true;
 			return false;

@@ -79,7 +79,7 @@ public class Blueprint{
 			}
 		}
 		try {
-			Files.write(sb.subSequence(0, sb.length() - 1), f, Charset.defaultCharset());
+			Files.write(sb.subSequence(0, sb.length()), f, Charset.defaultCharset());
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();

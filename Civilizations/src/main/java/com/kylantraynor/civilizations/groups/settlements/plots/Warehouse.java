@@ -72,7 +72,7 @@ public class Warehouse extends Plot implements HasInventory{
 	
 	@Override
 	public GroupInventory getInventory() {
-		if(chests == null) chests = getAllChests();
+		chests = getAllChests();
 		GroupInventory inv = new GroupInventory(getSize());
 		int j = 0;
 		for(Chest c : chests){

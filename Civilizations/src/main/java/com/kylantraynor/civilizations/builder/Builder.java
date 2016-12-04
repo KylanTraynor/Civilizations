@@ -58,7 +58,11 @@ public class Builder {
 		ItemStack supply = getSupplies(plan);
 		if(supply == null){
 			warnLackOfSupplies(plan);
-			currentProject = null;
+			if(!currentProject.trySkipNext()){
+				currentProject = null;
+			} else {
+				this.getSettings().setChanged(true);
+			}
 		} else {
 			currentProject.buildNext();
 			this.getSettings().setChanged(true);
