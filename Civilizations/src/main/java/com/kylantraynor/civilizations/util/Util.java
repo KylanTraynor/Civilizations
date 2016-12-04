@@ -509,7 +509,18 @@ public class Util {
 	}
 	
 	public static ItemStack getItemFromBlock(ItemStack block){
-		return null;
+		if(block == null) return null;
+		if(block.getType() == Material.AIR) return null;
+		if((block.getType() == Material.SPRUCE_DOOR ||
+				block.getType() == Material.BIRCH_DOOR ||
+				block.getType() == Material.JUNGLE_DOOR ||
+				block.getType() == Material.ACACIA_DOOR ||
+				block.getType() == Material.DARK_OAK_DOOR ||
+				block.getType() == Material.WOOD_DOOR ||
+				block.getType() == Material.IRON_DOOR_BLOCK) && block.getData().getData() >= 8){
+			return null;
+		}
+		return block;
 	}
 	
 	public static boolean isSameBlock(ItemStack block, ItemStack item){

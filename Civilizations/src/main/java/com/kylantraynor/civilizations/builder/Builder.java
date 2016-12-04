@@ -50,10 +50,9 @@ public class Builder {
 		if(plan == null){
 			currentProject = null;
 			return;
-		} else if(plan.getType() == Material.AIR){
+		} else if(Util.getItemFromBlock(plan) == null){
 			currentProject.buildNext();
 			this.getSettings().setChanged(true);
-			return;
 		}
 		ItemStack supply = getSupplies(plan);
 		if(supply == null){
