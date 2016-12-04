@@ -513,7 +513,7 @@ public class Util {
 	
 	public static boolean isSameBlock(ItemStack block, ItemStack item){
 		if(block.getType() != item.getType()){
-			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS) || item.getType() == Material.DIRT)
+			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS) || item.getType() == Material.DIRT) return true;
 			if(block.getType() == Material.DAYLIGHT_DETECTOR_INVERTED && item.getType() == Material.DAYLIGHT_DETECTOR) return true;
 			if(block.getType() == Material.REDSTONE_WIRE && item.getType() == Material.REDSTONE) return true;
 			if(block.getType() == Material.TRIPWIRE && item.getType() == Material.STRING) return true;
@@ -677,9 +677,7 @@ public class Util {
 		case GOLD_BLOCK:
 		case GOLD_ORE:
 		case GRASS:
-			return true;
 		case GRASS_PATH:
-			break;
 		case GRAVEL:
 		case HARD_CLAY:
 		case HAY_BLOCK:
