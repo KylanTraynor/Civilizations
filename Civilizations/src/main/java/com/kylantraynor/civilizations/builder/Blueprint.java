@@ -228,6 +228,9 @@ public class Blueprint{
 			if(f.getName().replace(".bpt", "").equalsIgnoreCase(bpId.toString())){
 				bp = Blueprint.load(f);
 				if(bp != null) return bp;
+			} else if(f.getName().replace(".yml","").equalsIgnoreCase(bpId.toString())){
+				bp = Blueprint.load(f);
+				if(bp != null) return bp;
 			}
 		}
 		return null;

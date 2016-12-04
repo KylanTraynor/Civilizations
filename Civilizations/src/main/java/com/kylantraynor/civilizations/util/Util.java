@@ -185,6 +185,16 @@ public class Util {
 				case 15: return "BLACK_WOOL";
 			}
 			return mat.toString();
+		case STONE:
+			switch((int) data){
+			case 0: return "STONE";
+			case 1: return "ANDESITE";
+			case 2: return "POLISHED_ANDESITE";
+			case 3: return "DIORITE";
+			case 4: return "POLISHED_DIORITE";
+			case 5: return "GRANITE";
+			case 6: return "POLISHED_GRANITE";
+			}
 		case STAINED_CLAY:
 			switch((int) data){
 			case 0: return "WHITE_CLAY";
@@ -489,6 +499,10 @@ public class Util {
 		default:
 			return null;
 		}
+	}
+	
+	public static ItemStack getItemFromBlock(ItemStack block){
+		return null;
 	}
 	
 	public static boolean isSameBlock(ItemStack block, ItemStack item){
