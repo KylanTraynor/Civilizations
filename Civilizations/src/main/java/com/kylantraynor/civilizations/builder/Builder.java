@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
@@ -101,13 +102,13 @@ public class Builder {
 	
 	private void warnLackOfSupplies(ItemStack supply){
 		if(getOwner() != null){
-			getOwner().sendNotification("Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
+			getOwner().sendNotification(Level.INFO, "Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
 		}
 	}
 	
 	private void warnProjectComleted(BuildProject currentProject2) {
 		if(getOwner() != null){
-			getOwner().sendNotification("Build project completed!");
+			getOwner().sendNotification(Level.ALL, "Build project completed!");
 		}
 	}
 
