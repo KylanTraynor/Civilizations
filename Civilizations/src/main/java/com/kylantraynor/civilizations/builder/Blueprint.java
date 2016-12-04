@@ -100,9 +100,9 @@ public class Blueprint{
 		}
 		String[] sa = s.split(",");
 		String name = sa[0];
-		int width = Integer.getInteger(sa[1]);
-		int height = Integer.getInteger(sa[2]);
-		int depth = Integer.getInteger(sa[3]);
+		int width = Integer.parseInt(sa[1]);
+		int height = Integer.parseInt(sa[2]);
+		int depth = Integer.parseInt(sa[3]);
 		
 		Code[][][] data = new Code[width][height][depth];
 		
@@ -127,7 +127,7 @@ public class Blueprint{
 					String current = lines.get(0);
 					String[] codes = current.split(",");
 					for(int z = 0; z < codes.length; z++){
-						data[x][y][z] = new Code(Integer.getInteger(codes[z].split(":")[0]), Byte.valueOf(codes[z].split(":")[1]));
+						data[x][y][z] = new Code(Integer.parseInt(codes[z].split(":")[0]), Byte.valueOf(codes[z].split(":")[1]));
 					}
 					lines.remove(0);
 				}
