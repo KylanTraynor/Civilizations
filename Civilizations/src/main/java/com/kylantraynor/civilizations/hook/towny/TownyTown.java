@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import mkremins.fanciful.civilizations.FancyMessage;
 
@@ -70,6 +72,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private float influence = 1;
 	private Region region;
 	private String lastNotification = "";
+	private Instant lastNotificationInstant = Instant.now();
+	static final int NOTIFICATION_SPAM_DELAY = 30;
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -476,9 +480,10 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	 * Sends a notification to all town members.
 	 */
 	@Override
-	public void sendNotification(String message) {
-		if(lastNotification.equalsIgnoreCase(message)) return;
+	public void sendNotification(Level type, String message) {
+		if(lastNotification.equalsIgnoreCase(message) && !(lastNotificationInstant.isBefore(Instant.now().minusSeconds(NOTIFICATION_SPAM_DELAY)))) return;
 		this.sendMessage(message, null);
+		lastNotificationInstant = Instant.now();
 		lastNotification = message;
 	}
 }

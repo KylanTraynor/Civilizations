@@ -195,6 +195,12 @@ public class Util {
 			case 5: return "GRANITE";
 			case 6: return "POLISHED_GRANITE";
 			}
+		case DIRT:
+			switch((int) data){
+			case 0: return "DIRT";
+			case 1: return "COARSE_DIRT";
+			case 2: return "PODZOL";
+			}
 		case STAINED_CLAY:
 			switch((int) data){
 			case 0: return "WHITE_CLAY";
