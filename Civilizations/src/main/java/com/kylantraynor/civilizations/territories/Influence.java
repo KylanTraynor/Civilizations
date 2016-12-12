@@ -25,7 +25,7 @@ public class Influence {
 	 * Gets the total influence.
 	 * @return
 	 */
-	public Float getInfluence(){
+	public Float getTotalInfluence(){
 		float result = 1f;
 		for(Float f : influences.values()){
 			if(f != null) result += f;

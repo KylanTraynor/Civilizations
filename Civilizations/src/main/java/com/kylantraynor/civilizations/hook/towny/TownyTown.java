@@ -46,6 +46,7 @@ import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.territories.Influence;
 import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.kylantraynor.civilizations.territories.Region;
 import com.palmergames.bukkit.towny.Towny;
@@ -69,7 +70,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 
 	Town townyTown;
 	private boolean bypassPlotLoading = true;
-	private float influence = 1;
+	private Influence influence = new Influence();
 	private Region region;
 	private String lastNotification = "";
 	private Instant lastNotificationInstant = Instant.now();
@@ -331,23 +332,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 
 	@Override
-	public float getInfluence() {
+	public Influence getInfluence() {
 		return this.influence;
-	}
-
-	@Override
-	public void setInfluence(float newInfluence) {
-		this.influence = (newInfluence >= 1 ? newInfluence : 1);
-	}
-
-	@Override
-	public void addInfluence(float addedInfluence) {
-		setInfluence(getInfluence() + addedInfluence);
-	}
-
-	@Override
-	public void removeInfluence(float removedInfluence) {
-		setInfluence(getInfluence() - removedInfluence);
 	}
 
 	@Override

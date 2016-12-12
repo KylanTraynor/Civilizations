@@ -123,6 +123,7 @@ public class Blueprint{
 			lines.remove(0);
 			for(int y = 0; y < height; y ++){
 				lines.remove(0);
+				lines.remove(0);
 				for(int x = 0; x < width; x++){
 					String current = lines.get(0);
 					String[] codes = current.split(",");

@@ -30,15 +30,20 @@ public class CommandHouse implements CommandExecutor{
 			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This command has to be used by a player.");
 			return true;
 		}
+		Player player = (Player) sender;
+		
+		
 		// Makes sure there is more than just /House
 		if(args.length == 0){
 			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "/house [name]");
 			return true;
 		}
-		// TODO Need to add the list of all the houses.
+		// Checks if the list of all the houses is requested.
 		if(args[0].equalsIgnoreCase("LIST")){
+			House.getHousesListChatMessage().send(player);
 			return true;
 		}
+		
 		// When the command is of the kind /House [House Name]
 		// Gets the House
 		House house = House.get(args[0]);
@@ -51,20 +56,18 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				// /House [Name] GetBanner
 				case "GETBANNER":
-					Player p2 = (Player ) sender;
-					if(p2.isOp()){
-						p2.getInventory().addItem(house.getBanner().getItemStack());
+					if(player.isOp()){
+						player.getInventory().addItem(house.getBanner().getItemStack());
 					} else {
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You don't have the permission to do this.");
 					}
 					return true;
 				// /House [Name] SetBanner
 				case "SETBANNER":
-					Player p = (Player) sender;
-					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, p)){
+					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, player)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this House.");
 					}
-					Block target = p.getTargetBlock((Set<Material>) null, 15);
+					Block target = player.getTargetBlock((Set<Material>) null, 15);
 					if(target != null){
 						if(target.getType() == Material.BANNER || target.getType() == Material.STANDING_BANNER){
 							BlockState state = target.getState();

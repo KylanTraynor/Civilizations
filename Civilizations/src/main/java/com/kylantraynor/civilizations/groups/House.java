@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +20,18 @@ import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.settings.HouseSettings;
+import com.kylantraynor.civilizations.territories.Influence;
+import com.kylantraynor.civilizations.territories.InfluentEntity;
 
 /**
  * Family House, with all the members of the family.
  * @author Baptiste
  *
  */
-public class House extends Group implements BannerOwner{
+public class House extends Group implements BannerOwner, InfluentEntity{
 	
+	private Influence influence = new Influence();
+
 	public String getWords() { return getSettings().getWords(); }
 	public void setWords(String words) { getSettings().setWords(words); }
 	
@@ -34,6 +39,30 @@ public class House extends Group implements BannerOwner{
 	
 	public OfflinePlayer getLord(){ return getSettings().getLord(); }
 	public void setLord(OfflinePlayer p){ getSettings().setLord(p); }
+	
+	public static FancyMessage getHousesListChatMessage(){
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("Noble Houses", ChatColor.GRAY));
+		List<House> houses = CacheManager.getHouseList();
+		houses.sort(getInfluenceComparator());
+		
+		for(int i = houses.size() - 1; i >= 0; i--){
+			fm.then("\n");
+			fm.then(houses.get(i).getName() + " (" + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
+			.command("/group " + houses.get(i).getId() + " info");
+		}
+		fm.then("\n");
+		fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
+		return fm;
+		
+	}
+	
+	public static Comparator<House> getInfluenceComparator(){
+		return (a, b) -> {
+			if(a.getInfluence().getTotalInfluence() < b.getInfluence().getTotalInfluence()) return -1;
+			if(a.getInfluence().getTotalInfluence() > b.getInfluence().getTotalInfluence()) return 1;
+			return 0;
+		};
+	}
 	
 	public House(String name, Banner b) {
 		super();
@@ -221,5 +250,10 @@ public class House extends Group implements BannerOwner{
 		}
 		fm.then("\n==============================").color(ChatColor.GOLD);
 		return fm;
+	}
+	
+	@Override
+	public Influence getInfluence() {
+		return this.influence;
 	}
 }

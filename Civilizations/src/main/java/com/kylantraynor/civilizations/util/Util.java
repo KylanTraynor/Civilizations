@@ -516,6 +516,7 @@ public class Util {
 				block.getType() == Material.JUNGLE_DOOR ||
 				block.getType() == Material.ACACIA_DOOR ||
 				block.getType() == Material.DARK_OAK_DOOR ||
+				block.getType() == Material.WOODEN_DOOR ||
 				block.getType() == Material.WOOD_DOOR ||
 				block.getType() == Material.IRON_DOOR_BLOCK) && block.getData().getData() >= 8){
 			return null;
@@ -545,6 +546,7 @@ public class Util {
 			if(block.getType() == Material.CROPS && item.getType() == Material.SEEDS) return true;
 			if(block.getType() == Material.IRON_DOOR_BLOCK && item.getType() == Material.IRON_DOOR && block.getData().getData() < 8) return true;
 			if(block.getType() == Material.BIRCH_DOOR && item.getType() == Material.BIRCH_DOOR_ITEM && block.getData().getData() < 8) return true;
+			if(block.getType() == Material.WOODEN_DOOR && item.getType() == Material.WOOD_DOOR && block.getData().getData() < 8) return true;
 			if(block.getType() == Material.WOOD_DOOR && item.getType() == Material.WOODEN_DOOR && block.getData().getData() < 8) return true;
 			if(block.getType() == Material.ACACIA_DOOR && item.getType() == Material.ACACIA_DOOR_ITEM && block.getData().getData() < 8) return true;
 			if(block.getType() == Material.SPRUCE_DOOR && item.getType() == Material.SPRUCE_DOOR_ITEM && block.getData().getData() < 8) return true;
@@ -798,9 +800,14 @@ public class Util {
 		case POWERED_RAIL:
 		case PRISMARINE:
 		case PURPUR_BLOCK:
+			return true;
 		case PURPUR_DOUBLE_SLAB:
+			break;
 		case PURPUR_PILLAR:
+			return true;
 		case PURPUR_SLAB:
+			if((block.getData().getData() % 8) == item.getData().getData()) return true;
+			return false;
 		case PURPUR_STAIRS:
 		case QUARTZ_BLOCK:
 		case QUARTZ_ORE:
