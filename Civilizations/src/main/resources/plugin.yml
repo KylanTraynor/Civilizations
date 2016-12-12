@@ -1,6 +1,6 @@
 name: Civilizations
 main: com.kylantraynor.civilizations.Civilizations
-version: ${project.version}
+version: 0.0.2-SNAPSHOT
 softdepend: [dynmap, TitleManager, Towny, Vault, LWC, Quickshop, DraggyRPG]
 commands:
   civilizationsanswer:
@@ -28,13 +28,15 @@ commands:
   plot:
     description: Access all plot commands.
     permission: civilizations.plot
-    aliases: [civplot]
+    aliases: [civplot,plot]
   stall:
     description: Access all marketstall commands.
     permission: civilizations.stall
   house:
     description: Access all house commands.
     permission: civilizations.house
+    aliases: [h]
   blueprint:
     description: Access all blueprint commands.
     permission: civilizations.blueprint
+    aliases: [bp]
