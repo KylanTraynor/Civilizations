@@ -20,8 +20,10 @@ import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.settings.HouseSettings;
+import com.kylantraynor.civilizations.territories.HonorificTitle;
 import com.kylantraynor.civilizations.territories.Influence;
 import com.kylantraynor.civilizations.territories.InfluentEntity;
+import com.kylantraynor.civilizations.util.Util;
 
 /**
  * Family House, with all the members of the family.
@@ -47,7 +49,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		
 		for(int i = houses.size() - 1; i >= 0; i--){
 			fm.then("\n");
-			fm.then(houses.get(i).getName() + " (" + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
+			fm.then("" + Util.getChatColor(houses.get(i).getBanner().getBaseColor()) + 0x23FA + ChatColor.GOLD + houses.get(i).getName() + " (Lord " + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
 			.command("/group " + houses.get(i).getId() + " info");
 		}
 		fm.then("\n");
@@ -60,7 +62,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		return (a, b) -> {
 			if(a.getInfluence().getTotalInfluence() < b.getInfluence().getTotalInfluence()) return -1;
 			if(a.getInfluence().getTotalInfluence() > b.getInfluence().getTotalInfluence()) return 1;
-			return 0;
+			return a.getName().compareToIgnoreCase(b.getName());
 		};
 	}
 	
@@ -173,6 +175,10 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		}
 		fm.then("\nCurrent Lord: ").color(ChatColor.GRAY).
 			then("" + getLordName()).color(ChatColor.GOLD);
+		fm.then("\nTitles: ").color(ChatColor.GRAY);
+		for(HonorificTitle t : getTitles()){
+			fm.then("\n\t" + t.getName()).color(ChatColor.GOLD);
+		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		fm.then("\nVassals: ").color(ChatColor.GRAY).command("/house " + this.getName() + " Vassals").
@@ -182,6 +188,15 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
+	
+	/**
+	 * Gets this house's list of Titles.
+	 * @return
+	 */
+	private List<HonorificTitle> getTitles() {
+		return getSettings().getTitles();
+	}
+	
 	/**
 	 * Gets the lord name of this House.
 	 * @return Unknown if there is no lord.

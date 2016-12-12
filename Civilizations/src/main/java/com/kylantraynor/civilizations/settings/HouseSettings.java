@@ -10,11 +10,13 @@ import org.bukkit.OfflinePlayer;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
+import com.kylantraynor.civilizations.territories.HonorificTitle;
 
 public class HouseSettings extends GroupSettings {
 	private OfflinePlayer lord;
 	private Banner banner;
 	private List<House> vassals;
+	private List<HonorificTitle> titles;
 
 	/**
 	 * Gets the Words of the House.
@@ -109,6 +111,8 @@ public class HouseSettings extends GroupSettings {
 					}
 				}
 			}
+		} else {
+			vassals = new ArrayList<House>();
 		}
 		return vassals;
 	}
@@ -128,6 +132,49 @@ public class HouseSettings extends GroupSettings {
 				slist.add(h.getSettings().getUniqueId().toString());
 			}
 			this.set("Vassals", slist);
+		}
+		setChanged(true);
+	}
+	
+	/**
+	 * Gets the list of Titles of this house.
+	 * @return
+	 */
+	public List<HonorificTitle> getTitles(){
+		if(this.titles != null) return titles;
+		if(this.contains("Titles")){
+			List<?> list = this.getList("Titles");
+			titles = new ArrayList<HonorificTitle>();
+			for(Object o : list){
+				if(o instanceof String){
+					UUID id = UUID.fromString((String) o);
+					HonorificTitle g = HonorificTitle.get(id);
+					if(g instanceof HonorificTitle){
+						titles.add((HonorificTitle) g);
+					}
+				}
+			}
+		} else {
+			titles = new ArrayList<HonorificTitle>();
+		}
+		return titles;
+	}
+	
+	/**
+	 * Sets the list of titles of the House.
+	 * @param list
+	 */
+	public void setTitles(List<HonorificTitle> list){
+		if(list == null){
+			titles = new ArrayList<HonorificTitle>();
+			this.set("Titles", null);
+		} else {
+			this.titles = list;
+			List<String> slist = new ArrayList<String>();
+			for(HonorificTitle t : titles){
+				slist.add(t.getSettings().getUniqueId().toString());
+			}
+			this.set("Titles", slist);
 		}
 		setChanged(true);
 	}
