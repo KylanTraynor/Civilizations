@@ -160,7 +160,7 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "INFO":
 				if(sender instanceof Player){
-					g.getInteractiveInfoPanel((Player)sender);
+					g.getInteractiveInfoPanel((Player)sender).send(sender);;
 				}
 				break;
 			case "RANK":

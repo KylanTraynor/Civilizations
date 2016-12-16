@@ -35,8 +35,9 @@ public class CommandHouse implements CommandExecutor{
 		
 		// Makes sure there is more than just /House
 		if(args.length == 0){
-			sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "/house [name]");
-			return true;
+			args = new String[]{"LIST"};
+			//sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "/house [name]");
+			//return true;
 		}
 		// Checks if the list of all the houses is requested.
 		if(args[0].equalsIgnoreCase("LIST")){

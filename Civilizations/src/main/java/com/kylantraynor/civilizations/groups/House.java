@@ -49,7 +49,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		
 		for(int i = houses.size() - 1; i >= 0; i--){
 			fm.then("\n");
-			fm.then("" + Util.getChatColor(houses.get(i).getBanner().getBaseColor()) + 0x23FA + ChatColor.GOLD + houses.get(i).getName() + " (Lord " + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
+			fm.then(ChatColor.GOLD + houses.get(i).getName() + " (Lord " + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
 			.command("/group " + houses.get(i).getId() + " info");
 		}
 		fm.then("\n");
@@ -174,7 +174,8 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
 		fm.then("\nCurrent Lord: ").color(ChatColor.GRAY).
-			then("" + getLordName()).color(ChatColor.GOLD);
+			then("" + getLordName()).color(ChatColor.GOLD).
+			command("/p " + getLordName());
 		fm.then("\nTitles: ").color(ChatColor.GRAY);
 		for(HonorificTitle t : getTitles()){
 			fm.then("\n\t" + t.getName()).color(ChatColor.GOLD);
