@@ -126,11 +126,11 @@ public class Prism extends Shape {
 		int y = Math.max(this.getMinY(), Math.min(sY, this.getMaxY()));
 		int z = Math.max(this.getMinZ(), Math.min(sZ, this.getMaxZ()));
 		
-		double distance = Math.sqrt((x - sX) * (x - sX)+
+		double distanceSquared = (x - sX) * (x - sX)+
 				(y - sY) * (y - sY)+
-				(z - sZ) * (z - sZ));
+				(z - sZ) * (z - sZ);
 		
-		return distance < s.getRadius();
+		return distanceSquared < s.getRadius() * s.getRadius();
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public class Prism extends Shape {
 	}
 	
 	@Override
-	public double distance(Shape s) {
+	public double distanceSquared(Shape s) {
 		if(this.intersect(s)) return 0;
 		
 		Location closest = new Location(s.getLocation().getWorld(),
@@ -173,7 +173,7 @@ public class Prism extends Shape {
 				Math.max(s.getMinZ(), Math.min(s.getMaxZ(), getLocation().getZ())));
 				
 		
-		return distance(closest);
+		return distanceSquared(closest);
 	}
 	
 	@Override
@@ -184,12 +184,12 @@ public class Prism extends Shape {
 	}
 
 	@Override
-	public double distance(Location l) {
+	public double distanceSquared(Location l) {
 		double x = Math.max(getMinX(), Math.min(getMaxX(), l.getX()));
 		double y = Math.max(getMinY(), Math.min(getMaxY(), l.getY()));
 		double z = Math.max(getMinZ(), Math.min(getMaxZ(), l.getZ()));
 		
-		return new Location(l.getWorld(), x, y, z).distance(l);
+		return new Location(l.getWorld(), x, y, z).distanceSquared(l);
 	}
 	
 	public boolean expand(BlockFace direction, int amount){

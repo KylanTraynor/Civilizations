@@ -282,13 +282,13 @@ public class Camp extends Settlement{
 	 * @return Camp or null if no camp could be found.
 	 */
 	public static Camp getClosest(Location l){
-		Double distance = null;
+		Double distanceSquared = null;
 		Camp closest = null;
 		for(Camp s : getCampList()){
-			if(distance == null){
+			if(distanceSquared == null){
 				closest = s;
-			} else if(distance > l.distance(s.getLocation())) {
-				distance = l.distance(s.getLocation());
+			} else if(distanceSquared > l.distanceSquared(s.getLocation())) {
+				distanceSquared = l.distanceSquared(s.getLocation());
 				closest = s;
 			}
 		}

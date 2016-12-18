@@ -7,6 +7,11 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.util.Util;
 
 public class BuildProject {
+	
+	public static final int FlipX = 0;
+	public static final int FlipY = 1;
+	public static final int FlipZ = 2;
+	
 	private Location location;
 	private Blueprint blueprint;
 	private int currentY;
@@ -15,6 +20,7 @@ public class BuildProject {
 	private boolean done;
 	private boolean setAir;
 	private int rotation;
+	private int flip;
 	
 	public BuildProject(Location l, Blueprint bp, boolean setAir){
 		this.location = l;

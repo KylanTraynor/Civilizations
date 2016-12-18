@@ -260,7 +260,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 	 * @return
 	 */
 	public FancyMessage getInteractiveVassalsList() {
-		FancyMessage fm = new FancyMessage("========== HOUSE " + getName().toUpperCase() + " VASSALS ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage("========== House " + getName() + " Vassals ==========").color(ChatColor.GOLD);
 		for(House h : getVassals()){
 			fm.then("\n" + h.getName()).command("/House " + h.getName() + " INFO");
 		}

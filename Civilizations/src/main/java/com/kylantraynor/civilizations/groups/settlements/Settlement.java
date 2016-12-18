@@ -120,18 +120,26 @@ public class Settlement extends Group {
 	 * @return
 	 */
 	public double distance(Location location){
+		return Math.sqrt(distanceSquared(location));
+	}
+	/**
+	 * Gets the square of the distance between the closest element of the settlement and the given location.
+	 * @param location
+	 * @return
+	 */
+	public double distanceSquared(Location location){
 		if(protects(location)) return 0.0;
-		double distance = location.distance(getLocation());
+		double distanceSquared = location.distanceSquared(getLocation());
 		for(Shape s : this.getProtection().getShapes()){
-			distance = Math.min(s.distance(location), distance);
+			distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
 		}
 		for(Plot p : getPlots()){
 			for(Shape s : p.getProtection().getShapes()){
-				distance = Math.min(s.distance(location), distance);
+				distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
 			}
 		}
 		
-		return distance;
+		return distanceSquared;
 	}
 	/**
 	 * Checks if this settlement is upgradable.
@@ -222,13 +230,13 @@ public class Settlement extends Group {
 	 * @return Settlement or null if no settlement could be found.
 	 */
 	public static Settlement getClosest(Location l){
-		Double distance = null;
+		Double distanceSquared = null;
 		Settlement closest = null;
 		for(Settlement s : getSettlementList()){
-			if(distance == null){
+			if(distanceSquared == null){
 				closest = s;
-			} else if(distance > s.distance(l)) {
-				distance = s.distance(l);
+			} else if(distanceSquared > s.distanceSquared(l)) {
+				distanceSquared = s.distanceSquared(l);
 				closest = s;
 			}
 			if(s.protects(l)){
@@ -261,16 +269,20 @@ public class Settlement extends Group {
 	}
 	
 	public double distance(Shape s){
-		double distance = s.getLocation().distance(this.getLocation());
+		return Math.sqrt(distanceSquared(s));
+	}
+	
+	public double distanceSquared(Shape s){
+		double distanceSquared = s.getLocation().distanceSquared(this.getLocation());
 		for(Shape shape : this.getProtection().getShapes()){
-			distance = Math.min(shape.distance(s), distance);
+			distanceSquared = Math.min(shape.distanceSquared(s), distanceSquared);
 		}
 		for(Plot p : getPlots()){
 			for(Shape shape : p.getProtection().getShapes()){
-				distance = Math.min(shape.distance(s), distance);
+				distanceSquared = Math.min(shape.distanceSquared(s), distanceSquared);
 			}
 		}
-		return distance;
+		return distanceSquared;
 	}
 	
 	/**
@@ -279,7 +291,7 @@ public class Settlement extends Group {
 	 * @return
 	 */
 	public boolean canMergeWith(Shape s) {
-		return distance(s) <= Civilizations.SETTLEMENT_MERGE_RADIUS;
+		return distanceSquared(s) <= Civilizations.SETTLEMENT_MERGE_RADIUS * Civilizations.SETTLEMENT_MERGE_RADIUS;
 	}
 	
 	public int getAmountOfWarehouses(){

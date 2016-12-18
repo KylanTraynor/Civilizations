@@ -20,8 +20,8 @@ public abstract class Shape implements Visualizable{
 	}
 	
 	public abstract boolean intersect(Shape s);
-	public abstract double distance(Location l);
-	public abstract double distance(Shape s);
+	public abstract double distanceSquared(Location location);
+	public abstract double distanceSquared(Shape shape);
 	public abstract int getMinX();
 	public abstract int getMinY();
 	public abstract int getMinZ();
@@ -106,7 +106,7 @@ public abstract class Shape implements Visualizable{
 	public void show(Player player) {
 		if(addPlayer(player)){
 			for(Block b : getBlockSurface()){
-				if(b.getLocation().distance(player.getLocation()) <= 100 && !walkThroughBlock(b)){
+				if(b.getLocation().distanceSquared(player.getLocation()) <= 10000 && !walkThroughBlock(b)){
 					player.sendBlockChange(b.getLocation(), Material.GOLD_BLOCK, (byte) 0);
 				}
 			}
@@ -116,7 +116,7 @@ public abstract class Shape implements Visualizable{
 	public void hide(Player player) {
 		if(removePlayer(player)){
 			for(Block b : getBlockSurface()){
-				if(b.getLocation().distance(player.getLocation()) <= 100 && !walkThroughBlock(b)){
+				if(b.getLocation().distanceSquared(player.getLocation()) <= 10000 && !walkThroughBlock(b)){
 					player.sendBlockChange(b.getLocation(), b.getLocation().getBlock().getType(), b.getLocation().getBlock().getData());
 				}
 			}
@@ -133,5 +133,12 @@ public abstract class Shape implements Visualizable{
 		if(block.getType() == Material.TRAPPED_CHEST) return true;
 		if(block.getType() == Material.COBBLE_WALL) return true;
 		return false;
+	}
+	
+	public double distance(Location l){
+		return Math.sqrt(distanceSquared(l));
+	}
+	public double distance(Shape s){
+		return Math.sqrt(distanceSquared(s));
 	}
 }

@@ -93,7 +93,7 @@ public class Hull extends Shape {
 			totalZ += l.getBlockZ();
 			totalY += l.getBlockY();
 		}
-		return new Location(getLocation().getWorld(), totalX / points.size(), totalY / points.size(), totalZ / points.size());
+		return new Location(getLocation().getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
 	}
 	
 	public double getMaxDistanceFromCenter(){
@@ -101,7 +101,7 @@ public class Hull extends Shape {
 			cachedMaxDistanceFromCenter = 0.0;
 			Location center = getMassCenter();
 			for(Location l : points){
-				if(l.distance(center) > cachedMaxDistanceFromCenter){
+				if(l.distanceSquared(center) > cachedMaxDistanceFromCenter * cachedMaxDistanceFromCenter){
 					cachedMaxDistanceFromCenter = l.distance(center);
 				}
 			}
@@ -127,7 +127,7 @@ public class Hull extends Shape {
 					} else {
 						Location temp = l.clone();
 						temp.setY(y);
-						if(onCircle.distance(temp) < onCircle.distance(closest)){
+						if(onCircle.distanceSquared(temp) < onCircle.distanceSquared(closest)){
 							closest = temp;
 						}
 					}
@@ -229,7 +229,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public double distance(Shape s) {
+	public double distanceSquared(Shape s) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -241,11 +241,11 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public double distance(Location location) {
-		double distance = getMassCenter().distance(location);
+	public double distanceSquared(Location location) {
+		double distanceSquared = getMassCenter().distanceSquared(location);
 		for(Location l : points){
-			distance = Math.min(l.distance(location), distance);
+			distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
 		}
-		return distance;
+		return distanceSquared;
 	}
 }

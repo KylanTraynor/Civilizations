@@ -222,10 +222,10 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	public double distance(Shape s){
+	public double distanceSquared(Shape s){
 		switch(operation.toUpperCase()){
 		case "UNION":
-			return Math.min(shape1.distance(s), shape2.distance(s));
+			return Math.min(shape1.distanceSquared(s), shape2.distanceSquared(s));
 		case "INTERSECTION":
 			break;
 		case "DIFFERENCE":
@@ -248,10 +248,10 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	public double distance(Location l) {
+	public double distanceSquared(Location l) {
 		switch(operation.toUpperCase()){
 		case "UNION":
-			return Math.min(shape1.distance(l), shape2.distance(l));
+			return Math.min(shape1.distanceSquared(l), shape2.distanceSquared(l));
 		case "INTERSECTION":
 			break;
 		case "DIFFERENCE":

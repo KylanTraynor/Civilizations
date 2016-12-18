@@ -47,8 +47,8 @@ public class Sphere extends Shape {
 		x = x - this.getLocation().getX();
 		y = y - this.getLocation().getY();
 		z = z - this.getLocation().getZ();
-		double distance = Math.sqrt(x * x + y * y + z * z); 
-		if(distance <= this.radius) return true;
+		double distanceSquared = (x * x + y * y + z * z); 
+		if(distanceSquared <= this.radius * this.radius) return true;
 		return false;
 	}
 	
@@ -112,11 +112,11 @@ public class Sphere extends Shape {
 		int sX = s.getLocation().getBlockX();
 		int sY = s.getLocation().getBlockY();
 		int sZ = s.getLocation().getBlockZ();
-		double distance = Math.sqrt((thisX - sX) * (thisX - sX) +
+		double distanceSquared = (thisX - sX) * (thisX - sX) +
 				(thisY - sY) * (thisY - sY) +
-				(thisZ - sZ) * (thisZ - sZ));
+				(thisZ - sZ) * (thisZ - sZ);
 		
-		return distance < (this.getRadius() + s.getRadius());
+		return distanceSquared < (this.getRadius() * this.getRadius() + s.getRadius() * s.getRadius());
 	}
 	
 	public boolean intersect(Prism p){
@@ -129,11 +129,11 @@ public class Sphere extends Shape {
 		int y = Math.max(p.getMinY(), Math.min(thisY, p.getMaxY()));
 		int z = Math.max(p.getMinZ(), Math.min(thisZ, p.getMaxZ()));
 		
-		double distance = Math.sqrt((x - thisX) * (x - thisX)+
+		double distanceSquared = (x - thisX) * (x - thisX)+
 				(y - thisY) * (y - thisY)+
-				(z - thisZ) * (z - thisZ));
+				(z - thisZ) * (z - thisZ);
 		
-		return distance < this.getRadius();
+		return distanceSquared < this.getRadius() * this.getRadius();
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	public double distance(Shape s) {
+	public double distanceSquared(Shape s) {
 		if(this.intersect(s)) return 0;
 		
 		Location closest = new Location(s.getLocation().getWorld(),
@@ -183,11 +183,11 @@ public class Sphere extends Shape {
 				Math.max(s.getMinZ(), Math.min(s.getMaxZ(), getLocation().getZ())));
 				
 		
-		return distance(closest);
+		return distanceSquared(closest);
 	}
 	
 	@Override
-	public double distance(Location l) {
-		return Math.max(getLocation().distance(l) - getRadius(), 0);
+	public double distanceSquared(Location l) {
+		return Math.max(getLocation().distanceSquared(l) - (getRadius() * getRadius()), 0);
 	}
 }
