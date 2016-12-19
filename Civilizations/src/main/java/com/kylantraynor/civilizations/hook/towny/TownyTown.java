@@ -467,7 +467,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	 */
 	@Override
 	public void sendNotification(Level type, String message) {
-		if(lastNotification.equalsIgnoreCase(message) && !(lastNotificationInstant.isBefore(Instant.now().minusSeconds(NOTIFICATION_SPAM_DELAY)))) return;
+		if(lastNotification.equalsIgnoreCase(message) && (lastNotificationInstant.isAfter(Instant.now().minusSeconds(NOTIFICATION_SPAM_DELAY)))) return;
 		this.sendMessage(message, null);
 		lastNotificationInstant = Instant.now();
 		lastNotification = message;

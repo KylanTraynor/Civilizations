@@ -97,7 +97,7 @@ public class Warehouse extends Plot implements HasInventory{
 	}
 	
 	public int getSize(){
-		if(chests == null) chests = getAllChests();
+		chests = getAllChests();
 		int chestSize = 0;
 		if(chests.isEmpty()) return 0;
 		chestSize = chests.get(0).getBlockInventory().getSize();
@@ -106,7 +106,7 @@ public class Warehouse extends Plot implements HasInventory{
 
 	@Override
 	public void addItem(ItemStack... items) {
-		if(chests == null) chests = getAllChests();
+		chests = getAllChests();
 		for(Chest c : chests){
 			if(items.length == 0) return;
 			HashMap<Integer, ItemStack> result = c.getBlockInventory().addItem(items);
@@ -116,15 +116,18 @@ public class Warehouse extends Plot implements HasInventory{
 
 	@Override
 	public void removeItem(ItemStack... items) {
-		if(chests == null) chests = getAllChests();
+		chests = getAllChests();
 		for(Chest c : chests){
 			if(items.length == 0) return;
 			for(ItemStack is : c.getBlockInventory().getContents()){
 				if(is == null) continue;
 				for(ItemStack item : items){
+					if(item == null) continue;
+					if(item.getAmount() == 0) continue;
 					if(Util.isSameBlock(item, is)){
 						ItemStack temp = is.clone();
 						temp.setAmount(item.getAmount());
+						item.setAmount(Math.max(item.getAmount() - is.getAmount(), 0));
 						c.getBlockInventory().removeItem(temp);
 					}
 				}
