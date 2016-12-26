@@ -134,8 +134,9 @@ public class MaterialAndData {
 		case LIME_SHULKER_BOX:
 			break;
 		case LOG:
+			break;
 		case LOG_2:
-			byte direction = this.data % 4;
+			break;
 		case MAGENTA_SHULKER_BOX:
 			break;
 		case OBSERVER:
@@ -219,6 +220,7 @@ public class MaterialAndData {
 		default:
 			return this;
 		}
+		return this;
 	}
 	
 	// STATIC
