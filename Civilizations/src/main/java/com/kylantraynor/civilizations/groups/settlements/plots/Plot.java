@@ -11,11 +11,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;

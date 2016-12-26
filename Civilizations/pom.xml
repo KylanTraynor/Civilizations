@@ -204,24 +204,24 @@
 				<version>0.0.21</version>
 			</dependency>
 			<dependency>
+				<groupId>com.kylantraynor</groupId>
+				<artifactId>DraggyData</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
 				<groupId>org.spigotmc</groupId>
 				<artifactId>spigot-api</artifactId>
-				<version>1.11-R0.1-SNAPSHOT</version>
+				<version>1.11.2-R0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.bukkit</groupId>
 				<artifactId>bukkit</artifactId>
-				<version>1.11-R0.1-SNAPSHOT</version>
+				<version>1.11.2-R0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.bukkit</groupId>
 				<artifactId>craftbukkit</artifactId>
-				<version>1.11-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.kylantraynor</groupId>
-				<artifactId>DraggyData</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.11.2-R0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

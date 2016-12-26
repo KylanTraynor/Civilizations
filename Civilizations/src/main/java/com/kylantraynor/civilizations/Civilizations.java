@@ -46,6 +46,7 @@ import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
+import com.kylantraynor.civilizations.hook.towny.TownyListener;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.ChatListener;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
@@ -102,6 +103,7 @@ public class Civilizations extends JavaPlugin{
 	private static WebListener webListener = new WebListener();
 	private static ChatListener chatListener = new ChatListener();
 	private static VehiclesListener vehiclesListener = new VehiclesListener();
+	private static TownyListener townyListener = new TownyListener();
 	/*
 	 * InfluenceMaps
 	 */
@@ -265,7 +267,10 @@ public class Civilizations extends JavaPlugin{
 		if(LWCHook.isActive()) {log("INFO", "LWC: OK"); } else {log("INFO", "LWC: NO"); }
 		
 		if(DynmapHook.isEnabled()) DynmapHook.activateDynmap();
-		if(TownyHook.isActive()) TownyHook.loadTownyTowns();
+		if(TownyHook.isActive()){
+			TownyHook.loadTownyTowns();
+			pm.registerEvents(getTownyListener(), this);
+		}
 		
 		if(DraggyRPGHook.isActive()) {
 			log("INFO", "DraggyRPG: OK");
@@ -736,6 +741,10 @@ public class Civilizations extends JavaPlugin{
 
 	public static ProtectionListener getProtectionListener() {
 		return protectionListener;
+	}
+	
+	public static TownyListener getTownyListener(){
+		return townyListener;
 	}
 
 	public boolean isDEBUG() {
