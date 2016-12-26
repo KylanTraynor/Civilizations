@@ -953,6 +953,4 @@ public class Util {
 			return Sound.BLOCK_STONE_PLACE;
 		}
 	}
-	
-	public static 
 }
