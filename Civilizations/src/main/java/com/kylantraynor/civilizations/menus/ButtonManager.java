@@ -58,14 +58,14 @@ public class ButtonManager {
 						return btn;
 					}
 				} else {
-					if(im.getDisplayName().equals(btn.getItemMeta().getDisplayName())){
-						if(im.getLore() == null && btn.getItemMeta().getLore() == null){
-							return btn;
-						}
-						if(im.getLore().equals(btn.getItemMeta().getLore())){
-							return btn;
-						}
-					}
+					if(im.getDisplayName() == null && btn.getItemMeta().getDisplayName() != null)
+						continue;
+					if(!im.getDisplayName().equals(btn.getItemMeta().getDisplayName()))
+						continue;
+					if(im.getLore() == null && btn.getItemMeta().getLore() == null)
+						return btn;
+					if(im.getLore().equals(btn.getItemMeta().getLore()))
+						return btn;
 				}
 			}
 		}
