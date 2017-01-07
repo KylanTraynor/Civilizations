@@ -27,7 +27,7 @@ import com.kylantraynor.voronoi.Voronoi;
 public class InfluenceMap {
 	
 	private World world;
-	private Voronoi voronoi;
+	private Voronoi<InfluenceCell> voronoi;
 	private int oceanLevel = 48;
 	private Map<VSite, InfluentSite> influentSites = new HashMap<VSite, InfluentSite>();
 	
@@ -60,7 +60,7 @@ public class InfluenceMap {
 		float zmin = zCenter - zRadius;
 		float xmax = xCenter + xRadius;
 		float zmax = zCenter + zRadius;
-		voronoi =  new Voronoi(a, xmin, zmin, xmax, zmax);
+		voronoi =  new Voronoi<InfluenceCell>(a, xmin, zmin, xmax, zmax);
 		voronoi.generate();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.updateInfluenceMap(this);
@@ -128,7 +128,7 @@ public class InfluenceMap {
 		return result;
 	}
 	
-	public VCell[] getCells(){
+	public InfluenceCell[] getCells(){
 		if(isGenerated()){
 			return voronoi.getCells();
 		} else {
@@ -136,7 +136,7 @@ public class InfluenceMap {
 		}
 	}
 	
-	public VCell getCell(InfluentSite site){
+	public InfluenceCell getCell(InfluentSite site){
 		for(Entry<VSite, InfluentSite> e : influentSites.entrySet()){
 			if(e.getValue() == site) return voronoi.getCell(e.getKey());
 		}
@@ -148,11 +148,11 @@ public class InfluenceMap {
 		return influentSites.values();
 	}
 
-	public Voronoi getData() {
+	public Voronoi<InfluenceCell> getData() {
 		return this.voronoi;
 	}
 	
-	public VCell getCell(Player p){
+	public InfluenceCell getCell(Player p){
 		VTriangle oldTriangle = CacheManager.getPlayerTriangulation(p);
 		VTriangle t = getData().getTriangleAt(
 				new VectorXZ((float) p.getLocation().getX(), (float) p.getLocation().getZ()),
@@ -160,7 +160,7 @@ public class InfluenceMap {
 		if(t != null){
 			if(t != oldTriangle)
 				CacheManager.setPlayerTriangulation(p, t);
-			return t.getOwner();
+			return (InfluenceCell) t.getOwner();
 		}
 		return null;
 	}
@@ -171,12 +171,12 @@ public class InfluenceMap {
 				CacheManager.getPlayerTriangulation(p));
 		VTriangle newTriangle = getData().getTriangleAt(
 				new VectorXZ((float) to.getX(), (float) to.getZ()), oldTriangle);
-		VCell cellFrom = null;
-		VCell cellTo = null;
+		InfluenceCell cellFrom = null;
+		InfluenceCell cellTo = null;
 		Region regionFrom = null;
 		Region regionTo = null;
-		if(oldTriangle != null) cellFrom = oldTriangle.getOwner();
-		if(newTriangle != null) cellTo = newTriangle.getOwner();
+		if(oldTriangle != null) cellFrom = (InfluenceCell) oldTriangle.getOwner();
+		if(newTriangle != null) cellTo = (InfluenceCell) newTriangle.getOwner();
 		
 		CacheManager.setPlayerTriangulation(p, newTriangle == null ? oldTriangle : newTriangle);
 		
@@ -185,7 +185,7 @@ public class InfluenceMap {
 		return new PlayerMoveData(p, regionFrom, regionTo, this);
 	}
 	
-	public VCell getCell(Location l){
+	public InfluenceCell getCell(Location l){
 		return getData().getCellAt(new VectorXZ((float) l.getX(), (float) l.getZ()));
 	}
 }
