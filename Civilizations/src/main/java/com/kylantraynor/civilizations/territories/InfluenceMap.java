@@ -60,7 +60,7 @@ public class InfluenceMap {
 		float zmin = zCenter - zRadius;
 		float xmax = xCenter + xRadius;
 		float zmax = zCenter + zRadius;
-		voronoi =  new Voronoi<InfluenceCell>(a, xmin, zmin, xmax, zmax);
+		voronoi =  new Voronoi<InfluenceCell>(InfluenceCell.class, a, xmin, zmin, xmax, zmax);
 		voronoi.generate();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.updateInfluenceMap(this);
@@ -77,7 +77,7 @@ public class InfluenceMap {
 	public InfluentSite getInfluentSiteAt(Location l){
 		VectorXZ location = new VectorXZ((float) l.getX(), (float)l.getZ());
 		if(isGenerated()){
-			VCell c = voronoi.getCellAt(location);
+			InfluenceCell c = voronoi.getCellAt(location);
 			VSite s = null;
 			if(c != null)
 				s = c.getSite();
