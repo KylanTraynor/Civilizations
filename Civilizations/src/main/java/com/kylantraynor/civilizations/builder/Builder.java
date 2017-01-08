@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.settings.GroupSettings;
+import com.kylantraynor.civilizations.util.MaterialAndData;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Builder {
@@ -46,16 +47,16 @@ public class Builder {
 			return;
 		}
 		
-		ItemStack plan = currentProject.getNext();
+		MaterialAndData plan = currentProject.getNext();
 		if(plan == null){
 			currentProject = null;
 			return;
-		} else if(Util.getItemFromBlock(plan) == null){
+		} else if(!plan.requiresSupply()){
 			currentProject.buildNext();
 			this.getSettings().setChanged(true);
 			return;
 		}
-		ItemStack supply = getSupplies(plan);
+		ItemStack supply = getSupplies(plan.toItemStack());
 		if(supply == null){
 			warnLackOfSupplies(plan);
 			if(!currentProject.trySkipNext()){
@@ -104,9 +105,9 @@ public class Builder {
 		return currentProject;
 	}
 	
-	private void warnLackOfSupplies(ItemStack supply){
+	private void warnLackOfSupplies(MaterialAndData supply){
 		if(getOwner() != null){
-			getOwner().sendNotification(Level.INFO, "Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply)) + "!");
+			getOwner().sendNotification(Level.INFO, "Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply.getDefault())) + "!");
 		}
 	}
 	

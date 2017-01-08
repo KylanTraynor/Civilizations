@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.util.MaterialAndData;
 import com.kylantraynor.civilizations.util.Util;
 
 public class BuildProject {
@@ -33,7 +34,7 @@ public class BuildProject {
 		done = false;
 	}
 	
-	public ItemStack getNext(){
+	public MaterialAndData getNext(){
 		if(done == true) return null;
 		return blueprint.getDataAt(currentX, currentY, currentZ);
 	}
@@ -41,19 +42,19 @@ public class BuildProject {
 	public boolean buildNext() {
 		if(done == true) return false;
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(l.getBlock().getType() == getNext().getType() && l.getBlock().getData() == getNext().getData().getData()){
+		if(l.getBlock().getType() == getNext().getMaterial() && l.getBlock().getData() == getNext().getData()){
 			increment();
 			return false;
-		} else if(setAir && getNext().getType() == Material.AIR){
+		} else if(setAir && getNext().getMaterial() == Material.AIR){
 			l.getBlock().breakNaturally();
-			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getType()), 1, 1);
+			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getMaterial()), 1, 1);
 			increment();
 			return false;
-		} else if(getNext().getType() != Material.AIR) {
+		} else if(getNext().getMaterial() != Material.AIR) {
 			l.getBlock().breakNaturally();
-			l.getBlock().setType(getNext().getType());
-			l.getBlock().setData(getNext().getData().getData());
-			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(getNext().getType()), 1, 1);
+			l.getBlock().setType(getNext().getMaterial());
+			l.getBlock().setData(getNext().getData());
+			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(getNext().getMaterial()), 1, 1);
 		}
 		
 		increment();
@@ -120,7 +121,7 @@ public class BuildProject {
 
 	public boolean trySkipNext() {
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(l.getBlock().getType() == getNext().getType() && l.getBlock().getData() == getNext().getData().getData()){
+		if(l.getBlock().getType() == getNext().getMaterial() && l.getBlock().getData() == getNext().getData()){
 			increment();
 			return true;
 		}

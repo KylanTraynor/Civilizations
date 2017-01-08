@@ -17,6 +17,7 @@ import org.bukkit.material.MaterialData;
 import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.selection.Selection;
+import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class Blueprint{
 	
@@ -193,13 +194,14 @@ public class Blueprint{
 		}
 	}
 
-	public ItemStack getDataAt(int x, int y, int z) {
+	public MaterialAndData getDataAt(int x, int y, int z) {
 		if(x < width && y < height && z < depth){
 			Code c = data[x][y][z];
 			Material m = getMaterialCodes().get(c.material);
 			byte data = c.data;
-			MaterialData md = new MaterialData(m, data);
-			return md.toItemStack(1);
+			return new MaterialAndData(m, data);
+			/*MaterialData md = new MaterialData(m, data);
+			return md.toItemStack(1);*/
 		}
 		return null;
 	}

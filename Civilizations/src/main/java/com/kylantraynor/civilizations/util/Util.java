@@ -128,6 +128,15 @@ public class Util {
 	public static String getMaterialName(ItemStack item) {
 		return getDataName(item.getType(), item.getData().getData(), item.getItemMeta());
 	}
+	
+	/**
+	 * Gets the material's name of the MaterialAndData.
+	 * @param materialAndData
+	 * @return
+	 */
+	public static String getMaterialName(MaterialAndData materialAndData){
+		return getDataName(materialAndData.getMaterial(), materialAndData.getData(), null);
+	}
 
 	/**
 	 * Converts a name like IRON_INGOT into Iron Ingot to improve readability
