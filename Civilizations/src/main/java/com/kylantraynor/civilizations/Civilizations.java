@@ -190,14 +190,14 @@ public class Civilizations extends JavaPlugin{
 		
 		setupCommands();
 		
-		int port = 8120;
+		/*int port = 8120;
 		try {
 			startWebServer(port);
 			log("INFO", "Successfully started webserver on port " + port);
 		} catch (Exception e) {
 			log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	private void loadInfluenceMaps() {
