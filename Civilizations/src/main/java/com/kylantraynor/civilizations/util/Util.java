@@ -536,7 +536,7 @@ public class Util {
 	public static boolean isSameBlock(ItemStack block, ItemStack item){
 		Civilizations.DEBUG("Looking for " + getMaterialName(block) + ", found " + getMaterialName(item) + ".");
 		if(block.getType() != item.getType()){
-			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS) || item.getType() == Material.DIRT) return true;
+			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS || item.getType() == Material.DIRT)) return true;
 			if(block.getType() == Material.DAYLIGHT_DETECTOR_INVERTED && item.getType() == Material.DAYLIGHT_DETECTOR) return true;
 			if(block.getType() == Material.REDSTONE_WIRE && item.getType() == Material.REDSTONE) return true;
 			if(block.getType() == Material.TRIPWIRE && item.getType() == Material.STRING) return true;
