@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.builder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +25,10 @@ public class BuildProject {
 	private boolean setAir;
 	private int rotation;
 	private int flip;
+	
+	private 
+	
+	private List<MaterialAndData> skippables = new ArrayList<MaterialAndData>();
 	
 	public BuildProject(Location l, Blueprint bp, boolean setAir){
 		this.location = l;
@@ -124,6 +131,8 @@ public class BuildProject {
 		if(l.getBlock().getType() == getNext().getMaterial() && l.getBlock().getData() == getNext().getData()){
 			increment();
 			return true;
+		} else if (isSkippable(getNext())){
+			increment();
 		}
 		return false;
 	}

@@ -14,12 +14,19 @@ public class CommandTownyTown extends CommandGroup{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0) args = new String[]{"Null", "INFO"};
-		if(!args[0].equals("Null") && args.length >= 2){
+		if(!args[0].equals("Null") && args.length > 0){
 			TownyTown t = TownyTown.get(args[0]);
 			if(t == null) return true;
+			if(args.length == 1){
+				args = new String[]{t.getName(), "INFO"};
+			}
 			switch(args[1].toUpperCase()){
 			case "INFO":
-				
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					t.getInteractiveInfoPanel(p).send(p);
+					return true;
+				}
 				break;
 			case "RANK":
 				if(sender instanceof Player){
