@@ -26,8 +26,6 @@ public class BuildProject {
 	private int rotation;
 	private int flip;
 	
-	private 
-	
 	private List<MaterialAndData> skippables = new ArrayList<MaterialAndData>();
 	
 	public BuildProject(Location l, Blueprint bp, boolean setAir){
@@ -133,8 +131,24 @@ public class BuildProject {
 			return true;
 		} else if (isSkippable(getNext())){
 			increment();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isSkippable(MaterialAndData mad){
+		ItemStack is = mad.toItemStack();
+		for(MaterialAndData m : skippables){
+			if(m.itemIsSimilar(is)) return true;
 		}
 		return false;
 	}
 
+	public List<MaterialAndData> getSkippables() {
+		return skippables;
+	}
+	
+	public void skip(MaterialAndData mad){
+		skippables.add(mad);
+	}
 }

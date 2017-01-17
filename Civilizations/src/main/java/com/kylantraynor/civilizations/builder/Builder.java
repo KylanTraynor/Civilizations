@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.Material;
-import org.bukkit.configuration.MemorySection;
+import mkremins.fanciful.civilizations.FancyMessage;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.util.MaterialAndData;
@@ -107,7 +110,16 @@ public class Builder {
 	
 	private void warnLackOfSupplies(MaterialAndData supply){
 		if(getOwner() != null){
-			getOwner().sendNotification(Level.INFO, "Warehouses lack of " + Util.prettifyText(Util.getMaterialName(supply.getDefault())) + "!");
+			FancyMessage notification = new FancyMessage(((Group)getOwner()).getChatHeader());
+			notification.then("Warehouses lack of ")
+			.then(Util.prettifyText(Util.getMaterialName(supply.getDefault())))
+			.tooltip("Actual block : " + Util.getMaterialName(supply))
+			.color(ChatColor.GOLD)
+			.then("! Click ")
+			.then("HERE").command("/group " + ((Group)getOwner()).getId() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
+			.color(ChatColor.GOLD)
+			.then(" to skip this type of block.");
+			((Group)getOwner()).sendMessage(notification, null);
 		}
 	}
 	

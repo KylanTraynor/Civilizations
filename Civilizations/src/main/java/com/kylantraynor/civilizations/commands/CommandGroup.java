@@ -7,6 +7,7 @@ import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,11 +16,14 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.builder.BuildProject;
+import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
+import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class CommandGroup implements CommandExecutor {
 
@@ -41,6 +45,32 @@ public class CommandGroup implements CommandExecutor {
 					g.openMenu((Player) sender);
 				}
 				break;
+			case "BUILDER":
+				if(g instanceof HasBuilder){
+					if(((HasBuilder) g).getBuilder() != null){
+						switch(args[2]){
+						case "SKIP":
+							if(args.length == 4){
+								MaterialAndData mad = new MaterialAndData(Material.getMaterial(args[3]), (byte)0);
+								for(BuildProject bp : ((HasBuilder) g).getBuilder().getProjects()){
+									if(!bp.getSkippables().contains(mad))bp.skip(mad);
+								}
+								sender.sendMessage(ChatColor.GREEN + "Block skipped!");
+							} else if(args.length == 5){
+								MaterialAndData mad = new MaterialAndData(Material.getMaterial(args[3]), Byte.parseByte(args[4]));
+								for(BuildProject bp : ((HasBuilder) g).getBuilder().getProjects()){
+									if(!bp.getSkippables().contains(mad))bp.skip(mad);
+								}
+								sender.sendMessage(ChatColor.GREEN + "Block skipped!");
+							} else {
+								sender.sendMessage(ChatColor.RED + "Invalid command.");
+							}
+						}
+						return true;
+					}
+				}
+				sender.sendMessage(ChatColor.RED + g.getName() + " doesn't have a builder.");
+				return true;
 			case "REMOVE":
 				if(sender instanceof Player){
 					if(g instanceof MarketStall){
