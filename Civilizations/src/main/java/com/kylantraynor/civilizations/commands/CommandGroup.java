@@ -48,7 +48,7 @@ public class CommandGroup implements CommandExecutor {
 			case "BUILDER":
 				if(g instanceof HasBuilder){
 					if(((HasBuilder) g).getBuilder() != null){
-						switch(args[2]){
+						switch(args[2].toUpperCase()){
 						case "SKIP":
 							if(args.length == 4){
 								MaterialAndData mad = new MaterialAndData(Material.getMaterial(args[3]), (byte)0);
