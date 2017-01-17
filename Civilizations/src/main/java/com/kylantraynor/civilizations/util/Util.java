@@ -336,21 +336,21 @@ public class Util {
 				case 2: return "BIRCH_PLANKS";
 				case 3: return "JUNGLE_PLANKS";
 			}
-			return mat.toString();
+			break;
 		case LOG:
-			switch(data){
+			switch(data % 4){
 				case 0: return "OAK_LOG";
 				case 1: return "SPRUCE_LOG";
 				case 2: return "BIRCH_LOG";
 				case 3: return "JUNGLE_LOG";
 			}
-			return mat.toString();
+			break;
 		case LOG_2:
-			switch(data){
+			switch(data % 4){
 				case 0: return "ACACIA_LOG";
 				case 1: return "DARK_OAK_LOG";
 			}
-			return mat.toString();
+			break;
 		case LEAVES:
 			data = (short) (data%4);
 			switch(data){
@@ -359,32 +359,33 @@ public class Util {
 				case 2: return "BIRCH_LEAVES";
 				case 3: return "JUNGLE_LEAVES";
 			}
+			break;
 		case LEAVES_2:
 			switch(data){
 				case 0: return "ACACIA_LEAVES";
 				case 1: return "DARK_OAK_LEAVES";
 			}
-			return mat.toString();
+			break;
 		case COAL:
 			switch(data){
 				case 0: return "COAL";
 				case 1: return "CHARCOAL";
 			}
-			return mat.toString();
+			break;
 		case SANDSTONE:
 			switch((int) data){
 				case 0: return "SANDSTONE";
 				case 1: return "CHISELED_SANDSTONE";
 				case 2: return "SMOOTH_SANDSTONE";
 			}
-			return mat.toString();
+			break;
 		case LONG_GRASS:
 			switch((int) data){
 				case 0: return "DEAD_SHRUB";
 				case 1: return "TALL_GRASS";
 				case 2: return "FERN";
 			}
-			return mat.toString();
+			break;
 		case STEP:
 			switch((int) data){
 				case 0: return "STONE_SLAB";
@@ -394,7 +395,7 @@ public class Util {
 				case 4: return "BRICK_SLAB";
 				case 5: return "STONE_BRICK_SLAB";
 			}
-			return mat.toString();
+			break;
 		case MONSTER_EGG:
 			switch((int) data){
 				case 50: return "CREEPER_EGG";
@@ -427,7 +428,7 @@ public class Util {
 				case 66: return "WITCH_EGG";
 				case 65: return "BAT_EGG";
 			}
-			return mat.toString();
+			break;
 		case SKULL: case SKULL_ITEM:
 			switch((int) data){
 				case 0: return "SKELETON_SKULL";
@@ -765,7 +766,7 @@ public class Util {
 			return true;
 		case LOG:
 		case LOG_2:
-			if(block.getData().getData() % 4 == item.getData().getData()) return true;
+			if((block.getData().getData() % 4) == (item.getData().getData() % 4)) return true;
 			return false;
 		case LONG_GRASS:
 			break;
