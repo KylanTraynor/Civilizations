@@ -20,6 +20,7 @@ import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
@@ -70,12 +71,13 @@ public class CommandGroup implements CommandExecutor {
 							break;
 						case "LIST":
 							Builder builder = ((HasBuilder) g).getBuilder();
-							FancyMessage fm = new FancyMessage();
+							FancyMessage fm = new FancyMessage(ChatTools.formatTitle(g.getName() + " Build Projects", ChatColor.GOLD));
 							int i = 1;
 							for(BuildProject bp : builder.getProjects()){
 								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 								fm.then("Project #" + i++ + "  at " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 							}
+							fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
 							fm.send(sender);
 							break;
 						case "REMOVEAT":
