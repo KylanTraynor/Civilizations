@@ -76,6 +76,7 @@ public class CommandGroup implements CommandExecutor {
 								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 								fm.then("Project #" + i++ + "  at " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 							}
+							fm.send(sender);
 							break;
 						case "REMOVEAT":
 							Builder builder2 = ((HasBuilder) g).getBuilder();
