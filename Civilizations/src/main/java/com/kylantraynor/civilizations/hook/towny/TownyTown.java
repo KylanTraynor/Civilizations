@@ -452,11 +452,18 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		} else {
 			fm.then("No Warehouses");
 		}
-		fm.then("\nBuild Projects: ").color(ChatColor.GRAY);
+		fm.then("\nBuild Projects: ").color(ChatColor.GRAY)
+			.tooltip("Click here to see the list of projects.")
+			.command("/group " + this.getId() + " Builder List");;
 		fm.then("" + getBuilder().getProjects().size()).color(ChatColor.GOLD)
+			.tooltip("Click here to see the list of projects.")
 			.command("/group " + this.getId() + " Builder List");
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY)
+			.tooltip("Click here to see the list of all members.")
+			.command("/group " + this.getId() + " members");
+		fm.then("" + getMembers().size()).color(ChatColor.GOLD)
+			.tooltip("Click here to see the list of all members.")
+			.command("/group " + this.getId() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
