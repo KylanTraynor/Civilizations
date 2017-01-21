@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.md_5.bungee.api.ChatColor;
+import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.builder.BuildProject;
+import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -64,6 +66,28 @@ public class CommandGroup implements CommandExecutor {
 								sender.sendMessage(ChatColor.GREEN + "Block skipped!");
 							} else {
 								sender.sendMessage(ChatColor.RED + "Invalid command.");
+							}
+							break;
+						case "LIST":
+							Builder builder = ((HasBuilder) g).getBuilder();
+							FancyMessage fm = new FancyMessage();
+							int i = 1;
+							for(BuildProject bp : builder.getProjects()){
+								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
+								fm.then("Project #" + i++ + "  at " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
+							}
+							break;
+						case "REMOVEAT":
+							Builder builder2 = ((HasBuilder) g).getBuilder();
+							for(BuildProject bp : builder2.getProjects()){
+								if(bp.getLocation().getBlockX() == Integer.parseInt(args[3])){
+									if(bp.getLocation().getBlockY() == Integer.parseInt(args[4])){
+										if(bp.getLocation().getBlockZ() == Integer.parseInt(args[5])){
+											builder2.removeProject(bp);
+											sender.sendMessage(ChatColor.GREEN + "Project removed!");
+										}
+									}
+								}
 							}
 						}
 						return true;
