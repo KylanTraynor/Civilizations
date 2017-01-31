@@ -1,13 +1,26 @@
 package com.kylantraynor.civilizations.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemFactory;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
+import com.kylantraynor.civilizations.Civilizations;
+
 public class MaterialAndData {
+	
+	final static MaterialAndData Air = new MaterialAndData(Material.AIR, (byte) 0);
+	final static MaterialAndData Dirt = new MaterialAndData(Material.DIRT, (byte) 0);
+	
+	private static Map<MaterialAndData, MaterialAndData> pasteReplacements = new HashMap<MaterialAndData, MaterialAndData>();
+	
 	final Material material;
 	final byte data;
 	
@@ -24,8 +37,35 @@ public class MaterialAndData {
 		return data;
 	}
 	
+	public String toString(){
+		if(data != 0){
+			return material.toString() + ":" + data;
+		} else {
+			return material.toString();
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof MaterialAndData){
+			if(((MaterialAndData) obj).getMaterial() == material && ((MaterialAndData) obj).getData() == data){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		int result = 7;
+		result *= material.hashCode();
+		result *= Byte.hashCode(data);
+		return result;
+	}
+	
 	public MaterialAndData getDefault() {
 		switch(material){
+		case GRASS:
 		case GRASS_PATH:
 			return new MaterialAndData(Material.DIRT, (byte) 0);
 		case DAYLIGHT_DETECTOR_INVERTED:
@@ -84,6 +124,14 @@ public class MaterialAndData {
 			return new MaterialAndData(Material.PURPUR_BLOCK, (byte) 0);
 		}
 		return this;
+	}
+	
+	public boolean isSimilar(MaterialAndData md){
+		MaterialAndData mdDefault = md.getDefault();
+		MaterialAndData thisDefault = this.getDefault();
+		if(this.getMaterial() == md.getMaterial() && this.data == md.data) return true;
+		if(thisDefault.getMaterial() == mdDefault.getMaterial() && thisDefault.getData() == mdDefault.getData()) return true;
+		return false;
 	}
 	
 	public boolean itemIsSimilar(ItemStack item){
@@ -758,6 +806,11 @@ public class MaterialAndData {
 	
 	public boolean requiresSupply() {
 		switch(material){
+		case LONG_GRASS:
+		case WATER:
+		case STATIONARY_WATER:
+		case LAVA:
+		case STATIONARY_LAVA:
 		case AIR:
 			return false;
 		case SPRUCE_DOOR:
@@ -774,13 +827,87 @@ public class MaterialAndData {
 		}
 	}
 	
+	public MaterialAndData changeForPaste(){
+		
+		MaterialAndData replacement = pasteReplacements.get(this);
+		if(replacement == null){
+			return this;
+		} else {
+			return replacement;
+		}
+	}
+	
 	public ItemStack toItemStack() {
-		return new MaterialData(material, data).toItemStack();
+		return toItemStack(1);
+	}
+	
+	public ItemStack toItemStack(int amount){
+		return new MaterialData(material, data).toItemStack(amount);
 	}
 	
 	// STATIC
 	
 	public static MaterialAndData getFrom(Block block){
 		return new MaterialAndData(block.getType(), block.getData());
+	}
+	
+	public static MaterialAndData getFrom(ItemStack itemStack){
+		return new MaterialAndData(itemStack.getType(), itemStack.getData().getData());
+	}
+	
+	public static void addPasteReplacementFor(String block, String replacement){
+		MaterialAndData blockMat;
+		MaterialAndData replacementMat;
+		
+		blockMat = MaterialAndData.parse(block);
+		replacementMat = MaterialAndData.parse(replacement);
+		
+		pasteReplacements.put(blockMat, replacementMat);
+	}
+	
+	public static MaterialAndData parse(String s){
+		if(s.contains(":")){
+			return new MaterialAndData(Material.valueOf(s.split("\\:")[0]), Byte.parseByte(s.split("\\:")[1]));
+		} else {
+			return new MaterialAndData(Material.valueOf(s), (byte) 0);
+		}
+	}
+
+	public static void reloadFromConfig(FileConfiguration config) {
+		ConfigurationSection s = config.getConfigurationSection("Materials");
+		if(s != null){
+			ConfigurationSection replacements = s.getConfigurationSection("PasteReplacements");
+			if(replacements != null){
+				for(Entry<String, Object> e : replacements.getValues(false).entrySet()){
+					if(e.getValue() instanceof String){
+						try{
+							pasteReplacements.put(MaterialAndData.parse(e.getKey()), MaterialAndData.parse((String) e.getValue())); 
+						} catch (Exception ex){
+							Civilizations.currentInstance.getLogger().severe(ChatColor.RED + "Failed to add replacement " + e.getValue() + " for " + e.getKey() + ".");
+						}
+					}
+				}
+				return;
+			}
+		}
+		
+		setDefaultReplacementValues();
+	}
+	
+	private static void setDefaultReplacementValues() {
+		pasteReplacements.clear();
+		pasteReplacements.put(new MaterialAndData(Material.LONG_GRASS, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.WATER, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.STATIONARY_WATER, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.LAVA, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.STATIONARY_LAVA, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.GRASS, (byte) 0), MaterialAndData.Dirt);
+	}
+
+	public static void saveToConfig(FileConfiguration config){
+		config.set("Materials.PasteReplacements", null);
+		for(Entry<MaterialAndData, MaterialAndData> e : pasteReplacements.entrySet()){
+			config.set("Materials.PasteReplacements." + e.getKey().toString(), e.getValue().toString());
+		}
 	}
 }

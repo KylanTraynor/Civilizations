@@ -47,6 +47,14 @@ public class CommandBlueprint implements CommandExecutor{
 				return true;
 			}
 			Selection s = SelectionManager.getSelection(player);
+			if(s == null){
+				player.sendMessage(messageHeader + ChatColor.RED + "You have no selection!");
+				return true;
+			}
+			if(!s.isValid()){
+				player.sendMessage(messageHeader + ChatColor.RED + "This selection is not valid! " + s.getValidityReason());
+				return true;
+			}
 			Blueprint bp = new Blueprint();
 			bp.fillDataFrom(s);
 			player.sendMessage(messageHeader + ChatColor.GREEN + "Selection has been turned into a blueprint!");
@@ -106,6 +114,10 @@ public class CommandBlueprint implements CommandExecutor{
 			Selection selection = SelectionManager.getSelection(player);
 			if(selection == null){
 				player.sendMessage(messageHeader + ChatColor.RED + "You need to have a selection.");
+				return true;
+			}
+			if(!selection.isValid()){
+				player.sendMessage(messageHeader + ChatColor.RED + "This selection is not valid! " + selection.getValidityReason());
 				return true;
 			}
 			Blueprint cbp = currentBlueprints.get(player.getUniqueId());

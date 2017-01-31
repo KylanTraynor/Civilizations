@@ -62,6 +62,7 @@ import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.util.MaterialAndData;
 
 import fr.rhaz.webservers.WebServers.API;
 
@@ -161,6 +162,8 @@ public class Civilizations extends JavaPlugin{
 			e.printStackTrace();
 		}
 		config = this.getConfig();
+		
+		MaterialAndData.reloadFromConfig(config);
 		
 		PluginManager pm = getServer().getPluginManager();
 		
@@ -396,6 +399,8 @@ public class Civilizations extends JavaPlugin{
 			DynmapHook.disable();
 		}
 		freesManagers();
+		MaterialAndData.saveToConfig(getConfig());
+		saveConfig();
 	}
 	
 	/**

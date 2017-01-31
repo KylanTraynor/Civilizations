@@ -257,4 +257,15 @@ public class GroupManager {
 			}
 		}
 	}
+
+	/**
+	 * Cancels all the builds in all builders.
+	 */
+	public static void cancelAllBuilds() {
+		for(Group g : CacheManager.getGroupList()){
+			if(g instanceof HasBuilder){
+				((HasBuilder) g).getBuilder().clearProjects();
+			}
+		}
+	}
 }

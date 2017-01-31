@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.builder;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +41,10 @@ public class Builder {
 	}
 	
 	public void update(){
-		if(getProjects().isEmpty()) return;
+		if(getProjects().isEmpty()){
+			currentProject = null;
+			return;
+		}
 		if(currentProject == null) currentProject = getProjects().get((int) Math.floor((Math.random() * getProjects().size())));
 		
 		if(currentProject.isDone()){
@@ -59,7 +63,7 @@ public class Builder {
 			this.getSettings().setChanged(true);
 			return;
 		}
-		ItemStack supply = getSupplies(plan.toItemStack());
+		ItemStack supply = getSupplies(plan.getDefault().toItemStack());
 		if(supply == null){
 			warnLackOfSupplies(plan);
 			if(!currentProject.trySkipNext()){
@@ -108,8 +112,9 @@ public class Builder {
 		return currentProject;
 	}
 	
+	private Instant lastWarning = Instant.now();
 	private void warnLackOfSupplies(MaterialAndData supply){
-		if(getOwner() != null){
+		if(getOwner() != null && lastWarning.isBefore(Instant.now().minusSeconds(10))){
 			FancyMessage notification = new FancyMessage(((Group)getOwner()).getChatHeader());
 			notification.then("Warehouses lack of ")
 			.then(Util.prettifyText(Util.getMaterialName(supply.getDefault())))
@@ -120,6 +125,7 @@ public class Builder {
 			.color(ChatColor.GOLD)
 			.then(" to skip this type of block.");
 			((Group)getOwner()).sendMessage(notification, null);
+			lastWarning = Instant.now();
 		}
 	}
 	
@@ -142,6 +148,12 @@ public class Builder {
 			}
 		}
 		return null;
+	}
+
+	public void clearProjects() {
+		List<BuildProject> p = new ArrayList<BuildProject>();
+		getSettings().setProjects(p);
+		currentProject = null;
 	}
 	
 }

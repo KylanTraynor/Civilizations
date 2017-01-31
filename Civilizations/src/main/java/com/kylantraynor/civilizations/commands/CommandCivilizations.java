@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.commands;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class CommandCivilizations implements CommandExecutor{
 
@@ -16,6 +19,26 @@ public class CommandCivilizations implements CommandExecutor{
 			case "UPDATEGROUPS":
 				if(sender.isOp()){
 					GroupManager.updateAllGroups();
+				}
+				break;
+			case "BUILDER":
+				if(sender.isOp()){
+					if(args.length > 1){
+						switch(args[1].toUpperCase()){
+						case "CANCELALL":
+							GroupManager.cancelAllBuilds();
+							sender.sendMessage(ChatColor.GREEN + "All build projects have been cancelled.");
+							break;
+						case "SETREPLACEMENT":
+							if(args.length == 4){
+								MaterialAndData.addPasteReplacementFor(args[2], args[3]);
+								sender.sendMessage(ChatColor.GREEN + "Replacement added!");
+							} else {
+								sender.sendMessage(ChatColor.RED + "/civilizations builder setReplacement [material]<:data> [material]<:data>");
+							}
+							break;
+						}
+					}
 				}
 				break;
 			case "TOGGLE":
