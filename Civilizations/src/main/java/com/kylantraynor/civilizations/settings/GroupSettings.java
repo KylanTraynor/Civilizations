@@ -9,7 +9,9 @@ import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionSet;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -37,7 +39,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * Sets whether or not the settings should be saved.
 	 * @param changed
 	 */
-	public void setChanged(boolean changed) {
+	public synchronized void setChanged(boolean changed) {
 		this.changed = changed;
 	}
 	
@@ -204,10 +206,21 @@ public class GroupSettings extends YamlConfiguration{
 		if(file == null) return;
 		try{
 			super.save(file);
-			this.setChanged(false);
 		} catch (IOException e){
 			e.printStackTrace();
+			this.setChanged(true);
 		}
+	}
+	
+	public void asyncSave(File file){
+		BukkitRunnable run = new BukkitRunnable(){
+			@Override
+			public void run() {
+				save(file);
+			}
+		};
+		run.runTaskAsynchronously(Civilizations.currentInstance);
+		this.setChanged(false);
 	}
 	
 	/**

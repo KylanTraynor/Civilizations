@@ -297,7 +297,7 @@ public class Group {
 		if(getProtection() != null){
 			getSettings().saveProtection(getProtection());
 		}
-		getSettings().save(f);
+		getSettings().asyncSave(f);
 		return !getSettings().hasChanged();
 	}
 	/**
