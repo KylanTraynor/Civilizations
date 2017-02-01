@@ -85,6 +85,8 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GOLD + ChatColor.BOLD + "Civilizations" + ChatColor.GOLD + "] ";
 
+	private boolean clearBuildProjectsOnRestart = true;
+	
 	private boolean clearing = false;
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
@@ -394,6 +396,9 @@ public class Civilizations extends JavaPlugin{
 
 	@Override
 	public void onDisable(){
+		if(clearBuildProjectsOnRestart)
+			GroupManager.cancelAllBuilds();
+		
 		GroupManager.updateAllGroups();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
