@@ -297,7 +297,11 @@ public class Group {
 		if(getProtection() != null){
 			getSettings().saveProtection(getProtection());
 		}
-		getSettings().asyncSave(f);
+		if(Civilizations.currentInstance.isEnabled()){
+			getSettings().asyncSave(f);
+		} else {
+			getSettings().save(f);
+		}
 		return !getSettings().hasChanged();
 	}
 	/**
