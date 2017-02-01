@@ -660,11 +660,9 @@ public class Util {
 		case COAL_BLOCK:
 		case COAL_ORE:
 		case COBBLESTONE:
-			return true;
 		case COBBLESTONE_STAIRS:
-			return true;
 		case COBBLE_WALL:
-			break;
+			return true;
 		case COCOA:
 			break;
 		case COMMAND:
