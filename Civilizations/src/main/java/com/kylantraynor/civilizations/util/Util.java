@@ -630,9 +630,7 @@ public class Util {
 		case BIRCH_FENCE_GATE:
 		case BIRCH_WOOD_STAIRS:
 		case BOOKSHELF:
-			return true;
 		case BRICK:
-			break;
 		case BRICK_STAIRS:
 			return true;
 		case BROWN_MUSHROOM:
