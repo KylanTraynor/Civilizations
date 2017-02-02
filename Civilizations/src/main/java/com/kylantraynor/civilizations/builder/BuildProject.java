@@ -152,7 +152,8 @@ public class BuildProject {
 		skippables.add(mad);
 	}
 
-	public boolean nextRequiresSupply(MaterialAndData mad) {
+	public boolean nextRequiresSupply() {
+		MaterialAndData mad = getNext();
 		if(mad.requiresSupply()){
 			Location l = location.clone().add(currentX, currentY, currentZ);
 			MaterialAndData block = MaterialAndData.getFrom(l.getBlock());
