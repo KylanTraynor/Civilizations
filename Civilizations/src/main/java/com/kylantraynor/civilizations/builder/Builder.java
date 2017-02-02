@@ -82,6 +82,7 @@ public class Builder {
 						break;
 					} else {
 						this.getSettings().setChanged(true);
+						break;
 					}
 				}
 				currentProject.buildNext();
