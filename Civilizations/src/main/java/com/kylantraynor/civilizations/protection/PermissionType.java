@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.protection;
 
 public enum PermissionType {
 	BREAK,
+	BUILD_BLUEPRINTS,
 	CLAIM,
 	DEGRADATION,
 	EXPLOSION,

@@ -207,8 +207,11 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		mayorPerm.put(PermissionType.MANAGE, true);
 		mayorPerm.put(PermissionType.MANAGE_STALLS, true);
 		
+		mayorPerm.put(PermissionType.BUILD_BLUEPRINTS, true);
+		
 		
 		assistantPerm.put(PermissionType.UPGRADE, false);
+		assistantPerm.put(PermissionType.KICK, false);
 		
 		resPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().residentBuild);
 		resPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().residentDestroy);

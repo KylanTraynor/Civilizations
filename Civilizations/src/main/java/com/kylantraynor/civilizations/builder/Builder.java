@@ -53,7 +53,44 @@ public class Builder {
 			currentProject = null;
 			return;
 		}
+		/* The builder nees to check what block needs to be built.
+		 * It will compare the planned block to what is already at the location.
+		 * It will then check the materials available to it.
+		 * It will try to build.
+		 */
 		
+		while(true){
+			MaterialAndData plan = currentProject.getNext();
+			// If there is no plan, then the build is likely one or was remove.
+			if(plan == null){
+				currentProject = null;
+				break;
+			}
+			// Checks if the next plan requires supply to be built.
+			if(!currentProject.nextRequiresSupply()){
+				currentProject.buildNext();
+				this.getSettings().setChanged(true);
+			} else {
+				ItemStack supply = getSupplies(plan.toItemStack());
+				if(supply == null){
+					supply = getSupplies(plan.getDefault().toItemStack());
+				}
+				if(supply == null){
+					if(!currentProject.trySkipNext()){
+						warnLackOfSupplies(plan);
+						currentProject = null;
+						break;
+					} else {
+						this.getSettings().setChanged(true);
+					}
+				}
+				currentProject.buildNext();
+				this.getSettings().setChanged(true);
+				break;
+			}
+		}
+		
+		/*
 		MaterialAndData plan = currentProject.getNext();
 		if(plan == null){
 			currentProject = null;
@@ -75,6 +112,7 @@ public class Builder {
 			currentProject.buildNext();
 			this.getSettings().setChanged(true);
 		}
+		*/
 	}
 
 	public boolean removeProject(BuildProject project) {

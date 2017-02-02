@@ -13,9 +13,12 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.selection.Selection;
 
 public class CommandBlueprint implements CommandExecutor{
@@ -38,7 +41,13 @@ public class CommandBlueprint implements CommandExecutor{
 		
 		switch(args[0].toUpperCase()){
 		case "HELP":
-			player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are not yet activated.");
+			player.sendMessage(ChatTools.formatTitle("Blueprints", ChatColor.GOLD));
+			player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are still in development! Be careful!");
+			player.sendMessage(messageHeader + ChatColor.GOLD + "/blueprint set " + ChatColor.GRAY + "(Sets the current selection as a blueprint.)");
+			player.sendMessage(messageHeader + ChatColor.GOLD + "/blueprint build <-ah> " + ChatColor.GRAY + "(Builds the blueprint at the selection (a - without air, h - only use selection footprint))");
+			player.sendMessage(messageHeader + ChatColor.GOLD + "/blueprint save [BlueprintName] " + ChatColor.GRAY + "(Saves the current blueprint to a file to be reloaded later.)");
+			player.sendMessage(messageHeader + ChatColor.GOLD + "/blueprint load [BlueprintName] " + ChatColor.GRAY + "(Reloads a saved blueprint.)");
+			player.sendMessage(ChatTools.getDelimiter());
 			return true;
 			
 		case "SET":
@@ -58,6 +67,8 @@ public class CommandBlueprint implements CommandExecutor{
 			Blueprint bp = new Blueprint();
 			bp.fillDataFrom(s);
 			player.sendMessage(messageHeader + ChatColor.GREEN + "Selection has been turned into a blueprint!");
+			player.sendMessage(messageHeader + ChatColor.GREEN + "Size X: " + bp.getWidth() + " blocks, Size Z: " + bp.getDepth() + " blocks.");
+			player.sendMessage(messageHeader + ChatColor.GREEN + "Height: " + bp.getHeight() + " blocks.");
 			currentBlueprints.put(player.getUniqueId(), bp);
 			return true;
 			
@@ -155,6 +166,11 @@ public class CommandBlueprint implements CommandExecutor{
 			}
 			if(settlement == null){
 				player.sendMessage(messageHeader + ChatColor.RED + "Can't add a build project outside of a settlement.");
+				return true;
+			}
+			
+			if(!((Group)settlement).hasPermission(PermissionType.BUILD_BLUEPRINTS, null, player)){
+				player.sendMessage(messageHeader + ChatColor.RED + "You don't have the permission to use blueprints in " + ((Group)settlement).getName() + ".");
 				return true;
 			}
 			

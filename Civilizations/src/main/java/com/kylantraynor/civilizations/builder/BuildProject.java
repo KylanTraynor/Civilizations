@@ -151,4 +151,18 @@ public class BuildProject {
 	public void skip(MaterialAndData mad){
 		skippables.add(mad);
 	}
+
+	public boolean nextRequiresSupply(MaterialAndData mad) {
+		if(mad.requiresSupply()){
+			Location l = location.clone().add(currentX, currentY, currentZ);
+			MaterialAndData block = MaterialAndData.getFrom(l.getBlock());
+			if(block.isSimilar(mad)){
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
 }

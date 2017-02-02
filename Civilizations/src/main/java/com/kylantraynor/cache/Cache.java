@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 public class Cache<K, T> {
 	private long timeToLive;
+	private Object locker = new Object();
     private LRUCache<K, CacheObject> cacheMap;
  
     protected class CacheObject {
@@ -43,7 +44,7 @@ public class Cache<K, T> {
     }
  
     public T put(K key, T value) {
-        synchronized (cacheMap) {
+        synchronized (locker) {
             CacheObject o = cacheMap.put(key, new CacheObject(value, key));
             T oldValue = null;
             if(o != null){
@@ -54,7 +55,7 @@ public class Cache<K, T> {
     }
  
     public T get(K key) {
-        synchronized (cacheMap) {
+        synchronized (locker) {
             CacheObject c = (CacheObject) cacheMap.get(key);
  
             if (c == null)
@@ -69,13 +70,13 @@ public class Cache<K, T> {
     }
  
     public void remove(K key) {
-        synchronized (cacheMap) {
+        synchronized (locker) {
             cacheMap.remove(key);
         }
     }
  
     public int size() {
-        synchronized (cacheMap) {
+        synchronized (locker) {
             return cacheMap.size();
         }
     }
@@ -85,7 +86,7 @@ public class Cache<K, T> {
         long now = System.currentTimeMillis();
         ArrayList<K> deleteKey = null;
  
-        synchronized (cacheMap) {
+        synchronized (locker) {
             Iterator<K> itr = cacheMap.keySet().iterator();
  
             deleteKey = new ArrayList<K>((cacheMap.size() / 2) + 1);
@@ -103,7 +104,7 @@ public class Cache<K, T> {
         }
  
         for (K key : deleteKey) {
-            synchronized (cacheMap) {
+            synchronized (locker) {
                 cacheMap.remove(key);
             }
  
