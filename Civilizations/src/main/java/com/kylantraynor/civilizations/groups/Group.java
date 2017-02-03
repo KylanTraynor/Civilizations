@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.MenuManager;

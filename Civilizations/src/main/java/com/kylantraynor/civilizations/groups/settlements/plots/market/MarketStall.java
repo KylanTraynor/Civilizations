@@ -22,8 +22,10 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.GroupAction;
+import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
@@ -35,7 +37,7 @@ import com.kylantraynor.civilizations.shops.ShopManager;
 import com.kylantraynor.civilizations.shops.ShopType;
 import com.kylantraynor.civilizations.util.Util;
 
-public class MarketStall extends Plot{
+public class MarketStall extends Plot implements Rentable{
 	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
@@ -155,11 +157,11 @@ public class MarketStall extends Plot{
 		}
 	}
 
-	public void payRent() {
+	public boolean payRent() {
 		if(getRenter() == null){
-			return;
+			return false;
 		}
-		setNextPayment(Instant.now().plus(1, ChronoUnit.DAYS));
+		setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
 		if(getOwner() != null){
 			if(Economy.withdrawPlayer(getRenter(), getRent())){
 				if(getRenter().isOnline()){
@@ -186,6 +188,8 @@ public class MarketStall extends Plot{
 					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(getRent()) + " for the rent.");
 					Economy.playCashinSound(getOwner().getPlayer());
 				}
+			} else {
+				return false;
 			}
 		} else if(getSettlement() != null) {
 			if(Economy.withdrawPlayer(getRenter(), getRent())){
@@ -203,6 +207,8 @@ public class MarketStall extends Plot{
 				}*/
 				//Pay Settlement
 				Economy.depositSettlement(getSettlement(), payout);
+			} else {
+				return false;
 			}
 		} else {
 			//Pay Fort
@@ -217,6 +223,7 @@ public class MarketStall extends Plot{
 				}
 			}*/
 		}
+		return true;
 	}
 	
 	public boolean isOwner(OfflinePlayer player){
@@ -314,7 +321,7 @@ public class MarketStall extends Plot{
 		
 		list.add(new GroupAction("Rename", "Rename this stall", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", isOwner(player) || isRenter(player)));
 		if(isOwner(player)){
-			list.add(new GroupAction("Rentable", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleRentable", isForRent()));
+			list.add(new GroupAction("ForRent", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", isForRent()));
 			list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", getRenter() != null));
 		} else {
 			if(isRenter(player)){
@@ -345,64 +352,82 @@ public class MarketStall extends Plot{
 		}
 		return f;
 	}
-	/*
-	public static MarketStall load(YamlConfiguration cf, Map<String, Settlement> settlements){
-		if(cf == null) return null;
-		Instant creation;
-		String name = cf.getString("Name");
-		String settlementPath = cf.getString("SettlementPath");
-		String shapes = cf.getString("Shape");
-		Boolean forRent = cf.getBoolean("IsForRent");
-		Double rent = cf.getDouble("Rent");
-		String nextpayment = cf.getString("NextPayment");
-		if(cf.getString("Creation") != null){
-			creation = Instant.parse(cf.getString("Creation"));
-		} else {
-			creation = Instant.now();
-			Civilizations.log("WARNING", "Couldn't find creation date for a stall. Replacing it by NOW.");
-		}
-		Settlement settlement = null;
-		if(settlementPath != null){
-			if(settlementPath.contains("TOWNY")){
-				settlement = Civilizations.loadSettlement(settlementPath);
-			} else {
-				UUID id = null;
-				try{
-					id = UUID.fromString(settlementPath);
-					Group g = Group.get(id);
-					if(g instanceof Settlement){
-						settlement = (Settlement) g;
-					}
-				} catch (IllegalArgumentException e) {
-					Civilizations.DEBUG("Not a valid UUID for " + name + "'s settlement.");
-				}
-			}
-		}
-		MarketStall g = new MarketStall(name, Util.parseShapes(shapes), settlement);
-		g.getSettings().setCreationDate(creation);
-		if(cf.contains("Owner")){
-			UUID id = UUID.fromString(cf.getString("Owner"));
-			if(id != null){
-				g.setOwner(Bukkit.getOfflinePlayer(id));
-			}
-		}
-		if(cf.contains("Renter")){
-			UUID id = UUID.fromString(cf.getString("Renter"));
-			if(id != null){
-				g.setRenter(Bukkit.getOfflinePlayer(id));
-			}
-		}
-		if(forRent != null){
-			g.setForRent(forRent);
-		}
-		if(rent != null){
-			g.setRent(rent);
-		}
-		if(!nextpayment.isEmpty()){
-			g.setNextPayment(Instant.parse(nextpayment));
+
+	@Override
+	public double getPrice() {
+		return getSettings().getPrice();
+	}
+
+	@Override
+	public void setPrice(double newPrice) {
+		getSettings().setPrice(newPrice);
+	}
+
+	@Override
+	public boolean isForSale() {
+		return getSettings().isForSale();
+	}
+
+	@Override
+	public void setForSale(boolean forSale) {
+		getSettings().setForSale(forSale);
+	}
+
+	@Override
+	public boolean purchase(OfflinePlayer player) {
+		
+		if(!isForSale()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This plot is not for sale.");
+			return false;
 		}
 		
-		return g;
+		if(Economy.withdrawPlayer(player, getPrice())){
+			Economy.playPaySound(player.getPlayer());
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've purchased this plot for " + Economy.format(getPrice()));
+			double amount = getPrice();
+			
+			if(getSettlement() != null){
+				amount = getSettlement().taxTransaction(TaxType.TRANSACTION, amount);
+			}
+			
+			if(getOwner() == null){
+				Economy.depositSettlement(getSettlement(), amount);
+				getSettlement().sendMessage(getSettlement().getChatColor() + player.getPlayer().getDisplayName() + " just purchased a plot for "+ Economy.format(amount) + "!", null);
+			} else {
+				Economy.depositPlayer(getOwner(), amount);
+				if(getOwner().isOnline()){
+					Economy.playCashinSound(getOwner().getPlayer());
+					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + player.getPlayer().getDisplayName() + " purchased this plot! You've received " + Economy.format(amount) + "!");
+				}
+			}
+			this.getSettings().setOwner(player);
+			this.setForSale(false);
+			return true;
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You don't have enough money to buy this plot.");
+			return false;
+		}
 	}
-	*/
+
+	@Override
+	public boolean rent(OfflinePlayer player) {
+		if(isForRent() && getRenter() == null){
+			this.getSettings().setRenter(player);
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this plot.");
+			this.payRent();
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't rent this plot.");
+		}
+		return false;
+	}
+
+	@Override
+	public Instant getNextRentDate() {
+		return this.getSettings().getNextPayment();
+	}
+
+	@Override
+	public void setNextRentDate(Instant next) {
+		this.getSettings().setNextPayment(next);
+	}
 }

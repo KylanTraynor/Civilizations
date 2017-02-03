@@ -22,6 +22,8 @@ import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.Purchasable;
+import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -162,17 +164,33 @@ public class CommandGroup implements CommandExecutor {
 					sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
 				}
 				return true;
-			case "TOGGLERENTABLE":
+			case "TOGGLEFORRENT":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						MarketStall stall = (MarketStall) g;
-						if(stall.isOwner(p)){
-							stall.setForRent(!stall.isForRent());
-							if(stall.isForRent()){
-								sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The stall is now for rent.");
+					if(g instanceof Rentable){
+						Rentable rentable = (Rentable) g;
+						if(rentable.isOwner(p)){
+							rentable.setForRent(!rentable.isForRent());
+							if(rentable.isForRent()){
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for rent.");
 							} else {
-								sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The stall is no longer for rent.");
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is no longer for rent.");
+							}
+						}
+					}
+				}
+				break;
+			case "TOGGLEFORSALE":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof Purchasable){
+						Purchasable purchasable = (Purchasable) g;
+						if(purchasable.isOwner(p)){
+							purchasable.setForSale(!purchasable.isForSale());
+							if(purchasable.isForSale()){
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for sale.");
+							} else {
+								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is no longer for sale.");
 							}
 						}
 					}
@@ -181,11 +199,14 @@ public class CommandGroup implements CommandExecutor {
 			case "PURCHASE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						MarketStall stall = (MarketStall) g;
-						if(stall.getOwner() == null){
-							stall.setOwner(p);
-							p.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "You've purchased this stall!");
+					if(g instanceof Purchasable){
+						Purchasable purchasable = (Purchasable) g;
+						if(purchasable.getOwner() == null){
+							if(purchasable.purchase(p)){
+								p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You've purchased this plot!");
+							} else {
+								p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't purchase this plot!");
+							}
 						}
 					}
 				}
@@ -193,11 +214,23 @@ public class CommandGroup implements CommandExecutor {
 			case "SETRENT":
 				if(sender instanceof Player && args.length > 2){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						MarketStall stall = (MarketStall) g;
-						if(stall.isOwner(p)){
-							stall.setRent(Double.parseDouble(args[2]));
-							sender.sendMessage(stall.getChatHeader() +ChatColor.GREEN+ "The rent for this stall is now " + Economy.format(stall.getRent()) + ".");
+					if(g instanceof Rentable){
+						Rentable rentable = (Rentable) g;
+						if(rentable.isOwner(p)){
+							rentable.setRent(Double.parseDouble(args[2]));
+							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The rent for this plot is now " + Economy.format(rentable.getRent()) + ".");
+						}
+					}
+				}
+				break;
+			case "SETPRICE":
+				if(sender instanceof Player && args.length > 2){
+					Player p = (Player) sender;
+					if(g instanceof Purchasable){
+						Purchasable purchasable = (Purchasable) g;
+						if(purchasable.isOwner(p)){
+							purchasable.setPrice(Double.parseDouble(args[2]));
+							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The price for this plot is now " + Economy.format(purchasable.getPrice()) + ".");
 						}
 					}
 				}

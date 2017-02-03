@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
@@ -326,5 +328,27 @@ public class Settlement extends Group {
 	
 	public int getTotalAvailableWarehousesSpace(){
 		return getTotalWarehousesSpace() - getTotalUsedWarehousesSpace();
+	}
+	
+	/**
+	 * Taxes a transaction.
+	 * @param taxType
+	 * @param preTaxAmount
+	 * @return postTax Amount
+	 */
+	public double taxTransaction(TaxType taxType, double preTaxAmount){
+		double taxedAmount = 0;
+		switch(taxType){
+		case RENT:
+			taxedAmount = getSettings().getStallRentTax() * preTaxAmount;
+			break;
+		case TRANSACTION:
+			taxedAmount = getSettings().getTransactionTax() * preTaxAmount;
+			break;
+		default:
+			break;
+		}
+		Economy.depositSettlement(this, taxedAmount);
+		return preTaxAmount - taxedAmount;
 	}
 }

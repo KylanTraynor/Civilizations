@@ -2,13 +2,22 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.economy.TaxType;
+import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 
-public class House extends Plot {
+public class House extends Plot implements Rentable{
 
 	public House(String name, Shape shape, Settlement settlement) {
 		super(name, shape, settlement);
@@ -76,5 +85,120 @@ public class House extends Plot {
 			}
 		}
 		return f;
+	}
+	@Override
+	public OfflinePlayer getOwner() {
+		return getSettings().getOwner();
+	}
+	@Override
+	public boolean isOwner(OfflinePlayer player) {
+		return getOwner() == player;
+	}
+	@Override
+	public double getPrice() {
+		return getSettings().getPrice();
+	}
+	@Override
+	public void setPrice(double newPrice) {
+		getSettings().setPrice(newPrice);
+	}
+	@Override
+	public boolean isForSale() {
+		return getSettings().isForSale();
+	}
+	@Override
+	public void setForSale(boolean forSale) {
+		getSettings().setForSale(forSale);
+	}
+	@Override
+	public boolean purchase(OfflinePlayer player) {
+		
+		return false;
+	}
+	@Override
+	public OfflinePlayer getRenter() {
+		return getSettings().getRenter();
+	}
+	@Override
+	public boolean isRenter(OfflinePlayer player) {
+		return getRenter() == player;
+	}
+	@Override
+	public double getRent() {
+		return getSettings().getRent();
+	}
+	@Override
+	public void setRent(double rent) {
+		getSettings().setRent(rent);
+	}
+	@Override
+	public boolean isForRent() {
+		return getSettings().isForRent();
+	}
+	@Override
+	public void setForRent(boolean forRent) {
+		getSettings().setForRent(forRent);
+	}
+	@Override
+	public boolean rent(OfflinePlayer player) {
+		if(isForRent() && getRenter() == null){
+			this.getSettings().setRenter(player);
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this house.");
+			this.payRent();
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't rent this house.");
+		}
+		return false;
+	}
+	@Override
+	public Instant getNextRentDate() {
+		return getSettings().getNextPayment();
+	}
+	@Override
+	public void setNextRentDate(Instant next) {
+		getSettings().setNextPayment(next);
+	}
+	@Override
+	public boolean payRent() {
+		if(getRenter() == null)
+			return false;
+		
+		setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
+		
+		if(Economy.withdrawPlayer(getRenter(), getRent())){
+			if(getRenter().isOnline()){
+				Economy.playPaySound(getRenter().getPlayer());
+				getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.");
+			}
+			double amount = getRent();
+			
+			if(getSettlement() != null){
+				amount = getSettlement().taxTransaction(TaxType.RENT, amount);
+			}
+			
+			if(getOwner() != null){
+				Economy.depositPlayer(getOwner(), amount);
+				if(getOwner().isOnline()){
+					Economy.playCashinSound(getOwner().getPlayer());
+					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(amount) + " in rent.");
+				}
+			} else if(getSettlement() != null) {
+				Economy.depositSettlement(getSettlement(), amount);
+			}
+			
+			return true;
+		} else {
+			if(getRenter().isOnline()){
+				getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You couldn't pay " + Economy.format(getRent()) + " in rent today!");
+			}
+			if(getOwner() != null){
+				if(getOwner().isOnline()){
+					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + getRenter().getName() + " couldn't pay the rent of " + Economy.format(getRent()) + "!");
+				}
+			} else if(getSettlement() != null) {
+				getSettlement().sendMessage(ChatColor.RED + getRenter().getName() + " couldn't pay the rent of " + Economy.format(getRent()) + "!", PermissionType.MANAGE_PLOTS);
+			}
+			return false;
+		}
 	}
 }

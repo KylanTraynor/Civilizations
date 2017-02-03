@@ -14,8 +14,10 @@ public class PlotSettings extends GroupSettings{
 	private Settlement settlement;
 	private OfflinePlayer owner;
 	private Boolean forRent;
+	private Boolean forSale;
 	private OfflinePlayer renter;
 	private Double rent;
+	private Double price;
 	private Instant nextPayment;
 
 	/**
@@ -123,6 +125,31 @@ public class PlotSettings extends GroupSettings{
 		this.set("Economy.Rent", rent);
 		this.setChanged(true);
 	}
+	
+	/**
+	 * Gets the price of this plot.
+	 * @return
+	 */
+	public double getPrice() {
+		if(price != null) return price;
+		if(this.contains("Economy.Price")){
+			price = this.getDouble("Economy.Price");
+		} else {
+			price = 1.0;
+		}
+		return price;
+	}
+
+	/**
+	 * Sets the price of this plot.
+	 * @param rent
+	 */
+	public void setPrice(double price) {
+		price = Math.max(price, 1.0);
+		this.price = price;
+		this.set("Economy.Price", price);
+		this.setChanged(true);
+	}
 
 	/**
 	 * Checks if the plot is for rent.
@@ -145,6 +172,30 @@ public class PlotSettings extends GroupSettings{
 	public void setForRent(boolean forRent) {
 		this.forRent = forRent;
 		this.set("Economy.ForRent", forRent);
+		this.setChanged(true);
+	}
+	
+	/**
+	 * Checks if the plot is for sale.
+	 * @return
+	 */
+	public boolean isForSale() {
+		if(forSale != null) return forSale;
+		if(this.contains("Economy.ForSale")){
+			forSale = this.getBoolean("Economy.ForSale");
+		} else {
+			forSale = false;
+		}
+		return forSale;
+	}
+
+	/**
+	 * Sets if the plot is for sale.
+	 * @param forSale
+	 */
+	public void setForSale(boolean forSale) {
+		this.forSale = forSale;
+		this.set("Economy.ForSale", forSale);
 		this.setChanged(true);
 	}
 
