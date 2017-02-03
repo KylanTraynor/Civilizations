@@ -18,7 +18,10 @@ public class Influence {
 	 * @return
 	 */
 	public Float getInfluence(InfluenceType type){
-		return influences.get(type);
+		if(influences.containsKey(type))
+			return influences.get(type);
+		else 
+			return 0f;
 	}
 	
 	/**

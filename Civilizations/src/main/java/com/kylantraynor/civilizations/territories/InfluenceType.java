@@ -4,5 +4,6 @@ public enum InfluenceType {
 	CULTURAL,
 	MILITARY,
 	COMMERCIAL,
-	DIPLOMATIC
+	DIPLOMATIC,
+	LEGITIMACY
 }

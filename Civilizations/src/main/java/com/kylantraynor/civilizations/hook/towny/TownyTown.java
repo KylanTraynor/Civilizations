@@ -280,7 +280,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	@Override
 	public File getFile(){
-		return new File(Civilizations.getTownyTownsDirectory(), this.getName());
+		return new File(Civilizations.getTownyTownsDirectory(), this.getName() + ".yml");
 	}
 	
 	@Override
