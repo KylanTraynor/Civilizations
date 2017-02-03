@@ -92,7 +92,14 @@ public class House extends Plot implements Rentable{
 	}
 	@Override
 	public boolean isOwner(OfflinePlayer player) {
-		return getOwner() == player;
+		if(getOwner() != null){
+			return player == getOwner();
+		} else if(this.hasPermission(PermissionType.MANAGE_PLOTS, null, player.getPlayer())){
+			return true;
+		} else if(player.isOp()){
+			return true;
+		}
+		return false;
 	}
 	@Override
 	public double getPrice() {

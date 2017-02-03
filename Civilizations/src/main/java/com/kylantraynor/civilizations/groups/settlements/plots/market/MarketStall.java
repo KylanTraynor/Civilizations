@@ -314,7 +314,7 @@ public class MarketStall extends Plot implements Rentable{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	
+	/*
 	@Override
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
@@ -335,7 +335,7 @@ public class MarketStall extends Plot implements Rentable{
 		
 		return list;
 	}
-	
+	*/
 	/**
 	 * Gets the file where this keep is saved.
 	 * @return File
