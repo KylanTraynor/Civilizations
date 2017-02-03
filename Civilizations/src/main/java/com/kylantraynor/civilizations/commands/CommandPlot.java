@@ -36,11 +36,17 @@ public class CommandPlot implements CommandExecutor {
 			Player player = (Player) sender;
 			
 			if(args.length == 0) args = new String[]{"INFO"};
-			
+			if(args[0].equalsIgnoreCase("INFO")){
+				Plot p = Plot.getAt(player.getLocation());
+				if(p == null){
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "There is no plot here.");
+				} else {
+					p.getInteractiveInfoPanel(player).send(player);
+				}
 			/*
 			 * Merges the selection with the plot intersecting.
 			 */
-			if(args[0].equalsIgnoreCase("ADD")){
+			} else if(args[0].equalsIgnoreCase("ADD")){
 				if(!SelectionManager.hasSelection(player)){
 					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection set.");
 					return true;
