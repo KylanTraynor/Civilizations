@@ -31,7 +31,8 @@ public class TerritoryListener implements Listener {
 				TitleManagerHook.sendActionBar(color + data.getTo().getNation().getName() + " Nation", event.getPlayer(), false);
 				//data.getTo().getNation().getBanner().getBaseColor();
 			}
-			TitleManagerHook.sendTitle("", "" + color + data.getTo().getName(), 5, 30, 10, event.getPlayer());
+			// Prettyfy text for towny names, to get rid of "_" .
+			TitleManagerHook.sendTitle("", "" + color + Util.prettifyText(data.getTo().getName()), 5, 30, 10, event.getPlayer());
 		}
 		/*Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
 		/Fort oldFort = null;
