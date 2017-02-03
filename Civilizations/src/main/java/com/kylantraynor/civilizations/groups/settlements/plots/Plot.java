@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import mkremins.fanciful.civilizations.FancyMessage;
@@ -13,9 +14,12 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -164,7 +168,7 @@ public class Plot extends Group {
 	@Override
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
-			.then("\nBelongs to ").color(ChatColor.GRAY)
+			.then("\nPart of ").color(ChatColor.GRAY)
 			.then(getNameOf(getSettlement())).color(ChatColor.GOLD);
 		if(getSettlement() != null){
 			fm.command("/group " + getSettlement().getId() + " info");
@@ -179,6 +183,30 @@ public class Plot extends Group {
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
+	
+	@Override
+	public List<GroupAction> getGroupActionsFor(Player player){
+		List<GroupAction> list = new ArrayList<GroupAction>();
+		
+		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		/*
+		if(isOwner(player)){
+			list.add(new GroupAction("Rentable", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleRentable", isForRent()));
+			list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", getRenter() != null));
+		} else {
+			if(isRenter(player)){
+				list.add(new GroupAction("Leave", "Stop renting this Stall", ActionType.COMMAND, "/group " + getId() + " leave", true));
+			} else {
+				list.add(new GroupAction("Rent", "Start renting this Stall", ActionType.COMMAND, "/group " + getId() + " join", isForRent()));
+			}
+		}
+		*/
+		//list.add(new GroupAction("Price", "Set the rent of this stall", ActionType.SUGGEST, "/group " + getId() + " setRent " + getRent(), isOwner(player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getId() + " remove", this.hasPermission(PermissionType.MANAGE, null, player)));
+		
+		return list;
+	}
+	
 	/**
 	 * Checks if this plot protects the given location.
 	 * @param location
