@@ -196,17 +196,28 @@ public class CommandGroup implements CommandExecutor {
 					}
 				}
 				break;
+			case "RENT":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					if(g instanceof Rentable){
+						Rentable rentable = (Rentable) g;
+						if(rentable.rent(p)){
+							p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You're now renting this plot!");
+						} else {
+							p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't rent this plot!");
+						}
+					}
+				}
+				break;
 			case "PURCHASE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.getOwner() == null){
-							if(purchasable.purchase(p)){
-								p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You've purchased this plot!");
-							} else {
-								p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't purchase this plot!");
-							}
+						if(purchasable.purchase(p)){
+							p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You've purchased this plot!");
+						} else {
+							p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't purchase this plot!");
 						}
 					}
 				}
