@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -28,24 +29,40 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
-		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
-		if(settlement != null){
-			if(settlement instanceof TownyTown) return;
-			if(!settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+		Plot plot = Plot.getAt(event.getBlock().getLocation());
+		if(plot != null){
+			if(!plot.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't break blocks here.");
+			}
+		} else {
+			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
+			if(settlement != null){
+				if(settlement instanceof TownyTown) return;
+				if(!settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+					event.setCancelled(true);
+					event.getPlayer().sendMessage(ChatColor.RED + "You can't break blocks here.");
+				}
 			}
 		}
 	}
 	
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event){
-		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
-		if(settlement != null){
-			if(settlement instanceof TownyTown) return;
-			if(!settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+		Plot plot = Plot.getAt(event.getBlock().getLocation());
+		if(plot != null){
+			if(!plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks here.");
+			}
+		} else {
+			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
+			if(settlement != null){
+				if(settlement instanceof TownyTown) return;
+				if(!settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+					event.setCancelled(true);
+					event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks here.");
+				}
 			}
 		}
 	}

@@ -7,6 +7,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -54,6 +56,27 @@ public class House extends Plot implements Rentable{
 		return fm;
 	}
 	*/
+	
+	public boolean isValid(){
+		boolean hasBed = false;
+		boolean hasCraftingTable = false;
+		boolean hasChest = false;
+		for(Shape s : getProtection().getShapes()){
+			for(Location l : s.getBlockLocations()){
+				if(l.getBlock().getType() == Material.BED_BLOCK && l.getBlock().getLightFromSky() > 14){
+					hasBed = true;
+					if(hasCraftingTable && hasChest) return true;
+				} else if(l.getBlock().getType() == Material.WORKBENCH && l.getBlock().getLightFromSky() > 14){
+					hasCraftingTable = true;
+					if(hasBed && hasChest) return true;
+				} else if(l.getBlock().getType() == Material.CHEST && l.getBlock().getLightFromSky() > 14){
+					hasChest = true;
+					if(hasBed && hasCraftingTable) return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	@Override
 	public boolean isPersistent(){
