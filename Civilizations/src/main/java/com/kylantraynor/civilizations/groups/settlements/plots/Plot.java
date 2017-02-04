@@ -193,9 +193,9 @@ public class Plot extends Group {
 		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		if(this instanceof Rentable){
 			if(((Rentable)this).isOwner(player)){
-				list.add(new GroupAction("ForRent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", ((Rentable)this).isForRent()));
+				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", ((Rentable)this).isForRent()));
 				list.add(new GroupAction("Kick", "Kick the player renting this plot", ActionType.COMMAND, "/group " + getId() + " kick", ((Rentable)this).getRenter() != null));
-				list.add(new GroupAction("Rent", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getId() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
+				list.add(new GroupAction("Rent Price", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getId() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
 			} else if(((Rentable)this).isRenter(player)) {
 				list.add(new GroupAction("Leave", "Stop renting this plot", ActionType.COMMAND, "/group " + getId() + " leave", true));
 			} else {
@@ -204,8 +204,8 @@ public class Plot extends Group {
 		}
 		if(this instanceof Purchasable){
 			if(((Purchasable)this).isOwner(player)){
-				list.add(new GroupAction("ForSale", "Toggle the for sale state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForSale", ((Purchasable)this).isForSale()));
-				list.add(new GroupAction("Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getId() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
+				list.add(new GroupAction("For Sale", "Toggle the for sale state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForSale", ((Purchasable)this).isForSale()));
+				list.add(new GroupAction("Purchase Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getId() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
 			} else {
 				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getId() + " buy", ((Purchasable)this).isForSale()));
 			}

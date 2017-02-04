@@ -25,6 +25,7 @@ import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.GroupAction;
+import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -314,28 +315,34 @@ public class MarketStall extends Plot implements Rentable{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	/*
 	@Override
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
 		
 		list.add(new GroupAction("Rename", "Rename this stall", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", isOwner(player) || isRenter(player)));
-		if(isOwner(player)){
-			list.add(new GroupAction("ForRent", "Toggle the rentable state of this Stall", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", isForRent()));
-			list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", getRenter() != null));
-		} else {
-			if(isRenter(player)){
-				list.add(new GroupAction("Leave", "Stop renting this Stall", ActionType.COMMAND, "/group " + getId() + " leave", true));
+		if(this instanceof Rentable){
+			if(((Rentable)this).isOwner(player)){
+				list.add(new GroupAction("For Rent", "Toggle the rentable state of this stall", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", ((Rentable)this).isForRent()));
+				list.add(new GroupAction("Kick", "Kick the player renting this stall", ActionType.COMMAND, "/group " + getId() + " kick", ((Rentable)this).getRenter() != null));
+				list.add(new GroupAction("Rent Price", "Set the rent of this stall", ActionType.SUGGEST, "/group " + getId() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
+			} else if(((Rentable)this).isRenter(player)) {
+				list.add(new GroupAction("Leave", "Stop renting this stall", ActionType.COMMAND, "/group " + getId() + " leave", true));
 			} else {
-				list.add(new GroupAction("Rent", "Start renting this Stall", ActionType.COMMAND, "/group " + getId() + " join", isForRent()));
+				list.add(new GroupAction("Rent", "Start renting this stall", ActionType.COMMAND, "/group " + getId() + " rent", ((Rentable)this).isForRent()));
 			}
 		}
-		list.add(new GroupAction("Price", "Set the rent of this stall", ActionType.SUGGEST, "/group " + getId() + " setRent " + getRent(), isOwner(player)));
-		list.add(new GroupAction("Remove", "Remove this stall and kick anyone renting it", ActionType.COMMAND, "/group " + getId() + " remove", isOwner(player)));
+		if(this instanceof Purchasable){
+			if(((Purchasable)this).isOwner(player)){
+				list.add(new GroupAction("For Sale", "Toggle the for sale state of this stall", ActionType.TOGGLE, "/group " + getId() + " toggleForSale", ((Purchasable)this).isForSale()));
+				list.add(new GroupAction("Purchase Price", "Set the purchase price of this stall", ActionType.SUGGEST, "/group " + getId() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
+			} else {
+				list.add(new GroupAction("Purchase", "Buy this stall", ActionType.COMMAND, "/group " + getId() + " buy", ((Purchasable)this).isForSale()));
+			}
+		}
+		list.add(new GroupAction("Remove", "Remove this stall", ActionType.COMMAND, "/group " + getId() + " remove", this.hasPermission(PermissionType.MANAGE, null, player)));
 		
 		return list;
 	}
-	*/
 	/**
 	 * Gets the file where this keep is saved.
 	 * @return File
