@@ -122,7 +122,7 @@ public class CommandGroup implements CommandExecutor {
 			case "SETNAME": case "RENAME":
 				if(sender instanceof Player){
 					if(g instanceof MarketStall){
-						if(((MarketStall)g).isOwner((Player) sender) || ((MarketStall)g).getRenter() == sender){
+						if(((MarketStall)g).isOwner((Player) sender) || ((MarketStall)g).isRenter((Player)sender)){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
 								sb.append(args[i] + " ");

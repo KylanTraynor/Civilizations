@@ -396,6 +396,13 @@ public class Util {
 				case 5: return "STONE_BRICK_SLAB";
 			}
 			break;
+		case RAW_FISH:
+			switch((int) data){
+				case 0: return "RAW_FISH";
+				case 1: return "RAW_SALMON";
+				case 2: return "RAW_PUFFER_FISH";
+				default: return mat.toString() + ":" + data;
+			}
 		case MONSTER_EGG:
 			switch((int) data){
 				case 50: return "CREEPER_EGG";
