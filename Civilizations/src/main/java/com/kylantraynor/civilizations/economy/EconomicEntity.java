@@ -1,7 +1,8 @@
 package com.kylantraynor.civilizations.economy;
 
 public interface EconomicEntity {
-	public boolean addFunds(double amount);
-	public boolean removeFunds(double amount);
-	public boolean tryTakeFunds(double amount);
+	public Budget getBudget();
+	public boolean addFunds(String label, double amount);
+	public boolean removeFunds(String label, double amount);
+	public boolean tryTakeFunds(String label, double amount);
 }

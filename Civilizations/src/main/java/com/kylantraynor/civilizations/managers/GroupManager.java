@@ -268,4 +268,9 @@ public class GroupManager {
 			}
 		}
 	}
+	
+	
+	public static void updateForEconomy() {
+		
+	}
 }

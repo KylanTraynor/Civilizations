@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.groups.settlements;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +62,22 @@ public class Settlement extends Group {
 	@Override
 	public SettlementSettings getSettings() {
 		return (SettlementSettings)super.getSettings();
+	}
+	/**
+	 * Gets the file where this camp is saved.
+	 * @return File
+	 */
+	@Override
+	public File getFile(){
+		File f = new File(Civilizations.getSettlementDirectory(), "" + this.getUniqueId().toString() + ".yml");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		return f;
 	}
 	/**
 	 * Gets the list of plots of this settlement.
@@ -337,17 +355,7 @@ public class Settlement extends Group {
 	 * @return postTax Amount
 	 */
 	public double taxTransaction(TaxType taxType, double preTaxAmount){
-		double taxedAmount = 0;
-		switch(taxType){
-		case RENT:
-			taxedAmount = getSettings().getStallRentTax() * preTaxAmount;
-			break;
-		case TRANSACTION:
-			taxedAmount = getSettings().getTransactionTax() * preTaxAmount;
-			break;
-		default:
-			break;
-		}
+		double taxedAmount = getSettings().getTax(taxType) * preTaxAmount;
 		Economy.depositSettlement(this, taxedAmount);
 		return preTaxAmount - taxedAmount;
 	}

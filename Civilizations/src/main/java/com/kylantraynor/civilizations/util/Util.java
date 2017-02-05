@@ -56,8 +56,6 @@ public class Util {
 			return "a month";
 		} else if(days > 1){
 			return "" + days + " days";
-		} else if(days == 1){
-			return "a day";
 		} else if(hours > 1){
 			return "" + hours + " hours";
 		} else if(hours == 1){

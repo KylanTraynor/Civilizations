@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionSet;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -167,6 +168,15 @@ public class GroupSettings extends YamlConfiguration{
 		this.setChanged(true);
 	}
 
+	public double getTax(TaxType type){
+		return this.getDouble("Economy.Taxes." + type.toString(), 0.01);
+	}
+	
+	public void setTax(TaxType type, double tax){
+		this.set("Economy.Taxes." + type.toString(), tax);
+		this.setChanged(true);
+	}
+	
 	/**
 	 * Gets the tax on stalls rental.
 	 * @return

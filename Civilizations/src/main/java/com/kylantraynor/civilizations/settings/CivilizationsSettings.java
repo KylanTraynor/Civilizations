@@ -1,10 +1,14 @@
 package com.kylantraynor.civilizations.settings;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class CivilizationsSettings extends YamlConfiguration {
+	
+	private Instant taxationDate;
+	private boolean hasChanged = true;
 	
 	public UUID getBlueprintId(String name){
 		if(this.contains("UUIDConversions.Blueprints." + name.toUpperCase())){
@@ -20,6 +24,36 @@ public class CivilizationsSettings extends YamlConfiguration {
 	
 	public void setBlueprintId(String name, UUID id){
 		this.set("UUIDConversions.Blueprints." + name, id.toString());
+		this.setChanged(true);
 	}
 	
+	public Instant getTaxationDate(){
+		if(taxationDate != null) return taxationDate;
+		String s = this.getString("Economy.TaxationDate");
+		if(s == null){
+			setTaxationDate(Instant.now());
+		} else {
+			try{
+				taxationDate = Instant.parse(s);
+			} catch (Exception e){
+				e.printStackTrace();
+				setTaxationDate(Instant.now());
+			}
+		}
+		return taxationDate;
+	}
+	
+	public void setTaxationDate(Instant newTaxationDate){
+		taxationDate = newTaxationDate;
+		this.set("Economy.TaxationDate", taxationDate.toString());
+		this.setChanged(true);
+	}
+	
+	public void setChanged(boolean changed){
+		this.hasChanged = changed;
+	}
+	
+	public boolean hasChanged(){
+		return hasChanged;
+	}
 }

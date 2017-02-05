@@ -3,6 +3,8 @@ package com.kylantraynor.civilizations;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +93,7 @@ public class Civilizations extends JavaPlugin{
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
-	static private FileConfiguration config;
+	static private CivilizationsSettings settings;
 	
 	public static HashMap<Player, Protection> getSelectedProtections(){ return selectedProtections; }
 	
@@ -157,15 +159,14 @@ public class Civilizations extends JavaPlugin{
 		saveDefaultConfig();
 		
 		File f = new File(this.getDataFolder(), "config.yml");
-		CivilizationsSettings settings = new CivilizationsSettings();
+		settings = new CivilizationsSettings();
 		try {
 			settings.load(f);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		config = this.getConfig();
 		
-		MaterialAndData.reloadFromConfig(config);
+		MaterialAndData.reloadFromConfig(settings);
 		
 		PluginManager pm = getServer().getPluginManager();
 		
@@ -332,7 +333,17 @@ public class Civilizations extends JavaPlugin{
 
 			@Override
 			public void run() {
-				
+				if(settings.hasChanged()){
+					try {
+						settings.save(new File(Civilizations.currentInstance.getDataFolder(), "config.yml"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if(Instant.now().isAfter(settings.getTaxationDate())){
+					settings.setTaxationDate(Instant.now().plus(1, ChronoUnit.DAYS));
+					GroupManager.updateForEconomy();
+				}
 			}
 			
 		};
@@ -532,6 +543,20 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getGroupDirectory(){
 		File f = new File(currentInstance.getDataFolder(), "Groups");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	
+	/**
+	 * Get the directory the settlement files are stored in.
+	 * @return File
+	 */
+	public static File getSettlementDirectory(){
+		File f = new File(currentInstance.getDataFolder(), "Settlements");
 		if(f.exists()){
 			return f;
 		} else {
