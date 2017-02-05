@@ -36,8 +36,8 @@ public class Loan {
 	
 	public boolean processPayment(){
 		if(end.isAfter(Instant.now())){
-			if(!borrower.removeFunds(payment)) return false;
-			lender.addFunds(payment);
+			if(!borrower.removeFunds("reason", payment)) return false;
+			lender.addFunds("Reason", payment);
 			return true;
 		} else {
 			return false;
