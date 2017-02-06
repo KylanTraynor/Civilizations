@@ -236,7 +236,7 @@ public class GroupManager {
 		for(Plot p : set.getPlots()){
 			if(!canMerge){
 				for(Shape shape : p.getSettings().getShapes()){
-					if(shape.distance(s) <= Civilizations.SETTLEMENT_MERGE_RADIUS){
+					if(shape.distanceSquared(s) <= Civilizations.getSettings().getSettlementMergeDistanceSquared()){
 						canMerge = true;
 						break;
 					}
