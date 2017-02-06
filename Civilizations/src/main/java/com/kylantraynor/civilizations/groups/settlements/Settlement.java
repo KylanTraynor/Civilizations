@@ -19,6 +19,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
@@ -52,6 +53,7 @@ public class Settlement extends Group {
 	public void init(){
 		super.init();
 		setChatColor(ChatColor.GRAY);
+		super.setProtection(new SettlementProtection(this));
 	}
 	
 	@Override
@@ -62,6 +64,11 @@ public class Settlement extends Group {
 	@Override
 	public SettlementSettings getSettings() {
 		return (SettlementSettings)super.getSettings();
+	}
+	
+	@Override
+	public SettlementProtection getProtection(){
+		return (SettlementProtection)super.getProtection();
 	}
 	/**
 	 * Gets the file where this camp is saved.
@@ -90,6 +97,7 @@ public class Settlement extends Group {
 	 */
 	public void setPlots(List<Plot> plts) {
 		this.plots = plts;
+		getProtection().hullNeedsUpdate();
 		setChanged(true);
 	}
 	/**
@@ -103,6 +111,7 @@ public class Settlement extends Group {
 		} else {
 			p.getProtection().setParent(this.getProtection());;
 			this.plots.add(p);
+			getProtection().hullNeedsUpdate();
 			setChanged(true);
 			return true;
 		}
@@ -116,6 +125,7 @@ public class Settlement extends Group {
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
 			p.getProtection().setParent(null);
+			getProtection().hullNeedsUpdate();
 			setChanged(true);
 			return true;
 		} else {

@@ -20,6 +20,7 @@ import org.dynmap.markers.MarkerSet;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
@@ -39,6 +40,7 @@ public class DynmapHook {
 	private static MarkerSet stallsMarkerSet;
 	private static MarkerSet regionsMarkerSet;
 	private static HashMap<String, Marker> markerList = new HashMap<String, Marker>();
+	private static MarkerSet settlementsMarkerSet;
 	/**
 	 * Tries to load the dynmap plugin. Returns true if successfully loaded, returns false otherwise.
 	 * @param manager
@@ -80,6 +82,10 @@ public class DynmapHook {
 					campMarkerSet.deleteMarkerSet();
 					campMarkerSet = null;
 				}
+				if(settlementsMarkerSet != null){
+					settlementsMarkerSet.deleteMarkerSet();
+					settlementsMarkerSet = null;
+				}
 				if (stallsMarkerSet != null){
 					stallsMarkerSet.deleteMarkerSet();
 					stallsMarkerSet = null;
@@ -94,6 +100,7 @@ public class DynmapHook {
 			loadCampMarkerSet();
 			loadStallsMarkerSet();
 			loadRegionsMarkerSet();
+			loadSettlementsMarkerSet();
 		} catch (Exception e) {
 			Civilizations.log("SEVERE", "Something went wrong activating Dynmap for Civilizations. Is it up to date?");
 			e.printStackTrace();
@@ -108,7 +115,7 @@ public class DynmapHook {
 		if(!isEnabled()) return;
 		regionsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.regions");
 		if(regionsMarkerSet == null)
-			regionsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.regions", Civilizations.getInstanceConfig().getString("Dynmap.layer.Regions.Name", "Regions"), null, false);
+			regionsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.regions", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Regions.Name", "Regions"), null, false);
 		else
 			regionsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Regions.Name", "Regions"));
 		if(regionsMarkerSet == null){
@@ -121,6 +128,28 @@ public class DynmapHook {
 		}
 		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 10));
 		regionsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Regions.HideByDefault", false));
+	}
+	
+	/**
+	 * Loads the marker set for Settlements.
+	 */
+	private static void loadSettlementsMarkerSet() {
+		if(!isEnabled()) return;
+		settlementsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.settlements");
+		if(settlementsMarkerSet == null)
+			settlementsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.settlements", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Settlements.Name", "Settlements"), null, false);
+		else
+			settlementsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Settlements.Name", "Settlements"));
+		if(settlementsMarkerSet == null){
+			Civilizations.log("SEVERE", "Error creating Settlements MarkerSet.");
+			return;
+		}
+		int minZoom = Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Settlements.MinZoom", 0);
+		if(minZoom > 0){
+			settlementsMarkerSet.setMinZoom(minZoom);
+		}
+		settlementsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Settlements.LayerPrio", 10));
+		settlementsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Settlements.HideByDefault", false));
 	}
 
 	/**
@@ -179,12 +208,41 @@ public class DynmapHook {
 		if(group instanceof Camp){
 			Camp c = (Camp) group;
 			DynmapHook.updateCamp(c);
+		} else if (group instanceof Settlement){
+			Settlement s = (Settlement) group;
+			DynmapHook.updateSettlement(s);
 		} else if (group instanceof MarketStall){
 			MarketStall m = (MarketStall) group;
 			DynmapHook.updateStall(m);
 		}
 	}
 	
+	private static void updateSettlement(Settlement s) {
+		if(s.getProtection().getHull() == null) return;
+		if(!s.getProtection().getHull().exists()) return;
+		String id = "" + s.getLocation().getBlockX() + "_" + s.getLocation().getBlockY() + "_" + s.getLocation().getBlockZ() + "_settlement";
+		AreaMarker m = regionsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ(), false);
+		if(m == null){
+			m = regionsMarkerSet.findAreaMarker(id);
+			if(m == null){
+				Civilizations.log("SEVERE", "Failed to create marker area.");
+				return;
+			}
+		}
+		m.setLabel(Util.prettifyText(s.getName()));
+		if(s instanceof NationMember){
+			if(((NationMember) s).getNation() != null){
+				if(((NationMember) s).getNation().getBanner() != null){
+					m.setFillStyle(0.1, ((NationMember) s).getNation().getBanner().getBaseColor().getColor().asRGB());
+					m.setLineStyle(2,  1, ((NationMember) s).getNation().getBanner().getBaseColor().getColor().asRGB());
+				}
+			} else {
+				m.setFillStyle(0.1, 0x999999);
+				m.setLineStyle(1 ,1, 0x999999);
+			}
+		}
+	}
+
 	/**
 	 * Updates the display of the given Stall.
 	 * @param c

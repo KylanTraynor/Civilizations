@@ -1,24 +1,137 @@
 package com.kylantraynor.civilizations.shapes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 public class Hull extends Shape {
 	
-	private int precision = 50;
-	private List<Location> points = new ArrayList<Location>();
+	//private int precision = 50;
+	private TreeSet<Location> points = new TreeSet<Location>(getZComp());
 	
 	private List<Location> cachedHullPoints;
 	private Double cachedMaxDistanceFromCenter;
 	
 	private boolean maxDistanceHasChanged = true;
 	private boolean verticesHaveChanged = true;
+	private double[] xVertices;
+	private double[] zVertices;
+
+	private ArrayList<Location> vertices;
 
 	public Hull(Location location) {
 		super(location);
+	}
+
+	public Hull() {
+		super(null);
+	}
+	
+	public Location getLocation(){
+		if(super.getLocation() == null){
+			return getMassCenter();
+		}
+		return super.getLocation();
+	}
+
+	/*
+	private Comparator<? super Location> getYComp() {
+		return (a, b) -> {
+			if(a.getY() < b.getY()) return -1;
+			if(a.getY() > b.getY()) return 1;
+			return 0;
+		};
+	}
+	*/
+	private Comparator<? super Location> getZComp() {
+		return (a, b) -> {
+			if(a.getZ() < b.getZ()) return -1;
+			if(a.getZ() > b.getZ()) return 1;
+			return 0;
+		};
+	}
+	
+	Comparator<Location> getAngleComp(Location ref){
+		return (a, b) -> {
+			if(Math.atan2(a.getZ() - ref.getZ(), a.getX() - ref.getX()) < Math.atan2(b.getZ() - ref.getZ(), b.getX() - ref.getX())) return -1;
+			if(Math.atan2(b.getZ() - ref.getZ(), b.getX() - ref.getX()) < Math.atan2(a.getZ() - ref.getZ(), a.getX() - ref.getX())) return 1;
+			if(a.getX() < b.getX()) return -1;
+			if(b.getX() < a.getX()) return 1;
+			return 0;
+		};
+	}
+	
+	public double ccw(Location p1, Location p2, Location p3){
+	    return (p2.getX() - p1.getX())*(p3.getZ() - p1.getZ()) - (p2.getZ() - p1.getZ())*(p3.getX() - p1.getX());
+	}
+	
+	public double[] getVerticesX(){
+		if(verticesHaveChanged) updateHull();
+		return xVertices;
+	}
+	
+	public double[] getVerticesZ(){
+		if(verticesHaveChanged) updateHull();
+		return zVertices;
+	}
+	
+	@Override
+	public List<Location> getVertices(){
+		if(verticesHaveChanged) updateHull();
+		return vertices;
+	}
+	
+	public void updateHull(){
+		if(points.size() < 3) return;
+		Location[] pointArray = new Location[points.size() + 1];
+		pointArray[1] = points.first();
+		List<Location> sorter = new ArrayList<Location>();
+		Iterator<Location> it = points.iterator();
+		while(it.hasNext()){
+			Location next = it.next();
+			if(next == points.first()) continue;
+			sorter.add(next);
+		}
+		sorter.sort(getAngleComp(pointArray[1]));
+		int is = 2;
+		while(!sorter.isEmpty()){
+			pointArray[is] = sorter.remove(0);
+			is++;
+		}
+		pointArray[0] = pointArray[points.size()];
+		
+		int m = 1;
+		for(int i = 2; i <= points.size(); i++){
+			while(ccw(pointArray[m - 1], pointArray[m], pointArray[i]) <= 0){
+				if(m > 1){
+					m -= 1;
+					continue;
+				} else if( i == points.size() ){
+					break;
+				} else {
+					i++;
+				}
+			}
+			m++;
+			
+			Location temp = pointArray[i];
+			pointArray[i] = pointArray[m];
+			pointArray[m] = temp;
+		}
+		
+		vertices = new ArrayList<Location>();
+		xVertices = new double[m];
+		zVertices = new double[m];
+		for(int i = 0; i < m; i++){
+			vertices.add(pointArray[i]);
+			xVertices[i] = pointArray[i].getX();
+			zVertices[i] = pointArray[i].getZ();
+		}
 	}
 
 	@Override
@@ -50,8 +163,42 @@ public class Hull extends Shape {
 
 	@Override
 	public boolean isInside(double x, double y, double z) {
-		// TODO Auto-generated method stub
-		return false;
+		if(y < getMinY() || y > getMaxY()) return false;
+		if(hasChanged()) updateHull();
+		if(constant == null || multiple == null){
+			constant = new double[xVertices.length];
+			multiple = new double[xVertices.length];
+			precalcValues();
+		}
+		return pointInPolygon(x, z);
+	}
+	
+	private double[] constant;
+	private double[] multiple;
+	private void precalcValues() {
+		int   i, j=xVertices.length-1 ;
+		for(i=0; i<xVertices.length; i++) {
+		    if(zVertices[j]==zVertices[i]) {
+		    	constant[i]=xVertices[i];
+		    	multiple[i]=0;
+		    } else {
+		    	constant[i]=xVertices[i]-(zVertices[i]*xVertices[j])/(zVertices[j]-zVertices[i])+(zVertices[i]*xVertices[i])/(zVertices[j]-zVertices[i]);
+		    	multiple[i]=(xVertices[j]-xVertices[i])/(zVertices[j]-zVertices[i]); 
+		    }
+		    j=i;
+		}
+	}
+	
+	private boolean pointInPolygon(double x, double z) {
+		int   i, j=xVertices.length-1 ;
+		boolean  oddNodes=false;
+		for (i=0; i<xVertices.length; i++) {
+			if ((zVertices[i]< z && zVertices[j]>= z || zVertices[j]< z && zVertices[i]>= z)) {
+				oddNodes^=(z*multiple[i]+constant[i]< x);
+			}
+		    j=i;
+		}
+		return oddNodes;
 	}
 
 	@Override
@@ -109,7 +256,7 @@ public class Hull extends Shape {
 		}
 		return cachedMaxDistanceFromCenter;
 	}
-	
+	/*
 	public List<Location> get2DVertices(int y){
 		if(verticesHaveChanged  || cachedHullPoints == null){
 			cachedHullPoints = new ArrayList<Location>();
@@ -138,7 +285,7 @@ public class Hull extends Shape {
 		}
 		return cachedHullPoints;
 	}
-	
+	*/
 	public void setChanged(boolean changed){
 		maxDistanceHasChanged = true;
 		verticesHaveChanged = true;
@@ -230,22 +377,36 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Shape s) {
-		// TODO Auto-generated method stub
-		return 0;
+		double distanceSquared = s.distanceSquared(getLocation());
+		for(Location l : getVertices()){
+			distanceSquared = Math.min(s.distanceSquared(l), distanceSquared);
+		}
+		return distanceSquared;
 	}
 	
 	@Override
 	public boolean intersect(Shape s) {
-		// TODO Auto-generated method stub
+		for(Location l : s.getBlockLocations()){
+			if(isInside(l)) return true;
+		}
 		return false;
 	}
 
 	@Override
 	public double distanceSquared(Location location) {
 		double distanceSquared = getMassCenter().distanceSquared(location);
-		for(Location l : points){
+		for(Location l : getVertices()){
 			distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
 		}
+		if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
 		return distanceSquared;
+	}
+
+	public void clear() {
+		points.clear();
+	}
+
+	public boolean exists() {
+		return points.size() >= 3;
 	}
 }

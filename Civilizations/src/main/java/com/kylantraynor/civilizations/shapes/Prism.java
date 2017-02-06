@@ -219,4 +219,18 @@ public class Prism extends Shape {
 			return false;
 		}
 	}
+
+	@Override
+	public List<Location> getVertices() {
+		List<Location> result = new ArrayList<Location>();
+		result.add(new Location(this.getLocation().getWorld(), getMinX(), getMinY(), getMinZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMaxX(), getMinY(), getMinZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMinX(), getMaxY(), getMinZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMaxX(), getMaxY(), getMinZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMinX(), getMinY(), getMaxZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMaxX(), getMinY(), getMaxZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMinX(), getMaxY(), getMaxZ()));
+		result.add(new Location(this.getLocation().getWorld(), getMaxX(), getMaxY(), getMaxZ()));
+		return result;
+	}
 }
