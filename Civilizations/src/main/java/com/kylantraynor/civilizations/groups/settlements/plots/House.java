@@ -6,13 +6,19 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import mkremins.fanciful.civilizations.FancyMessage;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+import org.bukkit.material.Bed;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -57,21 +63,41 @@ public class House extends Plot implements Rentable{
 	}
 	*/
 	
+	public int getBedCount(){
+		int result = 0;
+		for(Shape s : getProtection().getShapes()){
+			for(Location l : s.getBlockLocations()){
+				if(l.getBlock().getType() == Material.BED_BLOCK && l.getBlock().getLightFromSky() < 14){
+					BlockState state = l.getBlock().getState();
+					Bed bed = (Bed) state.getData();
+					if(bed.isHeadOfBed()){
+						result++;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	public boolean isValid(){
-		boolean hasBed = false;
+		int bedCount = 0;
 		boolean hasCraftingTable = false;
 		boolean hasChest = false;
 		for(Shape s : getProtection().getShapes()){
 			for(Location l : s.getBlockLocations()){
 				if(l.getBlock().getType() == Material.BED_BLOCK && l.getBlock().getLightFromSky() < 14){
-					hasBed = true;
-					if(hasCraftingTable && hasChest) return true;
+					BlockState state = l.getBlock().getState();
+					Bed bed = (Bed) state.getData();
+					if(bed.isHeadOfBed()){
+						bedCount++;
+						if(hasCraftingTable && hasChest) return true;
+					}
 				} else if(l.getBlock().getType() == Material.WORKBENCH && l.getBlock().getLightFromSky() < 14){
 					hasCraftingTable = true;
-					if(hasBed && hasChest) return true;
+					if(bedCount > 0 && hasChest) return true;
 				} else if(l.getBlock().getType() == Material.CHEST && l.getBlock().getLightFromSky() < 14){
 					hasChest = true;
-					if(hasBed && hasCraftingTable) return true;
+					if(bedCount > 0 && hasCraftingTable) return true;
 				}
 			}
 		}
@@ -109,6 +135,33 @@ public class House extends Plot implements Rentable{
 		}
 		return f;
 	}
+	
+	/**
+	 * Gets an interactive info panel adapted to the given player.
+	 * @param player Context
+	 * @return FancyMessage
+	 */
+	@Override
+	public FancyMessage getInteractiveInfoPanel(Player player) {
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
+			.then("\nPart of ").color(ChatColor.GRAY)
+			.then(getNameOf(getSettlement())).color(ChatColor.GOLD);
+		if(getSettlement() != null){
+			fm.command("/group " + getSettlement().getId() + " info");
+		}
+		fm.then(".").color(ChatColor.GRAY)
+			.then("\nMembers: ").color(ChatColor.GRAY)
+			.command("/group " + this.getId() + " members")
+			.then("" + getMembers().size()).color(ChatColor.GOLD)
+			.command("/group " + this.getId() + " members")
+			.then("/").color(ChatColor.GRAY)
+			.then("" + getBedCount()).color(ChatColor.GOLD).tooltip("Beds under a roof.")
+			.then("\nActions: \n").color(ChatColor.GRAY);
+		fm = addCommandsTo(fm, getGroupActionsFor(player));
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
+		return fm;
+	}
+	
 	@Override
 	public OfflinePlayer getOwner() {
 		return getSettings().getOwner();
