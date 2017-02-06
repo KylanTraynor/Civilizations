@@ -56,7 +56,7 @@ public class CivilizationsSettings extends YamlConfiguration {
 	
 	public int getSettlementMergeDistanceSquared(){
 		if(mergeDistanceSquared == 0){
-			mergeDistanceSquared = getSettlementMergeDistanceSquared() * getSettlementMergeDistanceSquared();
+			mergeDistanceSquared = getSettlementMergeDistance() * getSettlementMergeDistance();
 		}
 		return mergeDistanceSquared;
 	}
