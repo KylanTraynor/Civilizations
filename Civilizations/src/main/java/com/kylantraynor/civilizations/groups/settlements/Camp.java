@@ -22,12 +22,13 @@ import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.GroupAction;
-import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
+import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -95,7 +96,7 @@ public class Camp extends Settlement{
 	}
 	
 	@Override
-	public boolean upgrade(){
+	public boolean upgrade(){/*
 		if(SmallOutpost.hasUpgradeRequirements(this)){
 			for(Plot p : getPlots()){
 				if(p instanceof Keep){
@@ -130,6 +131,8 @@ public class Camp extends Settlement{
 			this.sendMessage("Nothing to upgrade to!", null);
 			return false;
 		}
+		*/
+		return false;
 	}
 	
 	@Override
@@ -146,6 +149,16 @@ public class Camp extends Settlement{
 	public void update(){
 		if(Instant.now().isAfter(getExpireOn())) remove();
 		super.update();
+		if(this.getHouses().size() >= 1){
+			for(House h : getHouses()){
+				if(h.isValid()){
+					if(GroupManager.convertToSettlement(this) != null){
+						this.remove();
+					}
+					return;
+				}
+			}
+		}
 	}
 	
 	@Override

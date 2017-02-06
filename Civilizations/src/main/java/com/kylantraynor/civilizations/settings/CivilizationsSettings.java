@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class CivilizationsSettings extends YamlConfiguration {
 	
+	private int mergeDistanceSquared = 0;
 	private Instant taxationDate;
 	private boolean hasChanged = true;
 	
@@ -47,6 +48,23 @@ public class CivilizationsSettings extends YamlConfiguration {
 		taxationDate = newTaxationDate;
 		this.set("Economy.TaxationDate", taxationDate.toString());
 		this.setChanged(true);
+	}
+	
+	public int getSettlementMergeDistance(){
+		return this.getInt("Settlements.MergeDistance", 25);
+	}
+	
+	public int getSettlementMergeDistanceSquared(){
+		if(mergeDistanceSquared == 0){
+			mergeDistanceSquared = getSettlementMergeDistanceSquared() * getSettlementMergeDistanceSquared();
+		}
+		return mergeDistanceSquared;
+	}
+	
+	public void setSettlementMergeDistance(int distance){
+		this.set("Settlements.MergeDistance", distance);
+		mergeDistanceSquared = distance * distance;
+		setChanged(true);
 	}
 	
 	public void setChanged(boolean changed){

@@ -76,7 +76,6 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static final String MC_SERVER_VERSION = org.bukkit.Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 	public static final String PLUGIN_NAME = "Civilizations";
-	public static final int SETTLEMENT_MERGE_RADIUS = 25;
 	
 	/**
 	 * Currently running instance of Civilizations
@@ -148,6 +147,10 @@ public class Civilizations extends JavaPlugin{
 		} else {
 			Bukkit.getServer().getLogger().log(Level.ALL, "["+level+"] " + message);
 		}
+	}
+	
+	public static CivilizationsSettings getSettings(){
+		return settings;
 	}
 	
 	/**

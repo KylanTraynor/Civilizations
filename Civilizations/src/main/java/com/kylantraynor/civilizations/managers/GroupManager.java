@@ -269,6 +269,11 @@ public class GroupManager {
 		}
 	}
 	
+	public static Settlement convertToSettlement(Camp camp){
+		Settlement s = new Settlement(camp.getLocation());
+		s = load(camp.getFile(), s);
+		return s;
+	}
 	
 	public static void updateForEconomy() {
 		
