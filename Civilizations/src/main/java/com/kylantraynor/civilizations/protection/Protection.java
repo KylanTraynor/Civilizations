@@ -120,7 +120,9 @@ public class Protection {
 	 * @return
 	 */
 	public int add(Shape shape){
-		return add(shape, true);
+		int result = add(shape, true);
+		refreshParent();
+		return result;
 	}
 	/**
 	 * Adds the given shape to the protection, and optionnally checks how many blocks have been added.
@@ -135,9 +137,11 @@ public class Protection {
 				if(!isInside(l)){i++;}
 			}
 			if(i != 0 || shape instanceof Sphere){shapes.add(shape);}
+			refreshParent();
 			return i;
 		} else {
 			shapes.add(shape);
+			refreshParent();
 			return 0;
 		}
 	}
@@ -331,6 +335,15 @@ public class Protection {
 
 	public void setShapes(List<Shape> shapes) {
 		this.shapes = shapes;
+		refreshParent();
+	}
+	
+	public void refreshParent(){
+		if(parent != null){
+			if(parent instanceof SettlementProtection){
+				((SettlementProtection) parent).hullNeedsUpdate();
+			}
+		}
 	}
 
 	public Location getCenter() {

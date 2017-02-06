@@ -39,8 +39,8 @@ public class Plot extends Group {
 	public Plot(String name, Shape shape, Settlement settlement){
 		super();
 		this.setName(name);
-		setSettlement(settlement);
 		this.getProtection().add(shape);
+		setSettlement(settlement);
 		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
@@ -48,8 +48,8 @@ public class Plot extends Group {
 	public Plot(String name, List<Shape> shapes, Settlement settlement){
 		super();
 		this.setName(name);
-		setSettlement(settlement);
 		this.getProtection().setShapes(shapes);
+		setSettlement(settlement);
 		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
@@ -57,8 +57,8 @@ public class Plot extends Group {
 	public Plot(Shape shape, Settlement settlement){
 		super();
 		this.setProtection(new Protection(settlement.getProtection()));
-		setSettlement(settlement);
 		this.getProtection().add(shape);
+		setSettlement(settlement);
 		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
