@@ -65,6 +65,7 @@ import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.MaterialAndData;
+import com.kylantraynor.civilizations.util.Util;
 
 import fr.rhaz.webservers.WebServers.API;
 
@@ -498,8 +499,13 @@ public class Civilizations extends JavaPlugin{
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
-				} else if(to instanceof TownyTown){
+				} else if(to instanceof Settlement){
 					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);
+					if(!to.isMember(player)){
+						TitleManagerHook.sendActionBar("Protected Area", player, false);
+					}
+				} else if(to instanceof TownyTown){
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + Util.prettifyText(to.getName()), 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}
