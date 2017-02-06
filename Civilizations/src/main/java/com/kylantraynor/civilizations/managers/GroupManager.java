@@ -45,9 +45,26 @@ public class GroupManager {
 		loadGroups();
 		loadHouses();
 		loadCamps();
+		loadSettlements();
 		loadPlots();
 	}
 	
+	private static void loadSettlements() {
+		File settlementDir = Civilizations.getSettlementDirectory();
+		if(settlementDir.exists()){
+			for(File f : settlementDir.listFiles()){
+				if(!f.getName().split("\\.")[1].equals("yml")) continue;
+				if(Civilizations.isClearing() ){
+					Civilizations.log("INFO", "Cleared file " + f.getName());
+					f.delete();
+					continue;
+				}
+				load(f, new Settlement());
+				f.delete();
+			}
+		}
+	}
+
 	private static void loadBuilders() {
 		File dir = Civilizations.getBuilderDirectory();
 		for(File f : dir.listFiles()){
@@ -272,6 +289,7 @@ public class GroupManager {
 	public static Settlement convertToSettlement(Camp camp){
 		Settlement s = new Settlement(camp.getLocation());
 		s = load(camp.getFile(), s);
+		Civilizations.currentInstance.getLogger().info("Converted Camp " + camp.getId() + " into a Settlement (id: " + s.getId() + ")");;
 		return s;
 	}
 	

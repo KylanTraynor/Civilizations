@@ -240,6 +240,9 @@ public class DynmapHook {
 				m.setFillStyle(0.1, 0x999999);
 				m.setLineStyle(1 ,1, 0x999999);
 			}
+		} else {
+			m.setFillStyle(0.1, 0x999999);
+			m.setLineStyle(1 ,1, 0x999999);
 		}
 	}
 
