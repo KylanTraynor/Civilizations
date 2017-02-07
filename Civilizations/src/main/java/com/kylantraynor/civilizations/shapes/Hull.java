@@ -58,11 +58,36 @@ public class Hull extends Shape {
 	
 	Comparator<Location> getAngleComp(Location ref){
 		return (a, b) -> {
+			double dx1 = a.getX() - ref.getX();
+			double dy1 = a.getZ() - ref.getZ();
+			double dx2 = b.getX() - ref.getX();
+			double dy2 = b.getZ() - ref.getZ();
+			if(dy1 >= 0 && dy2 < 0){
+				return -1; //a above, b below
+			} else if(dy2 >= 0 && dy1 < 0){
+				return 1; // a below, b above
+			} else if(dy1 == 0 && dy2 == 0){
+				// collinear and horizontal
+				if(dx1 >= 0 && dx2 < 0){
+					return -1;
+				} else if (dx2 >=0 && dx1 < 0){
+					return 1;	
+				} else {
+					return 0;
+				}
+			} else {
+				double c = -ccw(ref, a, b); // both above or below
+				if(c < 0) return -1;
+				if(c > 0) return 1;
+				return 0;
+			}
+			/*
 			if(Math.atan2(a.getZ() - ref.getZ(), a.getX() - ref.getX()) < Math.atan2(b.getZ() - ref.getZ(), b.getX() - ref.getX())) return -1;
 			if(Math.atan2(b.getZ() - ref.getZ(), b.getX() - ref.getX()) < Math.atan2(a.getZ() - ref.getZ(), a.getX() - ref.getX())) return 1;
 			if(a.getX() < b.getX()) return -1;
 			if(b.getX() < a.getX()) return 1;
 			return 0;
+			*/
 		};
 	}
 	
