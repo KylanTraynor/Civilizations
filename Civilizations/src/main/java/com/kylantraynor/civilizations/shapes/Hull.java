@@ -9,6 +9,8 @@ import java.util.TreeSet;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import com.kylantraynor.civilizations.Civilizations;
+
 public class Hull extends Shape {
 	
 	//private int precision = 50;
@@ -157,6 +159,7 @@ public class Hull extends Shape {
 			xVertices[i] = pointArray[i].getX();
 			zVertices[i] = pointArray[i].getZ();
 		}
+		debugInfo();
 	}
 
 	@Override
@@ -433,5 +436,17 @@ public class Hull extends Shape {
 
 	public boolean exists() {
 		return points.size() >= 3;
+	}
+	
+	public void debugInfo(){
+		for(Location l : points){
+			Civilizations.DEBUG("Point at : " + l.getX() + ", " + l.getY() + ", " + l.getZ());
+		}
+		for(Location l : vertices){
+			Civilizations.DEBUG("Hull vertex at : " + l.getX() + ", " + l.getY() + ", " + l.getZ());
+		}
+		for(int i = 0; i < xVertices.length; i++){
+			Civilizations.DEBUG("Hull vertex["+i+"] at : " + xVertices[i] + ", " + zVertices[i]);
+		}
 	}
 }

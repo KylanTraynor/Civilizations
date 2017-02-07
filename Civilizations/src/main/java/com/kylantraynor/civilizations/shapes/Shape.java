@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.Civilizations;
+
 public abstract class Shape implements Visualizable{
 	int width;
 	int height;
@@ -154,4 +156,5 @@ public abstract class Shape implements Visualizable{
 		result.add(new Location(this.getLocation().getWorld(), getMaxX(), getMaxY(), getMaxZ()));
 		return result;
 	}
+	
 }
