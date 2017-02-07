@@ -27,6 +27,10 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Util {
 
+	
+	public static double det(double x1, double y1, double x2, double y2){
+		return x1 * y2 - x2 * y1;
+	}
 	/**
 	 * Turns a difference between two instants into a readable string.
 	 * @param from

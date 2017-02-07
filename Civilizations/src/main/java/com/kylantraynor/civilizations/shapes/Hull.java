@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.util.Util;
 
 public class Hull extends Shape {
 	
@@ -161,6 +162,9 @@ public class Hull extends Shape {
 			xVertices[i] = pointArray[i].getX();
 			zVertices[i] = pointArray[i].getZ();
 		}
+		constant = null;
+		multiple = null;
+		verticesHaveChanged = false;
 		debugInfo();
 	}
 
@@ -187,14 +191,24 @@ public class Hull extends Shape {
 
 	@Override
 	public int getArea() {
-		// TODO Auto-generated method stub
-		return 0;
+		double area = 0;
+		if(verticesHaveChanged) updateHull();
+		if(vertices != null){
+			if(vertices.size() >= 3){
+				for(int i = 0; i < vertices.size(); i++){
+					int j = i + 1;
+					if(j >= vertices.size()) j = 0;
+					area += Util.det(xVertices[i], zVertices[i], xVertices[j], zVertices[j]);
+				}
+			}
+		}
+		return (int) Math.abs(area * 0.5);
 	}
 
 	@Override
 	public boolean isInside(double x, double y, double z) {
 		if(y < getMinY() || y > getMaxY()) return false;
-		if(hasChanged()) updateHull();
+		if(verticesHaveChanged) updateHull();
 		if(constant == null || multiple == null){
 			constant = new double[xVertices.length];
 			multiple = new double[xVertices.length];

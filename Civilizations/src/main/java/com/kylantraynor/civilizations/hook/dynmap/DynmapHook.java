@@ -221,9 +221,9 @@ public class DynmapHook {
 		if(s.getProtection().getHull() == null) return;
 		if(!s.getProtection().getHull().exists()) return;
 		String id = "" + s.getLocation().getBlockX() + "_" + s.getLocation().getBlockY() + "_" + s.getLocation().getBlockZ() + "_settlement";
-		AreaMarker m = regionsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ(), false);
+		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ(), false);
 		if(m == null){
-			m = regionsMarkerSet.findAreaMarker(id);
+			m = settlementsMarkerSet.findAreaMarker(id);
 			if(m == null){
 				Civilizations.log("SEVERE", "Failed to create marker area.");
 				return;
@@ -238,12 +238,13 @@ public class DynmapHook {
 				}
 			} else {
 				m.setFillStyle(0.1, 0x999999);
-				m.setLineStyle(1 ,1, 0x999999);
+				m.setLineStyle(2 ,1, 0x999999);
 			}
 		} else {
 			m.setFillStyle(0.1, 0x999999);
-			m.setLineStyle(1 ,1, 0x999999);
+			m.setLineStyle(2 ,1, 0x999999);
 		}
+		m.setDescription("Area: " + s.getProtection().getHull().getArea() + "m²");
 	}
 
 	/**
