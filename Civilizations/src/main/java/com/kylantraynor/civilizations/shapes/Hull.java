@@ -54,6 +54,8 @@ public class Hull extends Shape {
 		return (a, b) -> {
 			if(a.getZ() < b.getZ()) return -1;
 			if(a.getZ() > b.getZ()) return 1;
+			if(a.getX() < b.getX()) return -1;
+			if(a.getX() > b.getX()) return 1;
 			return 0;
 		};
 	}
