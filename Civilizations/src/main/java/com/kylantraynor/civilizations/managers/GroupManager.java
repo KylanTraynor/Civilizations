@@ -289,6 +289,7 @@ public class GroupManager {
 	public static Settlement convertToSettlement(Camp camp){
 		Settlement s = new Settlement(camp.getLocation());
 		s = load(camp.getFile(), s);
+		s.setPlots(camp.getPlots());
 		Civilizations.currentInstance.getLogger().info("Converted Camp " + camp.getId() + " into a Settlement (id: " + s.getId() + ")");;
 		return s;
 	}

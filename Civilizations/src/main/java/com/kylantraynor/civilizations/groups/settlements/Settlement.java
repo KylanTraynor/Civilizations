@@ -164,6 +164,9 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	public void setPlots(List<Plot> plts) {
 		this.plots = plts;
+		for(Plot p : plots){
+			p.getProtection().setParent(this.getProtection());
+		}
 		getProtection().hullNeedsUpdate();
 		setChanged(true);
 	}
@@ -176,7 +179,7 @@ public class Settlement extends Group implements HasBuilder{
 		if(this.plots.contains(p)){
 			return false;
 		} else {
-			p.getProtection().setParent(this.getProtection());;
+			p.getProtection().setParent(this.getProtection());
 			this.plots.add(p);
 			getProtection().hullNeedsUpdate();
 			setChanged(true);
@@ -273,6 +276,17 @@ public class Settlement extends Group implements HasBuilder{
 		}
 		for(Plot p : getPlots()){
 			p.remove();
+		}
+		CacheManager.settlementListChanged = true;
+		return super.remove();
+	}
+	/**
+	 * Destroys this settlement, but leaves the plots behind.
+	 * @return true if the settlement has been removed, false otherwise.
+	 */
+	public boolean softRemove(){
+		for(Player p : Bukkit.getServer().getOnlinePlayers()){
+			getProtection().hide(p);
 		}
 		CacheManager.settlementListChanged = true;
 		return super.remove();

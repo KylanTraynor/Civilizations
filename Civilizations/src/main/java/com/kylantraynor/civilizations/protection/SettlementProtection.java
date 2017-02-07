@@ -14,7 +14,7 @@ import com.kylantraynor.civilizations.shapes.Shape;
 public class SettlementProtection extends Protection{
 	private boolean hullNeedsUpdate;
 	private Settlement settlement;
-	private Hull hull = new Hull();
+	private Hull hull;
 	
 	public SettlementProtection(Settlement settlement) {
 		this.settlement = settlement;
@@ -25,6 +25,7 @@ public class SettlementProtection extends Protection{
 	}
 
 	public Hull getHull(){
+		if(hull == null) hull = new Hull(getSettlement().getLocation());
 		if(hullNeedsUpdate){
 			hull.clear();
 			for(Plot p : getSettlement().getPlots()){

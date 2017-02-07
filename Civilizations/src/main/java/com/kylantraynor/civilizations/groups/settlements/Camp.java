@@ -153,7 +153,8 @@ public class Camp extends Settlement{
 			for(House h : getHouses()){
 				if(h.isValid()){
 					if(GroupManager.convertToSettlement(this) != null){
-						this.remove();
+						this.softRemove();
+						CacheManager.campListChanged = true;
 					}
 					return;
 				}

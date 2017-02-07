@@ -240,7 +240,7 @@ public class Hull extends Shape {
 			totalZ += l.getBlockZ();
 			totalY += l.getBlockY();
 		}
-		return new Location(getLocation().getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
+		return new Location(points.first().getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
 	}
 	
 	public double getMaxDistanceFromCenter(){
