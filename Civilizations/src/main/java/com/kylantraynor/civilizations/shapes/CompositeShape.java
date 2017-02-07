@@ -39,13 +39,13 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	public int getVolume() {
+	public long getVolume() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getArea() {
+	public long getArea() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

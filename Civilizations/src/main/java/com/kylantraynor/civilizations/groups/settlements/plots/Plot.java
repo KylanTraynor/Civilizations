@@ -100,6 +100,20 @@ public class Plot extends Group {
 	 */
 	public void setPlotType(PlotType type) { this.type = type; }
 	
+	public void update(){
+		if(getSettlement() == null){
+			Settlement s = Settlement.getClosest(getProtection().getCenter());
+			if(s.canMergeWith(getProtection().getShapes().get(0))){
+				setSettlement(s);
+			}
+			/*
+			if(Settlement.getAt(getProtection().getCenter()) != null){
+				setSettlement(Settlement.getAt(getProtection().getCenter()));
+			}
+			*/
+		}
+		super.update();
+	}
 	/**
 	 * Destroys this plot.
 	 * @return true if the plot has been removed, false otherwise.

@@ -184,14 +184,14 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public int getVolume() {
+	public long getVolume() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getArea() {
-		double area = 0;
+	public long getArea() {
+		long area = 0;
 		if(verticesHaveChanged) updateHull();
 		if(vertices != null){
 			if(vertices.size() >= 3){
@@ -202,7 +202,7 @@ public class Hull extends Shape {
 				}
 			}
 		}
-		return (int) Math.abs(area * 0.5);
+		return (long) Math.abs(area / 2l);
 	}
 
 	@Override

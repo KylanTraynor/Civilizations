@@ -34,12 +34,12 @@ public class Prism extends Shape {
 	}
 
 	@Override
-	public int getVolume() {
+	public long getVolume() {
 		return getWidth() * getHeight() * getLength();
 	}
 
 	@Override
-	public int getArea() {
+	public long getArea() {
 		return getWidth() * getLength();
 	}
 	

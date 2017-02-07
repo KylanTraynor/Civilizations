@@ -33,13 +33,13 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	public int getVolume() {
-		return (int) ((4.0/3.0) * (Math.PI * this.radius * this.radius * this.radius));
+	public long getVolume() {
+		return (long) ((4.0/3.0) * (Math.PI * this.radius * this.radius * this.radius));
 	}
 
 	@Override
-	public int getArea() {
-		return (int)(Math.PI * this.radius * this.radius);
+	public long getArea() {
+		return (long)(Math.PI * this.radius * this.radius);
 	}
 
 	@Override
