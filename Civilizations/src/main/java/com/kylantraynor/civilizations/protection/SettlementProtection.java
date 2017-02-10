@@ -12,9 +12,9 @@ import com.kylantraynor.civilizations.shapes.Hull;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class SettlementProtection extends Protection{
-	private boolean hullNeedsUpdate;
+	protected boolean hullNeedsUpdate;
 	private Settlement settlement;
-	private Hull hull;
+	protected Hull hull;
 	
 	public SettlementProtection(Settlement settlement) {
 		this.settlement = settlement;

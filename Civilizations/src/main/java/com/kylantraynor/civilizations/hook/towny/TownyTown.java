@@ -42,6 +42,7 @@ import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
+import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Prism;
@@ -75,6 +76,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private String lastNotification = "";
 	private Instant lastNotificationInstant = Instant.now();
 	static final int NOTIFICATION_SPAM_DELAY = 30;
+	private List<Plot> townyPlots = new ArrayList<Plot>();
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -86,6 +88,13 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	public TownyTown(Location l) {
 		super(l);
 		CacheManager.townyTownListChanged = true;
+	}
+	
+	@Override
+	public void init(){
+		super.init();
+		setChatColor(ChatColor.GRAY);
+		super.setProtection(new TownyTownProtection(this));
 	}
 	
 	@Override
@@ -140,10 +149,11 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 					p.getProtection().setPermissions(new GroupTarget(p), new Permission(resPerm));
 					p.getProtection().setPermissions(new GroupTarget(this), new Permission(allyPerm));
 					p.getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(outsiderPerm));
-					this.addPlot(p);
-					this.getProtection().add(s);
+					townyPlots.add(p);
+					//this.getProtection().add(s);
 				} else {
-					this.getProtection().add(s, false);
+					townyPlots.add(new Plot(tb.getName(), s, this));
+					//this.getProtection().add(s, false);
 				}
 			}
 			i++;
@@ -303,6 +313,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public boolean hasPermission(PermissionType perm, Block b, Player player){
 		return true;
+		//return getProtection().hasPermission(player, perm);
 	}
 	
 	public void removeUnusedTownyPerms(){
@@ -405,5 +416,9 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		this.sendMessage(message, null);
 		lastNotificationInstant = Instant.now();
 		lastNotification = message;
+	}
+
+	public List<Plot> getTownyPlots() {
+		return townyPlots;
 	}
 }
