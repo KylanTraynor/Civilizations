@@ -422,8 +422,10 @@ public class Hull extends Shape {
 	@Override
 	public double distanceSquared(Shape s) {
 		double distanceSquared = s.distanceSquared(getLocation());
-		for(Location l : getVertices()){
-			distanceSquared = Math.min(s.distanceSquared(l), distanceSquared);
+		if(exists()){
+			for(Location l : getVertices()){
+				distanceSquared = Math.min(s.distanceSquared(l), distanceSquared);
+			}
 		}
 		return distanceSquared;
 	}
@@ -439,10 +441,12 @@ public class Hull extends Shape {
 	@Override
 	public double distanceSquared(Location location) {
 		double distanceSquared = getMassCenter().distanceSquared(location);
-		for(Location l : getVertices()){
-			distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
+		if(exists()){
+			for(Location l : getVertices()){
+				distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
+			}
+			if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
 		}
-		if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
 		return distanceSquared;
 	}
 
