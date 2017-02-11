@@ -28,46 +28,6 @@ import com.kylantraynor.civilizations.protection.PermissionType;
 public class CivilizationsListener implements Listener{
 	
 	@EventHandler
-	public void onBlockBreak(BlockBreakEvent event){
-		Plot plot = Plot.getAt(event.getBlock().getLocation());
-		if(plot != null){
-			if(!plot.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "You can't break blocks here.");
-			}
-		} else {
-			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
-			if(settlement != null){
-				if(settlement instanceof TownyTown) return;
-				if(!settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
-					event.setCancelled(true);
-					event.getPlayer().sendMessage(ChatColor.RED + "You can't break blocks here.");
-				}
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event){
-		Plot plot = Plot.getAt(event.getBlock().getLocation());
-		if(plot != null){
-			if(!plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
-				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks here.");
-			}
-		} else {
-			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
-			if(settlement != null){
-				if(settlement instanceof TownyTown) return;
-				if(!settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
-					event.setCancelled(true);
-					event.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks here.");
-				}
-			}
-		}
-	}
-	
-	@EventHandler
 	public void onBlockIgnite(BlockIgniteEvent event){
 		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 		if(settlement == null) return;
@@ -89,24 +49,6 @@ public class CivilizationsListener implements Listener{
 				event.setCancelled(true);
 			}
 			break;
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onEntitySpawn(EntitySpawnEvent event){
-		Settlement settlement = Settlement.getAt(event.getLocation());
-		if(settlement == null) return;
-		if(settlement instanceof TownyTown) return;
-		if(event.getEntity() instanceof LivingEntity){
-			LivingEntity entity = (LivingEntity) event.getEntity();
-			switch(entity.getType()){
-			case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case WITHER_SKULL:
-				if(!settlement.hasPermission(PermissionType.MOBSPAWNING, event.getLocation().getBlock(), null)){
-					event.setCancelled(true);
-				}
-				break;
-			default:
-			}
 		}
 	}
 	
@@ -153,10 +95,5 @@ public class CivilizationsListener implements Listener{
 				event.setCancelled(true);
 			}
 		}
-	}
-	
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event){
-		Civilizations.displayProtectionStatus(event.getFrom(), event.getTo(), event.getPlayer());
 	}
 }
