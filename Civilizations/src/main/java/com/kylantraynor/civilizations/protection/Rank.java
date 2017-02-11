@@ -71,4 +71,19 @@ public class Rank extends PermissionTarget{
 	public List<UUID> getUniqueIds(){
 		return players;
 	}
+	
+	@Override
+	public boolean equals(Object pt){
+		if(!(pt instanceof Rank)) return false;
+		if(((Rank) pt).getName().equals(this.getName())){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		int base = 11;
+		return base * name.hashCode();
+	}
 }

@@ -349,11 +349,13 @@ public class CommandGroup implements CommandExecutor {
 				Rank pr = g.getProtection().getRank(p);
 				if(pr!=null){
 					if(args.length == 1){
-						g.getInteractiveRankMembers(pr, 0).send(p);;
+						g.getInteractiveRankMembers(pr, 0).send(p);
 					} else {
-						g.getInteractiveRankMembers(pr, Integer.parseInt(args[1])).send(p);;
+						g.getInteractiveRankMembers(pr, Integer.parseInt(args[1])).send(p);
 					}
-				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");};
+				} else {
+					p.sendMessage(g.getChatHeader() + ChatColor.RED + "You have no rank in this group.");
+				}
 				break;
 			default:
 				Rank r = g.getProtection().getRank(args[0]);
@@ -368,7 +370,9 @@ public class CommandGroup implements CommandExecutor {
 							}
 						}
 					}
-				} else {p.sendMessage(g.getChatHeader() + ChatColor.RED + "Rank '" + args[0] + "' doesn't exist.");};
+				} else {
+					p.sendMessage(g.getChatHeader() + ChatColor.RED + "Rank '" + args[0] + "' doesn't exist.");
+				}
 				break;
 			}
 		}

@@ -7,7 +7,7 @@ import org.bukkit.OfflinePlayer;
 
 public class PlayerTarget extends PermissionTarget{
 	
-	private UUID uuid;
+	final private UUID uuid;
 
 	public PlayerTarget(OfflinePlayer p) {
 		super(TargetType.PLAYER);
@@ -17,14 +17,11 @@ public class PlayerTarget extends PermissionTarget{
 	public UUID getUniqueId() {
 		return uuid;
 	}
-
-	public void setUniqueId(UUID uuid) {
-		this.uuid = uuid;
-	}
 	
 	public OfflinePlayer getPlayer(){
 		return Bukkit.getOfflinePlayer(this.uuid);
 	}
+	
 	@Override
 	public boolean equals(Object pt){
 		if(!(pt instanceof PlayerTarget)) return false;
@@ -32,5 +29,11 @@ public class PlayerTarget extends PermissionTarget{
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		int base = 7;
+		return base * this.uuid.hashCode();
 	}
 }

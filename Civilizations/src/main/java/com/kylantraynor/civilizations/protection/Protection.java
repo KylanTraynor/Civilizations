@@ -246,7 +246,11 @@ public class Protection {
 		}
 		
 		// If not, just return false.
-		return false;
+		if(parent != null){
+			return parent.hasPermission(player, type);
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -258,7 +262,7 @@ public class Protection {
 		if(permissionSet.hasTarget(target)){
 			return true;
 		}
-		if(parent != null) return parent.hasTarget(target);
+		//if(parent != null) return parent.hasTarget(target);
 		return false;
 	}
 	/**
@@ -270,8 +274,8 @@ public class Protection {
 	public Permission getPermissions(PermissionTarget target){
 		if(permissionSet.hasTarget(target)){
 			return permissionSet.get(target);
-		} else {
-			if(parent != null) return parent.getPermissions(target);
+		/*} else {
+			if(parent != null) return parent.getPermissions(target);*/
 		}
 		return null;
 	}
@@ -285,8 +289,8 @@ public class Protection {
 	public boolean getPermission(PermissionType type, PermissionTarget target){
 		if(permissionSet.isPermSetFor(type, target)){
 			return permissionSet.get(target).get(type);
-		} else if(parent != null) {
-			return parent.getPermission(type, target);
+		/*} else if(parent != null) {
+			return parent.getPermission(type, target);*/
 		}
 		if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
 	}

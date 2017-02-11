@@ -2,7 +2,7 @@ package com.kylantraynor.civilizations.protection;
 
 public class PermissionTarget {
 	
-	TargetType type;
+	final private TargetType type;
 	public TargetType getType(){
 		return type;
 	}
@@ -18,5 +18,11 @@ public class PermissionTarget {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		int base = 11;
+		return base * type.hashCode();
 	}
 }

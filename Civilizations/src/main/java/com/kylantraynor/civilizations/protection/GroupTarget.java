@@ -24,4 +24,19 @@ public class GroupTarget extends PermissionTarget{
 	public boolean isPartOf(OfflinePlayer player){
 		return getGroup().isMember(player);
 	}
+	
+	@Override
+	public boolean equals(Object pt){
+		if(!(pt instanceof GroupTarget)) return false;
+		if(((GroupTarget) pt).getGroup().equals(this.getGroup())){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		int base = 13;
+		return base * getGroup().getUniqueId().hashCode();
+	}
 }
