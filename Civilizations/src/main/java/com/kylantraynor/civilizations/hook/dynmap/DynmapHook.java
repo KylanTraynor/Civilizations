@@ -126,7 +126,7 @@ public class DynmapHook {
 		if(minZoom > 0){
 			regionsMarkerSet.setMinZoom(minZoom);
 		}
-		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 10));
+		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 50));
 		regionsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Regions.HideByDefault", false));
 	}
 	
@@ -148,7 +148,7 @@ public class DynmapHook {
 		if(minZoom > 0){
 			settlementsMarkerSet.setMinZoom(minZoom);
 		}
-		settlementsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Settlements.LayerPrio", 20));
+		settlementsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Settlements.LayerPrio", 9));
 		settlementsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Settlements.HideByDefault", false));
 	}
 
@@ -171,7 +171,7 @@ public class DynmapHook {
 		if (minzoom > 0) {
 		   campMarkerSet.setMinZoom(minzoom);
 		}
-		campMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Camp.LayerPrio", 50));
+		campMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Camp.LayerPrio", 8));
 	    campMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Camp.HideByDefault", false));
 	}
 	
@@ -194,7 +194,7 @@ public class DynmapHook {
 		if (minzoom > 0) {
 		   stallsMarkerSet.setMinZoom(minzoom);
 		}
-		stallsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.LayerPrio", 50));
+		stallsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.LayerPrio", 1));
 	    stallsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Stalls.HideByDefault", false));
 	}
 	
