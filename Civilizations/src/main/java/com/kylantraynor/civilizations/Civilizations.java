@@ -486,8 +486,8 @@ public class Civilizations extends JavaPlugin{
 	public static void displayProtectionStatus(Location fromL, Location toL, Player player) {
 		if(fromL.getBlock().equals(toL.getBlock())) return;
 		
-		Settlement from = Settlement.getAt(fromL);
-		Settlement to = Settlement.getAt(toL);
+		Settlement from = Settlement.getAt(fromL.getBlock().getLocation());
+		Settlement to = Settlement.getAt(toL.getBlock().getLocation());
 		
 		if((from != null && to != null) || (from == null && to != null)){
 			
@@ -516,10 +516,10 @@ public class Civilizations extends JavaPlugin{
 			} else {
 				Plot p = null;
 				for(Plot plot : to.getPlots()){
-					if(plot.protects(toL)) p = plot;
+					if(plot.protects(toL.getBlock().getLocation())) p = plot;
 				}
 				if(p == null) return;
-				if(!p.protects(fromL)){
+				if(!p.protects(fromL.getBlock().getLocation())){
 					TitleManagerHook.sendActionBar(p.getName(), player, false);
 				}
 			}

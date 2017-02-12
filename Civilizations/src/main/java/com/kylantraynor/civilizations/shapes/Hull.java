@@ -207,7 +207,7 @@ public class Hull extends Shape {
 	@Override
 	public boolean isInside(double x, double y, double z) {
 		if(verticesHaveChanged) updateHull();
-		if(y < getMinY() || y > getMaxY()) return false;
+		//if(y < getMinY() || y > getMaxY()) return false;
 		if(x < getMinX() || x > getMaxX()) return false;
 		if(z < getMinZ() || z > getMaxZ()) return false;
 		if(constant == null || multiple == null){
