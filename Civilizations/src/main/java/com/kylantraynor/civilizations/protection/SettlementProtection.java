@@ -49,6 +49,7 @@ public class SettlementProtection extends Protection{
 				}
 			}
 			hull.updateHull();
+			hullNeedsUpdate = false;
 		}
 		return hull;
 	}
