@@ -208,7 +208,7 @@ public class Protection {
 	 * @param type
 	 * @return
 	 */
-	public boolean hasPermission(Player player, PermissionType type){
+	public boolean hasPermission(OfflinePlayer player, PermissionType type){
 		// First, check if the player is op
 		if(player.isOp()) return true;
 		// If not, check if the protection has a specific permission set for the player

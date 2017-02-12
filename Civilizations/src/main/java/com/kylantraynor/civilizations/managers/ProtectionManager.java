@@ -33,6 +33,7 @@ public class ProtectionManager {
 	}
 	
 	public static boolean hasPermission(Protection protection, PermissionType type, OfflinePlayer player){
+		return protection.hasPermission(player, type);
 	}
 	
 }
