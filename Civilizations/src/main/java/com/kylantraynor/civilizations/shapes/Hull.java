@@ -523,10 +523,11 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Shape s) {
-		double distanceSquared = s.distanceSquared(getLocation());
+		if(intersect(s)) return 0.0;
+		double distanceSquared = distanceSquared(s.getLocation());
 		if(exists()){
-			for(Location l : getVertices()){
-				distanceSquared = Math.min(s.distanceSquared(l), distanceSquared);
+			for(Location l : s.getVertices()){
+				distanceSquared = Math.min(distanceSquared(l), distanceSquared);
 			}
 		}
 		return distanceSquared;
