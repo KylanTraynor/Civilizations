@@ -154,7 +154,7 @@ public class Builder {
 	
 	private Instant lastWarning = Instant.now();
 	private void warnLackOfSupplies(MaterialAndData supply){
-		if(getOwner() != null && lastWarning.isBefore(Instant.now().minusSeconds(10))){
+		if(getOwner() != null && lastWarning.isBefore(Instant.now().minusSeconds(60))){
 			FancyMessage notification = new FancyMessage(((Group)getOwner()).getChatHeader());
 			notification.then("Warehouses lack of ")
 			.then(Util.prettifyText(Util.getMaterialName(supply.getDefault())))
