@@ -162,6 +162,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				Civilizations.log("INFO", "Loading " + t.getName() + ": " + Math.round(((double)i/tl.size())*100) + "% (" + i + "/"+ tl.size()+ ")");
 			}
 		}
+		this.getProtection().hullNeedsUpdate();
 		CacheManager.townyTownListChanged = true;
 	}
 	public TownyTown(Town t, UUID uuid) throws TownyException {
