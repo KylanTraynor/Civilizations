@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.settings.GroupSettings;
 import com.kylantraynor.civilizations.util.MaterialAndData;
@@ -163,7 +164,7 @@ public class Builder {
 			.then("HERE").command("/group " + ((Group)getOwner()).getId() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
 			.color(ChatColor.GOLD)
 			.then(" to skip this type of block.");
-			((Group)getOwner()).sendMessage(notification, null);
+			((Group)getOwner()).sendMessage(notification, PermissionType.BLUEPRINT_NOTIFICATIONS);
 			lastWarning = Instant.now();
 		}
 	}
