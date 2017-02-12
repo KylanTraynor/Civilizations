@@ -119,6 +119,7 @@ public class Hull extends Shape {
 	
 	public void updateHull(){
 		if(points.size() < 3) return;
+		Civilizations.currentInstance.getLogger().info("Recalculating hull.");
 		Location[] pointArray = new Location[points.size() + 1];
 		pointArray[1] = points.first();
 		List<Location> sorter = new ArrayList<Location>();
