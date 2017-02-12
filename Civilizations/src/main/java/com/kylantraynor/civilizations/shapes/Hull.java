@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.voronoi.VectorXZ;
 
 public class Hull extends Shape {
 	
@@ -442,11 +443,56 @@ public class Hull extends Shape {
 	public double distanceSquared(Location location) {
 		double distanceSquared = getMassCenter().distanceSquared(location);
 		if(exists()){
+			
+			if(isInside(location)) return 0;
+			
+			List<Location> sorter = new ArrayList<Location>();
+			for(Location l : getVertices()){
+				sorter.add(l);
+			}
+			sorter.add(location);
+			sorter.sort(getAngleComp(getMassCenter()));
+			int i = sorter.indexOf(location);
+			int h = i - 1;
+			int j = i + 1;
+			if(i == 0){
+				h = sorter.size() - 1;
+			} else if(i == sorter.size() - 1){
+				j = 0;
+			}
+			VectorXZ p0 = new VectorXZ(location.getBlockX(), location.getBlockZ());
+			VectorXZ p1 = new VectorXZ(sorter.get(h).getBlockX(), sorter.get(h).getBlockZ());
+			VectorXZ p2 = new VectorXZ(sorter.get(j).getBlockX(), sorter.get(j).getBlockZ());
+			VectorXZ v = p2.substract(p1);
+			VectorXZ n = v.getOrthogonal();
+			VectorXZ p3 = VectorXZ.getRayIntersection(p1, v, p0, n);
+			
+			if(p1.getX() < p2.getX()){
+				if(p3.getX() < p1.getX()){
+					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
+				} else if(p3.getX() > p2.getX()){
+					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
+				} else {
+					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
+				}
+			} else {
+				if(p3.getX() > p1.getX()){
+					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
+				} else if(p3.getX() < p2.getX()){
+					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
+				} else {
+					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
+				}
+			}
+		}
+		/*
+		if(exists()){
 			for(Location l : getVertices()){
 				distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
 			}
 			if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
 		}
+		*/
 		return distanceSquared;
 	}
 

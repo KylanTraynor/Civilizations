@@ -3,6 +3,8 @@ package com.kylantraynor.civilizations.protection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
+
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -22,6 +24,19 @@ public class SettlementProtection extends Protection{
 	
 	public void hullNeedsUpdate(){
 		hullNeedsUpdate = true;
+	}
+	
+	/**
+	 * Checks if the given location is inside of the protection.
+	 * @param location
+	 * @return
+	 */
+	@Override
+	public boolean isInside(Location location){
+		if(getHull().exists()){
+			return getHull().isInside(location);
+		}
+		return false;
 	}
 
 	public Hull getHull(){

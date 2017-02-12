@@ -230,14 +230,18 @@ public class Settlement extends Group implements HasBuilder{
 	public double distanceSquared(Location location){
 		if(protects(location)) return 0.0;
 		double distanceSquared = location.distanceSquared(getLocation());
-		for(Shape s : this.getProtection().getShapes()){
-			distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
-		}
-		for(Plot p : getPlots()){
-			for(Shape s : p.getProtection().getShapes()){
+		if(this.getProtection().getHull().exists()){
+			distanceSquared = Math.min(this.getProtection().getHull().distance(location), distanceSquared);
+		} else {
+			for(Shape s : this.getProtection().getShapes()){
 				distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
 			}
 		}
+		/*for(Plot p : getPlots()){
+			for(Shape s : p.getProtection().getShapes()){
+				distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
+			}
+		}*/
 		
 		return distanceSquared;
 	}
