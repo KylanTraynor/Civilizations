@@ -26,6 +26,7 @@ public class TownyTownProtection extends SettlementProtection {
 				hull.addPoints(s.getVertices());
 			}
 			hull.updateHull();
+			this.hullNeedsUpdate = false;
 		}
 		return hull;
 	}
