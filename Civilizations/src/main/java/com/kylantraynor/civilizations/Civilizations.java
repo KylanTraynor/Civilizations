@@ -484,12 +484,12 @@ public class Civilizations extends JavaPlugin{
 	 * @param player
 	 */
 	public static void displayProtectionStatus(Location fromL, Location toL, Player player) {
-		boolean fromProtected = Settlement.isProtected(fromL);
-		boolean toProtected = Settlement.isProtected(toL);
-		if((fromProtected && toProtected) || (!fromProtected && toProtected)){
-			
-			Settlement from = Settlement.getAt(fromL);
-			Settlement to = Settlement.getAt(toL);
+		if(fromL.getBlock().equals(toL.getBlock())) return;
+		
+		Settlement from = Settlement.getAt(fromL);
+		Settlement to = Settlement.getAt(toL);
+		
+		if((from != null && to != null) || (from == null && to != null)){
 			
 			if(!to.equals(from)){
 				if(to instanceof Camp){
@@ -515,7 +515,7 @@ public class Civilizations extends JavaPlugin{
 				}
 			} else {
 				Plot p = null;
-				for(Plot plot : CacheManager.getPlotList()){
+				for(Plot plot : to.getPlots()){
 					if(plot.protects(toL)) p = plot;
 				}
 				if(p == null) return;
@@ -524,9 +524,7 @@ public class Civilizations extends JavaPlugin{
 				}
 			}
 			
-		} else if( fromProtected && !toProtected){
-			
-			Settlement from = Settlement.getAt(fromL);
+		} else if(from != null && to == null){
 			if(from != null){
 				if(from instanceof Camp){
 					if(from.isMember(player)){
