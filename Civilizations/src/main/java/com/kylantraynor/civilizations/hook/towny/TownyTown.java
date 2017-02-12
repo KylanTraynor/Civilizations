@@ -76,7 +76,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private String lastNotification = "";
 	private Instant lastNotificationInstant = Instant.now();
 	static final int NOTIFICATION_SPAM_DELAY = 30;
-	private List<Plot> townyPlots = new ArrayList<Plot>();
+	private List<Shape> townyPlots = new ArrayList<Shape>();
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -130,7 +130,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				int width = Coord.getCellSize();
 				int length = Coord.getCellSize();
 				Shape s = new Prism(l, width, 255, length);
-				if(isPlot(tb)){
+				/*if(isPlot(tb)){
 					Plot p = new Plot(tb.getName(), s, this);
 					
 					Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
@@ -154,7 +154,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				} else {
 					townyPlots.add(new Plot(tb.getName(), s, this));
 					//this.getProtection().add(s, false);
-				}
+				}*/
+				townyPlots.add(s);
 			}
 			i++;
 			if(i % 50 == 0){
@@ -428,7 +429,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		lastNotification = message;
 	}
 
-	public List<Plot> getTownyPlots() {
+	public List<Shape> getTownyPlots() {
 		return townyPlots;
 	}
 }

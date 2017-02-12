@@ -22,10 +22,8 @@ public class TownyTownProtection extends SettlementProtection {
 					hull.addPoints(s.getVertices());
 				}
 			}
-			for(Plot p : ((TownyTown)getSettlement()).getTownyPlots()){
-				for(Shape s : p.getProtection().getShapes()){
-					hull.addPoints(s.getVertices());
-				}
+			for(Shape s : ((TownyTown)getSettlement()).getTownyPlots()){
+				hull.addPoints(s.getVertices());
 			}
 			hull.updateHull();
 		}
