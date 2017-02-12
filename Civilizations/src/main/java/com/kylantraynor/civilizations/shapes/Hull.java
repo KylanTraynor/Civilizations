@@ -208,8 +208,10 @@ public class Hull extends Shape {
 
 	@Override
 	public boolean isInside(double x, double y, double z) {
-		if(y < getMinY() || y > getMaxY()) return false;
 		if(verticesHaveChanged) updateHull();
+		if(y < getMinY() || y > getMaxY()) return false;
+		if(x < getMinX() || x > getMaxX()) return false;
+		if(z < getMinZ() || z > getMaxZ()) return false;
 		if(constant == null || multiple == null){
 			constant = new double[xVertices.length];
 			multiple = new double[xVertices.length];
@@ -289,17 +291,49 @@ public class Hull extends Shape {
 	}
 	
 	public double getMaxDistanceFromCenter(){
-		if(maxDistanceHasChanged || cachedMaxDistanceFromCenter == null){
-			cachedMaxDistanceFromCenter = 0.0;
-			Location center = getMassCenter();
-			for(Location l : points){
-				if(l.distanceSquared(center) > cachedMaxDistanceFromCenter * cachedMaxDistanceFromCenter){
-					cachedMaxDistanceFromCenter = l.distance(center);
+		return Math.sqrt(getMaxSquaredDistanceFromCenter());
+	}
+	public double getMaxSquaredDistanceFromCenter(){
+		double distanceSquared = 0.0;
+		Location center = getMassCenter();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(l.distanceSquared(center) > distanceSquared){
+					distanceSquared = l.distanceSquared(center);
 				}
 			}
+		} else {
+			for(Location l : points){
+				if(l.distanceSquared(center) > distanceSquared){
+					distanceSquared = l.distanceSquared(center);
+				}
+			}
+		}
+		return distanceSquared;
+		/*
+		if(maxDistanceHasChanged || cachedMaxDistanceFromCenter == null){
+			cachedMaxDistanceFromCenter = 0.0;
+			double distanceSquared = 0.0;
+			Location center = getMassCenter();
+			if(exists()){
+				for(Location l : getVertices()){
+					if(l.distanceSquared(center) > distanceSquared){
+						distanceSquared = l.distanceSquared(center);
+					}
+				}
+			} else {
+				for(Location l : points){
+					if(l.distanceSquared(center) > distanceSquared){
+						distanceSquared = l.distanceSquared(center);
+					}
+				}
+			}
+			
+			cachedMaxDistanceFromCenter = Math.sqrt(distanceSquared);
 			maxDistanceHasChanged = false;
 		}
 		return cachedMaxDistanceFromCenter;
+		*/
 	}
 	/*
 	public List<Location> get2DVertices(int y){
@@ -345,11 +379,21 @@ public class Hull extends Shape {
 	@Override
 	public int getMinX() {
 		Integer min = null;
-		for(Location l : points){
-			if(min == null){
-				min = l.getBlockX();
-			} else if (l.getBlockX() < min){
-				min = l.getBlockX();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(min == null){
+					min = l.getBlockX();
+				} else if (l.getBlockX() < min){
+					min = l.getBlockX();
+				}
+			}
+		} else {
+			for(Location l : points){
+				if(min == null){
+					min = l.getBlockX();
+				} else if (l.getBlockX() < min){
+					min = l.getBlockX();
+				}
 			}
 		}
 		return min;
@@ -371,11 +415,21 @@ public class Hull extends Shape {
 	@Override
 	public int getMinZ() {
 		Integer min = null;
-		for(Location l : points){
-			if(min == null){
-				min = l.getBlockZ();
-			} else if (l.getBlockZ() < min){
-				min = l.getBlockZ();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(min == null){
+					min = l.getBlockZ();
+				} else if (l.getBlockZ() < min){
+					min = l.getBlockZ();
+				}
+			}
+		} else {
+			for(Location l : points){
+				if(min == null){
+					min = l.getBlockZ();
+				} else if (l.getBlockZ() < min){
+					min = l.getBlockZ();
+				}
 			}
 		}
 		return min;
@@ -384,11 +438,21 @@ public class Hull extends Shape {
 	@Override
 	public int getMaxX() {
 		Integer max = null;
-		for(Location l : points){
-			if(max == null){
-				max = l.getBlockX();
-			} else if (l.getBlockX() > max){
-				max = l.getBlockX();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(max == null){
+					max = l.getBlockX();
+				} else if (l.getBlockX() > max){
+					max = l.getBlockX();
+				}
+			}
+		} else {
+			for(Location l : points){
+				if(max == null){
+					max = l.getBlockX();
+				} else if (l.getBlockX() > max){
+					max = l.getBlockX();
+				}
 			}
 		}
 		return max;
@@ -397,11 +461,21 @@ public class Hull extends Shape {
 	@Override
 	public int getMaxY() {
 		Integer max = null;
-		for(Location l : points){
-			if(max == null){
-				max = l.getBlockY();
-			} else if (l.getBlockY() > max){
-				max = l.getBlockY();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(max == null){
+					max = l.getBlockY();
+				} else if (l.getBlockY() > max){
+					max = l.getBlockY();
+				}
+			}
+		} else {
+			for(Location l : points){
+				if(max == null){
+					max = l.getBlockY();
+				} else if (l.getBlockY() > max){
+					max = l.getBlockY();
+				}
 			}
 		}
 		return max;
@@ -410,11 +484,21 @@ public class Hull extends Shape {
 	@Override
 	public int getMaxZ() {
 		Integer max = null;
-		for(Location l : points){
-			if(max == null){
-				max = l.getBlockZ();
-			} else if (l.getBlockZ() > max){
-				max = l.getBlockZ();
+		if(exists()){
+			for(Location l : getVertices()){
+				if(max == null){
+					max = l.getBlockZ();
+				} else if (l.getBlockZ() > max){
+					max = l.getBlockZ();
+				}
+			}
+		} else {
+			for(Location l : points){
+				if(max == null){
+					max = l.getBlockZ();
+				} else if (l.getBlockZ() > max){
+					max = l.getBlockZ();
+				}
 			}
 		}
 		return max;
@@ -443,7 +527,6 @@ public class Hull extends Shape {
 	public double distanceSquared(Location location) {
 		double distanceSquared = getMassCenter().distanceSquared(location);
 		if(exists()){
-			
 			if(isInside(location)) return 0;
 			
 			List<Location> sorter = new ArrayList<Location>();
