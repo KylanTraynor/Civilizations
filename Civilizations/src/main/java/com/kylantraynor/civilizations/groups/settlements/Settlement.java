@@ -266,7 +266,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public void update(){
-		DynmapHook.updateMap(this);
+		if(isChanged()) DynmapHook.updateMap(this);
 		super.update();
 	}
 	/**
