@@ -199,6 +199,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	 */
 	private void importTownPermissions() {
 		Map<PermissionType, Boolean> mayorPerm = new HashMap<PermissionType, Boolean>();
+		Map<PermissionType, Boolean> coMayorPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> assistantPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
@@ -218,7 +219,6 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		mayorPerm.put(PermissionType.MANAGE_STALLS, true);
 		
 		mayorPerm.put(PermissionType.BUILD_BLUEPRINTS, true);
-		
 		
 		assistantPerm.put(PermissionType.UPGRADE, false);
 		assistantPerm.put(PermissionType.KICK, false);
@@ -241,6 +241,15 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		Rank mayor = new Rank("Mayor", (Rank)null);
 		mayor.addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
 		
+		Rank coMayor = new Rank("Co-Mayor", mayor);
+		for(Resident r : townyTown.getResidents()){
+			for(String rank : r.getTownRanks()){
+				if(rank.equalsIgnoreCase("co-mayor")){
+					coMayor.addPlayer(TownyHook.getPlayer(r));
+				}
+			}
+		}
+		
 		Rank assistant = new Rank("Assistant", mayor);
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
@@ -251,6 +260,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		}
 		
 		getProtection().setPermissions(mayor, new Permission(mayorPerm));
+		getProtection().setPermissions(coMayor, new Permission(coMayorPerm));
 		getProtection().setPermissions(assistant, new Permission(assistantPerm));
 		getProtection().setPermissions(new GroupTarget(this), new Permission(resPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(allyPerm));
