@@ -20,7 +20,7 @@ public class MenuManager {
 		MenuManager.menus = menus;
 	}
 
-	public Menu openMenu(Menu menu, Player player) {
+	public static Menu openMenu(Menu menu, Player player) {
 		menus.put(player, menu);
 		if(menu instanceof GroupMenu){
 			((GroupMenu) menu).open(player, GroupMenu.Page.MAIN);

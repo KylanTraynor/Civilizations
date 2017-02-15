@@ -537,7 +537,7 @@ public class Group implements EconomicEntity{
 	 * @return GroupMenu
 	 */
 	public GroupMenu openMenu(Player player){
-		return MenuManager.openMenu(new GroupMenu(this), player);
+		return (GroupMenu)MenuManager.openMenu(new GroupMenu(this), player);
 	}
 	
 	public String getType() {
