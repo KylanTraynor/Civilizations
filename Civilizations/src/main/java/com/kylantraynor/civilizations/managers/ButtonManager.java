@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations.menus;
+package com.kylantraynor.civilizations.managers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.kylantraynor.civilizations.menus.Button;
 
 public class ButtonManager {
 	

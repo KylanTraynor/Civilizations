@@ -7,12 +7,12 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.LockManager;
+import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.Button;
-import com.kylantraynor.civilizations.menus.ButtonManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.LockpickMenu;
-import com.kylantraynor.civilizations.menus.MenuManager;
 
 public class MenuListener implements Listener{
 	

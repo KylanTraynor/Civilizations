@@ -44,6 +44,16 @@ public class CommandPlot implements CommandExecutor {
 					p.getInteractiveInfoPanel(player).send(player);
 				}
 			/*
+			 * Displays the plot menu.
+			 */
+			} else if(args[0].equalsIgnoreCase("MENU")){
+				Plot p = Plot.getAt(player.getLocation());
+				if(p == null){
+					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "There is no plot here.");
+				} else {
+					p.openMenu(player);
+				}
+			/*
 			 * Merges the selection with the plot intersecting.
 			 */
 			} else if(args[0].equalsIgnoreCase("ADD")){

@@ -2,6 +2,8 @@ package com.kylantraynor.civilizations.menus;
 
 import java.util.List;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,6 +11,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.managers.ButtonManager;
+import com.kylantraynor.civilizations.managers.MenuManager;
 
 public class Button extends ItemStack{
 	
@@ -47,11 +51,13 @@ public class Button extends ItemStack{
 	
 	public void run(){
 		if(isEnabled && this.runnable != null){
-			ButtonManager.buttons.remove(this);
 			try{
 				this.runnable.runTask(Civilizations.currentInstance);
-			} catch (IllegalStateException e){
-				
+				ButtonManager.buttons.remove(this);
+			} catch (Exception e){
+				MenuManager.getMenus().get(getPlayer()).close();
+				getPlayer().sendMessage("" + ChatColor.BOLD + ChatColor.RED + "An error happened clicking on this button. Please report it to a staff member.");
+				e.printStackTrace();
 			}
 		}
 	}

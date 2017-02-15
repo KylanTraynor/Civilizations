@@ -7,8 +7,8 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.managers.LockManager;
+import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.LockpickMenu;
-import com.kylantraynor.civilizations.menus.MenuManager;
 
 public class LockpickSession {
 

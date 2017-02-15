@@ -28,6 +28,13 @@ public class CommandTownyTown extends CommandGroup{
 					return true;
 				}
 				break;
+			case "MENU":
+				if(sender instanceof Player){
+					Player p = (Player) sender;
+					t.openMenu(p);
+					return true;
+				}
+				break;
 			case "RANK":
 				if(sender instanceof Player){
 					Player p = (Player) sender;

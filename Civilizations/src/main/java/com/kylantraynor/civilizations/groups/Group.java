@@ -27,8 +27,8 @@ import com.kylantraynor.civilizations.economy.Budget;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
-import com.kylantraynor.civilizations.menus.MenuManager;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -534,9 +534,10 @@ public class Group implements EconomicEntity{
 	/**
 	 * Opens an inventory menu for the given player.
 	 * @param player
+	 * @return GroupMenu
 	 */
-	public void openMenu(Player player){
-		MenuManager.openMenu(new GroupMenu(this), player);
+	public GroupMenu openMenu(Player player){
+		return MenuManager.openMenu(new GroupMenu(this), player);
 	}
 	
 	public String getType() {
