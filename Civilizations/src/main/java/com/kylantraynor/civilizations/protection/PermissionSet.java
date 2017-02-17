@@ -12,14 +12,6 @@ import org.bukkit.ChatColor;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 public class PermissionSet extends HashMap<PermissionTarget, Permissions>{
-	/**
-	 * Gets Permission for the given Target.
-	 * @param target
-	 * @return Permission
-	 */
-	public Permissions get(PermissionTarget target){
-		return this.get(target);
-	}
 	
 	public Set<PermissionTarget> getTargets(){
 		return this.keySet();
