@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -59,24 +60,25 @@ public class ProtectionListener implements Listener{
 					canPlace = false;
 					reason = "this stall doesn't belong to you";
 				}
-			} else if(!plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.PLACE, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
-				reason = "you don't have the PLACE permission in " + plot.getName();
+				//reason = "you don't have the PLACE permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
 				if(settlement instanceof TownyTown) return;
-				if(!settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+				if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.PLACE, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 					canPlace = false;
-					reason = "you don't have the PLACE permission in " + settlement.getName();
+					//reason = "you don't have the PLACE permission in " + settlement.getName();
 				}
 			}
 		}
 		
 		if(!canPlace){
 			event.setCancelled(true);
-			player.sendMessage(ChatColor.RED + "You can't place blocks here because " + reason + ".");
+			if(!reason.equalsIgnoreCase(""))
+				player.sendMessage(ChatColor.RED + "You can't place blocks here because " + reason + ".");
 		}
 		/*
 		if(Settlement.isProtected(event.getBlock().getLocation())){
@@ -137,24 +139,25 @@ public class ProtectionListener implements Listener{
 					canBreak = false;
 					reason = "this stall doesn't belong to you";
 				}
-			} else if(!plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
+			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;
-				reason = "you don't have the BREAK permission in " + plot.getName();
+				//reason = "you don't have the BREAK permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
 				if(settlement instanceof TownyTown) return;
-				if(!settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+				if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
-					reason = "you don't have the BREAK permission in " + settlement.getName();
+					//reason = "you don't have the BREAK permission in " + settlement.getName();
 				}
 			}
 		}
 		
 		if(!canBreak){
 			event.setCancelled(true);
-			player.sendMessage(ChatColor.RED + "You can't break blocks here because " + reason + ".");
+			if(!reason.equalsIgnoreCase(""))
+				player.sendMessage(ChatColor.RED + "You can't break blocks here because " + reason + ".");
 		}
 		/*
 		if(Settlement.isProtected(event.getBlock().getLocation())){
