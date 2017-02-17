@@ -57,7 +57,7 @@ public class Group implements EconomicEntity{
 	private int id;
 	private List<UUID> members;
 	private boolean hasChanged = true;
-	private Protection protection;
+	protected Protection protection;
 	private ChatColor chatColor;
 	private GroupSettings settings;
 	private Budget budget;
@@ -78,8 +78,12 @@ public class Group implements EconomicEntity{
 	public void init(){
 		members = new ArrayList<UUID>();
 		chatColor = ChatColor.WHITE;
-		protection = new Protection();
+		initProtection();
 		getSettings().setCreationDate(Instant.now());
+	}
+	
+	public void initProtection(){
+		protection = new Protection();
 	}
 	
 	public UUID getUniqueId(){

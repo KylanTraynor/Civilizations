@@ -152,7 +152,7 @@ public class Protection {
 	 * @param permission
 	 * @return true
 	 */
-	public boolean addPermissions(PermissionTarget target, Permission permission){
+	public boolean addPermissions(PermissionTarget target, Permissions permission){
 		setPermissions(target, permission);
 		return true;
 	}
@@ -161,7 +161,7 @@ public class Protection {
 		if(getRank(rank.getName()) != null){
 			return false;
 		} else {
-			setPermissions(rank, new Permission(new HashMap<PermissionType, Boolean>()));
+			setPermissions(rank, new Permissions(new HashMap<PermissionType, Boolean>()));
 			return true;
 		}
 	}
@@ -174,9 +174,6 @@ public class Protection {
 				}
 			}
 		}
-		if(parent != null){
-			return parent.getRank(name);
-		}
 		return null;
 	}
 	
@@ -188,9 +185,6 @@ public class Protection {
 				}
 			}
 		}
-		if(parent != null){
-			return parent.getRank(player);
-		}
 		return null;
 	}
 	/**
@@ -198,7 +192,7 @@ public class Protection {
 	 * @param target
 	 * @param permission
 	 */
-	public void setPermissions(PermissionTarget target, Permission permission){
+	public void setPermissions(PermissionTarget target, Permissions permission){
 		permissionSet.add(target, permission);
 	}
 	
@@ -213,18 +207,18 @@ public class Protection {
 		if(player.isOp()) return true;
 		// If not, check if the protection has a specific permission set for the player
 		PlayerTarget pt = new PlayerTarget(player);
-		if(hasTarget(pt)){
+		if(permissionSet.isSet(type, pt)){
 			return getPermission(type, pt);
 		}
 		// If not, check if the protection has a specific permission set for the player's rank
 		Rank r = getRank(player);
 		if(r != null){
-			if(hasTarget(r)){
+			if(permissionSet.isSet(type, r)){
 				return getPermission(type, r);
 			} else {
 				while(r.getParent() != null){
 					Rank rParent = getRank(r.getParent());
-					if(hasTarget(rParent)){
+					if(permissionSet.isSet(type, rParent)){
 						return getPermission(type, rParent);
 					} else {
 						r = rParent;
@@ -237,14 +231,15 @@ public class Protection {
 		for(PermissionTarget target : permissionSet.getTargets()){
 			if(target instanceof GroupTarget){
 				if(((GroupTarget) target).isPartOf(player)){
-					return getPermission(type, target);
+					if(permissionSet.isSet(type, target))
+						return getPermission(type, target);
 				}
 			}
 		}
 		
 		// If not, check if the protection has a permission set for outsiders
 		PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
-		if(hasTarget(o)){
+		if(permissionSet.isSet(type, o)){
 			return getPermission(type, o);
 		}
 		
@@ -273,14 +268,10 @@ public class Protection {
 	 * @param target
 	 * @return Permission
 	 */
-	@Deprecated
-	public Permission getPermissions(PermissionTarget target){
-		if(permissionSet.hasTarget(target)){
-			return permissionSet.get(target);
+	public Permissions getPermissions(PermissionTarget target){
+		return permissionSet.get(target);
 		/*} else {
 			if(parent != null) return parent.getPermissions(target);*/
-		}
-		return null;
 	}
 	
 	/**
@@ -290,7 +281,7 @@ public class Protection {
 	 * @return
 	 */
 	public boolean getPermission(PermissionType type, PermissionTarget target){
-		if(permissionSet.isPermSetFor(type, target)){
+		if(permissionSet.isSet(type, target)){
 			return permissionSet.get(target).get(type);
 		/*} else if(parent != null) {
 			return parent.getPermission(type, target);*/

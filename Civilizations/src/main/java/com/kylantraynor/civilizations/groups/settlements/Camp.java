@@ -33,6 +33,7 @@ import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.CampSettings;
@@ -193,8 +194,8 @@ public class Camp extends Settlement{
 		serverPerm.put(PermissionType.DEGRADATION, false);
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
-		p.setPermissions(new GroupTarget(this), new Permission(resPerm));
-		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(serverPerm));
+		p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
+		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.

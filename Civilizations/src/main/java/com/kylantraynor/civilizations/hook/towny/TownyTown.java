@@ -41,6 +41,7 @@ import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.protection.TargetType;
@@ -94,7 +95,11 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	public void init(){
 		super.init();
 		setChatColor(ChatColor.GRAY);
-		super.setProtection(new TownyTownProtection(this));
+	}
+	
+	@Override
+	public void initProtection(){
+		super.protection = new TownyTownProtection(this);
 	}
 	
 	@Override
@@ -262,13 +267,13 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}
 		}
 		
-		getProtection().setPermissions(mayor, new Permission(mayorPerm));
-		getProtection().setPermissions(coMayor, new Permission(coMayorPerm));
-		getProtection().setPermissions(assistant, new Permission(assistantPerm));
-		getProtection().setPermissions(new GroupTarget(this), new Permission(resPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permission(allyPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(outsiderPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permission(serverPerm));
+		getProtection().setPermissions(mayor, new Permissions(mayorPerm));
+		getProtection().setPermissions(coMayor, new Permissions(coMayorPerm));
+		getProtection().setPermissions(assistant, new Permissions(assistantPerm));
+		getProtection().setPermissions(new GroupTarget(this), new Permissions(resPerm));
+		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permissions(allyPerm));
+		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
+		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
 	}
 
 	@Override

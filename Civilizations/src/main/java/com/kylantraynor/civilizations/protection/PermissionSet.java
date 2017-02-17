@@ -11,25 +11,23 @@ import org.bukkit.ChatColor;
 
 import mkremins.fanciful.civilizations.FancyMessage;
 
-public class PermissionSet {
-	
-	private Map<PermissionTarget, Permission> permissions = new HashMap<PermissionTarget, Permission>();
+public class PermissionSet extends HashMap<PermissionTarget, Permissions>{
 	/**
 	 * Gets Permission for the given Target.
 	 * @param target
 	 * @return Permission
 	 */
-	public Permission get(PermissionTarget target){
-		return permissions.get(target);
+	public Permissions get(PermissionTarget target){
+		return this.get(target);
 	}
 	
 	public Set<PermissionTarget> getTargets(){
-		return permissions.keySet();
+		return this.keySet();
 	}
 	
-	public boolean isPermSetFor(PermissionType type, PermissionTarget target){
+	public boolean isSet(PermissionType type, PermissionTarget target){
 		if(hasTarget(target)){
-			if(permissions.get(target).contains(type)){
+			if(this.get(target).contains(type)){
 				return true;
 			}
 		}
@@ -41,8 +39,8 @@ public class PermissionSet {
 	 * @param permission
 	 * @return Returns the last Permission for this target, or null.
 	 */
-	public Permission add(PermissionTarget target, Permission permission){
-		return permissions.put(target, permission);
+	public Permissions add(PermissionTarget target, Permissions permission){
+		return this.put(target, permission);
 	}
 	/**
 	 * Checks if this set has Permissions for the given target.
@@ -50,17 +48,15 @@ public class PermissionSet {
 	 * @return true if Permissions exist for this target, false otherwise.
 	 */
 	public boolean hasTarget(PermissionTarget target) {
-		if(permissions.containsKey(target)){
-			if(permissions.get(target) != null){
-				return true;
-			}
+		if(this.get(target) != null){
+			return true;
 		}
 		return false;
 	}
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder(ChatColor.GOLD + "PERMISSIONS:\n");
-		for(Entry<PermissionTarget, Permission> e : permissions.entrySet()){
+		for(Entry<PermissionTarget, Permissions> e : this.entrySet()){
 			switch(e.getKey().getType()){
 			case PLAYER:
 				PlayerTarget pt = (PlayerTarget) e.getKey();
@@ -79,7 +75,7 @@ public class PermissionSet {
 	public FancyMessage getFancyMessage(){
 		FancyMessage fm = new FancyMessage("PERMISSIONS:\n").color(ChatColor.GOLD);
 		Map<PermissionType, List<PermissionTarget>> permissionTypes = new HashMap<PermissionType, List<PermissionTarget>>();
-		for(Entry<PermissionTarget, Permission> e : permissions.entrySet()){
+		for(Entry<PermissionTarget, Permissions> e : this.entrySet()){
 			for(Entry<PermissionType, Boolean> e1 : e.getValue().getTypes().entrySet()){
 				if(e1.getValue()){
 					if(permissionTypes.containsKey(e1.getKey())){

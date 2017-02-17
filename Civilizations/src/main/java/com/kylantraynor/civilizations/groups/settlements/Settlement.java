@@ -35,6 +35,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
@@ -92,7 +93,11 @@ public class Settlement extends Group implements HasBuilder{
 	public void init(){
 		super.init();
 		setChatColor(ChatColor.GRAY);
-		super.setProtection(new SettlementProtection(this));
+	}
+	
+	@Override
+	public void initProtection(){
+		super.protection = new SettlementProtection(this);
 	}
 	
 	@Override

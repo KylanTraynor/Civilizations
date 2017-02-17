@@ -19,6 +19,8 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.menus.pages.GroupMainPage;
+import com.kylantraynor.civilizations.menus.pages.MenuPage;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 
@@ -42,7 +44,7 @@ public class GroupMenu extends Menu{
 	//private Material permissionLackButton = Material.REDSTONE_BLOCK;
 	//private Material navigationValid = Material.ARROW;
 	//private Material navigationInvalid = Material.BARRIER;
-	private Page currentPage;
+	private MenuPage currentPage;
 	private String currentGoal;
 	private String currentSubPage;
 	
@@ -69,14 +71,12 @@ public class GroupMenu extends Menu{
 	public int pos(int column, int line){
 		return column + line * 9;
 	}
-	/**
-	 * Changes the page and updates the menu.
-	 * @param p
-	 */
+	/*
 	public void changePage(Page p){
 		currentPage = p;
 		update();
 	}
+	*/
 	/**
 	 * Updates the Menu depending on the active page.
 	 */
@@ -85,6 +85,8 @@ public class GroupMenu extends Menu{
 		ButtonManager.clearButtons(player);
 		this.bottom.clear();
 		this.top.clear();
+		currentPage.refresh(this);
+		/*
 		switch(currentPage)
 		{
 		case MAIN: updateForMain(); break;
@@ -92,6 +94,7 @@ public class GroupMenu extends Menu{
 		case RANK: updateForRank(group.getProtection().getRank(currentSubPage)); break;
 		case RANKS_SELECTION: updateForRankSelection(); break;
 		}
+		*/
 		player.updateInventory();
 	}
 	/**
@@ -329,9 +332,9 @@ public class GroupMenu extends Menu{
 	 * @param player
 	 * @param p
 	 */
-	public void open(Player player, Page p){
+	public void open(Player player, MenuPage p){
 		if(p == null){
-			p = Page.MAIN;
+			p = new GroupMainPage(player, this.group);
 		}
 		this.currentPage = p;
 		this.player = player;
@@ -377,5 +380,10 @@ public class GroupMenu extends Menu{
 			changePage(Page.RANKS_SELECTION);
 			break;
 		}
+	}
+	
+	public void changePage(MenuPage page) {
+		currentPage = page;
+		update();
 	}
 }
