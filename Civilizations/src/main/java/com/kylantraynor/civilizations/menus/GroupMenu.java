@@ -386,4 +386,7 @@ public class GroupMenu extends Menu{
 		currentPage = page;
 		update();
 	}
+	public Group getGroup() {
+		return group;
+	}
 }

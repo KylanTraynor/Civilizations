@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
 import com.kylantraynor.civilizations.menus.GroupMenu.Page;
+import com.kylantraynor.civilizations.menus.pages.GroupMainPage;
 
 public class MenuManager {
 	private static HashMap<Player, Menu> menus = new HashMap<Player, Menu>();
@@ -23,7 +24,7 @@ public class MenuManager {
 	public static Menu openMenu(Menu menu, Player player) {
 		menus.put(player, menu);
 		if(menu instanceof GroupMenu){
-			((GroupMenu) menu).open(player, GroupMenu.Page.MAIN);
+			((GroupMenu) menu).open(player, new GroupMainPage(player, ((GroupMenu) menu).getGroup()));
 		} else {
 			menu.open(player);
 		}
