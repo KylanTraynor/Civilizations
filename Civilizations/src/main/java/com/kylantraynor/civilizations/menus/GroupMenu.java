@@ -178,7 +178,7 @@ public class GroupMenu extends Menu{
 
 			@Override
 			public void run() {
-				((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MAIN);
+				//((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MAIN);
 			}
 			
 		}, true);
@@ -194,7 +194,7 @@ public class GroupMenu extends Menu{
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
+						//((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
@@ -210,7 +210,7 @@ public class GroupMenu extends Menu{
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
+						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -270,7 +270,7 @@ public class GroupMenu extends Menu{
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
+						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
@@ -281,7 +281,7 @@ public class GroupMenu extends Menu{
 	 * @param page
 	 * @param string
 	 */
-	protected void startSelection(Page page, String string) {
+	protected void startSelection(MenuPage page, String string) {
 		this.currentGoal = string;
 		changePage(page);
 	}
@@ -317,12 +317,12 @@ public class GroupMenu extends Menu{
 		case "RANK_SELECTION":
 			this.currentSubPage = name;
 			currentGoal = null;
-			changePage(Page.RANK);
+			//changePage(Page.RANK);
 			break;
 		case "PARENT_RANK_SELECTION":
 			group.getProtection().getRank(currentSubPage).setParent(group.getProtection().getRank(name));
 			currentGoal = null;
-			changePage(Page.RANK);
+			//changePage(Page.RANK);
 			break;
 		}
 	}
@@ -373,11 +373,11 @@ public class GroupMenu extends Menu{
 		case "RANK_NAMING":
 			group.getProtection().getRank((String) argument).setName(result);
 			currentSubPage = result;
-			changePage(Page.RANK);
+			//changePage(Page.RANK);
 			break;
 		case "RANK_NEW":
 			group.getProtection().addRank(new Rank(result, (Rank)null));
-			changePage(Page.RANKS_SELECTION);
+			//changePage(Page.RANKS_SELECTION);
 			break;
 		}
 	}
