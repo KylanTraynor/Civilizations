@@ -125,43 +125,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		importTownPermissions();
 		int i = 0;
 		for(TownBlock tb : tl){
-			World w = Bukkit.getServer().getWorld(tb.getWorld().getName());
-			if(w == null){
-				throw new TownyException();
-			} else {
-				int x = tb.getX() * Coord.getCellSize();
-				int z = tb.getZ() * Coord.getCellSize();
-				Location l = new Location(w, x, 0, z);
-				int width = Coord.getCellSize();
-				int length = Coord.getCellSize();
-				Shape s = new Prism(l, width, 255, length);
-				/*if(isPlot(tb)){
-					Plot p = new Plot(tb.getName(), s, this);
-					
-					Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
-					Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
-					Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
-					
-					if(tb.getPermissions().residentBuild != t.getPermissions().residentBuild) resPerm.put(PermissionType.PLACE, tb.getPermissions().residentBuild);
-					if(tb.getPermissions().residentDestroy != t.getPermissions().residentDestroy) resPerm.put(PermissionType.BREAK, tb.getPermissions().residentDestroy);
-					
-					if(tb.getPermissions().allyBuild != t.getPermissions().allyBuild) allyPerm.put(PermissionType.PLACE, tb.getPermissions().allyBuild);
-					if(tb.getPermissions().allyDestroy != t.getPermissions().allyDestroy) allyPerm.put(PermissionType.BREAK, tb.getPermissions().allyDestroy);
-					
-					if(tb.getPermissions().outsiderBuild != t.getPermissions().outsiderBuild) outsiderPerm.put(PermissionType.PLACE, tb.getPermissions().outsiderBuild);
-					if(tb.getPermissions().outsiderDestroy != t.getPermissions().outsiderDestroy) outsiderPerm.put(PermissionType.BREAK, tb.getPermissions().outsiderDestroy);
-					
-					p.getProtection().setPermissions(new GroupTarget(p), new Permission(resPerm));
-					p.getProtection().setPermissions(new GroupTarget(this), new Permission(allyPerm));
-					p.getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(outsiderPerm));
-					townyPlots.add(p);
-					//this.getProtection().add(s);
-				} else {
-					townyPlots.add(new Plot(tb.getName(), s, this));
-					//this.getProtection().add(s, false);
-				}*/
-				townyPlots.add(s);
-			}
+			addTownyPlot(tb);
 			i++;
 			if(i % 50 == 0){
 				Civilizations.log("INFO", "Loading " + t.getName() + ": " + Math.round(((double)i/tl.size())*100) + "% (" + i + "/"+ tl.size()+ ")");
@@ -438,5 +402,58 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 
 	public List<Shape> getTownyPlots() {
 		return townyPlots;
+	}
+
+	public void addTownyPlot(TownBlock tb) throws TownyException {
+		World w = Bukkit.getServer().getWorld(tb.getWorld().getName());
+		if(w == null){
+			throw new TownyException();
+		} else {
+			int x = tb.getX() * Coord.getCellSize();
+			int z = tb.getZ() * Coord.getCellSize();
+			Location l = new Location(w, x, 0, z);
+			int width = Coord.getCellSize();
+			int length = Coord.getCellSize();
+			Shape s = new Prism(l, width, 255, length);
+			/*if(isPlot(tb)){
+				Plot p = new Plot(tb.getName(), s, this);
+				
+				Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
+				Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
+				Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
+				
+				if(tb.getPermissions().residentBuild != t.getPermissions().residentBuild) resPerm.put(PermissionType.PLACE, tb.getPermissions().residentBuild);
+				if(tb.getPermissions().residentDestroy != t.getPermissions().residentDestroy) resPerm.put(PermissionType.BREAK, tb.getPermissions().residentDestroy);
+				
+				if(tb.getPermissions().allyBuild != t.getPermissions().allyBuild) allyPerm.put(PermissionType.PLACE, tb.getPermissions().allyBuild);
+				if(tb.getPermissions().allyDestroy != t.getPermissions().allyDestroy) allyPerm.put(PermissionType.BREAK, tb.getPermissions().allyDestroy);
+				
+				if(tb.getPermissions().outsiderBuild != t.getPermissions().outsiderBuild) outsiderPerm.put(PermissionType.PLACE, tb.getPermissions().outsiderBuild);
+				if(tb.getPermissions().outsiderDestroy != t.getPermissions().outsiderDestroy) outsiderPerm.put(PermissionType.BREAK, tb.getPermissions().outsiderDestroy);
+				
+				p.getProtection().setPermissions(new GroupTarget(p), new Permission(resPerm));
+				p.getProtection().setPermissions(new GroupTarget(this), new Permission(allyPerm));
+				p.getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permission(outsiderPerm));
+				townyPlots.add(p);
+				//this.getProtection().add(s);
+			} else {
+				townyPlots.add(new Plot(tb.getName(), s, this));
+				//this.getProtection().add(s, false);
+			}*/
+			townyPlots.add(s);
+		}
+		this.getProtection().hullNeedsUpdate();
+	}
+
+	public void removeTownyPlot(TownBlock tb) {
+		int x = tb.getX() * Coord.getCellSize();
+		int z = tb.getZ() * Coord.getCellSize();
+		for(Shape s : townyPlots){
+			if(s.isInside(x, 0, z)){
+				townyPlots.remove(s);
+				break;
+			}
+		}
+		this.getProtection().hullNeedsUpdate();
 	}
 }

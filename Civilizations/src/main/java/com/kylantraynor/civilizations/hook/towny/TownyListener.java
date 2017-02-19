@@ -6,6 +6,13 @@ import com.kylantraynor.civilizations.managers.CacheManager;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class TownyListener implements Listener{
 	
@@ -25,6 +32,45 @@ public class TownyListener implements Listener{
 	
 	public void onTownAddResident(TownAddResidentEvent event){
 		
+	}
+	
+	public void onTownClaim(TownClaimEvent event){
+		TownBlock tb = event.getTownBlock();
+		Town town = null;
+		try {
+			town = tb.getTown();
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
+		if(town != null){
+			for(TownyTown t : TownyTown.getTownyTownList()){
+				if(t.getName().equalsIgnoreCase(town.getName())){
+					try {
+						t.addTownyPlot(tb);
+					} catch (TownyException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
+		}
+	}
+	
+	public void onTownUnclaim(TownUnclaimEvent event){
+		Town town = event.getTown();
+		WorldCoord w = event.getWorldCoord();
+		if(town != null){
+			for(TownyTown t : TownyTown.getTownyTownList()){
+				if(t.getName().equalsIgnoreCase(town.getName())){
+					try {
+						t.removeTownyPlot(w.getTownBlock());
+					} catch (TownyException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
+		}
 	}
 	
 }
