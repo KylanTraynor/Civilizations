@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import com.kylantraynor.civilizations.managers.CacheManager;
@@ -16,12 +17,14 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class TownyListener implements Listener{
 	
+	@EventHandler
 	public void onNewTown(NewTownEvent event){
 		if(event.getTown() != null){
 			TownyHook.loadTownyTown(event.getTown().getName());
 		}
 	}
 	
+	@EventHandler
 	public void onDeleteTown(DeleteTownEvent event){
 		for(TownyTown t : CacheManager.getTownyTownList()){
 			if(t.getName().equalsIgnoreCase(event.getTownName())){
@@ -34,6 +37,7 @@ public class TownyListener implements Listener{
 		
 	}
 	
+	@EventHandler
 	public void onTownClaim(TownClaimEvent event){
 		TownBlock tb = event.getTownBlock();
 		Town town = null;
@@ -56,6 +60,7 @@ public class TownyListener implements Listener{
 		}
 	}
 	
+	@EventHandler
 	public void onTownUnclaim(TownUnclaimEvent event){
 		Town town = event.getTown();
 		WorldCoord w = event.getWorldCoord();
