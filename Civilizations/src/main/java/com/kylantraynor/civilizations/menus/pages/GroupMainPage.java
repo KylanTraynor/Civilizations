@@ -53,11 +53,12 @@ public class GroupMainPage implements MenuPage {
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
+		MenuPage page = this;
 		Button mainButton = new Button(player, Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
 
 			@Override
 			public void run() {
-				((GroupMenu)MenuManager.getMenus().get(player)).changePage(new GroupMainPage(player, group));
+				((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 			}
 			
 		}, true);
@@ -67,6 +68,11 @@ public class GroupMainPage implements MenuPage {
 	@Override
 	public String getTitle() {
 		return "" + ChatColor.BOLD + ChatColor.GOLD + group.getName();
+	}
+
+	@Override
+	public Map<Integer, Button> getButtons() {
+		return buttons;
 	}
 
 }

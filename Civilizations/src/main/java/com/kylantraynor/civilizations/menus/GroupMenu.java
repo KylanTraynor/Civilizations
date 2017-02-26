@@ -2,6 +2,8 @@ package com.kylantraynor.civilizations.menus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Stack;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -39,6 +41,8 @@ public class GroupMenu extends Menu{
 	private Player player;
 	private int linesTop = 1; // Navigation Bar
 	private int linesBottom = 4; // Menus
+	
+	private Stack<MenuPage> pageStack = new Stack<MenuPage>();
 	
 	private Material validButton = Material.EMERALD_BLOCK;
 	//private Material permissionLackButton = Material.REDSTONE_BLOCK;
@@ -86,6 +90,15 @@ public class GroupMenu extends Menu{
 		this.bottom.clear();
 		this.top.clear();
 		currentPage.refresh(this);
+		for(Entry<Integer, Button> e : currentPage.getButtons().entrySet()){
+			this.bottom.setItem(e.getKey(), e.getValue());
+		}
+		
+		// add back button
+		if(pageStack.size() > 0){
+			this.top.setItem(pos(0,0), pageStack.peek().getIconButton());
+		}
+		
 		/*
 		switch(currentPage)
 		{
@@ -383,6 +396,11 @@ public class GroupMenu extends Menu{
 	}
 	
 	public void changePage(MenuPage page) {
+		if(page != pageStack.peek()){
+			pageStack.add(currentPage);
+		} else {
+			pageStack.pop();
+		}
 		currentPage = page;
 		update();
 	}

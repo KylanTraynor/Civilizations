@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.menus.pages;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,6 +18,8 @@ public class GroupPermissionsPage implements MenuPage {
 	
 	private Player player;
 	private Group group;
+	
+	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 	
 	public GroupPermissionsPage(Player player, Group group){
 		this.player = player;
@@ -34,11 +39,12 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public Button getIconButton() {
+		MenuPage page =this;
 		Button permissionsButton = new Button(player, Material.EMERALD_BLOCK, "Permissions for " + group.getType(), null,
 				new BukkitRunnable(){
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).changePage(new GroupManagePage(player, group));
+						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
 		}, group.hasPermission(PermissionType.MANAGE, null, player));
@@ -49,6 +55,11 @@ public class GroupPermissionsPage implements MenuPage {
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Map<Integer, Button> getButtons() {
+		return buttons;
 	}
 
 }
