@@ -215,13 +215,13 @@
 			</dependency>
 			<dependency>
 				<groupId>com.kylantraynor</groupId>
-				<artifactId>DraggyRPG</artifactId>
+				<artifactId>DraggyData</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.kylantraynor</groupId>
-				<artifactId>DraggyData</artifactId>
-				<version>0.0.3-SNAPSHOT</version>
+				<artifactId>DraggyRPG</artifactId>
+				<version>0.0.21</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
