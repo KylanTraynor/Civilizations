@@ -325,18 +325,22 @@ public class Util {
 		case SAPLING:
 			switch((int) data){
 				case 0: return "OAK_SAPLING";
-				case 1: return "PINE_SAPLING";
+				case 1: return "SPRUCE_SAPLING";
 				case 2: return "BIRCH_SAPLING";
-				case 3: return "JUNGLE_TREE_SAPLING";
+				case 3: return "JUNGLE_SAPLING";
+				case 4: return "ACACIA_SAPLING";
+				case 5: return "DARK_OAK_SAPLING";
 			}
 			return mat.toString();
 		
 		case WOOD:
 			switch((int) data){
 				case 0: return "OAK_PLANKS";
-				case 1: return "PINE_PLANKS";
+				case 1: return "SPRUCE_PLANKS";
 				case 2: return "BIRCH_PLANKS";
 				case 3: return "JUNGLE_PLANKS";
+				case 4: return "ACACIA_PLANKS";
+				case 5: return "DARK_OAK_PLANKS";
 			}
 			break;
 		case LOG:
