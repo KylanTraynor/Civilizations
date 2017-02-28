@@ -396,10 +396,14 @@ public class GroupMenu extends Menu{
 	}
 	
 	public void changePage(MenuPage page) {
-		if(page != pageStack.peek()){
-			pageStack.add(currentPage);
+		if(pageStack.size() > 0){
+			if(page != pageStack.peek()){
+				pageStack.add(currentPage);
+			} else {
+				pageStack.pop();
+			}
 		} else {
-			pageStack.pop();
+			pageStack.add(currentPage);
 		}
 		currentPage = page;
 		update();
