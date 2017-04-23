@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.hook.towny;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
@@ -20,7 +21,7 @@ public class TownyListener implements Listener{
 	@EventHandler
 	public void onNewTown(NewTownEvent event){
 		if(event.getTown() != null){
-			TownyHook.loadTownyTown(event.getTown().getName());
+			HookManager.getTowny().loadTownyTown(event.getTown().getName());
 		}
 	}
 	
