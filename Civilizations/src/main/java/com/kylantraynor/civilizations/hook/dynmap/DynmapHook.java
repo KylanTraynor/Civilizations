@@ -46,7 +46,7 @@ public class DynmapHook {
 	 * @param manager
 	 * @return boolean
 	 */
-	public static boolean load(PluginManager manager) {
+	public boolean load(PluginManager manager) {
 		if((plugin = manager.getPlugin("dynmap")) != null){
 			api = (DynmapAPI)plugin;
 			return true;
@@ -69,7 +69,7 @@ public class DynmapHook {
 	/**
 	 * Activates the Dynmap for Civilizations
 	 */
-	public static void activateDynmap() {
+	public void activateDynmap() {
 		try{
 			markerAPI = api.getMarkerAPI();
 			if (markerAPI == null) {

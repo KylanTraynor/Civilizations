@@ -22,8 +22,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
-import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
-import com.kylantraynor.civilizations.hook.towny.TownyHook;
+import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -159,8 +158,8 @@ public class GroupManager {
 	public static Settlement loadSettlement(String path){
 		Civilizations.log("INFO", "Getting settlement from " + path);
 		if(path.contains("TOWNY: ")){
-			if(TownyHook.isActive()){
-				return TownyHook.loadTownyTown(path.replace("TOWNY: ", ""));
+			if(HookManager.getTowny() != null){
+				return HookManager.getTowny().loadTownyTown(path.replace("TOWNY: ", ""));
 			} else { return null;}
 		} else {
 			File f = new File(path);
@@ -227,8 +226,8 @@ public class GroupManager {
 		for(Group g : CacheManager.getGroupList()){
 			g.update();
 		}
-		if(DraggyRPGHook.isActive()){
-			DraggyRPGHook.updateLevelCenters();
+		if(HookManager.getDraggyRPG() != null){
+			HookManager.getDraggyRPG().updateLevelCenters();
 		}
 		Civilizations.log("INFO", "Files saved!");
 	}

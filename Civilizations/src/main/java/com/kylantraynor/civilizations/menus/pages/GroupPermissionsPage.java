@@ -39,7 +39,7 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public Button getIconButton() {
-		MenuPage page =this;
+		MenuPage page = this;
 		Button permissionsButton = new Button(player, Material.EMERALD_BLOCK, "Permissions for " + group.getType(), null,
 				new BukkitRunnable(){
 					@Override
@@ -53,7 +53,7 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

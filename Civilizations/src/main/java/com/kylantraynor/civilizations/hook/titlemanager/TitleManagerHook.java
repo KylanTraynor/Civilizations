@@ -17,7 +17,7 @@ public class TitleManagerHook {
 	 * @param manager
 	 * @return boolean
 	 */
-	public static boolean load(PluginManager manager) {
+	public boolean load(PluginManager manager) {
 		if((plugin = manager.getPlugin("TitleManager")) != null){
 			return true;
 		}

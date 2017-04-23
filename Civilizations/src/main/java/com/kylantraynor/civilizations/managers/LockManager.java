@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.griefcraft.model.Protection.Type;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.events.PlayerLockpickEvent;
+import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
 import com.kylantraynor.civilizations.protection.LockpickSession;
@@ -69,15 +70,15 @@ public class LockManager {
 	}
 
 	public static boolean isLocked(Block block) {
-		if(LWCHook.isActive()){
-			return LWCHook.hasProtection(block);
+		if(HookManager.getLWC() != null){
+			return HookManager.getLWC().hasProtection(block);
 		}
 		return false;
 	}
 	
 	public static boolean hasAccess(Player player, Block block){
-		if(LWCHook.isActive()){
-			return LWCHook.canAccessProtection(player, block);
+		if(HookManager.getLWC() != null){
+			return HookManager.getLWC().canAccessProtection(player, block);
 		}
 		return false;
 	}
@@ -110,8 +111,8 @@ public class LockManager {
 				return;
 			}
 		}
-		if(TownyHook.isActive()){
-			if(!TownyHook.hasSwitchPerm(player, block)){
+		if(HookManager.getTowny() != null){
+			if(!HookManager.getTowny().hasSwitchPerm(player, block)){
 				player.sendMessage("You can't pick a lock here.");
 				return;
 			}
@@ -120,15 +121,15 @@ public class LockManager {
 			player.sendMessage("You can't pick locks in creative.");
 			return;
 		}
-		if(LWCHook.isActive()){
-			if(LWCHook.getLockType(block) == Type.PASSWORD){
+		if(HookManager.getLWC() != null){
+			if(HookManager.getLWC().getLockType(block) == Type.PASSWORD){
 				player.sendMessage("This type of lock can't be picked.");
 				return;
 			}
-			if(!LWCHook.getLockOwner(block).isOnline()){
-				if(Instant.ofEpochMilli(LWCHook.getLockOwner(block).getLastPlayed())
+			if(!HookManager.getLWC().getLockOwner(block).isOnline()){
+				if(Instant.ofEpochMilli(HookManager.getLWC().getLockOwner(block).getLastPlayed())
 						.isBefore(Instant.now().minus(minutesAfterLogout, ChronoUnit.MINUTES))){
-					if(!Instant.ofEpochMilli(LWCHook.getLockOwner(block).getLastPlayed())
+					if(!Instant.ofEpochMilli(HookManager.getLWC().getLockOwner(block).getLastPlayed())
 							.isBefore(Instant.now().minus(daysSinceLastSeen, ChronoUnit.DAYS))){
 						player.sendMessage("You can only unlock a chest if its owner is online, or past "+ daysSinceLastSeen +" days of absence.");
 						return;
@@ -157,8 +158,8 @@ public class LockManager {
 	public static void unlock(Block block) {
 		if(isLockable(block)){
 			if(isLocked(block)){
-				if(LWCHook.isActive()){
-					LWCHook.unlock(block);
+				if(HookManager.getLWC() != null){
+					HookManager.getLWC().unlock(block);
 				} else {
 					
 				}

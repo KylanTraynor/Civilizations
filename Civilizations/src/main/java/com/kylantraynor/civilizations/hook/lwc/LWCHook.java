@@ -27,7 +27,7 @@ public class LWCHook implements Listener{
 		}
 	}
 	
-	public static boolean canAccessProtection(Player player, Block block){
+	public boolean canAccessProtection(Player player, Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null){
 				return LWC.getInstance().canAccessProtection(player, block);
@@ -39,14 +39,14 @@ public class LWCHook implements Listener{
 		}
 	}
 	
-	public static boolean hasProtection(Block block){
+	public boolean hasProtection(Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null) return true;
 		}
 		return false;
 	}
 	
-	public static Type getLockType(Block block){
+	public Type getLockType(Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null){
 				return LWC.getInstance().findProtection(block).getType();
@@ -55,7 +55,7 @@ public class LWCHook implements Listener{
 		return null;
 	}
 	
-	public static boolean unlock(Block block){
+	public boolean unlock(Block block){
 		if(isActive()){
 			if(LWC.getInstance().findProtection(block) != null){
 				if(LWC.getInstance().findProtection(block).getType() == Type.PRIVATE){
@@ -69,7 +69,7 @@ public class LWCHook implements Listener{
 		return false;
 	}
 	
-	public static OfflinePlayer getLockOwner(Block block){
+	public OfflinePlayer getLockOwner(Block block){
 		if(!hasProtection(block)) return null;
 		String ownerName = LWC.getInstance().findProtection(block).getOwner();
 		try{

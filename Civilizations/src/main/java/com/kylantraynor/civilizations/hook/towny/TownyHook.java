@@ -24,6 +24,7 @@ public class TownyHook {
 	
 	private static Plugin plugin;
 	private static Map<String, UUID> uniqueIds = new HashMap<String, UUID>();
+	private static TownyListener townyListener = new TownyListener();
 
 	/**
 	 * Gets the state of the TitleManager hook. Returns true if the plugin is loaded and enabled, returns false otherwise.
@@ -44,7 +45,7 @@ public class TownyHook {
 	/**
 	 * Loads all Towns data from Towny to Civilizations.
 	 */
-	public static void loadTownyTowns() {
+	public void loadTownyTowns() {
 		if(isActive()){
 			List<com.palmergames.bukkit.towny.object.Town> tl = com.palmergames.bukkit.towny.object.TownyUniverse.getDataSource().getTowns();
 			for(com.palmergames.bukkit.towny.object.Town t : tl){
@@ -95,7 +96,7 @@ public class TownyHook {
 		return false;
 	}
 	
-	public static TownyTown loadTownyTown(String name){
+	public TownyTown loadTownyTown(String name){
 		if(isActive()){
 			for(TownyTown t : CacheManager.getTownyTownList()){
 				if(t.getName().equalsIgnoreCase(name)){
@@ -129,7 +130,7 @@ public class TownyHook {
 		return null;
 	}
 
-	public static boolean hasSwitchPerm(Player player, Block block) {
+	public boolean hasSwitchPerm(Player player, Block block) {
 		if(isActive()){
 			com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
 			if(tb != null){
@@ -145,7 +146,7 @@ public class TownyHook {
 		}
 	}
 
-	public static void bypassPermsFor(Block block) {
+	public void bypassPermsFor(Block block) {
 		if(isActive()){
 			final com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
 			if(tb != null){
@@ -164,5 +165,9 @@ public class TownyHook {
 				}
 			}
 		}
+	}
+
+	public TownyListener getTownyListener() {
+		return townyListener;
 	}
 }

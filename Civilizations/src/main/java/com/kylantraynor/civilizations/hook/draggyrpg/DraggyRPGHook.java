@@ -67,7 +67,7 @@ public class DraggyRPGHook {
 		}
 	}
 
-	public static void loadLevelCenters() {
+	public void loadLevelCenters() {
 		for(Settlement s : CacheManager.getSettlementList()){
 			int number = s.getMembers().size();
 			if(number > 0){
@@ -77,7 +77,7 @@ public class DraggyRPGHook {
 		}
 	}
 	
-	public static void updateLevelCenters(){
+	public void updateLevelCenters(){
 		for(Settlement s : CacheManager.getSettlementList()){
 			if(levelCenters.containsKey(s)){
 				int number = s.getMembers().size();

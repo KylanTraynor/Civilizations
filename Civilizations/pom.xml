@@ -139,7 +139,11 @@
     		<artifactId>webservers</artifactId>
     		<scope>compile</scope>
     	</dependency>
-    	
+
+    	<dependency>
+    		<groupId>com.kylantraynor</groupId>
+    		<artifactId>LivelyWorld</artifactId>
+    	</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -222,6 +226,11 @@
 				<groupId>com.kylantraynor</groupId>
 				<artifactId>DraggyRPG</artifactId>
 				<version>0.0.21</version>
+			</dependency>
+			<dependency>
+				<groupId>com.kylantraynor</groupId>
+				<artifactId>LivelyWorld</artifactId>
+				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

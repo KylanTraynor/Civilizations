@@ -42,6 +42,7 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
@@ -108,7 +109,6 @@ public class Civilizations extends JavaPlugin{
 	private static WebListener webListener = new WebListener();
 	private static ChatListener chatListener = new ChatListener();
 	private static VehiclesListener vehiclesListener = new VehiclesListener();
-	private static TownyListener townyListener = new TownyListener();
 	/*
 	 * InfluenceMaps
 	 */
@@ -185,7 +185,7 @@ public class Civilizations extends JavaPlugin{
 		
 		GroupManager.loadAll();
 		
-		loadHooks(pm);
+		HookManager.loadHooks();
 		
 		GroupManager.ensurePlotsAreLinked();
 		
@@ -261,6 +261,7 @@ public class Civilizations extends JavaPlugin{
 	 * Loads all the hooks allowing the interaction with other plugins.
 	 * @param pm PluginManager
 	 */
+	/*
 	private void loadHooks(PluginManager pm) {
 		if(DynmapHook.load(pm)){ log("INFO", "Hook to Dynmap: OK");
 		} else { log("WARNING", "Hook to Dynmap: NO, " + PLUGIN_NAME + " will not be displayed."); }
@@ -287,7 +288,7 @@ public class Civilizations extends JavaPlugin{
 			DraggyRPGHook.loadLevelCenters();
 		} else {log("INFO", "DraggyRPG: NO");}
 	}
-	
+	*/
 	/**
 	 * Setups all the commands for Civilizations.
 	 */

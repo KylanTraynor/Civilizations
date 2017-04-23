@@ -8,8 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.selection.Selection;
-import com.kylantraynor.civilizations.shapes.Prism;
-import com.kylantraynor.civilizations.shapes.Shape;
 
 public class SelectionManager {
 	static private Map<UUID, Selection> selections;
