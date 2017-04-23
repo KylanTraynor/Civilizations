@@ -785,10 +785,6 @@ public class Civilizations extends JavaPlugin{
 	public static ProtectionListener getProtectionListener() {
 		return protectionListener;
 	}
-	
-	public static TownyListener getTownyListener(){
-		return townyListener;
-	}
 
 	public boolean isDEBUG() {
 		return DEBUG;
