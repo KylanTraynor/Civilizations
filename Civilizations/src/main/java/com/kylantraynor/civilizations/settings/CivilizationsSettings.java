@@ -10,6 +10,7 @@ public class CivilizationsSettings extends YamlConfiguration {
 	private int mergeDistanceSquared = 0;
 	private Instant taxationDate;
 	private boolean hasChanged = true;
+	private String wikiUrl;
 	
 	public UUID getBlueprintId(String name){
 		if(this.contains("UUIDConversions.Blueprints." + name.toUpperCase())){
@@ -64,6 +65,19 @@ public class CivilizationsSettings extends YamlConfiguration {
 	public void setSettlementMergeDistance(int distance){
 		this.set("Settlements.MergeDistance", distance);
 		mergeDistanceSquared = distance * distance;
+		setChanged(true);
+	}
+	
+	public String getWikiUrl(){
+		if(wikiUrl == null){
+			wikiUrl = this.getString("General.WikiRoot", null);
+		}
+		return wikiUrl;
+	}
+	
+	public void setWikiUrl(String url){
+		this.set("General.WikiRoot", url);
+		wikiUrl = url;
 		setChanged(true);
 	}
 	

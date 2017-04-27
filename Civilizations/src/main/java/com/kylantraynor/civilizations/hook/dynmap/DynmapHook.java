@@ -244,7 +244,16 @@ public class DynmapHook {
 			m.setFillStyle(0.1, 0x999999);
 			m.setLineStyle(2 ,1, 0x999999);
 		}
-		m.setDescription("Area: " + s.getProtection().getHull().getArea() + "m²");
+		StringBuilder sb = new StringBuilder();
+		sb.append("<h1>"+s.getName()+"</h1><br />");
+		if(Civilizations.getSettings().getWikiUrl() != null){
+			sb.append("<a href=\"");
+			sb.append(Civilizations.getSettings().getWikiUrl());
+			sb.append(s.getName().replace(" ", "_"));
+			sb.append("\" target=\"_blank\">Wiki</a><br />");
+		}
+		sb.append("Area: " + s.getProtection().getHull().getArea() + "m²");
+		m.setDescription(sb.toString());
 	}
 
 	/**
