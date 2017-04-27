@@ -21,26 +21,37 @@ public class CommandCivilizations implements CommandExecutor{
 					GroupManager.updateAllGroups();
 				}
 				break;
+			case "SET":
+				if(!sender.isOp()) {sender.sendMessage(ChatColor.RED + "You don't have the permission to do this."); return true;}
+				if(args.length <= 2) {sender.sendMessage(ChatColor.RED + "/Civilizations Set <property> <value>"); return true;}
+				switch(args[1].toUpperCase()){
+				case "WIKIROOT":
+					Civilizations.getSettings().setWikiUrl(args[2]);
+					sender.sendMessage(ChatColor.GREEN + "Wiki links have been set to " + Civilizations.getSettings().getWikiUrl() + "[entry name]!");
+					break;
+				default:
+					sender.sendMessage(ChatColor.RED + "Unkown Property. (Try WikiRoot)");
+				}
+				return true;
 			case "BUILDER":
-				if(sender.isOp()){
-					if(args.length > 1){
-						switch(args[1].toUpperCase()){
-						case "CANCELALL":
-							GroupManager.cancelAllBuilds();
-							sender.sendMessage(ChatColor.GREEN + "All build projects have been cancelled.");
-							break;
-						case "SETREPLACEMENT":
-							if(args.length == 4){
-								MaterialAndData.addPasteReplacementFor(args[2], args[3]);
-								sender.sendMessage(ChatColor.GREEN + "Replacement added!");
-							} else {
-								sender.sendMessage(ChatColor.RED + "/civilizations builder setReplacement [material]<:data> [material]<:data>");
-							}
-							break;
+				if(!sender.isOp()) {sender.sendMessage(ChatColor.RED + "You don't have the permission to do this."); return true;}
+				if(args.length > 1){
+					switch(args[1].toUpperCase()){
+					case "CANCELALL":
+						GroupManager.cancelAllBuilds();
+						sender.sendMessage(ChatColor.GREEN + "All build projects have been cancelled.");
+						break;
+					case "SETREPLACEMENT":
+						if(args.length == 4){
+							MaterialAndData.addPasteReplacementFor(args[2], args[3]);
+							sender.sendMessage(ChatColor.GREEN + "Replacement added!");
+						} else {
+							sender.sendMessage(ChatColor.RED + "/civilizations builder setReplacement <material>(:data) <material>(:data)");
 						}
+						break;
 					}
 				}
-				break;
+				return true;
 			case "TOGGLE":
 				if(args.length > 1){
 					switch(args[1].toUpperCase()){
