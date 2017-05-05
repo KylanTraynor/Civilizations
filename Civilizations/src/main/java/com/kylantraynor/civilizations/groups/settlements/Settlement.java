@@ -6,6 +6,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -40,6 +42,7 @@ import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.MutableInteger;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Settlement extends Group implements HasBuilder{
@@ -447,6 +450,24 @@ public class Settlement extends Group implements HasBuilder{
 			}
 		}
 		return space;
+	}
+	
+	public Map<String, Integer> getPlotCounts(){
+		Map<String, MutableInteger> temp = new HashMap<String, MutableInteger>();
+		Map<String, Integer> result = new HashMap<String, Integer>();
+		for(Plot p : getPlots()){
+			String key = p.getType();
+			MutableInteger count = temp.get(key);
+			if(count != null){
+				count.value++;
+			} else {
+				temp.put(key, new MutableInteger(1));
+			}
+		}
+		for(Entry<String, MutableInteger> e : temp.entrySet()){
+			result.put(e.getKey(), e.getValue().value);
+		}
+		return result;
 	}
 	
 	public List<Warehouse> getWarehouses(){

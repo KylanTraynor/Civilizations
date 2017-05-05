@@ -120,7 +120,7 @@ public class House extends Plot implements Rentable{
 	}
 	
 	/**
-	 * Gets the file where this keep is saved.
+	 * Gets the file where this house is saved.
 	 * @return File
 	 */
 	@Override
@@ -169,7 +169,7 @@ public class House extends Plot implements Rentable{
 	@Override
 	public boolean isOwner(OfflinePlayer player) {
 		if(getOwner() != null){
-			return player == getOwner();
+			return player.getUniqueId().equals(getOwner().getUniqueId());
 		} else if(this.hasPermission(PermissionType.MANAGE_PLOTS, null, player.getPlayer())){
 			return true;
 		} else if(player.isOp()){
@@ -195,8 +195,37 @@ public class House extends Plot implements Rentable{
 	}
 	@Override
 	public boolean purchase(OfflinePlayer player) {
+		if(!isForSale()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house is not for sale.");
+			return false;
+		}
 		
-		return false;
+		if(Economy.withdrawPlayer(player, getPrice())){
+			Economy.playPaySound(player.getPlayer());
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've purchased this house for " + Economy.format(getPrice()));
+			double amount = getPrice();
+			
+			if(getSettlement() != null){
+				amount = getSettlement().taxTransaction(TaxType.TRANSACTION, amount);
+			}
+			
+			if(getOwner() == null){
+				Economy.depositSettlement(getSettlement(), amount);
+				getSettlement().sendMessage(getSettlement().getChatColor() + player.getPlayer().getDisplayName() + " just purchased a house for "+ Economy.format(amount) + "!", null);
+			} else {
+				Economy.depositPlayer(getOwner(), amount);
+				if(getOwner().isOnline()){
+					Economy.playCashinSound(getOwner().getPlayer());
+					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + player.getPlayer().getDisplayName() + " purchased this house! You've received " + Economy.format(amount) + "!");
+				}
+			}
+			this.getSettings().setOwner(player);
+			this.setForSale(false);
+			return true;
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You don't have enough money to buy this plot.");
+			return false;
+		}
 	}
 	@Override
 	public OfflinePlayer getRenter() {
@@ -224,14 +253,24 @@ public class House extends Plot implements Rentable{
 	}
 	@Override
 	public boolean rent(OfflinePlayer player) {
-		if(isForRent() && getRenter() == null){
-			this.getSettings().setRenter(player);
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this house.");
-			this.payRent();
-		} else {
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't rent this house.");
+		if(!isForRent()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house isn't for rent.");
+			return false;
 		}
-		return false;
+		if(getRenter() != null){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house is already rented by someone.");
+			return false;
+		}
+		
+		this.getSettings().setRenter(player);
+		if(this.payRent()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this house.");
+			return true;
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't afford to rent this house.");
+			this.getSettings().setRenter(null);
+			return false;
+		}
 	}
 	@Override
 	public Instant getNextRentDate() {

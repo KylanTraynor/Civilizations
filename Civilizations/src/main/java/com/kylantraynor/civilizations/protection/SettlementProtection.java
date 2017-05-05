@@ -36,7 +36,7 @@ public class SettlementProtection extends Protection{
 		if(getHull().exists()){
 			return getHull().isInside(location);
 		}
-		return false;
+		return super.isInside(location);
 	}
 
 	public Hull getHull(){

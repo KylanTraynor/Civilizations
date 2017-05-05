@@ -418,14 +418,24 @@ public class MarketStall extends Plot implements Rentable{
 
 	@Override
 	public boolean rent(OfflinePlayer player) {
-		if(isForRent() && getRenter() == null){
-			this.getSettings().setRenter(player);
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this plot.");
-			this.payRent();
-		} else {
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't rent this plot.");
+		if(!isForRent()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house isn't for rent.");
+			return false;
 		}
-		return false;
+		if(getRenter() != null){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house is already rented by someone.");
+			return false;
+		}
+		
+		this.getSettings().setRenter(player);
+		if(this.payRent()){
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this house.");
+			return true;
+		} else {
+			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't afford to rent this house.");
+			this.getSettings().setRenter(null);
+			return false;
+		}
 	}
 
 	@Override

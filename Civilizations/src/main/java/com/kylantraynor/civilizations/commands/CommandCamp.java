@@ -45,12 +45,15 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else if(!c.isMember(p)){
+					c.getInteractiveInfoPanel(p).send(p);
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're not part of this camp.");
 				} else {
 					if(ChronoUnit.HOURS.between(Instant.now(), c.getSettings().getExpiryDate()) > Camp.campDuration - 1){
+						c.getInteractiveInfoPanel(p).send(p);
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "You can only renew the camp once a day.");
 					} else {
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
+						c.getInteractiveInfoPanel(p).send(p);
 						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for " + Util.durationToString(Instant.now(), c.getExpireOn())+ "!");
 					}
 				}
@@ -63,6 +66,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else if(!c.isMember(p)){
+					c.getInteractiveInfoPanel(p).send(p);
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're not part of this camp.");
 				} else {
 					new ClearQuestion(c, p).ask();
@@ -76,12 +80,14 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else if(c.isMember(p)){
+					c.getInteractiveInfoPanel(p).send(p);
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're already part of this camp.");
 				} else {
 					if(c.hasOneMemberOnline()){
 						p.sendMessage(Camp.messageHeader + ChatColor.BLUE + "You've requested to join this camp. Please wait for an answer.");
 						new JoinQuestion(c, p).ask();
 					} else {
+						c.getInteractiveInfoPanel(p).send(p);
 						p.sendMessage(Camp.messageHeader + ChatColor.RED + "No member of this camp is online to accept your request.");
 					}
 				}
@@ -94,6 +100,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else if(!c.isMember(p)){
+					c.getInteractiveInfoPanel(p).send(p);
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "You're not part of this camp.");
 				} else {
 					new LeaveQuestion(c, p).ask();

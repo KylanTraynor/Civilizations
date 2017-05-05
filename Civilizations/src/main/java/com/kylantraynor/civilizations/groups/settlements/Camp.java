@@ -35,6 +35,7 @@ import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.CampSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -87,7 +88,6 @@ public class Camp extends Settlement{
 	public CampSettings getSettings() {
 		return (CampSettings)super.getSettings();
 	}
-	
 	
 	@Override
 	public boolean isUpgradable(){

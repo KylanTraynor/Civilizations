@@ -61,6 +61,7 @@ public class Group implements EconomicEntity{
 	private ChatColor chatColor;
 	private GroupSettings settings;
 	private Budget budget;
+	private boolean removed;
 	
 	public Group(){
 		list.add(this);
@@ -244,9 +245,13 @@ public class Group implements EconomicEntity{
 		if(f != null){
 			if(f.exists()) f.delete();
 		}
-		CacheManager.groupListChanged = true;
-		availableIds.push(this.getId());
-		return list.remove(this);
+		boolean result = list.remove(this);
+		if(result){
+			CacheManager.groupListChanged = true;
+			availableIds.push(this.getId());
+			removed = result;
+		}
+		return result;
 	}
 	/**
 	 * Gets the File where this Group is saved.
@@ -316,6 +321,7 @@ public class Group implements EconomicEntity{
 	 * Updates the group.
 	 */
 	public void update(){
+		if(removed) return;
 		if(isChanged() || getSettings().hasChanged()){
 			try{save();} catch (Exception e) {e.printStackTrace();};
 		}
