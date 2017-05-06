@@ -563,7 +563,15 @@ public class Hull extends Shape {
 			} else if(i == sorter.size() - 1){
 				j = 0;
 			}
+			
 			VectorXZ p0 = new VectorXZ(location.getBlockX(), location.getBlockZ());
+			Segment s = new Segment(
+					sorter.get(h).getBlockX(), 
+					sorter.get(h).getBlockZ(), 
+					sorter.get(j).getBlockX(), 
+					sorter.get(j).getBlockZ());
+			distanceSquared = s.distanceSquared(p0);
+			/*
 			VectorXZ p1 = new VectorXZ(sorter.get(h).getBlockX(), sorter.get(h).getBlockZ());
 			VectorXZ p2 = new VectorXZ(sorter.get(j).getBlockX(), sorter.get(j).getBlockZ());
 			VectorXZ v = p2.substract(p1);
@@ -587,6 +595,7 @@ public class Hull extends Shape {
 					distanceSquared = Math.min(p0.distanceSquared(p3), distanceSquared);
 				}
 			}
+			*/
 		}
 		/*
 		if(exists()){

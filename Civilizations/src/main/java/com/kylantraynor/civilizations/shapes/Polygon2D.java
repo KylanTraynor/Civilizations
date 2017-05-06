@@ -80,7 +80,6 @@ public class Polygon2D extends Shape {
 
 	@Override
 	public boolean intersect(Shape s) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -94,80 +93,10 @@ public class Polygon2D extends Shape {
 			VectorXZ p0 = new VectorXZ(location.getBlockX(), location.getBlockZ());
 			for(int i = 0 ; i < xVertices.length; i++){
 				int j = (i == xVertices.length - 1 ? 0 : i + 1);
-				
-				VectorXZ p1 = new VectorXZ(xVertices[i], zVertices[i]);
-				VectorXZ p2 = new VectorXZ(xVertices[j], zVertices[j]);
-				VectorXZ v = p2.substract(p1);
-				VectorXZ n = v.getOrthogonal();
-				VectorXZ p3 = VectorXZ.getRayIntersection(p1, v, p0, n);
-				
-				if(p1.getX() < p2.getX()){
-					if(p3.getX() < p1.getX()){
-						distanceSquared = Math.min(p0.distanceSquared(p1), distanceSquared);
-					} else if(p3.getX() > p2.getX()){
-						distanceSquared = Math.min(p0.distanceSquared(p2), distanceSquared);
-					} else {
-						distanceSquared = Math.min(p0.distanceSquared(p3), distanceSquared);
-					}
-				} else {
-					if(p3.getX() > p1.getX()){
-						distanceSquared = Math.min(p0.distanceSquared(p1), distanceSquared);
-					} else if(p3.getX() < p2.getX()){
-						distanceSquared = Math.min(p0.distanceSquared(p2), distanceSquared);
-					} else {
-						distanceSquared = Math.min(p0.distanceSquared(p3), distanceSquared);
-					}
-				}
+				Segment s = new Segment(xVertices[i], zVertices[i], xVertices[j], zVertices[j]);
+				distanceSquared = Math.min(s.distanceSquared(p0), distanceSquared);
 			}
-			/*
-			List<Location> sorter = new ArrayList<Location>();
-			for(Location l : getVertices()){
-				sorter.add(l);
-			}
-			sorter.add(location);
-			sorter.sort(getAngleComp(getLocation()));
-			int i = sorter.indexOf(location);
-			int h = i - 1;
-			int j = i + 1;
-			if(i == 0){
-				h = sorter.size() - 1;
-			} else if(i == sorter.size() - 1){
-				j = 0;
-			}
-			VectorXZ p0 = new VectorXZ(location.getBlockX(), location.getBlockZ());
-			VectorXZ p1 = new VectorXZ(sorter.get(h).getBlockX(), sorter.get(h).getBlockZ());
-			VectorXZ p2 = new VectorXZ(sorter.get(j).getBlockX(), sorter.get(j).getBlockZ());
-			VectorXZ v = p2.substract(p1);
-			VectorXZ n = v.getOrthogonal();
-			VectorXZ p3 = VectorXZ.getRayIntersection(p1, v, p0, n);
-			
-			if(p1.getX() < p2.getX()){
-				if(p3.getX() < p1.getX()){
-					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
-				} else if(p3.getX() > p2.getX()){
-					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
-				} else {
-					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
-				}
-			} else {
-				if(p3.getX() > p1.getX()){
-					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
-				} else if(p3.getX() < p2.getX()){
-					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
-				} else {
-					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
-				}
-			}
-			*/
 		}
-		/*
-		if(exists()){
-			for(Location l : getVertices()){
-				distanceSquared = Math.min(l.distanceSquared(location), distanceSquared);
-			}
-			if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
-		}
-		*/
 		return distanceSquared;
 	}
 
