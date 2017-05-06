@@ -241,6 +241,7 @@ public class Group implements EconomicEntity{
 	 * @return true if the group has been removed, false otherwise.
 	 */
 	public boolean remove() {
+		Civilizations.DEBUG("Trying to remove " + getType() + ".");
 		File f = getFile();
 		if(f != null){
 			if(f.exists()) f.delete();
