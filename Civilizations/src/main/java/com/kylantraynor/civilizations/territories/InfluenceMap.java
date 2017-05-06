@@ -47,7 +47,7 @@ public class InfluenceMap {
 							new VSite(
 									((InfluentSite) s).getX(),
 									((InfluentSite) s).getZ(),
-									((InfluentSite) s).getInfluence().getTotalInfluence()),
+									(float)((InfluentSite) s).getInfluence().getTotalInfluence()),
 									(InfluentSite) s);
 			}
 		VSite[] a = influentSites.keySet().toArray(new VSite[influentSites.size()]);
