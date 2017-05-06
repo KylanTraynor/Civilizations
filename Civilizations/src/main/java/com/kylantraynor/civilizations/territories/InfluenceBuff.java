@@ -1,8 +1,11 @@
 package com.kylantraynor.civilizations.territories;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 public class InfluenceBuff {
 	private InfluenceType type;
-	private int duration = 1; // in days
+	private Instant until = Instant.now().plus(1, ChronoUnit.DAYS); // in days
 	private float buff;
 	private String label;
 	
@@ -11,22 +14,26 @@ public class InfluenceBuff {
 	}
 
 	public InfluenceBuff(InfluenceType t, float b, String l, int i) {
+		this(t,b,l,Instant.now().plus(i, ChronoUnit.DAYS));
+	}
+	
+	public InfluenceBuff(InfluenceType t, float b, String l, Instant i){
 		type = t;
 		buff = b;
 		label = l;
-		duration = i;
+		until = i;
 	}
 
 	public InfluenceType getType() {
 		return type;
 	}
 
-	public int getDuration() {
-		return duration;
+	public Instant getUntil() {
+		return until;
 	}
 
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public void setUntil(Instant until) {
+		this.until = until;
 	}
 
 	public float getBuff() {

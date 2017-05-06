@@ -196,8 +196,7 @@ public class Hull extends Shape {
 		long area = 0;
 		if(getVertices().size() >= 3){
 			for(int i = 0; i < getVertices().size(); i++){
-				int j = i + 1;
-				if(j >= getVertices().size()) j = 0;
+				int j = (i == getVertices().size() - 1 ? 0 : i + 1);
 				area += Util.det(xVertices[i], zVertices[i], xVertices[j], zVertices[j]);
 			}
 		}
@@ -523,6 +522,7 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Shape s) {
+		if(s.getLocation().getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		if(intersect(s)) return 0.0;
 		double distanceSquared = distanceSquared(s.getLocation());
 		if(exists()){
@@ -535,6 +535,7 @@ public class Hull extends Shape {
 	
 	@Override
 	public boolean intersect(Shape s) {
+		if(s.getLocation().getWorld().equals(getLocation().getWorld())) return false;
 		for(Location l : s.getBlockLocations()){
 			if(isInside(l)) return true;
 		}
@@ -543,6 +544,7 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Location location) {
+		if(location.getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		double distanceSquared = getMassCenter().distanceSquared(location);
 		if(exists()){
 			if(isInside(location)) return 0;
@@ -570,19 +572,19 @@ public class Hull extends Shape {
 			
 			if(p1.getX() < p2.getX()){
 				if(p3.getX() < p1.getX()){
-					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p1), distanceSquared);
 				} else if(p3.getX() > p2.getX()){
-					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p2), distanceSquared);
 				} else {
-					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p3), distanceSquared);
 				}
 			} else {
 				if(p3.getX() > p1.getX()){
-					distanceSquared = Math.min(p0.distance(p1), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p1), distanceSquared);
 				} else if(p3.getX() < p2.getX()){
-					distanceSquared = Math.min(p0.distance(p2), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p2), distanceSquared);
 				} else {
-					distanceSquared = Math.min(p0.distance(p3), distanceSquared);
+					distanceSquared = Math.min(p0.distanceSquared(p3), distanceSquared);
 				}
 			}
 		}
