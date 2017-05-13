@@ -20,6 +20,7 @@ public class Polygon2D extends Shape {
 	private double[] multiple;
 	
 	private long area;
+	private boolean selfIntersects;
 	
 	public Polygon2D(Location... locations) {
 		super(get2DCenter(locations));
@@ -38,6 +39,7 @@ public class Polygon2D extends Shape {
 		
 		calcArea();
 		precalcValues();
+		checkSelfIntersect();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -66,6 +68,28 @@ public class Polygon2D extends Shape {
 		}
 	}
 	
+	public List<Segment> getSegments(){
+		List<Segment> segments = new ArrayList<Segment>();
+		for(int i = 0; i < xVertices.length; i ++){
+			int j = (i == xVertices.length - 1 ? 0 : i+1);
+			segments.add(new Segment(xVertices[i], zVertices[i], xVertices[j], zVertices[j]));
+		}
+		return segments;
+	}
+	
+	private void checkSelfIntersect() {
+		List<Segment> segments = getSegments();
+		for(Segment s : segments){
+			for(Segment s2 : segments){
+				if(s == s2) continue;
+				if(s.intersects(s2)){
+					selfIntersects = true;
+					return;
+				}
+			}
+		}
+	}
+	
 	private boolean pointInPolygon(double x, double z) {
 		int   i, j=xVertices.length-1 ;
 		boolean  oddNodes=false;
@@ -80,12 +104,23 @@ public class Polygon2D extends Shape {
 
 	@Override
 	public boolean intersect(Shape s) {
+		if(s instanceof Polygon2D){
+			for(Segment seg : getSegments()){
+				for(Segment seg2 : ((Polygon2D) s).getSegments()){
+					if(seg.intersects(seg2)) return true;
+				}
+			}
+		}
 		return false;
+	}
+	
+	public boolean selfIntersects(){
+		return selfIntersects;
 	}
 
 	@Override
 	public double distanceSquared(Location location) {
-		if(location.getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
+		if(!location.getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		double distanceSquared = getLocation().distanceSquared(location);
 		if(xVertices.length >= 3){
 			if(isInside(location)) return 0;
@@ -102,7 +137,7 @@ public class Polygon2D extends Shape {
 
 	@Override
 	public double distanceSquared(Shape shape) {
-		if(shape.getLocation().getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
+		if(!shape.getLocation().getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		if(intersect(shape)) return 0.0;
 		double distanceSquared = distanceSquared(shape.getLocation());
 		if(xVertices.length >= 3){

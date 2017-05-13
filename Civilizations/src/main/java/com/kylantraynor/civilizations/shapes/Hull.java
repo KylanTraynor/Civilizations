@@ -522,7 +522,7 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Shape s) {
-		if(s.getLocation().getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
+		if(!s.getLocation().getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		if(intersect(s)) return 0.0;
 		double distanceSquared = distanceSquared(s.getLocation());
 		if(exists()){
@@ -535,7 +535,7 @@ public class Hull extends Shape {
 	
 	@Override
 	public boolean intersect(Shape s) {
-		if(s.getLocation().getWorld().equals(getLocation().getWorld())) return false;
+		if(!s.getLocation().getWorld().equals(getLocation().getWorld())) return false;
 		for(Location l : s.getBlockLocations()){
 			if(isInside(l)) return true;
 		}
@@ -544,7 +544,7 @@ public class Hull extends Shape {
 
 	@Override
 	public double distanceSquared(Location location) {
-		if(location.getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
+		if(!location.getWorld().equals(getLocation().getWorld())) return Double.POSITIVE_INFINITY;
 		double distanceSquared = getMassCenter().distanceSquared(location);
 		if(exists()){
 			if(isInside(location)) return 0;
