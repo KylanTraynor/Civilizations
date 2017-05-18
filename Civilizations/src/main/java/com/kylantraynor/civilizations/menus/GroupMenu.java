@@ -40,7 +40,7 @@ public class GroupMenu extends Menu{
 	private Inventory bottom;
 	private Player player;
 	private int linesTop = 1; // Navigation Bar
-	private int linesBottom = 4; // Menus
+	private int linesBottom = 6; // Menus
 	
 	private Stack<MenuPage> pageStack = new Stack<MenuPage>();
 	

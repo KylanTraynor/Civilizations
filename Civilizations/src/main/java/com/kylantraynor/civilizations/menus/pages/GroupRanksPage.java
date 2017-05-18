@@ -35,7 +35,7 @@ public class GroupRanksPage implements MenuPage{
 
 	@Override
 	public int getRows() {
-		return 4;
+		return (int) (Math.ceil(group.getProtection().getRanks().size() / 9.0) + 1);
 	}
 
 	@Override
