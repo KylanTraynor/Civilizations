@@ -24,6 +24,9 @@ public class MenuListener implements Listener{
 			event.setCancelled(true);
 			ButtonManager.run(btn);
 		}
+		if (MenuManager.getMenus().containsKey(event.getWhoClicked())){
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler

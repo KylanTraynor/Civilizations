@@ -836,4 +836,16 @@ public class Civilizations extends JavaPlugin{
 			f.mkdir();
 		return f;
 	}
+	
+	public static Material getSelectionToolMaterial(){
+		return Material.STICK;
+	}
+	
+	public static String getSelectionToolName(){
+		return ChatColor.GOLD + "Urbanist Tool";
+	}
+	
+	public static String[] getSelectionToolLore(){
+		return new String[]{"Use this tool to select an area."};
+	}
 }

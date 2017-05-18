@@ -24,6 +24,7 @@ public class GroupMainPage implements MenuPage {
 	private Group group;
 	
 	private MenuPage managePage;
+	private MenuPage ranksPage;
 	
 	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 
@@ -31,11 +32,12 @@ public class GroupMainPage implements MenuPage {
 		this.player = player;
 		this.group = group;
 		managePage = new GroupManagePage(player, group);
+		ranksPage = new GroupRanksPage(player, group);
 	}
 	
 	@Override
 	public int getRows() {
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -46,6 +48,7 @@ public class GroupMainPage implements MenuPage {
 			return;
 		}
 		buttons.put(gMenu.pos(4, 1), managePage.getIconButton());
+		buttons.put(gMenu.pos(4, 2), ranksPage.getIconButton());
 	}
 
 	@Override
