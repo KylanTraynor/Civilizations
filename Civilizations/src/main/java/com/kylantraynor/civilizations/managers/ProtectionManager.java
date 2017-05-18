@@ -44,7 +44,7 @@ public class ProtectionManager {
 	public static boolean hasPermission(Protection protection, PermissionType type, OfflinePlayer player, boolean displayResult){
 		Protection currentProtection = protection;
 		Boolean result = null;
-		while(currentProtection != null && result == null){
+		while(currentProtection != null && result == null && player != null){
 			// First, check if the player is op
 			if(player.isOp()) return true;
 			// If not, check if the protection has a specific permission set for the player
@@ -60,8 +60,8 @@ public class ProtectionManager {
 					result = currentProtection.getPermission(type, r);
 					break;
 				} else {
-					while(r.getParent() != null){
-						Rank rParent = currentProtection.getRank(r.getParent());
+					while(r.getParentId() != null){
+						Rank rParent = currentProtection.getRank(r.getParentId());
 						if(currentProtection.getPermissionSet().isSet(type, rParent)){
 							result = currentProtection.getPermission(type, rParent);
 							break;
@@ -105,9 +105,26 @@ public class ProtectionManager {
 			}
 		}
 		
+		if(player == null){
+			while(currentProtection != null){
+				PermissionTarget o = new PermissionTarget(TargetType.SERVER);
+				if(currentProtection.getPermissionSet().isSet(type, o)){
+					result = currentProtection.getPermission(type, o);
+				}
+				// If not, just return false.
+				if(currentProtection.getParent() != null){
+					currentProtection = currentProtection.getParent();
+				} else {
+					currentProtection = null;
+				}
+			}
+		}
+		
 		if(result == false && displayResult){
-			if(player.isOnline()){
-				player.getPlayer().sendMessage(ChatColor.RED + "You don't have " + ChatColor.GOLD + (type.getDescription()) + ChatColor.RED + " in " + ChatColor.GOLD + currentProtection.getGroup().getName());
+			if(player != null){
+				if(player.isOnline()){
+					player.getPlayer().sendMessage(ChatColor.RED + "You don't have " + ChatColor.GOLD + (type.getDescription()) + ChatColor.RED + " in " + ChatColor.GOLD + currentProtection.getGroup().getName());
+				}
 			}
 		}
 		return result;

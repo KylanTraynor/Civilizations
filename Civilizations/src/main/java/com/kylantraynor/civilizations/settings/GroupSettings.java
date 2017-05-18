@@ -272,7 +272,8 @@ public class GroupSettings extends YamlConfiguration{
 				for(UUID id : r.getUniqueIds()){
 					idList.add(id.toString());
 				}
-				this.set("Protection.Ranks." + r.getName() + ".Parent", r.getParent());
+				this.set("Protection.Ranks." + r.getName() + ".ID", r.getUniqueId().toString());
+				this.set("Protection.Ranks." + r.getName() + ".Parent", r.getParentId().toString());
 				this.set("Protection.Ranks." + r.getName() + ".Level", r.getLevel());
 				this.set("Protection.Ranks." + r.getName() + ".Members", idList);
 			}
@@ -285,7 +286,12 @@ public class GroupSettings extends YamlConfiguration{
 		if(this.contains("Protection.Ranks")){
 			ConfigurationSection cs = this.getConfigurationSection("Protection.Ranks");
 			for(String s : cs.getKeys(false)){
-				Rank r = new Rank(s, cs.getString(s + ".Parent"));
+				Rank r;
+				try{
+					r = new Rank(UUID.fromString(cs.getString(s + ".ID")), s, UUID.fromString(cs.getString(s + ".Parent")));
+				}catch (Exception e){
+					r = new Rank(UUID.randomUUID(), s, null);
+				}
 				r.setLevel(cs.getInt(s + ".Level"));
 				for(Object o : cs.getList(s + ".Members")){
 					if(o instanceof String){
@@ -309,5 +315,9 @@ public class GroupSettings extends YamlConfiguration{
 				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypesAsString());
 			}
 		}
+	}
+	
+	public PermissionSet getPermissionSet(){
+		
 	}
 }

@@ -6,6 +6,7 @@ public enum PermissionType {
 	BLUEPRINT_NOTIFICATIONS("Permission to receive notifications about build projects."),
 	CLAIM                  ("Permission to claim areas."),
 	DEGRADATION            ("Permission to cause degradations."),
+	ERODE                  ("Permission to cause erosion."),
 	EXPLOSION              ("Permission to cause explosions."),
 	FIRE                   ("Permission to start fires."),
 	FIRESPREAD             ("Permission for fire to spread."),

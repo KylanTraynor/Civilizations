@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.protection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -158,7 +159,7 @@ public class Protection {
 	}
 	
 	public boolean addRank(Rank rank){
-		if(getRank(rank.getName()) != null){
+		if(getRank(rank.getUniqueId()) != null){
 			return false;
 		} else {
 			setPermissions(rank, new Permissions(new HashMap<PermissionType, Boolean>()));
@@ -166,10 +167,21 @@ public class Protection {
 		}
 	}
 	
-	public Rank getRank(String name){
+	public Rank getRank(UUID uuid){
 		for(PermissionTarget r : permissionSet.getTargets()){
 			if(r instanceof Rank){
-				if(((Rank)r).getName().equalsIgnoreCase(name)){
+				if(((Rank)r).getUniqueId() == (uuid)){
+					return (Rank) r;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Rank getRank(String string) {
+		for(PermissionTarget r : permissionSet.getTargets()){
+			if(r instanceof Rank){
+				if(((Rank)r).getName().equalsIgnoreCase(string)){
 					return (Rank) r;
 				}
 			}
@@ -216,8 +228,8 @@ public class Protection {
 			if(permissionSet.isSet(type, r)){
 				return getPermission(type, r);
 			} else {
-				while(r.getParent() != null){
-					Rank rParent = getRank(r.getParent());
+				while(r.getParentId() != null){
+					Rank rParent = getRank(r.getParentId());
 					if(permissionSet.isSet(type, rParent)){
 						return getPermission(type, rParent);
 					} else {

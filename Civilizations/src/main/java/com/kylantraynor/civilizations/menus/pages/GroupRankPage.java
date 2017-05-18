@@ -45,8 +45,8 @@ public class GroupRankPage implements MenuPage{
 		List<String> lore = new ArrayList<String>();
 		String parentName = "None";
 		int count = rank.getPlayers().size();
-		if(rank.getParent() != null){
-			parentName = rank.getParent();
+		if(rank.getParentId() != null){
+			parentName = group.getProtection().getRank(rank.getParentId()).getName();
 		}
 		lore.add("Parent: " + parentName);
 		lore.add("Members: ");
