@@ -16,13 +16,13 @@ public class Rank extends PermissionTarget{
 	
 	public Rank(UUID id, String name, UUID parent){
 		this(name, parent);
-		this.id = id;
+		this.id = id != null ? id : UUID.randomUUID();
 	}
 	
 	public Rank(String name, UUID parent){
 		super(TargetType.RANK);
 		this.name = name;
-		this.parent = parent;
+		this.parent = parent != null ? parent : UUID.randomUUID();
 	}
 	
 	public Rank(String name, Rank parent){
