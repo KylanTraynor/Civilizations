@@ -316,8 +316,4 @@ public class GroupSettings extends YamlConfiguration{
 			}
 		}
 	}
-	
-	public PermissionSet getPermissionSet(){
-		
-	}
 }
