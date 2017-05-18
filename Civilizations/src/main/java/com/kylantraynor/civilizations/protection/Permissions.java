@@ -25,14 +25,7 @@ public class Permissions {
 			getTypes().remove(type);
 			return true;
 		}
-		if(getTypes().containsKey(type)){
-			if(getTypes().get(type) != bool){
-				getTypes().remove(type);
-				getTypes().put(type, bool);
-			}
-		} else {
-			getTypes().put(type, bool);
-		}
+		getTypes().put(type, bool);
 		return true;
 	}
 	
@@ -147,5 +140,9 @@ public class Permissions {
 			output.put(e.getKey().toString(), e.getValue());
 		}
 		return output;
+	}
+
+	public void remove(PermissionType type) {
+		types.remove(type);
 	}
 }

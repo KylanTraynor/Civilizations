@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.menus.pages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +23,15 @@ public class GroupRankPage implements MenuPage{
 	private Player player;
 	private Group group;
 	private Rank rank;
+	private GroupPermissionsPage permsPage;
+	
+	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 	
 	public GroupRankPage(Player player, Group group, Rank r) {
 		this.player = player;
 		this.group = group;
 		this.rank = r;
+		permsPage = new GroupPermissionsPage(player, group, r);
 	}
 
 	@Override
@@ -36,8 +41,7 @@ public class GroupRankPage implements MenuPage{
 
 	@Override
 	public void refresh(Menu menu) {
-		// TODO Auto-generated method stub
-		
+		buttons.put(4 + 9, permsPage.getIconButton());
 	}
 
 	@Override

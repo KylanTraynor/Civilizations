@@ -1,7 +1,11 @@
 package com.kylantraynor.civilizations.menus.pages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,38 +13,80 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
+import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Permissions;
 
 public class GroupPermissionsPage implements MenuPage {
 	
 	private Player player;
 	private Group group;
+	private PermissionTarget target;
 	
 	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 	
-	public GroupPermissionsPage(Player player, Group group){
+	public GroupPermissionsPage(Player player, Group group, PermissionTarget target){
 		this.player = player;
 		this.group = group;
+		this.target = target;
 	}
 	
 	@Override
 	public int getRows() {
-		return 2;
+		return 4;
 	}
 
 	@Override
 	public void refresh(Menu menu) {
-		// TODO Auto-generated method stub
+		int i = 0;
+		for(PermissionType pt : PermissionType.values()){
+			buttons.put(i++, getPermissionButton(pt));
+		}
+	}
+
+	private Button getPermissionButton(PermissionType pt) {
 		
+		boolean isSet = false;
+		boolean value = false;
+		
+		List<String> lore = new ArrayList<String>();
+		
+		lore.add(pt.getDescription());
+		
+		Permissions perms = group.getProtection().getPermissionSet().get(target);
+		isSet = perms != null;
+		if(isSet){
+			isSet = perms.contains(pt);
+			if(isSet){
+				value = perms.get(pt);
+			}
+		}
+		
+		Material mat;
+		mat = isSet ? (value ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK) : Material.IRON_BLOCK;
+		
+		final boolean set = isSet;
+		final boolean val = value;
+		Button permissionButton = new Button(player,mat, pt.toString(), lore, 
+			new BukkitRunnable(){
+				@Override
+				public void run() {
+					ProtectionManager.setPermission(group.getProtection(), target, pt, (set ? (val ? false : null) : true));
+					((GroupMenu)MenuManager.getMenus().get(player)).update();
+				}
+			}
+		,true);
+		return permissionButton;
 	}
 
 	@Override
 	public Button getIconButton() {
 		MenuPage page = this;
-		Button permissionsButton = new Button(player, Material.EMERALD_BLOCK, "Permissions for " + group.getType(), null,
+		Button permissionsButton = new Button(player, Material.PAPER, target.getName() + " permissions for " + group.getName(), null,
 				new BukkitRunnable(){
 					@Override
 					public void run() {
@@ -54,7 +100,7 @@ public class GroupPermissionsPage implements MenuPage {
 	@Override
 	public String getTitle() {
 		
-		return null;
+		return "" + ChatColor.BOLD + ChatColor.GOLD + target.getName() + " Permissions";
 	}
 
 	@Override

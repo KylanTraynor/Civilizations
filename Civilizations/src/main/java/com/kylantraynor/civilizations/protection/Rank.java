@@ -84,7 +84,7 @@ public class Rank extends PermissionTarget{
 	@Override
 	public boolean equals(Object pt){
 		if(!(pt instanceof Rank)) return false;
-		if(((Rank) pt).getName().equals(this.getName())){
+		if(((Rank) pt).getUniqueId().equals(this.getUniqueId())){
 			return true;
 		}
 		return false;

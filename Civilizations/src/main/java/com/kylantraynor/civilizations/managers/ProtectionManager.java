@@ -1,14 +1,19 @@
 package com.kylantraynor.civilizations.managers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.PlayerTarget;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.Rank;
@@ -38,6 +43,19 @@ public class ProtectionManager {
 			return hasPermission(p, type, player, displayResult);
 		} else {
 			return true;
+		}
+	}
+	
+	public static void setPermission(Protection protection, PermissionTarget target, PermissionType type, Boolean value){
+		Permissions perms = protection.getPermissions(target);
+		if(perms != null){
+			perms.set(type, value);
+			protection.getGroup().getSettings().setChanged(true);
+		} else if(value != null) {
+			Map<PermissionType, Boolean> perm = new HashMap<PermissionType, Boolean>();
+			perm.put(type, value);
+			protection.setPermissions(target, new Permissions(perm));
+			protection.getGroup().getSettings().setChanged(true);
 		}
 	}
 	

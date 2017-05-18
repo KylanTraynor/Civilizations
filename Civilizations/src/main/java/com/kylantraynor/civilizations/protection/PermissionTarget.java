@@ -25,4 +25,8 @@ public class PermissionTarget {
 		int base = 11;
 		return base * type.hashCode();
 	}
+
+	public String getName() {
+		return type.toString();
+	}
 }
