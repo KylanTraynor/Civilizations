@@ -22,7 +22,7 @@ public class Rank extends PermissionTarget{
 	public Rank(String name, UUID parent){
 		super(TargetType.RANK);
 		this.name = name;
-		this.parent = parent != null ? parent : UUID.randomUUID();
+		this.parent = parent;
 	}
 	
 	public Rank(String name, Rank parent){

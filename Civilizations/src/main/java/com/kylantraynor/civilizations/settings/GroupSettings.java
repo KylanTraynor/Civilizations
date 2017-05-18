@@ -273,7 +273,20 @@ public class GroupSettings extends YamlConfiguration{
 					idList.add(id.toString());
 				}
 				this.set("Protection.Ranks." + r.getName() + ".ID", r.getUniqueId().toString());
-				this.set("Protection.Ranks." + r.getName() + ".Parent", r.getParentId().toString());
+				if(r.getParentId() != null) {
+					boolean real = false;
+					for(Rank r1 : ranks){
+						if(r1.getUniqueId() == r.getParentId()){
+							real = true;
+							break;
+						}
+					}
+					if(real){
+						this.set("Protection.Ranks." + r.getName() + ".Parent", r.getParentId().toString());
+					} else {
+						this.set("Protection.Ranks." + r.getName() + ".Parent", null);
+					}
+				}
 				this.set("Protection.Ranks." + r.getName() + ".Level", r.getLevel());
 				this.set("Protection.Ranks." + r.getName() + ".Members", idList);
 			}
