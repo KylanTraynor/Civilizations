@@ -55,7 +55,12 @@ public class GroupRanksPage implements MenuPage{
 		}
 		int i = gMenu.pos(0, 1);
 		for(Rank r : group.getProtection().getRanks()){
-			buttons.put(i, rankPages.get(r).getIconButton());
+			MenuPage rp = rankPages.get(r);
+			if(rp == null){
+				rp = new GroupRankPage(player, group, r);
+				rankPages.put(r, rp);
+			}
+			buttons.put(i, rp.getIconButton());
 			i++;
 		}
 	}
