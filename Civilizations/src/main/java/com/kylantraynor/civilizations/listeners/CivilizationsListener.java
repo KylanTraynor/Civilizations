@@ -2,6 +2,9 @@ package com.kylantraynor.civilizations.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -13,8 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Protection;
 
 public class CivilizationsListener implements Listener{
 	
@@ -84,6 +89,23 @@ public class CivilizationsListener implements Listener{
 				SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
 				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
 				event.setCancelled(true);
+			}
+		} else {
+			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+				Block b = event.getClickedBlock();
+				if(b.getType() == Material.SIGN || b.getType() == Material.SIGN_POST){
+					BlockState state = b.getState();
+					Sign sign = (Sign) state;
+					if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
+						event.setCancelled(true);
+						Protection p = ProtectionManager.getProtectionAt(sign.getLocation());
+						if(p == null){
+							event.getPlayer().sendMessage(ChatColor.RED + "There is no protected area here.");
+							return;
+						}
+						p.getGroup().openMenu(event.getPlayer());
+					}
+				}
 			}
 		}
 	}
