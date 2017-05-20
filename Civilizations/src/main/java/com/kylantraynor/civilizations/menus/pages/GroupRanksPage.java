@@ -57,7 +57,7 @@ public class GroupRanksPage implements MenuPage{
 			if(ranks.contains(r)) continue;
 			ranks.add(r);
 		}
-		int i = gMenu.pos(0, 1);
+		int i = gMenu.pos(0, 0);
 		for(Rank r : ranks){
 			MenuPage rp = rankPages.get(r);
 			if(rp == null){

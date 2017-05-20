@@ -42,7 +42,7 @@ public class GroupManagePage implements MenuPage {
 
 	@Override
 	public void refresh(Menu menu) {
-		buttons.put(4 + 9, outsiderPermissions.getIconButton());
+		buttons.put(4, outsiderPermissions.getIconButton());
 	}
 
 	@Override

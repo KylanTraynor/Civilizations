@@ -43,7 +43,7 @@ public class GroupRankPage implements MenuPage{
 
 	@Override
 	public void refresh(Menu menu) {
-		buttons.put(4 + 9, permsPage.getIconButton());
+		buttons.put(4, permsPage.getIconButton());
 	}
 
 	@Override

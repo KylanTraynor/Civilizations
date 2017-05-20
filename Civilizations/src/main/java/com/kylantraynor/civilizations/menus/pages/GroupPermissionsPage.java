@@ -43,7 +43,7 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public void refresh(Menu menu) {
-		int i = 9;
+		int i = 0;
 		for(PermissionType pt : PermissionType.values()){
 			buttons.put(i++, getPermissionButton(pt));
 		}

@@ -91,9 +91,11 @@ public class GroupMenu extends Menu{
 		this.top.clear();
 		currentPage.refresh(this);
 		for(Entry<Integer, Button> e : currentPage.getButtons().entrySet()){
-			this.top.setItem(e.getKey() + 9, e.getValue());
+			this.top.setItem(e.getKey() + 18, e.getValue());
 		}
-		
+		for(int i = 9 ; i < 18; i++){
+			this.top.setItem(i, new ItemStack(Material.THIN_GLASS));
+		}
 		// add back button
 		if(pageStack.size() > 0){
 			this.top.setItem(pos(0,0), pageStack.peek().getIconButton());

@@ -47,8 +47,8 @@ public class GroupMainPage implements MenuPage {
 		if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
 			return;
 		}
-		buttons.put(gMenu.pos(4, 1), managePage.getIconButton());
-		buttons.put(gMenu.pos(4, 2), ranksPage.getIconButton());
+		buttons.put(gMenu.pos(4, 0), managePage.getIconButton());
+		buttons.put(gMenu.pos(4, 1), ranksPage.getIconButton());
 	}
 
 	@Override
