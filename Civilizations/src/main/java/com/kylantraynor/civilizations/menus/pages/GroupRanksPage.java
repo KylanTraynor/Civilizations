@@ -53,8 +53,12 @@ public class GroupRanksPage implements MenuPage{
 		/*if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
 			return;
 		}*/
-		int i = gMenu.pos(0, 1);
 		for(Rank r : group.getProtection().getRanks()){
+			if(ranks.contains(r)) continue;
+			ranks.add(r);
+		}
+		int i = gMenu.pos(0, 1);
+		for(Rank r : ranks){
 			MenuPage rp = rankPages.get(r);
 			if(rp == null){
 				rp = new GroupRankPage(player, group, r);
@@ -68,9 +72,9 @@ public class GroupRanksPage implements MenuPage{
 	@Override
 	public Button getIconButton() {
 		List<String> lore = new ArrayList<String>();
-		lore.add("Ranks: ");
+		lore.add(ChatColor.WHITE + "Ranks: ");
 		for(Rank r : ranks){
-			lore.add("    " + r.getName());
+			lore.add(ChatColor.GOLD + "    " + r.getName());
 		}
 		MenuPage page = this;
 		Button ranksButton = new Button(player, Material.EMERALD_BLOCK, "Manage " + group.getType() + " ranks", lore,
@@ -98,7 +102,7 @@ public class GroupRanksPage implements MenuPage{
 		return (a, b) -> { // Rank from lowest to highest
 			if(a.getLevel() < b.getLevel()) return -1;
 			if(a.getLevel() > b.getLevel()) return 1;
-			return 0;
+			return a.getName().compareTo(b.getName());
 		};
 	}
 

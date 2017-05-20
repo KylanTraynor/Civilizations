@@ -20,6 +20,7 @@ import com.kylantraynor.civilizations.menus.Menu;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Permissions;
+import com.kylantraynor.civilizations.util.Util;
 
 public class GroupPermissionsPage implements MenuPage {
 	
@@ -76,7 +77,7 @@ public class GroupPermissionsPage implements MenuPage {
 		
 		final boolean set = isSet;
 		final boolean val = value;
-		Button permissionButton = new Button(player,mat, pt.toString(), lore, 
+		Button permissionButton = new Button(player,mat, ChatColor.GRAY + Util.prettifyText(pt.toString()), lore, 
 			new BukkitRunnable(){
 				@Override
 				public void run() {

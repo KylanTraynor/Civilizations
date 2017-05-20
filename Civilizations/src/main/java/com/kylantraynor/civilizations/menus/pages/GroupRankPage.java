@@ -54,10 +54,10 @@ public class GroupRankPage implements MenuPage{
 		if(rank.getParentId() != null){
 			parentName = group.getProtection().getRank(rank.getParentId()).getName();
 		}
-		lore.add("Parent: " + parentName);
-		lore.add("Members: ");
+		lore.add(ChatColor.WHITE + "Parent: " + ChatColor.GOLD + parentName);
+		lore.add(ChatColor.WHITE + "Members: ");
 		for(OfflinePlayer p : rank.getPlayers()){
-			lore.add("    " + p.getName());
+			lore.add(ChatColor.GOLD + "    " + p.getName());
 		}
 		MenuPage page = this;
 		Button rankButton = new Button(player, Material.GOLD_BLOCK, rank.getName(), lore,
