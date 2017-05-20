@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -25,9 +24,14 @@ public class MenuListener implements Listener{
 			Civilizations.DEBUG("Clicked on button \"" + btn.getName() + "\" by player " + event.getWhoClicked().getName() + ".");
 			event.setCancelled(true);
 			ButtonManager.run(btn);
-		}
-		if (MenuManager.getMenus().containsKey(event.getWhoClicked())){
-			Civilizations.DEBUG("Couldn't find a button for \"" + event.getCurrentItem().getItemMeta().getDisplayName() + "\" by player " + event.getWhoClicked().getName() + ".");
+		} else if (MenuManager.getMenus().containsKey(event.getWhoClicked())){
+			if(event.getCurrentItem() != null){
+				String name = event.getCurrentItem().getType().toString();
+				if(event.getCurrentItem().getItemMeta() != null){
+					name = event.getCurrentItem().getItemMeta().getDisplayName();
+				}
+				Civilizations.DEBUG("Couldn't find a button for \"" + name + "\" by player " + event.getWhoClicked().getName() + ".");
+			}
 			event.setCancelled(true);
 		}
 	}
