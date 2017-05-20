@@ -89,7 +89,6 @@ public class GroupPermissionsPage implements MenuPage {
 					} else {
 						ProtectionManager.setPermission(group.getProtection(), target, pt, true);
 					}
-					ProtectionManager.unsetPermission(group.getProtection(), target, pt);
 					((GroupMenu)MenuManager.getMenus().get(player)).update();
 				}
 			}
