@@ -117,7 +117,7 @@ public class Permissions {
 		return types.containsKey(type) ?
 				(types.get(type) == null ?
 						false :
-						types.get(type)) :
+						types.containsKey(type)) :
 				false;
 	}
 
