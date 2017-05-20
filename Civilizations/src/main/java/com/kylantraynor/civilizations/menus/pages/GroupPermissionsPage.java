@@ -56,7 +56,7 @@ public class GroupPermissionsPage implements MenuPage {
 		
 		List<String> lore = new ArrayList<String>();
 		
-		lore.add(pt.getDescription());
+		lore.add(ChatColor.GRAY + pt.getDescription());
 		
 		Permissions perms = group.getProtection().getPermissionSet().get(target);
 		isSet = perms != null;
@@ -70,14 +70,14 @@ public class GroupPermissionsPage implements MenuPage {
 		Material mat;
 		mat = isSet ? (value ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK) : Material.IRON_BLOCK;
 		if(isSet){
-			lore.add("Value: " + value);
+			lore.add(ChatColor.WHITE + "Value: " + ChatColor.GOLD + value);
 		} else {
-			lore.add("Unset (Will inherit parent's value)");
+			lore.add(ChatColor.WHITE + "Unset + "+ ChatColor.GRAY +" (Will inherit parent's value)");
 		}
 		
 		final boolean set = isSet;
 		final boolean val = value;
-		Button permissionButton = new Button(player,mat, ChatColor.GRAY + Util.prettifyText(pt.toString()), lore, 
+		Button permissionButton = new Button(player,mat, ChatColor.WHITE + Util.prettifyText(pt.toString()), lore, 
 			new BukkitRunnable(){
 				@Override
 				public void run() {
@@ -100,7 +100,7 @@ public class GroupPermissionsPage implements MenuPage {
 	@Override
 	public Button getIconButton() {
 		MenuPage page = this;
-		Button permissionsButton = new Button(player, Material.PAPER, target.getName() + " permissions for " + group.getName(), null,
+		Button permissionsButton = new Button(player, Material.PAPER, ChatColor.WHITE + target.getName() + " permissions for " + group.getName(), null,
 				new BukkitRunnable(){
 					@Override
 					public void run() {

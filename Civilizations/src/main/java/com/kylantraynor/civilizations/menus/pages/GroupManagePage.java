@@ -15,18 +15,24 @@ import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
 import com.kylantraynor.civilizations.menus.GroupMenu.Page;
+import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.TargetType;
 
 public class GroupManagePage implements MenuPage {
 
 	private Player player;
 	private Group group;
 	
+	private MenuPage outsiderPermissions;
+	
 	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 
 	public GroupManagePage(Player player, Group group){
 		this.player = player;
 		this.group = group;
+		
+		outsiderPermissions = new GroupPermissionsPage(player, group, new PermissionTarget(TargetType.OUTSIDERS));
 	}
 	
 	@Override
@@ -36,8 +42,7 @@ public class GroupManagePage implements MenuPage {
 
 	@Override
 	public void refresh(Menu menu) {
-		// TODO Auto-generated method stub
-
+		buttons.put(4 + 9, outsiderPermissions.getIconButton());
 	}
 
 	@Override

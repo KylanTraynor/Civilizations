@@ -39,7 +39,7 @@ public class GroupMenu extends Menu{
 	private Inventory top;
 	private Inventory bottom;
 	private Player player;
-	private int linesTop = 1; // Navigation Bar
+	private int linesTop = 6; // Navigation Bar
 	private int linesBottom = 6; // Menus
 	
 	private Stack<MenuPage> pageStack = new Stack<MenuPage>();
@@ -61,10 +61,10 @@ public class GroupMenu extends Menu{
 	 */
 	private void initInventories() {
 		this.top = Bukkit.createInventory(null, 9 * linesTop, ChatColor.BOLD + this.group.getName());
-		this.bottom = Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
+		//this.bottom = player.getInventory();//Bukkit.createInventory(null, 9 * linesBottom, this.group.getName());
 		
 		this.top.setMaxStackSize(1);
-		this.bottom.setMaxStackSize(1);
+		//this.bottom.setMaxStackSize(1);
 	}
 	/**
 	 * Gets the index of a slot depending on its column and line.
@@ -87,11 +87,11 @@ public class GroupMenu extends Menu{
 	@Override
 	public void update(){
 		ButtonManager.clearButtons(player);
-		this.bottom.clear();
+		//this.bottom.clear();
 		this.top.clear();
 		currentPage.refresh(this);
 		for(Entry<Integer, Button> e : currentPage.getButtons().entrySet()){
-			this.bottom.setItem(e.getKey(), e.getValue());
+			this.top.setItem(e.getKey() + 9, e.getValue());
 		}
 		
 		// add back button
@@ -357,7 +357,7 @@ public class GroupMenu extends Menu{
 
 	@Override
 	public Inventory getBottomInventory() {
-		return this.bottom;
+		return this.player.getInventory();
 	}
 
 	@Override
