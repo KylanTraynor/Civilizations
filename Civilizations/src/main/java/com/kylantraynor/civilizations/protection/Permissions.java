@@ -114,7 +114,11 @@ public class Permissions {
 	}
 
 	public boolean contains(PermissionType type) {
-		return types.containsKey(type);
+		return types.containsKey(type) ?
+				(types.get(type) == null ?
+						false :
+						types.get(type)) :
+				false;
 	}
 
 	public boolean get(PermissionType type) {

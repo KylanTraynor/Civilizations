@@ -42,7 +42,7 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public void refresh(Menu menu) {
-		int i = 0;
+		int i = 9;
 		for(PermissionType pt : PermissionType.values()){
 			buttons.put(i++, getPermissionButton(pt));
 		}
@@ -68,6 +68,11 @@ public class GroupPermissionsPage implements MenuPage {
 		
 		Material mat;
 		mat = isSet ? (value ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK) : Material.IRON_BLOCK;
+		if(isSet){
+			lore.add("Value: " + value);
+		} else {
+			lore.add("Unset (Will inherit parent's value)");
+		}
 		
 		final boolean set = isSet;
 		final boolean val = value;
