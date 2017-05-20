@@ -74,13 +74,22 @@ public class GroupPermissionsPage implements MenuPage {
 			lore.add("Unset (Will inherit parent's value)");
 		}
 		
-		final Boolean newValue = isSet ? (value ? false : null) : true;
+		final boolean set = isSet;
+		final boolean val = value;
 		Button permissionButton = new Button(player,mat, pt.toString(), lore, 
 			new BukkitRunnable(){
 				@Override
 				public void run() {
-					
-					ProtectionManager.setPermission(group.getProtection(), target, pt, newValue);
+					if(set){
+						if(val){
+							ProtectionManager.setPermission(group.getProtection(), target, pt, false);
+						} else {
+							ProtectionManager.unsetPermission(group.getProtection(), target, pt);
+						}
+					} else {
+						ProtectionManager.setPermission(group.getProtection(), target, pt, true);
+					}
+					ProtectionManager.unsetPermission(group.getProtection(), target, pt);
 					((GroupMenu)MenuManager.getMenus().get(player)).update();
 				}
 			}

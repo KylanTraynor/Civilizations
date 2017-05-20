@@ -147,5 +147,9 @@ public class ProtectionManager {
 		}
 		return result;
 	}
+
+	public static void unsetPermission(Protection protection, PermissionTarget target, PermissionType pt) {
+		setPermission(protection, target, pt, null);
+	}
 	
 }
