@@ -25,7 +25,9 @@ public class ProtectionManager {
 		Plot p = Plot.getAt(location);
 		if(p == null){
 			Settlement s = Settlement.getAt(location);
-			result = s.getProtection();
+			if(s != null){
+				result = s.getProtection();
+			}
 		} else {
 			result = p.getProtection();
 		}
