@@ -409,6 +409,7 @@ public class GroupMenu extends Menu{
 		} else {
 			pageStack.add(currentPage);
 		}
+		Civilizations.DEBUG("Going from menu page \"" + currentPage.getTitle() + "\" to page \"" + page.getTitle() + "\".");
 		currentPage = page;
 		update();
 	}

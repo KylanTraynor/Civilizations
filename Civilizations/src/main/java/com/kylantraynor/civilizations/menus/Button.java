@@ -61,4 +61,12 @@ public class Button extends ItemStack{
 			}
 		}
 	}
+
+	public String getName() {
+		if(this.getItemMeta() != null){
+			return this.getItemMeta().getDisplayName();
+		} else {
+			return this.getType().toString();
+		}
+	}
 }

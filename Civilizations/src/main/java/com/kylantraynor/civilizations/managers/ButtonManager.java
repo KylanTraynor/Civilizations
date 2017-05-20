@@ -7,6 +7,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.menus.Button;
 
 public class ButtonManager {
@@ -46,10 +47,10 @@ public class ButtonManager {
 		return false;
 	}
 	
-	public static Button getButton(ItemStack stk, List<HumanEntity> list){
+	public static Button getButton(ItemStack stk, HumanEntity humanEntity){
 		if(stk == null) return null;
 		for(Button btn : buttons){
-			if(btn.getType().equals(stk.getType()) && list.contains(btn.getPlayer())){
+			if(btn.getType().equals(stk.getType()) && humanEntity.equals(btn.getPlayer())){
 				ItemMeta im = stk.getItemMeta();
 				if(im == null && btn.getItemMeta() == null) return btn;
 				if(im.getDisplayName() == null && btn.getItemMeta().getDisplayName() == null){
@@ -77,6 +78,7 @@ public class ButtonManager {
 	public static void clearButtons(HumanEntity player) {
 		for(Button btn : buttons.toArray(new Button[buttons.size()])){
 			if(btn.getPlayer() == player){
+				Civilizations.DEBUG("Removing button \"" + btn.getName() + "\" for player " + player.getName() + ".");
 				buttons.remove(btn);
 			}
 		}

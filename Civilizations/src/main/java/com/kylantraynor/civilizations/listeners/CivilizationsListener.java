@@ -91,8 +91,9 @@ public class CivilizationsListener implements Listener{
 				event.setCancelled(true);
 			}
 		} else {
-			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(event.getPlayer() != null){
 				Block b = event.getClickedBlock();
+				if(b == null) return;
 				if(b.getType() == Material.SIGN || b.getType() == Material.SIGN_POST){
 					BlockState state = b.getState();
 					Sign sign = (Sign) state;
@@ -103,6 +104,7 @@ public class CivilizationsListener implements Listener{
 							event.getPlayer().sendMessage(ChatColor.RED + "There is no protected area here.");
 							return;
 						}
+						Civilizations.DEBUG("Opening menu for " + event.getPlayer().getName() + ".");
 						p.getGroup().openMenu(event.getPlayer());
 					}
 				}
