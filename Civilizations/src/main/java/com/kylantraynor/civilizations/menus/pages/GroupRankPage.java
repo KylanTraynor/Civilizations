@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -73,14 +75,12 @@ public class GroupRankPage implements MenuPage{
 
 	@Override
 	public Map<Integer, Button> getButtons() {
-		// TODO Auto-generated method stub
-		return null;
+		return buttons;
 	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		return "" + ChatColor.BOLD + ChatColor.GOLD + rank.getName();
 	}
 
 }
