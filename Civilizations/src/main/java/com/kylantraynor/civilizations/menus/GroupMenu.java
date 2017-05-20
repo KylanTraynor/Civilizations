@@ -89,16 +89,19 @@ public class GroupMenu extends Menu{
 		//this.bottom.clear();
 		this.top.clear();
 		currentPage.refresh(this);
+		// Draw Page Content
 		for(Entry<Integer, Button> e : currentPage.getButtons().entrySet()){
 			this.top.setItem(e.getKey() + 18, e.getValue());
 		}
+		// Draw Navigation Bar Border
 		for(int i = 9 ; i < 18; i++){
 			this.top.setItem(i, new ItemStack(Material.THIN_GLASS));
 		}
-		// add back button
+		// Draw Navigation Bar
 		if(pageStack.size() > 0){
 			this.top.setItem(pos(0,0), pageStack.peek().getIconButton());
 		}
+		this.top.setItem(4, currentPage.getIconButton());
 		
 		/*
 		switch(currentPage)

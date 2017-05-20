@@ -23,6 +23,7 @@ public class GroupMainPage implements MenuPage {
 	
 	private MenuPage managePage;
 	private MenuPage ranksPage;
+	private MenuPage parentPage;
 	
 	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
 
@@ -31,6 +32,9 @@ public class GroupMainPage implements MenuPage {
 		this.group = group;
 		managePage = new GroupManagePage(player, group);
 		ranksPage = new GroupRanksPage(player, group);
+		if(group.getProtection().getParent() != null){
+			parentPage = new GroupMainPage(player, group.getProtection().getParent().getGroup());
+		}
 	}
 	
 	@Override
@@ -42,8 +46,12 @@ public class GroupMainPage implements MenuPage {
 	public void refresh(Menu menu) {
 		if(!(menu instanceof GroupMenu)) return;
 		GroupMenu gMenu = (GroupMenu) menu;
+		buttons.clear();
 		if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
 			return;
+		}
+		if(parentPage != null){
+			buttons.put(gMenu.pos(0, 0), parentPage.getIconButton());
 		}
 		buttons.put(gMenu.pos(4, 0), managePage.getIconButton());
 		buttons.put(gMenu.pos(4, 1), ranksPage.getIconButton());
