@@ -72,7 +72,7 @@ public class GroupPermissionsPage implements MenuPage {
 		if(isSet){
 			lore.add(ChatColor.WHITE + "Value: " + ChatColor.GOLD + value);
 		} else {
-			lore.add(ChatColor.WHITE + "Unset + "+ ChatColor.GRAY +" (Will inherit parent's value)");
+			lore.add(ChatColor.WHITE + "Not set" + ChatColor.GRAY + " (Will inherit parent's value)");
 		}
 		
 		final boolean set = isSet;
