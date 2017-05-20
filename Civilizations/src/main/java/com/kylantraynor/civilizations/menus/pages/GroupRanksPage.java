@@ -50,9 +50,9 @@ public class GroupRanksPage implements MenuPage{
 		if(!(menu instanceof GroupMenu)) return;
 		GroupMenu gMenu = (GroupMenu) menu;
 		buttons.clear();
-		if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
+		/*if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
 			return;
-		}
+		}*/
 		int i = gMenu.pos(0, 1);
 		for(Rank r : group.getProtection().getRanks()){
 			MenuPage rp = rankPages.get(r);
