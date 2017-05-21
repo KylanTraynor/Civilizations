@@ -16,9 +16,11 @@ public class ButtonManager {
 	
 	public static boolean registerButton(Button bt){
 		if(buttons.contains(bt)){
+			Civilizations.DEBUG("Button is already registered \"" + bt.getName() + "\" for player " + bt.getPlayer().getName() + ".");
 			return false;
 		} else {
 			buttons.add(bt);
+			Civilizations.DEBUG("Button \"" + bt.getName() + "\" for player " + bt.getPlayer().getName() + ".");
 			return true;
 		}
 	}

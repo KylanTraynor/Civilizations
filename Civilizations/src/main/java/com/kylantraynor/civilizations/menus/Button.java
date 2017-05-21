@@ -17,11 +17,8 @@ import com.kylantraynor.civilizations.managers.MenuManager;
 public class Button extends ItemStack{
 	
 	private Material invalidButton = Material.IRON_BLOCK;
-	
 	private boolean isEnabled;
-
 	private Player player;
-
 	private BukkitRunnable runnable;
 	
 	public Button(Player p, Material mat, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){
