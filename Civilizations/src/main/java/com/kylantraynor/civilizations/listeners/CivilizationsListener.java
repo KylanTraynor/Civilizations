@@ -91,10 +91,10 @@ public class CivilizationsListener implements Listener{
 				event.setCancelled(true);
 			}
 		} else {
-			if(event.getPlayer() != null){
+			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
 				Block b = event.getClickedBlock();
 				if(b == null) return;
-				if(b.getType() == Material.SIGN || b.getType() == Material.SIGN_POST){
+				if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST){
 					BlockState state = b.getState();
 					Sign sign = (Sign) state;
 					if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
