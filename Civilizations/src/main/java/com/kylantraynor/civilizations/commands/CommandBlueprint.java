@@ -40,7 +40,7 @@ public class CommandBlueprint implements CommandExecutor{
 		}
 		
 		switch(args[0].toUpperCase()){
-		case "HELP":
+		case "HELP": default:
 			player.sendMessage(ChatTools.formatTitle("Blueprints", ChatColor.GOLD));
 			player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are still in development! Be careful!");
 			player.sendMessage(messageHeader + ChatColor.GOLD + "/blueprint set " + ChatColor.GRAY + "(Sets the current selection as a blueprint.)");
@@ -187,8 +187,8 @@ public class CommandBlueprint implements CommandExecutor{
 			}
 			return true;
 		}
-		player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are not yet activated.");
-		return false;
+		//player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are not yet activated.");
+		//return false;
 	}
 
 }
