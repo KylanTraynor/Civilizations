@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyHook {
@@ -151,17 +152,18 @@ public class TownyHook {
 			final com.palmergames.bukkit.towny.object.TownBlock tb = TownyUniverse.getTownBlock(block.getLocation());
 			if(tb != null){
 				if(tb.getPermissions() != null){
+					String perms = tb.getPermissions().toString();
 					tb.getPermissions().setAll(true);
 					
 					BukkitRunnable bk = new BukkitRunnable(){
 
 						@Override
 						public void run() {
-							tb.getPermissions().reset();
+							tb.getPermissions().load(perms);;
 						}
 						
 					};
-					bk.runTaskLater(Civilizations.currentInstance, 1);
+					bk.runTaskLater(Civilizations.currentInstance, 5);
 				}
 			}
 		}
