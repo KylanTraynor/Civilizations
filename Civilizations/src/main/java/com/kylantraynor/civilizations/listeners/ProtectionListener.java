@@ -222,14 +222,14 @@ public class ProtectionListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntitySpawn(EntitySpawnEvent event){
-		Settlement settlement = Settlement.getAt(event.getLocation());
-		if(settlement == null) return;
-		if(settlement instanceof TownyTown) return;
+		//Settlement settlement = Settlement.getAt(event.getLocation());
+		//if(settlement == null) return;
+		//if(settlement instanceof TownyTown) return;
 		if(event.getEntity() instanceof LivingEntity){
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){
 			case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case WITHER_SKULL: case HUSK:
-				if(!settlement.hasPermission(PermissionType.MOBSPAWNING, event.getLocation().getBlock(), null)){
+				if(ProtectionManager.hasPermissionAt(event.getLocation(), PermissionType.MOBSPAWNING, null)){
 					event.setCancelled(true);
 				}
 				break;
