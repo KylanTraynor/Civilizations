@@ -11,6 +11,7 @@ import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.groups.Group;
@@ -78,6 +79,12 @@ public class Builder {
 				}
 				if(supply == null){
 					if(!currentProject.trySkipNext()){
+						MaterialAndData mat = MaterialAndData.getFrom(supply);
+						if(mat.changeForPaste().getMaterial() == Material.AIR){
+							currentProject.buildInstead(mat.changeForPaste());
+							this.getSettings().setChanged(true);
+							break;
+						}
 						warnLackOfSupplies(plan);
 						currentProject = null;
 						break;

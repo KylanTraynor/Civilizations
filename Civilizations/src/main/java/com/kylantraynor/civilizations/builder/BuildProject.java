@@ -166,4 +166,26 @@ public class BuildProject {
 			return false;
 		}
 	}
+
+	public boolean buildInstead(MaterialAndData replacement) {
+		if(done == true) return false;
+		Location l = location.clone().add(currentX, currentY, currentZ);
+		if(l.getBlock().getType() == replacement.getMaterial() && l.getBlock().getData() == replacement.getData()){
+			increment();
+			return false;
+		} else if(setAir && replacement.getMaterial() == Material.AIR){
+			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(l.getBlock().getType()), 1, 1);
+			l.getBlock().breakNaturally();
+			increment();
+			return false;
+		} else if(replacement.getMaterial() != Material.AIR) {
+			l.getBlock().breakNaturally();
+			l.getBlock().setType(replacement.getMaterial());
+			l.getBlock().setData(replacement.getData());
+			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(replacement.getMaterial()), 1, 1);
+		}
+		
+		increment();
+		return true;
+	}
 }
