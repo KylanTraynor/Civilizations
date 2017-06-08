@@ -79,9 +79,8 @@ public class Builder {
 				}
 				if(supply == null){
 					if(!currentProject.trySkipNext()){
-						MaterialAndData mat = MaterialAndData.getFrom(supply);
-						if(mat.changeForPaste().getMaterial() == Material.AIR){
-							currentProject.buildInstead(mat.changeForPaste());
+						if(plan.changeForPaste().getMaterial() == Material.AIR){
+							currentProject.buildInstead(plan.changeForPaste());
 							this.getSettings().setChanged(true);
 							break;
 						}
