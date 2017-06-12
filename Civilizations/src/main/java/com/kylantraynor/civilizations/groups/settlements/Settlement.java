@@ -149,6 +149,8 @@ public class Settlement extends Group implements HasBuilder{
 			.then("" + getHouses().size()).color(ChatColor.GOLD)
 			.then("\nWarehouses: ").color(ChatColor.GRAY)
 			.then("" + getWarehouses().size()).color(ChatColor.GOLD)
+			.then("/").color(ChatColor.GRAY)
+			.then("" + (int) Math.floor(getHouses().size() / 10.0)).color(ChatColor.GOLD).tooltip("The number of wharehouses available increases every 10 Houses built.")
 			.then("\nStalls: ").color(ChatColor.GRAY)
 			.then("" + getMarketStalls().size()).color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
