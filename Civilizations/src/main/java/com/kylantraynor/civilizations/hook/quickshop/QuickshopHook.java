@@ -3,8 +3,8 @@ package com.kylantraynor.civilizations.hook.quickshop;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
-import org.maxgamer.QuickShop.QuickShop;
-import org.maxgamer.QuickShop.Shop.Shop;
+import org.maxgamer.quickshop.QuickShop;
+import org.maxgamer.quickshop.Shop.Shop;
 
 import com.kylantraynor.civilizations.shops.ShopType;
 

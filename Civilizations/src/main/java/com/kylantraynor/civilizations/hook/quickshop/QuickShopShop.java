@@ -5,7 +5,7 @@ import com.kylantraynor.civilizations.shops.ShopType;
 
 public class QuickShopShop extends Shop{
 
-	public QuickShopShop(org.maxgamer.QuickShop.Shop.Shop shop) {
+	public QuickShopShop(org.maxgamer.quickshop.Shop.Shop shop) {
 		this.setLocation(shop.getLocation());
 		this.setItem(shop.getItem());
 		this.setPrice(shop.getPrice());
