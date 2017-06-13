@@ -2,7 +2,7 @@ package com.kylantraynor.civilizations.hook.quickshop;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.maxgamer.QuickShop.Shop.ShopPurchaseEvent;
+import org.maxgamer.quickshop.Shop.ShopPurchaseEvent;
 
 import com.kylantraynor.civilizations.shops.ShopManager;
 
