@@ -251,7 +251,7 @@ public class Civilizations extends JavaPlugin{
 	private void registerAdvancements() {
 		Map<String, TriggerType> crit = new HashMap<String, TriggerType>();
 		crit.put("trigger1", TriggerType.IMPOSSIBLE);
-		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "civs_root"))
+		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "root"))
 		.withTitle("Civilizations")
 		.withDescription("Establish your own civilization!")
 		.withIcon(new ItemStack(Material.BANNER))
