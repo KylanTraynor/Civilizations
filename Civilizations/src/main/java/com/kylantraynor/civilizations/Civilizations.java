@@ -254,7 +254,7 @@ public class Civilizations extends JavaPlugin{
 		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "civs_root"))
 		.withTitle("Civilizations")
 		.withDescription("Establish your own civilization!")
-		.withIcon(new ItemStack(Material.STANDING_BANNER))
+		.withIcon(new ItemStack(Material.BANNER))
 		.withCriterias(crit)
 		.withAnnouncement(true)
 		.withToast(true)
