@@ -16,13 +16,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -67,6 +70,8 @@ import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.MaterialAndData;
 import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.draggydata.AdvancementAPI;
+import com.kylantraynor.draggydata.AdvancementAPI.FrameType;
 
 import fr.rhaz.webservers.WebServers.API;
 
@@ -181,7 +186,7 @@ public class Civilizations extends JavaPlugin{
 		pm.registerEvents(getChatListener(), this);
 		pm.registerEvents(getVehiclesListener(), this);
 		
-		registerAchievements();
+		registerAdvancements();
 		
 		GroupManager.loadAll();
 		
@@ -233,8 +238,37 @@ public class Civilizations extends JavaPlugin{
 	private void freesManagers(){
 		SelectionManager.free();
 	}
+	
+	public List<World> getColonizableWorlds(){
+		List<World> worlds = new ArrayList<World>();
+		for(String s : getSettings().getColonizableWorlds()){
+			worlds.add(Bukkit.getWorld(s));
+		}
+		return worlds;
+	}
 
-	private void registerAchievements() {
+	private void registerAdvancements() {
+		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "civs_root"))
+		.withTitle("Civilizations")
+		.withDescription("Establish your own civilization!")
+		.withItem(new ItemStack(Material.BANNER))
+		.withAnnouncement(true)
+		.withToast(true)
+		.withFrame(FrameType.GOAL);
+		for(World w : getColonizableWorlds()){
+			civs.save(w);
+		}
+		AdvancementAPI camp = new AdvancementAPI(new NamespacedKey(this, "setup_camp"))
+			.withTitle("Setup Camp!")
+			.withDescription("Create a temporary camp to protect an area.")
+			.withItem(new ItemStack(Material.BED))
+			.withAnnouncement(true)
+			.withToast(true)
+			.withFrame(FrameType.TASK)
+			.withParent(civs.getID());
+		for(World w : getColonizableWorlds()){
+			camp.save(w);
+		}
 		/*Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
 		createCamp.getDescription().add("Create a camp.");
 		AchievementManager.registerAchievement(createCamp);*/

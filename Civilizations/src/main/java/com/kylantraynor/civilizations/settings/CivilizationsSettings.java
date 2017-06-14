@@ -1,6 +1,8 @@
 package com.kylantraynor.civilizations.settings;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -87,5 +89,19 @@ public class CivilizationsSettings extends YamlConfiguration {
 	
 	public boolean hasChanged(){
 		return hasChanged;
+	}
+
+	public List<String> getColonizableWorlds() {
+		List<String> list = (List<String>) this.getList("General.ColonizableWorlds");
+		if(list == null){
+			list = new ArrayList<String>();
+			list.add("world");
+			setColonizableWorlds(list);
+		}
+		return list;
+	}
+	
+	public void setColonizableWorlds(List<String> worlds){
+		this.set("General.ColonizableWorlds", worlds);
 	}
 }
