@@ -259,9 +259,10 @@ public class Civilizations extends JavaPlugin{
 		.withAnnouncement(true)
 		.withToast(true)
 		.withFrame(FrameType.GOAL);
-		for(World w : getColonizableWorlds()){
+		Advancement civsAdv = civs.load();
+		/*for(World w : getColonizableWorlds()){
 			civs.save(w);
-		}
+		}*/
 		crit.clear();
 		crit.put("trigger1", TriggerType.IMPOSSIBLE);
 		AdvancementAPI camp = new AdvancementAPI(new NamespacedKey(this, "setup_camp"))
@@ -273,9 +274,10 @@ public class Civilizations extends JavaPlugin{
 			.withToast(true)
 			.withFrame(FrameType.TASK)
 			.withParent(civs.getID());
-		for(World w : getColonizableWorlds()){
+		Advancement campAdv = camp.load();
+		/*for(World w : getColonizableWorlds()){
 			camp.save(w);
-		}
+		}*/
 		/*Achievement createCamp = new Achievement("create_camp", "Setting up Camp", null, new ArrayList<String>());
 		createCamp.getDescription().add("Create a camp.");
 		AchievementManager.registerAchievement(createCamp);*/
