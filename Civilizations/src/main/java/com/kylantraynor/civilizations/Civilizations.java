@@ -72,6 +72,7 @@ import com.kylantraynor.civilizations.util.MaterialAndData;
 import com.kylantraynor.civilizations.util.Util;
 import com.kylantraynor.draggydata.AdvancementAPI;
 import com.kylantraynor.draggydata.AdvancementAPI.FrameType;
+import com.kylantraynor.draggydata.AdvancementAPI.TriggerType;
 
 import fr.rhaz.webservers.WebServers.API;
 
@@ -248,20 +249,26 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	private void registerAdvancements() {
+		Map<String, TriggerType> crit = new HashMap<String, TriggerType>();
+		crit.put("trigger1", TriggerType.IMPOSSIBLE);
 		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "civs_root"))
 		.withTitle("Civilizations")
 		.withDescription("Establish your own civilization!")
-		.withItem(new ItemStack(Material.BANNER))
+		.withIcon(new ItemStack(Material.BANNER))
+		.withCriterias(crit)
 		.withAnnouncement(true)
 		.withToast(true)
 		.withFrame(FrameType.GOAL);
 		for(World w : getColonizableWorlds()){
 			civs.save(w);
 		}
+		crit.clear();
+		crit.put("trigger1", TriggerType.IMPOSSIBLE);
 		AdvancementAPI camp = new AdvancementAPI(new NamespacedKey(this, "setup_camp"))
 			.withTitle("Setup Camp!")
 			.withDescription("Create a temporary camp to protect an area.")
-			.withItem(new ItemStack(Material.BED))
+			.withIcon(new ItemStack(Material.BED))
+			.withCriterias(crit)
 			.withAnnouncement(true)
 			.withToast(true)
 			.withFrame(FrameType.TASK)
