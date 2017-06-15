@@ -255,6 +255,7 @@ public class Civilizations extends JavaPlugin{
 		.withTitle("Civilizations")
 		.withDescription("Establish your own civilization!")
 		.withIcon(new ItemStack(Material.BANNER))
+		.withBackground("minecraft:textures/blocks/stone.png")
 		.withCriterias(crit)
 		.withAnnouncement(true)
 		.withToast(true)
