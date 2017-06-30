@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.groups.settlements.Camp;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.questions.ClearQuestion;
 import com.kylantraynor.civilizations.questions.JoinQuestion;
 import com.kylantraynor.civilizations.questions.LeaveQuestion;
@@ -25,17 +26,12 @@ public class CommandCamp extends CommandGroup{
 		case "HERE":
 			if(sender instanceof Player){
 				Player p = (Player) sender;
-				Camp closest = Camp.getClosest(p.getLocation());
-				if(closest != null){
-					if(closest.getLocation().distance(p.getLocation()) <= Camp.getSize() * 2){
-						p.sendMessage(Camp.messageHeader + ChatColor.RED + "Too close to another camp.");
-						return true;
-					}
+				Camp c = GroupManager.createCamp(p, p.getLocation());
+				if(c != null){
+					p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp created!");
+					p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camps only last a day. Make sure to Renew it on the " + ChatColor.GOLD + "/camp" + ChatColor.GREEN + " screen!");
 				}
-				Camp c = new Camp(p.getLocation());
-				c.addMember(p);
-				p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp created!");
-				p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camps only last a day. Make sure to Renew it on the " + ChatColor.GOLD + "/camp" + ChatColor.GREEN + " screen!");
+				return true;
 			}
 			break;
 		case "RENEW":

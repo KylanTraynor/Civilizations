@@ -1,9 +1,14 @@
 package com.kylantraynor.civilizations.events;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+
+import com.kylantraynor.civilizations.groups.settlements.Camp;
+import com.kylantraynor.civilizations.managers.GroupManager;
 
 public class CampCreateEvent extends GroupCreateEvent{
 

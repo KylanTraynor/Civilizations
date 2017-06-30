@@ -5,14 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.events.CampCreateEvent;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
@@ -237,8 +242,22 @@ public class GroupManager {
 	 * @param l Location of the new camp.
 	 * @return The camp created.
 	 */
-	public static Camp createCamp(Location l){
-		return new Camp(l);
+	public static Camp createCamp(Player p, Location l){
+		Settlement set = Settlement.getClosest(l);
+		if(set != null){
+			if(set.distance(l) <= Camp.getSize() * 2){
+				p.sendMessage(Camp.messageHeader + ChatColor.RED + "Too close to another settlement.");
+				return null;
+			}
+		}
+		CampCreateEvent event = new CampCreateEvent(p, l);
+		Bukkit.getPluginManager().callEvent(event);
+		if(!event.isCancelled()){
+			Camp camp = new Camp(l);
+			camp.addMember(p);
+			return camp;
+		}
+		return null;
 	}
 	
 	/**
@@ -295,5 +314,14 @@ public class GroupManager {
 	
 	public static void updateForEconomy() {
 		
+	}
+
+	public static Group get(UUID groupId) {
+		for(Group g : CacheManager.getGroupList()){
+			if(g.getUniqueId().equals(groupId)){
+				return g;
+			}
+		}
+		return null;
 	}
 }
