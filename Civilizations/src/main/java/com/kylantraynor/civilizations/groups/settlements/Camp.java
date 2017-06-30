@@ -178,6 +178,7 @@ public class Camp extends Settlement{
 		Protection p = this.getProtection();
 		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
+		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
 		
 		resPerm.put(PermissionType.MANAGE, true);
 		resPerm.put(PermissionType.MANAGE_RANKS, true);
@@ -188,6 +189,9 @@ public class Camp extends Settlement{
 		resPerm.put(PermissionType.FIRE, true);
 		resPerm.put(PermissionType.INVITE, true);
 		
+		outsiderPerm.put(PermissionType.BREAK, false);
+		outsiderPerm.put(PermissionType.PLACE, false);
+		
 		serverPerm.put(PermissionType.EXPLOSION, false);
 		serverPerm.put(PermissionType.FIRE, true);
 		serverPerm.put(PermissionType.FIRESPREAD, false);
@@ -195,6 +199,7 @@ public class Camp extends Settlement{
 		serverPerm.put(PermissionType.MOBSPAWNING, false);
 		
 		p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
+		p.setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
 		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
 	}
 	/**
