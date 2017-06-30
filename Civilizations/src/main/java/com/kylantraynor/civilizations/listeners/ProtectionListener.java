@@ -228,7 +228,7 @@ public class ProtectionListener implements Listener{
 		if(event.getEntity() instanceof LivingEntity){
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){
-			case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case WITHER_SKULL: case HUSK:
+			case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case CAVE_SPIDER: case WITHER_SKELETON: case HUSK: case ENDERMAN:
 				if(!ProtectionManager.hasPermissionAt(event.getLocation(), PermissionType.MOBSPAWNING, null)){
 					event.setCancelled(true);
 				}
