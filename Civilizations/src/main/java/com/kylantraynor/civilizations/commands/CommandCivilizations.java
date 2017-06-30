@@ -1,21 +1,29 @@
 package com.kylantraynor.civilizations.commands;
 
-import net.md_5.bungee.api.ChatColor;
-
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class CommandCivilizations implements CommandExecutor{
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length > 0 && sender.isOp()){
+		if(sender.isOp()){
+			if(args.length == 0) args = new String[]{"INFO"};
 			switch(args[0].toUpperCase()){
+			default:
+			case "INFO":
+				sender.sendMessage(ChatTools.formatTitle("Civilizations Plugin", ChatColor.GRAY));
+				sender.sendMessage(ChatColor.GRAY + "Wiki Root: " + ChatColor.GOLD + Civilizations.getSettings().getWikiUrl());
+				sender.sendMessage(ChatColor.GRAY + "Debug: " + ChatColor.GOLD + Civilizations.currentInstance.isDEBUG());
+				sender.sendMessage(ChatColor.GRAY + "Using Chat: " + ChatColor.GOLD + Civilizations.currentInstance.useChat);
+				break;
 			case "UPDATEGROUPS":
 				if(sender.isOp()){
 					GroupManager.updateAllGroups();
