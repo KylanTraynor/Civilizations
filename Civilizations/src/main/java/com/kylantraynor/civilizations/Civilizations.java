@@ -41,6 +41,8 @@ import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandRegion;
 import com.kylantraynor.civilizations.commands.CommandSelection;
 import com.kylantraynor.civilizations.commands.CommandStall;
+import com.kylantraynor.civilizations.database.Database;
+import com.kylantraynor.civilizations.database.SQLite;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -99,6 +101,7 @@ public class Civilizations extends JavaPlugin{
 	private boolean clearing = false;
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
+	private Database database;
 	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
 	static private CivilizationsSettings settings;
 	
@@ -204,6 +207,8 @@ public class Civilizations extends JavaPlugin{
 		
 		initManagers();
 		
+		//initDatabase();
+		
 		setupCommands();
 		
 		/*int port = 8120;
@@ -214,6 +219,11 @@ public class Civilizations extends JavaPlugin{
 			log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 			e.printStackTrace();
 		}*/
+	}
+
+	private void initDatabase() {
+		this.database = new SQLite(this);
+		this.database.load();
 	}
 
 	private void loadInfluenceMaps() {
@@ -465,6 +475,13 @@ public class Civilizations extends JavaPlugin{
 		}
 		freesManagers();
 		MaterialAndData.saveToConfig(getConfig());
+		if(settings.hasChanged()){
+			try {
+				settings.save(new File(Civilizations.currentInstance.getDataFolder(), "config.yml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		saveConfig();
 	}
 	
@@ -891,5 +908,9 @@ public class Civilizations extends JavaPlugin{
 	
 	public static String[] getSelectionToolLore(){
 		return new String[]{"Use this tool to select an area."};
+	}
+
+	public Database getDatabase() {
+		return this.database;
 	}
 }

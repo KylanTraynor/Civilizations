@@ -19,6 +19,7 @@ import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
@@ -253,6 +254,8 @@ public class DynmapHook {
 			sb.append("\" target=\"_blank\">Wiki</a><br />");
 		}
 		sb.append("Area: " + s.getProtection().getHull().getArea() + "m²");
+		sb.append("<h2>Taxes: </h2><br />");
+		sb.append("Daily Server Tax: " + s.getNextTaxationAmount(TaxType.LAND));
 		m.setDescription(sb.toString());
 	}
 

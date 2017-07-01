@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations;
 
+import java.time.Instant;
+
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
@@ -11,6 +13,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
 
+import com.kylantraynor.civilizations.economy.BudgetEntry;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -138,5 +142,27 @@ public class Economy {
 		if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY) && !player.isSneaking()){
 			player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 0.5);
 		}
+	}
+
+	public static void transferFunds(
+			EconomicEntity emiter, EconomicEntity receiver,
+			String label, double amount){
+		emiter.takeFunds(amount);
+		receiver.giveFunds(amount);
+		addEntry(new BudgetEntry(emiter, receiver, label, amount, Instant.now()));
+	}
+	
+	public static boolean tryTransferFunds(
+			EconomicEntity emiter, EconomicEntity receiver,
+			String label, double amount){
+		if(emiter.getBalance() < amount) return false;
+		emiter.takeFunds(amount);
+		receiver.giveFunds(amount);
+		addEntry(new BudgetEntry(emiter, receiver, label, amount, Instant.now()));
+		return true;
+	}
+	
+	public static void addEntry(BudgetEntry budgetEntry) {
+		Civilizations.currentInstance.getDatabase().insertBudgetEntry(budgetEntry);
 	}
 }

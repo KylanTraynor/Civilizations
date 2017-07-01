@@ -41,7 +41,7 @@ import com.kylantraynor.civilizations.settings.GroupSettings;
  * @author Baptiste
  *
  */
-public class Group implements EconomicEntity{
+public class Group extends EconomicEntity{
 	
 	private static ArrayList<Group> list = new ArrayList<Group>();
 	public static ArrayList<Group> getList() {return list;}
@@ -566,27 +566,5 @@ public class Group implements EconomicEntity{
 	public void setSettings(GroupSettings settings) {
 		this.settings = settings;
 	}
-	@Override
-	public Budget getBudget() {
-		if(budget == null) budget = new Budget();
-		return budget;
-	}
-
-	@Override
-	public boolean addFunds(String label, double amount) {
-		return getBudget().addEntry(label, amount);
-	}
-
-	@Override
-	public boolean removeFunds(String label, double amount) {
-		return getBudget().addEntry(label, -amount);
-	}
-
-	@Override
-	public boolean tryTakeFunds(String label, double amount) {
-		if(getBudget().getBalance() >= amount){
-			return removeFunds(label, amount);
-		}
-		return false;
-	}
+	
 }

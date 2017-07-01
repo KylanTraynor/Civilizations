@@ -52,6 +52,7 @@ import com.kylantraynor.civilizations.territories.Influence;
 import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.kylantraynor.civilizations.territories.Region;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -455,5 +456,33 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}
 		}
 		this.getProtection().hullNeedsUpdate();
+	}
+	
+	@Override
+	public double getBalance(){
+		try {
+			return townyTown.getHoldingBalance();
+		} catch (EconomyException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@Override
+	public void giveFunds(double amount){
+		try {
+			townyTown.pay(amount, "");
+		} catch (EconomyException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void takeFunds(double amount){
+		try {
+			townyTown.collect(amount);
+		} catch (EconomyException e) {
+			e.printStackTrace();
+		}
 	}
 }
