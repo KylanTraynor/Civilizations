@@ -5,7 +5,15 @@ import java.util.UUID;
 public abstract class EconomicEntity {
 	private Budget budget;
 	private double balance = 0;
-	private UUID id = UUID.randomUUID();
+	private UUID id;
+	
+	public EconomicEntity(UUID id){
+		this.id = id;
+	}
+	
+	public EconomicEntity(){
+		this.id = UUID.randomUUID();
+	}
 	
 	public UUID getUniqueId(){
 		return id;

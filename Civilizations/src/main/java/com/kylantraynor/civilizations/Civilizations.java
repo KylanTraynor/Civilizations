@@ -139,6 +139,7 @@ public class Civilizations extends JavaPlugin{
 	
 	private static Server webServer;
 	public static boolean useChat = false;
+	public static boolean useDatabase = false;
 	
 	public static Server getWebServer(){
 		return webServer;
@@ -207,7 +208,8 @@ public class Civilizations extends JavaPlugin{
 		
 		initManagers();
 		
-		//initDatabase();
+		if(useDatabase)
+			initDatabase();
 		
 		setupCommands();
 		

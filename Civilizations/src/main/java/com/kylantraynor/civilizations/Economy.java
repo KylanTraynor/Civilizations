@@ -163,6 +163,7 @@ public class Economy {
 	}
 	
 	public static void addEntry(BudgetEntry budgetEntry) {
-		Civilizations.currentInstance.getDatabase().insertBudgetEntry(budgetEntry);
+		if(Civilizations.useDatabase)
+			Civilizations.currentInstance.getDatabase().insertBudgetEntry(budgetEntry);
 	}
 }
