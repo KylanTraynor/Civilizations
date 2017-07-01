@@ -21,32 +21,40 @@ public class BudgetEntry {
 	}
 	
 	public BudgetEntry(EconomicEntity emiter, EconomicEntity receiver, String label, double amount, Instant instant){
-		this.setEmiter(emiter.getUniqueId());
-		this.setReceiver(receiver.getUniqueId());
+		if(emiter != null)
+			this.setEmiter(emiter.getUniqueId());
+		if(receiver != null)
+			this.setReceiver(receiver.getUniqueId());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
 	}
 	
 	public BudgetEntry(OfflinePlayer emiter, OfflinePlayer receiver, String label, double amount, Instant instant){
-		this.setEmiter(emiter.getUniqueId());
-		this.setReceiver(receiver.getUniqueId());
+		if(emiter != null)
+			this.setEmiter(emiter.getUniqueId());
+		if(receiver != null)
+			this.setReceiver(receiver.getUniqueId());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
 	}
 	
 	public BudgetEntry(EconomicEntity emiter, OfflinePlayer receiver, String label, double amount, Instant instant){
-		this.setEmiter(emiter.getUniqueId());
-		this.setReceiver(receiver.getUniqueId());
+		if(emiter != null)
+			this.setEmiter(emiter.getUniqueId());
+		if(receiver != null)
+			this.setReceiver(receiver.getUniqueId());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
 	}
 	
 	public BudgetEntry(OfflinePlayer emiter, EconomicEntity receiver, String label, double amount, Instant instant){
-		this.setEmiter(emiter.getUniqueId());
-		this.setReceiver(receiver.getUniqueId());
+		if(emiter != null)
+			this.setEmiter(emiter.getUniqueId());
+		if(receiver != null)
+			this.setReceiver(receiver.getUniqueId());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);

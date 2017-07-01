@@ -7,6 +7,9 @@ import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.kylantraynor.civilizations.economy.TaxBase;
+import com.kylantraynor.civilizations.economy.TaxInfo;
+
 public class CivilizationsSettings extends YamlConfiguration {
 	
 	private int mergeDistanceSquared = 0;
@@ -108,5 +111,28 @@ public class CivilizationsSettings extends YamlConfiguration {
 
 	public String getSQLiteFilename() {
 		return this.getString("SQLite.Filename", "civs");
+	}
+	
+	public TaxInfo getTaxInfo(String tax) {
+		String root = "Economy.Taxes.";
+		if(this.contains(root + tax)){
+			double value = this.getDouble(root + tax + ".value", 0);
+			boolean isPercent = this.getBoolean(root + tax + ".isPercent", false);
+			TaxBase base = TaxBase.valueOf(this.getString(root + tax + ".base", "FromBalance"));
+			return new TaxInfo(tax, base, value, isPercent);
+		} else {
+			return null;
+		}
+	}
+
+	public void setTaxInfo(String tax, TaxBase base, double value,
+			boolean isPercent) {
+		
+		String root = "Economy.Taxes.";
+		this.set(root + tax + ".value", value);
+		this.set(root + tax + ".isPercent", isPercent);
+		this.set(root + tax + ".base", base.toString());
+		
+		this.setChanged(true);
 	}
 }

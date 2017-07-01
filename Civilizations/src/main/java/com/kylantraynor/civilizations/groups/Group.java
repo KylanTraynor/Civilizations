@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -22,11 +23,15 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.Budget;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.TaxBase;
+import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -62,6 +67,7 @@ public class Group extends EconomicEntity{
 	private GroupSettings settings;
 	private Budget budget;
 	private boolean removed;
+	private UUID parent;
 	
 	public Group(){
 		list.add(this);
@@ -541,6 +547,129 @@ public class Group extends EconomicEntity{
 		//fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
+	}
+	/**
+	 * Gets the next taxed amount for the specific type of tax.
+	 * @param tax The type of tax.
+	 * @return double Amount
+	 */
+	public double getNextTaxationAmount(String tax) {
+		if(this.getParent() == null)
+			return 0;
+		Group parent = getParent();
+		TaxInfo taxInfo;
+		if(parent != null){
+			taxInfo = parent.getTax(tax);
+		} else {
+			taxInfo = Civilizations.getSettings().getTaxInfo(tax);
+		}
+		if(taxInfo != null){
+			return calculateTax(taxInfo);
+		}
+		return 0;
+	}
+	
+	/**
+	 * Gets the exact amount for th specific tax base.
+	 * @param taxInfo
+	 * @return
+	 */
+	public double calculateTax(TaxInfo taxInfo){
+		switch(taxInfo.getBase()){
+		case FromBalance:
+			if(taxInfo.isPercent()){
+				return this.getBalance() * (taxInfo.getValue() / 100.0);
+			} else {
+				return taxInfo.getValue();
+			}
+		case PerMember:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * getMembers().size();
+			} else {
+				return taxInfo.getValue() * getMembers().size();
+			}
+		default:
+			break;
+		}
+		return 0;
+	}
+	/**
+	 * Gets the tax informations of the given type.
+	 * @param tax
+	 * @return
+	 */
+	public TaxInfo getTax(String tax) {
+		return this.getSettings().getTaxInfo(tax);
+	}
+	/**
+	 * Adds a new tax.
+	 * @param tax
+	 * @param base
+	 * @param value
+	 * @param isPercent
+	 */
+	public void setTax(String tax, TaxBase base, double value, boolean isPercent){
+		this.getSettings().setTaxInfo(tax, base, value, isPercent);
+	}
+	/**
+	 * Gets the names of all the taxes of this group.
+	 * @return
+	 */
+	public Set<String> getTaxes(){
+		return this.getSettings().getTaxes();
+	}
+	/**
+	 * Processes all the taxes outgoing transfers for this group.
+	 */
+	public void processTaxes(){
+		Group parent = getParent();
+		String taxTarget = "Server";
+		if(parent != null){
+			taxTarget = parent.getName();
+		}
+		for(String tax : getTaxes()){
+			double transfer = getNextTaxationAmount(tax);
+			if(Economy.tryTransferFunds(this, parent, taxTarget + " " + tax, transfer)){
+				this.sendMessage(ChatColor.GREEN + "Payed tax " + tax + " to " + taxTarget + ": " + Economy.format(transfer), PermissionType.TAX_NOTIFICATIONS);
+			} else {
+				this.sendMessage(ChatColor.RED + "Couldn't pay tax " + tax + " to " + taxTarget + ": " + Economy.format(transfer), PermissionType.TAX_NOTIFICATIONS);
+			}
+		}
+	}
+	/**
+	 * Gets the parent group of this group, if any.
+	 * @return Null if this group has no parent.
+	 */
+	public Group getParent() {
+		if(this.parent != null){
+			return GroupManager.get(this.parent);
+		}
+		return null;
+	}
+	/**
+	 * Sets the parent group of this group.
+	 * @param group
+	 */
+	public void setParent(Group group){
+		if(group != null)
+			this.parent = group.getUniqueId();
+		else
+			this.parent = null;
+	}
+	/**
+	 * Gets the parent's id, if it exists.
+	 * @return UUID
+	 */
+	public UUID getParentId(){
+		return this.parent;
+	}
+	/**
+	 * Sets the parent's id.
+	 * @param id
+	 */
+	public void setParentId(UUID id){
+		this.parent = id;
 	}
 	/**
 	 * Opens an inventory menu for the given player.

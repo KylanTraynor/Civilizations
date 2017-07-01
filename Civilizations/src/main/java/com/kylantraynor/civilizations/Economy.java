@@ -155,9 +155,13 @@ public class Economy {
 	public static boolean tryTransferFunds(
 			EconomicEntity emiter, EconomicEntity receiver,
 			String label, double amount){
-		if(emiter.getBalance() < amount) return false;
-		emiter.takeFunds(amount);
-		receiver.giveFunds(amount);
+		if(emiter != null){
+			if(emiter.getBalance() < amount) return false;
+			emiter.takeFunds(amount);
+		}
+		if(receiver != null)
+			receiver.giveFunds(amount);
+		
 		addEntry(new BudgetEntry(emiter, receiver, label, amount, Instant.now()));
 		return true;
 	}

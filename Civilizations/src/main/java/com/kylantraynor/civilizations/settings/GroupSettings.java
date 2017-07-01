@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +13,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.economy.TaxBase;
+import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionSet;
@@ -328,5 +331,33 @@ public class GroupSettings extends YamlConfiguration{
 				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypesAsString());
 			}
 		}
+	}
+
+	public TaxInfo getTaxInfo(String tax) {
+		String root = "Economy.Taxes.";
+		if(this.contains(root + tax)){
+			double value = this.getDouble(root + tax + ".value", 0);
+			boolean isPercent = this.getBoolean(root + tax + ".isPercent", false);
+			TaxBase base = TaxBase.valueOf(this.getString(root + tax + ".base", "FromBalance"));
+			return new TaxInfo(tax, base, value, isPercent);
+		} else {
+			return null;
+		}
+	}
+
+	public void setTaxInfo(String tax, TaxBase base, double value,
+			boolean isPercent) {
+		
+		String root = "Economy.Taxes.";
+		this.set(root + tax + ".value", value);
+		this.set(root + tax + ".isPercent", isPercent);
+		this.set(root + tax + ".base", base.toString());
+		
+		this.setChanged(true);
+	}
+
+	public Set<String> getTaxes() {
+		String root = "Economy.Taxes";
+		return this.getConfigurationSection(root).getKeys(false);
 	}
 }

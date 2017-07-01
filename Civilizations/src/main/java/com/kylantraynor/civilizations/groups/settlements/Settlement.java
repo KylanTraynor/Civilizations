@@ -29,6 +29,7 @@ import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.Budget;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.House;
@@ -601,6 +602,49 @@ public class Settlement extends Group implements HasBuilder{
 		return null;
 	}
 
+	@Override
+	public double calculateTax(TaxInfo taxInfo){
+		switch(taxInfo.getBase()){
+		case FromBalance:
+			if(taxInfo.isPercent()){
+				return this.getBalance() * (taxInfo.getValue() / 100.0);
+			} else {
+				return taxInfo.getValue();
+			}
+		case PerMember:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * getMembers().size();
+			} else {
+				return taxInfo.getValue() * getMembers().size();
+			}
+		case PerPlot:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * getPlots().size();
+			} else {
+				return taxInfo.getValue() * getPlots().size();
+			}
+		case PerArea:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * this.getProtection().getHull().getArea();
+			} else {
+				return taxInfo.getValue() * this.getProtection().getHull().getArea();
+			}
+		case PerVolume:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * this.getProtection().getHull().getVolume();
+			} else {
+				return taxInfo.getValue() * this.getProtection().getHull().getVolume();
+			}
+		default:
+			break;
+		}
+		return 0;
+	}
+	
 	@Override
 	public void sendNotification(Level type, String message) {
 		// TODO Auto-generated method stub

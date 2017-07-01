@@ -20,6 +20,7 @@ public enum PermissionType {
 	MANAGE_STALLS          ("Permission to manage the stalls of this group."),
 	MOBSPAWNING            ("Permission for mobs to spawn within this group."),
 	PLACE                  ("Permission to place blocks within this group."),
+	TAX_NOTIFICATIONS	   ("Permission to see notifications when this group is taxed."),
 	UNCLAIM                ("Permission to unclaim areas."),
 	UPGRADE                ("Permission to upgrade this group.");
 	
