@@ -3,6 +3,8 @@ package com.kylantraynor.civilizations.economy;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.kylantraynor.civilizations.Economy;
+
 public class Loan {
 	
 	private EconomicEntity lender;
@@ -36,9 +38,7 @@ public class Loan {
 	
 	public boolean processPayment(){
 		if(end.isAfter(Instant.now())){
-			if(!borrower.removeFunds("reason", payment)) return false;
-			lender.addFunds("Reason", payment);
-			return true;
+			return Economy.tryTransferFunds(borrower, lender, "Loan of " + Economy.format(principal) + " interests.", payment);
 		} else {
 			return false;
 		}
