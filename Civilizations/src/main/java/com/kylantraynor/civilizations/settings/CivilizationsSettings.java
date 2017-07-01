@@ -104,4 +104,8 @@ public class CivilizationsSettings extends YamlConfiguration {
 	public void setColonizableWorlds(List<String> worlds){
 		this.set("General.ColonizableWorlds", worlds);
 	}
+
+	public String getSQLiteFilename() {
+		return this.getString("SQLite.Filename", "civs");
+	}
 }
