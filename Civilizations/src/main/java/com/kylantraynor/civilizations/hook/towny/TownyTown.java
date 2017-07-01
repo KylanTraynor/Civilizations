@@ -34,6 +34,7 @@ import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
@@ -79,6 +80,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	private Instant lastNotificationInstant = Instant.now();
 	static final int NOTIFICATION_SPAM_DELAY = 30;
 	private List<Shape> townyPlots = new ArrayList<Shape>();
+	private boolean payTaxes;
 	/**
 	 * Gets the CacheManagerd list of Towns from Towny.
 	 * @return List<TownyTown> of Towns.
@@ -239,6 +241,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permissions(allyPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
 		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
+		
+		this.payTaxes = townyTown.hasUpkeep();
 	}
 
 	@Override
@@ -484,5 +488,13 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		} catch (EconomyException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public double calculateTax(TaxInfo taxInfo){
+		if(this.payTaxes){
+			return super.calculateTax(taxInfo);
+		}
+		return 0;
 	}
 }
