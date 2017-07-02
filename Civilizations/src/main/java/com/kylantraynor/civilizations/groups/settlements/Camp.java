@@ -231,7 +231,11 @@ public class Camp extends Settlement{
 		if(isMember(player)){
 			list.add(new GroupAction("Leave", "Leaves this camp", ActionType.COMMAND, "/camp leave", true));
 		} else {
-			list.add(new GroupAction("Join", "Ask online members of this camp to join", ActionType.COMMAND, "/camp join", hasOneMemberOnline()));
+			if(getMembers().size() > 0){
+				list.add(new GroupAction("Join", "Ask online members of this camp to join", ActionType.COMMAND, "/camp join", hasOneMemberOnline()));
+			} else {
+				list.add(new GroupAction("Claim", "Claim this abandonned camp", ActionType.COMMAND, "/camp join", true));
+			}
 		}
 		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		list.add(new GroupAction("Renew", "Renew the camp for " + campDuration + " hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));

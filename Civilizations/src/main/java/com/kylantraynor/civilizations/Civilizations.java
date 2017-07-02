@@ -477,14 +477,12 @@ public class Civilizations extends JavaPlugin{
 		}
 		freesManagers();
 		MaterialAndData.saveToConfig(getConfig());
-		if(settings.hasChanged()){
-			try {
-				settings.save(new File(Civilizations.currentInstance.getDataFolder(), "config.yml"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		saveConfig();
+		try {
+			settings.save(new File(Civilizations.currentInstance.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -559,7 +557,11 @@ public class Civilizations extends JavaPlugin{
 				if(to instanceof Camp){
 					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);
 					if(!to.isMember(player)){
-						TitleManagerHook.sendActionBar("Protected Area", player, false);
+						if(to.getMembers().size() > 0){
+							TitleManagerHook.sendActionBar("Protected Area", player, false);
+						} else {
+							TitleManagerHook.sendActionBar("Abandonned Camp, do " + ChatColor.GOLD + "/camp claim" + ChatColor.RESET + " to claim it for yourself!", player, false);
+						}
 					}
 				} else if(to instanceof SmallOutpost){
 					TitleManagerHook.sendTitle("", ChatColor.GRAY + to.getName(), 10, 40, 10, player);

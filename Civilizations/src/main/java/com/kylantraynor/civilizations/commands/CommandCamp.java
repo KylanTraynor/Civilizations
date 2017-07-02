@@ -69,6 +69,7 @@ public class CommandCamp extends CommandGroup{
 				}
 			}
 			break;
+		case "CLAIM":
 		case "JOIN":
 			if(sender instanceof Player){
 				Player p = (Player) sender;
@@ -83,8 +84,14 @@ public class CommandCamp extends CommandGroup{
 						p.sendMessage(Camp.messageHeader + ChatColor.BLUE + "You've requested to join this camp. Please wait for an answer.");
 						new JoinQuestion(c, p).ask();
 					} else {
-						c.getInteractiveInfoPanel(p).send(p);
-						p.sendMessage(Camp.messageHeader + ChatColor.RED + "No member of this camp is online to accept your request.");
+						if(c.getMembers().size() > 0) {
+							c.getInteractiveInfoPanel(p).send(p);
+							p.sendMessage(Camp.messageHeader + ChatColor.RED + "No member of this camp is online to accept your request.");
+						} else {
+							c.addMember(p);
+							c.getInteractiveInfoPanel(p).send(p);
+							p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "This camp was abandonned. You've claimed it for yourself!");
+						}
 					}
 				}
 			}
