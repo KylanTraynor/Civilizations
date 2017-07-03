@@ -67,6 +67,7 @@ public class MaterialAndData {
 		switch(material){
 		case GRASS:
 		case GRASS_PATH:
+		case SOIL:
 			return new MaterialAndData(Material.DIRT, (byte) 0);
 		case DAYLIGHT_DETECTOR_INVERTED:
 			return new MaterialAndData(Material.DAYLIGHT_DETECTOR, (byte) 0);

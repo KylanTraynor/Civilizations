@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -902,12 +903,20 @@ public class Civilizations extends JavaPlugin{
 		return f;
 	}
 	
+	public static boolean isSelectionTool(ItemStack is){
+		if(is.getType() != getSelectionToolMaterial()) return false;
+		ItemMeta im = is.getItemMeta();
+		if(im == null) return false;
+		if(!im.getDisplayName().equals(getSelectionToolName())) return false;
+		return true;
+	}
+	
 	public static Material getSelectionToolMaterial(){
-		return Material.STICK;
+		return Material.FENCE;
 	}
 	
 	public static String getSelectionToolName(){
-		return ChatColor.GOLD + "Urbanist Tool";
+		return ChatColor.WHITE + "Urban Planner Tool";
 	}
 	
 	public static String[] getSelectionToolLore(){
