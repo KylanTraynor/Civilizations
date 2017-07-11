@@ -50,7 +50,7 @@ public abstract class Shape implements Visualizable{
 	public abstract Block[] getBlockSurface();
 	
 	public boolean isInside(Location location){
-		if(location.getWorld().equals(this.location.getWorld())){
+		if(location.getWorld().equals(getLocation().getWorld())){
 			return isInside(location.getX(), location.getY(), location.getZ());
 		} else {
 			return false;
