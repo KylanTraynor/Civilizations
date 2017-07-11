@@ -19,28 +19,28 @@ public class Prism extends Shape {
 	}
 
 	@Override
-	public int getWidth() {
+	public int getBlockWidth() {
 		return this.width;
 	}
 
 	@Override
-	public int getHeight() {
+	public int getBlockHeight() {
 		return this.height;
 	}
 
 	@Override
-	public int getLength() {
+	public int getBlockLength() {
 		return this.length;
 	}
 
 	@Override
 	public long getVolume() {
-		return getWidth() * getHeight() * getLength();
+		return getBlockWidth() * getBlockHeight() * getBlockLength();
 	}
 
 	@Override
 	public long getArea() {
-		return getWidth() * getLength();
+		return getBlockWidth() * getBlockLength();
 	}
 	
 	Location[] getCorners(){
@@ -122,9 +122,9 @@ public class Prism extends Shape {
 		int sY = s.getLocation().getBlockY();
 		int sZ = s.getLocation().getBlockZ();
 		
-		int x = Math.max(this.getMinX(), Math.min(sX, this.getMaxX()));
-		int y = Math.max(this.getMinY(), Math.min(sY, this.getMaxY()));
-		int z = Math.max(this.getMinZ(), Math.min(sZ, this.getMaxZ()));
+		double x = Math.max(this.getMinX(), Math.min(sX, this.getMaxX()));
+		double y = Math.max(this.getMinY(), Math.min(sY, this.getMaxY()));
+		double z = Math.max(this.getMinZ(), Math.min(sZ, this.getMaxZ()));
 		
 		double distanceSquared = (x - sX) * (x - sX)+
 				(y - sY) * (y - sY)+
@@ -134,32 +134,32 @@ public class Prism extends Shape {
 	}
 
 	@Override
-	public int getMinX() {
+	public int getMinBlockX() {
 		return getLocation().getBlockX();
 	}
 
 	@Override
-	public int getMinY() {
+	public int getMinBlockY() {
 		return getLocation().getBlockY();
 	}
 
 	@Override
-	public int getMinZ() {
+	public int getMinBlockZ() {
 		return getLocation().getBlockZ();
 	}
 
 	@Override
-	public int getMaxX() {
+	public int getMaxBlockX() {
 		return getLocation().getBlockX() + this.width;
 	}
 
 	@Override
-	public int getMaxY() {
+	public int getMaxBlockY() {
 		return getLocation().getBlockY() + this.height;
 	}
 
 	@Override
-	public int getMaxZ() {
+	public int getMaxBlockZ() {
 		return getLocation().getBlockZ() + this.length;
 	}
 	

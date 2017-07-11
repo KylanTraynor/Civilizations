@@ -24,18 +24,18 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	public int getWidth() {
-		return getMaxX() - getMinX();
+	public int getBlockWidth() {
+		return getMaxBlockX() - getMinBlockX();
 	}
 
 	@Override
-	public int getHeight() {
-		return getMaxY() - getMinY();
+	public int getBlockHeight() {
+		return getMaxBlockY() - getMinBlockY();
 	}
 
 	@Override
-	public int getLength() {
-		return getMaxZ() - getMinZ();
+	public int getBlockLength() {
+		return getMaxBlockZ() - getMinBlockZ();
 	}
 
 	@Override
@@ -192,33 +192,33 @@ public class CompositeShape extends Shape{
 	}
 
 	@Override
-	public int getMinX() {
-		return Math.min(shape1.getMinX(), shape2.getMinX());
+	public int getMinBlockX() {
+		return Math.min(shape1.getMinBlockX(), shape2.getMinBlockX());
 	}
 
 	@Override
-	public int getMinY() {
-		return Math.min(shape1.getMinY(), shape2.getMinY());
+	public int getMinBlockY() {
+		return Math.min(shape1.getMinBlockY(), shape2.getMinBlockY());
 	}
 
 	@Override
-	public int getMinZ() {
-		return Math.min(shape1.getMinZ(), shape2.getMinZ());
+	public int getMinBlockZ() {
+		return Math.min(shape1.getMinBlockZ(), shape2.getMinBlockZ());
 	}
 
 	@Override
-	public int getMaxX() {
-		return Math.max(shape1.getMaxX(), shape2.getMaxX());
+	public int getMaxBlockX() {
+		return Math.max(shape1.getMaxBlockX(), shape2.getMaxBlockX());
 	}
 
 	@Override
-	public int getMaxY() {
-		return Math.max(shape1.getMaxY(), shape2.getMaxY());
+	public int getMaxBlockY() {
+		return Math.max(shape1.getMaxBlockY(), shape2.getMaxBlockY());
 	}
 
 	@Override
-	public int getMaxZ() {
-		return Math.max(shape1.getMaxZ(), shape2.getMaxZ());
+	public int getMaxBlockZ() {
+		return Math.max(shape1.getMaxBlockZ(), shape2.getMaxBlockZ());
 	}
 
 	@Override

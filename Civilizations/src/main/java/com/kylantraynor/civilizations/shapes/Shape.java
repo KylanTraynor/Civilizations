@@ -24,15 +24,24 @@ public abstract class Shape implements Visualizable{
 	public abstract boolean intersect(Shape s);
 	public abstract double distanceSquared(Location location);
 	public abstract double distanceSquared(Shape shape);
-	public abstract int getMinX();
-	public abstract int getMinY();
-	public abstract int getMinZ();
-	public abstract int getMaxX();
-	public abstract int getMaxY();
-	public abstract int getMaxZ();
-	public abstract int getWidth();
-	public abstract int getHeight();
-	public abstract int getLength();
+	public double getMinX() {return getMinBlockX(); }
+	public double getMinY() {return getMinBlockY(); }
+	public double getMinZ() {return getMinBlockZ(); }
+	public double getMaxX() {return getMaxBlockX() + 1; }
+	public double getMaxY() {return getMaxBlockY() + 1; }
+	public double getMaxZ() {return getMaxBlockZ() + 1; }
+	public abstract int getMinBlockX();
+	public abstract int getMinBlockY();
+	public abstract int getMinBlockZ();
+	public abstract int getMaxBlockX();
+	public abstract int getMaxBlockY();
+	public abstract int getMaxBlockZ();
+	public abstract int getBlockWidth();
+	public abstract int getBlockHeight();
+	public abstract int getBlockLength();
+	public double getWidth() {return getMaxX() - getMinX(); }
+	public double getHeight() {return getMaxY() - getMinY(); }
+	public double getLength() {return getMaxZ() - getMinZ(); }
 	public abstract long getVolume();
 	public abstract long getArea();
 	public abstract boolean isInside(double x, double y, double z);

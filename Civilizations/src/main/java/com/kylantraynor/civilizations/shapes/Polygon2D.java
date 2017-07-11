@@ -149,7 +149,7 @@ public class Polygon2D extends Shape {
 	}
 
 	@Override
-	public int getMinX() {
+	public int getMinBlockX() {
 		int result = getLocation().getBlockX();
 		for(int x : xVertices){
 			result = x < result ? x : result;
@@ -158,13 +158,13 @@ public class Polygon2D extends Shape {
 	}
 
 	@Override
-	public int getMinY() {
+	public int getMinBlockY() {
 		int result = getLocation().getBlockY();
 		return result;
 	}
 
 	@Override
-	public int getMinZ() {
+	public int getMinBlockZ() {
 		int result = getLocation().getBlockZ();
 		for(int z : zVertices){
 			result = z < result ? z : result;
@@ -173,42 +173,42 @@ public class Polygon2D extends Shape {
 	}
 
 	@Override
-	public int getMaxX() {
+	public int getMaxBlockX() {
 		int result = getLocation().getBlockX();
 		for(int x : xVertices){
-			result = x > result ? x : result;
+			result = (x-1) > result ? (x-1) : result;
 		}
 		return result;
 	}
 
 	@Override
-	public int getMaxY() {
+	public int getMaxBlockY() {
 		int result = getLocation().getBlockY();
 		return result;
 	}
 
 	@Override
-	public int getMaxZ() {
+	public int getMaxBlockZ() {
 		int result = getLocation().getBlockZ();
 		for(int z : zVertices){
-			result = z > result ? z : result;
+			result = (z-1) > result ? (z-1) : result;
 		}
 		return result;
 	}
 
 	@Override
-	public int getWidth() {
-		return getMaxX() - getMinX();
+	public int getBlockWidth() {
+		return getMaxBlockX() - getMinBlockX();
 	}
 
 	@Override
-	public int getHeight() {
+	public int getBlockHeight() {
 		return 0;
 	}
 
 	@Override
-	public int getLength() {
-		return getMaxZ() - getMinZ();
+	public int getBlockLength() {
+		return getMaxBlockZ() - getMinBlockZ();
 	}
 
 	@Override

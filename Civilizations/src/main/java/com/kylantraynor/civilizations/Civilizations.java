@@ -235,7 +235,7 @@ public class Civilizations extends JavaPlugin{
 		im.setLore(getSelectionToolLore());
 		is.setItemMeta(im);
 		ShapelessRecipe r = new ShapelessRecipe(new NamespacedKey(this, "urbanist_tool"), is);
-		r.addIngredient(getSelectionToolMaterial());
+		r.addIngredient(Material.STICK);
 		Bukkit.addRecipe(r);
 		
 	}
@@ -928,7 +928,7 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	public static Material getSelectionToolMaterial(){
-		return Material.STICK;
+		return Material.WOOD_SPADE;
 	}
 	
 	public static String getSelectionToolName(){
@@ -943,8 +943,8 @@ public class Civilizations extends JavaPlugin{
 				"", 
 				ChatColor.BLUE + "Use " + ChatColor.GOLD + "/Selection Start Hull" + ChatColor.BLUE + " to begin a polygonal", 
 				ChatColor.BLUE + "selection, then Left Click to add a block to the", 
-				ChatColor.BLUE + "point cloud. A Hull will be calculated to fit", 
-				ChatColor.BLUE + "them all in."
+				ChatColor.BLUE + "point cloud. A Hull will be calculated to fit them", 
+				ChatColor.BLUE + "all in."
 				};
 		List<String> result = new ArrayList<String>();
 		for(String line : s){

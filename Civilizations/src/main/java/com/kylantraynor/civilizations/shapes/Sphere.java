@@ -18,17 +18,17 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	public int getWidth() {
+	public int getBlockWidth() {
 		return this.radius * 2;
 	}
 
 	@Override
-	public int getHeight() {
+	public int getBlockHeight() {
 		return this.radius * 2;
 	}
 
 	@Override
-	public int getLength() {
+	public int getBlockLength() {
 		return this.radius * 2;
 	}
 
@@ -125,9 +125,9 @@ public class Sphere extends Shape {
 		int thisY = this.getLocation().getBlockY();
 		int thisZ = this.getLocation().getBlockZ();
 		
-		int x = Math.max(p.getMinX(), Math.min(thisX, p.getMaxX()));
-		int y = Math.max(p.getMinY(), Math.min(thisY, p.getMaxY()));
-		int z = Math.max(p.getMinZ(), Math.min(thisZ, p.getMaxZ()));
+		double x = Math.max(p.getMinX(), Math.min(thisX, p.getMaxX()));
+		double y = Math.max(p.getMinY(), Math.min(thisY, p.getMaxY()));
+		double z = Math.max(p.getMinZ(), Math.min(thisZ, p.getMaxZ()));
 		
 		double distanceSquared = (x - thisX) * (x - thisX)+
 				(y - thisY) * (y - thisY)+
@@ -137,32 +137,32 @@ public class Sphere extends Shape {
 	}
 
 	@Override
-	public int getMinX() {
+	public int getMinBlockX() {
 		return getLocation().getBlockX() - getRadius();
 	}
 
 	@Override
-	public int getMinY() {
+	public int getMinBlockY() {
 		return getLocation().getBlockY() - getRadius();
 	}
 
 	@Override
-	public int getMinZ() {
+	public int getMinBlockZ() {
 		return getLocation().getBlockZ() - getRadius();
 	}
 
 	@Override
-	public int getMaxX() {
+	public int getMaxBlockX() {
 		return getLocation().getBlockX() + getRadius();
 	}
 
 	@Override
-	public int getMaxY() {
+	public int getMaxBlockY() {
 		return getLocation().getBlockY() + getRadius();
 	}
 
 	@Override
-	public int getMaxZ() {
+	public int getMaxBlockZ() {
 		return getLocation().getBlockZ() + getRadius();
 	}
 

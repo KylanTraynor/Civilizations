@@ -25,6 +25,13 @@ public class Hull extends Shape {
 	private boolean verticesHaveChanged = true;
 	private double[] xVertices;
 	private double[] zVertices;
+	
+	private Integer minX = null;
+	private Integer minY = null;
+	private Integer minZ = null;
+	private Integer maxX = null;
+	private Integer maxY = null;
+	private Integer maxZ = null;
 
 	private ArrayList<Location> vertices;
 
@@ -171,23 +178,22 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public int getWidth() {
-		return getMaxX() - getMinX();
+	public int getBlockWidth() {
+		return getMaxBlockX() - getMinBlockX();
 	}
 
 	@Override
-	public int getHeight() {
-		return getMaxY() - getMinY();
+	public int getBlockHeight() {
+		return getMaxBlockY() - getMinBlockY();
 	}
 
 	@Override
-	public int getLength() {
-		return getMaxZ() - getMinZ();
+	public int getBlockLength() {
+		return getMaxBlockZ() - getMinBlockZ();
 	}
 
 	@Override
 	public long getVolume() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -201,6 +207,10 @@ public class Hull extends Shape {
 			}
 		}
 		return (long) Math.abs(area / 2l);
+	}
+	
+	public boolean isInside(Block b){
+		return isInside(b.getLocation().getBlockX() + 0.5, b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 0.5);
 	}
 
 	@Override
@@ -267,13 +277,34 @@ public class Hull extends Shape {
 		return null;
 	}
 	
-	public void addPoint(Location location){
-		points.add(location);
+	public void addBlock(Block block){
+		if(block == null) return;
+		//Add the 4 corners of the block at BlockY;
+		if(points.size() == 0){
+			minY = block.getLocation().getBlockY();
+			maxY = block.getLocation().getBlockY();
+		} else {
+			minY = Math.min(minY, block.getLocation().getBlockY());
+			maxY = Math.max(maxY, block.getLocation().getBlockY());
+		}
+		for(int x = 0; x <= 1; x++){
+			for(int z = 0; z <= 1; z++){
+				points.add(block.getLocation().clone().add(x, 0, z));
+			}
+		}
 		setChanged(true);
 	}
 	
-	public void addPoints(List<Location> list){
-		for(Location l : list){
+	public void addBlocks(List<Block> blocks){
+		for(Block b : blocks){
+			addBlock(b);
+		}
+		setChanged(true);
+	}
+	
+	public void addPoints(List<Location> locations){
+		for(Location l : locations){
+			if(l == null) continue;
 			points.add(l);
 		}
 		setChanged(true);
@@ -371,10 +402,10 @@ public class Hull extends Shape {
 		massCenter = null;
 		maxDistanceSquared = Double.NaN;
 		minX = null;
-		minY = null;
+		//minY = null;
 		minZ = null;
 		maxX = null;
-		maxY = null;
+		//maxY = null;
 		maxZ = null;
 	}
 	
@@ -383,15 +414,8 @@ public class Hull extends Shape {
 		return false;
 	}
 	
-	private Integer minX = null;
-	private Integer minY = null;
-	private Integer minZ = null;
-	private Integer maxX = null;
-	private Integer maxY = null;
-	private Integer maxZ = null;
-	
 	@Override
-	public int getMinX() {
+	public int getMinBlockX() {
 		if(minX != null) return minX;
 		Integer min = null;
 		if(exists()){
@@ -416,7 +440,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public int getMinY() {
+	public int getMinBlockY() {
 		if(minY != null) return minY;
 		Integer min = null;
 		for(Location l : points){
@@ -431,7 +455,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public int getMinZ() {
+	public int getMinBlockZ() {
 		if(minZ != null) return minZ;
 		Integer min = null;
 		if(exists()){
@@ -456,7 +480,7 @@ public class Hull extends Shape {
 	}
 
 	@Override
-	public int getMaxX() {
+	public int getMaxBlockX() {
 		if(maxX != null) return maxX;
 		Integer max = null;
 		if(exists()){
@@ -476,12 +500,12 @@ public class Hull extends Shape {
 				}
 			}
 		}
-		maxX = max;
-		return max;
+		maxX = max - 1;
+		return maxX;
 	}
 
 	@Override
-	public int getMaxY() {
+	public int getMaxBlockY() {
 		if(maxY != null) return maxY;
 		Integer max = null;
 		for(Location l : points){
@@ -491,12 +515,12 @@ public class Hull extends Shape {
 				max = l.getBlockY();
 			}
 		}
-		maxY = max;
-		return max;
+		maxY = max - 1;
+		return maxY;
 	}
 
 	@Override
-	public int getMaxZ() {
+	public int getMaxBlockZ() {
 		if(maxZ != null) return maxZ;
 		Integer max = null;
 		if(exists()){
@@ -516,8 +540,8 @@ public class Hull extends Shape {
 				}
 			}
 		}
-		maxZ = max;
-		return max;
+		maxZ = max - 1;
+		return maxZ;
 	}
 
 	@Override
@@ -605,7 +629,18 @@ public class Hull extends Shape {
 			if(isInside(location.getX(), location.getY(), location.getZ())) return 0;
 		}
 		*/
-		return distanceSquared;
+		if(getMinY() < location.getBlockY() && location.getBlockY() < getMaxY()){
+			return distanceSquared;
+		} else {
+			if(getMinY() > location.getBlockY()){
+				double dy = location.getBlockY() - getMinY();
+				return distanceSquared + dy*dy;
+			} else{
+				double dy = getMaxY() - location.getBlockY();
+				return distanceSquared + dy*dy;
+			}
+		}
+		//return distanceSquared;
 	}
 
 	public void clear() {

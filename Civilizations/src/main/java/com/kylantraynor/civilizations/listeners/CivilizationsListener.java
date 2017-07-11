@@ -1,6 +1,9 @@
 package com.kylantraynor.civilizations.listeners;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -49,32 +52,6 @@ public class CivilizationsListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerItemHeld(PlayerItemHeldEvent event){
-		ItemStack item = event.getPlayer().getInventory().getItem(event.getNewSlot());
-		if(item != null && item.getType() == Material.STICK){
-			if(!Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
-				Civilizations.getPlayersInProtectionMode().add(event.getPlayer());
-				/*for(Settlement s : Settlement.getSettlementList()){
-					updateProtectionVisibility(event.getPlayer(), s.getProtection());
-					for(Plot p : s.getPlots()){
-						updateProtectionVisibility(event.getPlayer(), p.getProtection());
-					}
-				}*/
-			}
-		} else {
-			if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
-				Civilizations.getPlayersInProtectionMode().remove(event.getPlayer());
-				/*for(Settlement s : Settlement.getSettlementList()){
-					updateProtectionVisibility(event.getPlayer(), s.getProtection());
-					for(Plot p : s.getPlots()){
-						updateProtectionVisibility(event.getPlayer(), p.getProtection());
-					}
-				}*/
-			}
-		}
-	}
-	
-	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if(event.getPlayer() == null) return;
 		if(event.getPlayer().getInventory().getItemInMainHand() != null){
@@ -84,14 +61,28 @@ public class CivilizationsListener implements Listener{
 					event.setCancelled(true);
 					return;
 				} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
-					SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
-					event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
-					event.setCancelled(true);
+					String selectionMode = SelectionManager.getSelectionMode(event.getPlayer());
+					if(selectionMode.equals("HULL")){
+						SelectionManager.addPoint(event.getPlayer(), event.getClickedBlock().getLocation());
+						event.getPlayer().sendMessage(Civilizations.messageHeader + "Point " + SelectionManager.getPoints(event.getPlayer()).size() + " Set.");
+						event.setCancelled(true);
+					} else {
+						SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
+						event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
+						event.setCancelled(true);
+					}
 					return;
 				} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-					SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
-					event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
-					event.setCancelled(true);
+					String selectionMode = SelectionManager.getSelectionMode(event.getPlayer());
+					if(selectionMode.equals("HULL")){
+						if(SelectionManager.removeLastPoint(event.getPlayer())){
+							event.getPlayer().sendMessage(Civilizations.messageHeader + "Last point removed from point cloud selection.");
+						}
+					} else {
+						SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
+						event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
+						event.setCancelled(true);
+					}
 					return;
 				}
 			}

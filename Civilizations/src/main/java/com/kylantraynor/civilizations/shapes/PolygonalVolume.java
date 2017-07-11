@@ -11,12 +11,12 @@ public class PolygonalVolume extends Polygon2D{
 	}
 	
 	@Override
-	public int getMinY(){
+	public int getMinBlockY(){
 		return getLocation().getBlockY();
 	}
 	
 	@Override
-	public int getMaxY(){
+	public int getMaxBlockY(){
 		return getLocation().getBlockY() + height;
 	}
 	
