@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -262,8 +263,28 @@ public class Hull extends Shape {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder result = new StringBuilder("HULL;");
+		result.append(getLocation().getWorld().getName() + ";");
+		result.append(getMinBlockY() + ";");
+		result.append(getMaxBlockY() + ";");
+		for(Location p : points){
+			result.append(p.getBlockX() + "," + p.getBlockZ() + ";");
+		}
+		return result.toString();
+	}
+	
+	public static Hull parse(String string){
+		String[] component = string.split(";");
+		Hull result = new Hull();
+		World w = Bukkit.getWorld(component[1]);
+		int minY = Integer.parseInt(component[2]);
+		int maxY = Integer.parseInt(component[3]);
+		for(int i = 4; i < component.length; i++){
+			String[] point = component[i].split(",");
+			Location l = new Location(w, Integer.parseInt(point[0]), (i % 2 == 0 ? minY : maxY), Integer.parseInt(point[1]));
+			result.addPoint(l);
+		}
+		return result;
 	}
 
 	@Override
@@ -303,6 +324,18 @@ public class Hull extends Shape {
 				points.add(block.getLocation().clone().add(x, 0, z));
 			}
 		}
+		setChanged(true);
+	}
+	
+	public void addPoint(Location l){
+		if(points.size() == 0){
+			minY = l.getBlockY();
+			maxY = l.getBlockY();
+		} else {
+			minY = Math.min(minY, l.getBlockY());
+			maxY = Math.max(maxY, l.getBlockY());
+		}
+		points.add(l);
 		setChanged(true);
 	}
 	

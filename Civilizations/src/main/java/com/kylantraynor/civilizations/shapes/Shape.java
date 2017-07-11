@@ -107,6 +107,8 @@ public abstract class Shape implements Visualizable{
 				return Prism.parse(s);
 			case "SPHERE":
 				return Sphere.parse(s);
+			case "HULL":
+				return Hull.parse(s);
 			}
 			return null;
 		} else {
