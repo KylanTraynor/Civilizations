@@ -20,6 +20,7 @@ import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.selection.Selection;
+import com.kylantraynor.civilizations.shapes.Shape;
 
 public class CommandBlueprint implements CommandExecutor{
 	private HashMap<UUID, Blueprint> currentBlueprints = new HashMap<UUID, Blueprint>();
@@ -139,17 +140,17 @@ public class CommandBlueprint implements CommandExecutor{
 			if(checkHeight){
 				if(selection.getWidth() < cbp.getWidth() || selection.getHeight() < cbp.getHeight() || selection.getLength() < cbp.getDepth()){
 					player.sendMessage(messageHeader + ChatColor.RED + "The selection is too small to fit the blueprint.");
-					int needX = Math.max(cbp.getWidth() - selection.getWidth(), 0);
-					int needY = Math.max(cbp.getHeight() - selection.getHeight(), 0);
-					int needZ = Math.max(cbp.getDepth() - selection.getLength(), 0);
+					int needX = (int)Math.max(cbp.getWidth() - selection.getWidth(), 0);
+					int needY = (int)Math.max(cbp.getHeight() - selection.getHeight(), 0);
+					int needZ = (int)Math.max(cbp.getDepth() - selection.getLength(), 0);
 					player.sendMessage(messageHeader + ChatColor.RED + "This blueprint needs " + needX + " blocks more in X, " + needZ + " blocks more in Z and " + needY + " blocks more in Y.");
 					return true;
 				}
 			} else {
 				if(selection.getWidth() < cbp.getWidth() || selection.getLength() < cbp.getDepth()){
 					player.sendMessage(messageHeader + ChatColor.RED + "The selection is too small to fit the blueprint.");
-					int needX = Math.max(cbp.getWidth() - selection.getWidth(), 0);
-					int needZ = Math.max(cbp.getDepth() - selection.getLength(), 0);
+					int needX = (int)Math.max(cbp.getWidth() - selection.getWidth(), 0);
+					int needZ = (int)Math.max(cbp.getDepth() - selection.getLength(), 0);
 					player.sendMessage(messageHeader + ChatColor.RED + "This blueprint needs " + needX + " blocks more in X and " + needZ + " blocks more in Z");
 					return true;
 				}
@@ -159,7 +160,7 @@ public class CommandBlueprint implements CommandExecutor{
 			HasBuilder settlement = null;
 			for(Settlement g : CacheManager.getSettlementList()){
 				if(!(g instanceof HasBuilder)) continue;
-				if(g.canMergeWith(selection)){
+				if(g.canMergeWith((Shape)selection)){
 					settlement = (HasBuilder) g;
 					break;
 				}

@@ -271,7 +271,7 @@ public class GroupManager {
 		for(Plot p : set.getPlots()){
 			if(!canMerge){
 				for(Shape shape : p.getSettings().getShapes()){
-					if(shape.distanceSquared(s) <= Civilizations.getSettings().getSettlementMergeDistanceSquared()){
+					if(shape.distanceSquared((Shape)s) <= Civilizations.getSettings().getSettlementMergeDistanceSquared()){
 						canMerge = true;
 						break;
 					}
@@ -279,7 +279,7 @@ public class GroupManager {
 			}
 		}
 		if(!canMerge) return null;
-		return new MarketStall("Stall", s, set);
+		return new MarketStall("Stall", (Shape)s, set);
 	}
 
 	/**
