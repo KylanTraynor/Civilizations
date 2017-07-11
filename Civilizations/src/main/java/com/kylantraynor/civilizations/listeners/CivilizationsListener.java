@@ -77,36 +77,40 @@ public class CivilizationsListener implements Listener{
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if(event.getPlayer() == null) return;
-		if(Civilizations.getPlayersInProtectionMode().contains(event.getPlayer())){
-			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_AIR){
-				Civilizations.selectTargetProtection(event.getPlayer());
-				event.setCancelled(true);
-			} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
-				SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
-				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
-				event.setCancelled(true);
-			} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-				SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
-				event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
-				event.setCancelled(true);
+		if(event.getPlayer().getInventory().getItemInMainHand() != null){
+			if(Civilizations.isSelectionTool(event.getPlayer().getInventory().getItemInMainHand())){
+				if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_AIR){
+					Civilizations.selectTargetProtection(event.getPlayer());
+					event.setCancelled(true);
+					return;
+				} else if(event.getPlayer() != null && event.getAction() == Action.LEFT_CLICK_BLOCK){
+					SelectionManager.setPrimary(event.getPlayer(), event.getClickedBlock().getLocation());
+					event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 1 Set.");
+					event.setCancelled(true);
+					return;
+				} else if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+					SelectionManager.setSecondary(event.getPlayer(), event.getClickedBlock().getLocation());
+					event.getPlayer().sendMessage(Civilizations.messageHeader + "Position 2 Set.");
+					event.setCancelled(true);
+					return;
+				}
 			}
-		} else {
-			if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-				Block b = event.getClickedBlock();
-				if(b == null) return;
-				if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST){
-					BlockState state = b.getState();
-					Sign sign = (Sign) state;
-					if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
-						event.setCancelled(true);
-						Protection p = ProtectionManager.getProtectionAt(sign.getLocation());
-						if(p == null){
-							event.getPlayer().sendMessage(ChatColor.RED + "There is no protected area here.");
-							return;
-						}
-						Civilizations.DEBUG("Opening menu for " + event.getPlayer().getName() + ".");
-						p.getGroup().openMenu(event.getPlayer());
+		}
+		if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			Block b = event.getClickedBlock();
+			if(b == null) return;
+			if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST){
+				BlockState state = b.getState();
+				Sign sign = (Sign) state;
+				if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
+					event.setCancelled(true);
+					Protection p = ProtectionManager.getProtectionAt(sign.getLocation());
+					if(p == null){
+						event.getPlayer().sendMessage(ChatColor.RED + "There is no protected area here.");
+						return;
 					}
+					Civilizations.DEBUG("Opening menu for " + event.getPlayer().getName() + ".");
+					p.getGroup().openMenu(event.getPlayer());
 				}
 			}
 		}
