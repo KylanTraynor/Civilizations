@@ -25,6 +25,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -233,6 +234,8 @@ public class Civilizations extends JavaPlugin{
 		ItemMeta im = is.getItemMeta();
 		im.setDisplayName(getSelectionToolName());
 		im.setLore(getSelectionToolLore());
+		im.setUnbreakable(true);
+		im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_DESTROYS);
 		is.setItemMeta(im);
 		ShapelessRecipe r = new ShapelessRecipe(new NamespacedKey(this, "urbanist_tool"), is);
 		r.addIngredient(Material.STICK);
@@ -942,7 +945,7 @@ public class Civilizations extends JavaPlugin{
 				ChatColor.RED + "Right Click" + ChatColor.BLUE + " to set the " + ChatColor.RED + "second corner" + ChatColor.BLUE + ".", 
 				"", 
 				ChatColor.BLUE + "Use " + ChatColor.GOLD + "/Selection Start Hull" + ChatColor.BLUE + " to begin a polygonal", 
-				ChatColor.BLUE + "selection, then Left Click to add a block to the", 
+				ChatColor.BLUE + "selection, then "+ChatColor.GOLD + "Left Click"+ChatColor.BLUE+" to add a block to the", 
 				ChatColor.BLUE + "point cloud. A Hull will be calculated to fit them", 
 				ChatColor.BLUE + "all in."
 				};
