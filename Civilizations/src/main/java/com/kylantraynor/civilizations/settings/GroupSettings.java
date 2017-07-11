@@ -255,7 +255,12 @@ public class GroupSettings extends YamlConfiguration{
 
 	public void setShapes(List<Shape> shapes) {
 		if(shapes != null){
-			this.set("Protection.Shape", Util.getShapesString(shapes));
+			try{
+				this.set("Protection.Shape", Util.getShapesString(shapes));
+			} catch(Exception e){
+				Civilizations.currentInstance.getLogger().warning("Couldn't save protection shapes for " + this.getName() + ".");
+				e.printStackTrace();
+			}
 		} else {
 			this.set("Protection.Shape", null);
 		}
