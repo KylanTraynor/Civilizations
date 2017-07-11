@@ -3,8 +3,9 @@ package com.kylantraynor.civilizations.selection;
 import org.bukkit.Location;
 
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.shapes.Visualizable;
 
-public interface Selection {
+public interface Selection extends Visualizable{
 	public boolean isValid();
 	public String getValidityReason();
 	public Location getLocation();

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -267,8 +268,18 @@ public class Hull extends Shape {
 
 	@Override
 	public Location[] getBlockLocations() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Location> list = new ArrayList<Location>();
+		World w = getLocation().getWorld();
+		for(int x = getMinBlockX(); x <= getMaxBlockX(); x++){
+			for(int z = getMinBlockZ(); z <= getMaxBlockZ(); z++){
+				for(int y = getMinBlockY(); y <= getMaxBlockY(); y++){
+					if(isInside(x + 0.5, y, z + 0.5)){
+						list.add(w.getBlockAt(x, y, z).getLocation());
+					}
+				}
+			}
+		}
+		return list.toArray(new Location[list.size()]);
 	}
 
 	@Override
