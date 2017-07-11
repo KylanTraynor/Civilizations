@@ -34,6 +34,8 @@ public class Hull extends Shape {
 	private Integer maxX = null;
 	private Integer maxY = null;
 	private Integer maxZ = null;
+	
+	private World world = null;
 
 	private ArrayList<Location> vertices;
 
@@ -277,6 +279,7 @@ public class Hull extends Shape {
 		String[] component = string.split(";");
 		Hull result = new Hull();
 		World w = Bukkit.getWorld(component[1]);
+		result.setWorld(w);
 		int minY = Integer.parseInt(component[2]);
 		int maxY = Integer.parseInt(component[3]);
 		for(int i = 4; i < component.length; i++){
@@ -355,7 +358,6 @@ public class Hull extends Shape {
 	}
 	
 	public Location getMassCenter(){
-		if(massCenter != null) return massCenter;
 		int totalX = 0;
 		int totalZ = 0;
 		int totalY = 0;
@@ -364,7 +366,7 @@ public class Hull extends Shape {
 			totalZ += l.getBlockZ();
 			totalY += l.getBlockY();
 		}
-		massCenter =  new Location(points.first().getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
+		massCenter =  new Location(getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
 		return massCenter;
 	}
 	
@@ -706,5 +708,14 @@ public class Hull extends Shape {
 		for(int i = 0; i < xVertices.length; i++){
 			Civilizations.DEBUG("Hull vertex["+i+"] at : " + xVertices[i] + ", " + zVertices[i]);
 		}
+	}
+
+	public World getWorld() {
+		if(super.getLocation() != null) return super.getLocation().getWorld(); 
+		return world;
+	}
+
+	public void setWorld(World world) {
+		this.world = world;
 	}
 }

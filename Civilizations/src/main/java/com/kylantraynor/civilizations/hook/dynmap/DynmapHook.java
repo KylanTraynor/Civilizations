@@ -127,7 +127,7 @@ public class DynmapHook {
 		if(minZoom > 0){
 			regionsMarkerSet.setMinZoom(minZoom);
 		}
-		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 50));
+		regionsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Regions.LayerPrio", 1));
 		regionsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Regions.HideByDefault", false));
 	}
 	
