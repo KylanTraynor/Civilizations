@@ -266,7 +266,7 @@ public class Hull extends Shape {
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder("HULL;");
-		result.append(getLocation().getWorld().getName() + ";");
+		result.append(getWorld().getName() + ";");
 		result.append(getMinBlockY() + ";");
 		result.append(getMaxBlockY() + ";");
 		for(Location p : points){

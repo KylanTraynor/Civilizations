@@ -64,9 +64,14 @@ public class SettlementProtection extends Protection{
 		return null;
 	}
 	
+	@Override
+	public void setShapes(List<Shape> shapes) {
+		//if(getSettlement() instanceof Camp) {super.setShapes(shapes); return;}
+	}
+	
+	@Override
 	public List<Shape> getShapes(){
 		if(getSettlement() instanceof Camp) return super.getShapes();
-		if(getSettlement() instanceof TownyTown) return super.getShapes();
 		List<Shape> result = new ArrayList<Shape>();
 		result.add(getHull());
 		return result;
