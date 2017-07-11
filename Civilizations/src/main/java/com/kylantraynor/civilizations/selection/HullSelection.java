@@ -15,11 +15,16 @@ public class HullSelection extends Hull implements Selection {
 		super(l);
 	}
 	
-	public void addPoint(Location l){
+	public void addBlock(Location l){
 		if(getVertices().size() > 0){
 			if(getVertices().get(0).getWorld() != l.getWorld()) return;
 		}
-		super.addPoint(l);
+		super.addBlock(l.getBlock());
+	}
+	
+	public Location getLocation(){
+		if(getVertices().size() == 0) return null;
+		return new Location(getVertices().get(0).getWorld(), getMinBlockX(), getMinBlockY(), getMinBlockZ());
 	}
 	
 	@Override

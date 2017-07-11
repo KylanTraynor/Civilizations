@@ -20,17 +20,17 @@ public class Prism extends Shape {
 
 	@Override
 	public int getBlockWidth() {
-		return this.width;
+		return this.width - 1;
 	}
 
 	@Override
 	public int getBlockHeight() {
-		return this.height;
+		return this.height - 1;
 	}
 
 	@Override
 	public int getBlockLength() {
-		return this.length;
+		return this.length - 1;
 	}
 
 	@Override
@@ -45,15 +45,15 @@ public class Prism extends Shape {
 	
 	Location[] getCorners(){
 		Location c1 = getLocation().clone();
-		Location c2 = getLocation().clone().add(this.width, this.height, this.length);
+		Location c2 = getLocation().clone().add(getBlockWidth(), getBlockHeight(), getBlockLength());
 		return new Location[]{c1, c2};
 	}
 
 	@Override
 	public boolean isInside(double x, double y, double z) {
-		if(Math.floor(x) >= getLocation().getBlockX() && Math.floor(x) <= getLocation().getBlockX() + width){
-			if(Math.floor(y) >= getLocation().getBlockY() && Math.floor(y) <= getLocation().getBlockY() + height){
-				if(Math.floor(z) >= getLocation().getBlockZ() && Math.floor(z) <= getLocation().getBlockZ() + length){
+		if(x >= getMinX() && x < getMaxX()){
+			if(y >= getMinY() && y < getMaxY()){
+				if(z >= getMinZ() && z < getMaxZ()){
 					return true;
 				}
 			}
@@ -65,8 +65,8 @@ public class Prism extends Shape {
 	public String toString() {
 		String result = "PRISM;" + getLocation().getWorld().getName() + ";" +
 				getLocation().getX() + ";" + getLocation().getY() +
-				";" + getLocation().getZ() + ";" + getWidth() + ";" +
-				getHeight() + ";" + getLength();
+				";" + getLocation().getZ() + ";" + (int)getWidth() + ";" +
+				(int)getHeight() + ";" + (int)getLength();
 		return result;
 	}
 	
@@ -85,9 +85,9 @@ public class Prism extends Shape {
 	@Override
 	public Location[] getBlockLocations() {
 		List<Location> list = new ArrayList<Location>();
-		for(int x = 0; x <= width; x++){
-			for(int y = 0; y <= height; y++){
-				for(int z = 0; z <= length; z++){
+		for(int x = 0; x <= getBlockWidth(); x++){
+			for(int y = 0; y <= getBlockHeight(); y++){
+				for(int z = 0; z <= getBlockLength(); z++){
 					list.add(getLocation().clone().add(x, y, z));
 				}
 			}
@@ -98,10 +98,10 @@ public class Prism extends Shape {
 	@Override
 	public Block[] getBlockSurface() {
 		List<Block> list = new ArrayList<Block>();
-		for(int x = 0; x <= width; x++){
-			for(int y = 0; y <= height; y++){
-				for(int z = 0; z <= length; z++){
-					if((x == 0 || x == width) || (y == 0 || y == height) || (z == 0 || z == length)){
+		for(int x = 0; x <= getBlockWidth(); x++){
+			for(int y = 0; y <= getBlockHeight(); y++){
+				for(int z = 0; z <= getBlockLength(); z++){
+					if((x == 0 || x == getBlockWidth()) || (y == 0 || y == getBlockHeight()) || (z == 0 || z == getBlockLength())){
 						list.add(getLocation().clone().add(x, y, z).getBlock());
 					}
 				}
@@ -111,9 +111,9 @@ public class Prism extends Shape {
 	}
 	
 	public boolean intersect(Prism p){
-		return (this.getMinX() <= p.getMaxX() && this.getMaxX() >= p.getMinX()) &&
-				(this.getMinY() <= p.getMaxY() && this.getMaxY() >= p.getMinY()) &&
-				(this.getMinZ() <= p.getMaxZ() && this.getMaxZ() >= p.getMinZ());
+		return (this.getMinX() < p.getMaxX() && this.getMaxX() > p.getMinX()) &&
+				(this.getMinY() < p.getMaxY() && this.getMaxY() > p.getMinY()) &&
+				(this.getMinZ() < p.getMaxZ() && this.getMaxZ() > p.getMinZ());
 	}
 	
 	public boolean intersect(Sphere s){
@@ -150,17 +150,17 @@ public class Prism extends Shape {
 
 	@Override
 	public int getMaxBlockX() {
-		return getLocation().getBlockX() + this.width;
+		return getLocation().getBlockX() + getBlockWidth();
 	}
 
 	@Override
 	public int getMaxBlockY() {
-		return getLocation().getBlockY() + this.height;
+		return getLocation().getBlockY() + getBlockHeight();
 	}
 
 	@Override
 	public int getMaxBlockZ() {
-		return getLocation().getBlockZ() + this.length;
+		return getLocation().getBlockZ() + getBlockLength();
 	}
 	
 	@Override

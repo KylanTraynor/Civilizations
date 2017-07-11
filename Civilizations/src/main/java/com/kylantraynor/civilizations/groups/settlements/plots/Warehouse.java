@@ -50,9 +50,9 @@ public class Warehouse extends Plot implements HasInventory{
 		Location l = null;
 		for(Shape s : getProtection().getShapes()){
 			l = s.getLocation().clone();
-			for(int x = s.getMinX(); x < s.getMaxX(); x++){
-				for(int y = s.getMinY(); y < s.getMaxY(); y++){
-					for(int z = s.getMinZ(); z < s.getMaxZ(); z++){
+			for(int x = s.getMinBlockX(); x <= s.getMaxBlockX(); x++){
+				for(int y = s.getMinBlockY(); y <= s.getMaxBlockY(); y++){
+					for(int z = s.getMinBlockZ(); z <= s.getMaxBlockZ(); z++){
 						l.setX(x);
 						l.setY(y);
 						l.setZ(z);

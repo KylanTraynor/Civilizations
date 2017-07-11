@@ -358,12 +358,12 @@ public class Protection {
 
 	public Location getCenter() {
 		World w = null;
-		Integer minX = null;
-		Integer minY = null;
-		Integer minZ = null;
-		Integer maxX = null;
-		Integer maxY = null;
-		Integer maxZ = null;
+		Double minX = null;
+		Double minY = null;
+		Double minZ = null;
+		Double maxX = null;
+		Double maxY = null;
+		Double maxZ = null;
 		for(Shape s : shapes){
 			if(w == null){
 				w = s.getLocation().getWorld();

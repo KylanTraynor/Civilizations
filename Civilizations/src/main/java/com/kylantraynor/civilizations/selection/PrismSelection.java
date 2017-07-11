@@ -15,9 +15,9 @@ public class PrismSelection extends Prism implements Selection{
 	
 	public PrismSelection(Location corner1, Location corner2){
 		super(getFirstCorner(corner1, corner2),
-				Math.abs(corner1.getBlockX() - corner2.getBlockX()),
-				Math.abs(corner1.getBlockY() - corner2.getBlockY()),
-				Math.abs(corner1.getBlockZ() - corner2.getBlockZ()));
+				Math.abs(corner1.getBlockX() - corner2.getBlockX() + 1),
+				Math.abs(corner1.getBlockY() - corner2.getBlockY() + 1),
+				Math.abs(corner1.getBlockZ() - corner2.getBlockZ() + 1));
 		if(corner1.getWorld() == corner2.getWorld()){
 			isValid = true;
 		} else {
@@ -30,21 +30,6 @@ public class PrismSelection extends Prism implements Selection{
 		return new Location(corner1.getWorld(), Math.min(corner1.getBlockX(), corner2.getBlockX()),
 				Math.min(corner1.getBlockY(), corner2.getBlockY()),
 				Math.min(corner1.getBlockZ(), corner2.getBlockZ()));
-	}
-	
-	@Override
-	public int getWidth(){
-		return getMaxX() - getMinX() + 1;
-	}
-	
-	@Override
-	public int getLength(){
-		return getMaxZ() - getMinZ() + 1;
-	}
-	
-	@Override
-	public int getHeight(){
-		return getMaxY() - getMinY() + 1;
 	}
 	
 	@Override

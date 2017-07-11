@@ -61,7 +61,7 @@ public class CommandPlot implements CommandExecutor {
 					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no selection set.");
 					return true;
 				}
-				Shape s = SelectionManager.getSelection(player);
+				Shape s = (Shape)SelectionManager.getSelection(player);
 				
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
@@ -93,7 +93,7 @@ public class CommandPlot implements CommandExecutor {
 					return true;
 				}
 				// The +1 is to add the full block, since the coordinate of the block is in a corner, and we want the entire block.
-				Selection s = SelectionManager.getSelection((Player) sender);
+				Shape s = (Shape) SelectionManager.getSelection((Player) sender);
 				
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : CacheManager.getPlotList()){

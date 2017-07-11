@@ -115,9 +115,9 @@ public class MarketStall extends Plot implements Rentable{
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
 		Location current = this.getProtection().getCenter().clone();
 		for(Shape s : getProtection().getShapes()){
-			for(int x = s.getMinX(); x <= s.getMaxX(); x++){
-				for(int y = s.getMinY(); y <= s.getMaxY(); y++){
-					for(int z = s.getMinZ(); z <= s.getMaxZ(); z++){
+			for(int x = s.getMinBlockX(); x <= s.getMaxBlockX(); x++){
+				for(int y = s.getMinBlockY(); y <= s.getMaxBlockY(); y++){
+					for(int z = s.getMinBlockZ(); z <= s.getMaxBlockZ(); z++){
 						current.setX(x);
 						current.setY(y);
 						current.setZ(z);

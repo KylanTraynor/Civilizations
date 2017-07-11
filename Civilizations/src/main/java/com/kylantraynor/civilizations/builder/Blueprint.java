@@ -17,6 +17,7 @@ import org.bukkit.material.MaterialData;
 import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.selection.Selection;
+import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class Blueprint{
@@ -162,7 +163,7 @@ public class Blueprint{
 	}
 	
 	public void fillDataFrom(Selection s){
-		fillDataFrom(s.getLocation(), s.getWidth(), s.getHeight(), s.getLength());
+		fillDataFrom(s.getLocation(), (int)((Shape)s).getWidth(), (int)((Shape)s).getHeight(), (int)((Shape)s).getLength());
 	}
 	
 	public void fillDataFrom(Location l, int width, int height, int depth){
