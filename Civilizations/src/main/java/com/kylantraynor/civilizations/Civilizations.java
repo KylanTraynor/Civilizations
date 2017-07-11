@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -209,6 +210,8 @@ public class Civilizations extends JavaPlugin{
 		
 		initManagers();
 		
+		registerRecipes();
+		
 		if(useDatabase)
 			initDatabase();
 		
@@ -222,6 +225,19 @@ public class Civilizations extends JavaPlugin{
 			log("WARNING", "Could not start webserver on port " + port + ". This port is probably already in use.");
 			e.printStackTrace();
 		}*/
+	}
+	
+	private void registerRecipes(){
+		
+		ItemStack is = new ItemStack(getSelectionToolMaterial());
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName(getSelectionToolName());
+		im.setLore(getSelectionToolLore());
+		is.setItemMeta(im);
+		ShapelessRecipe r = new ShapelessRecipe(new NamespacedKey(this, "urbanist_tool"), is);
+		r.addIngredient(getSelectionToolMaterial());
+		Bukkit.addRecipe(r);
+		
 	}
 
 	private void initDatabase() {
@@ -912,15 +928,20 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	public static Material getSelectionToolMaterial(){
-		return Material.FENCE;
+		return Material.STICK;
 	}
 	
 	public static String getSelectionToolName(){
 		return ChatColor.WHITE + "Urban Planner Tool";
 	}
 	
-	public static String[] getSelectionToolLore(){
-		return new String[]{"Use this tool to select an area."};
+	public static List<String> getSelectionToolLore(){
+		String[] s = new String[]{"Use this tool to select an area.", "Left Click to set the first corner.", "Right Click to set the second cornder.", "", "Use /Selection Start Hull to begin a polygonal", "selection, then Left Click to add a block to the", "point cloud. A Hull will be calculated to fit.", "them all in."};
+		List<String> result = new ArrayList<String>();
+		for(String line : s){
+			result.add(line);
+		}
+		return result;
 	}
 
 	public Database getDatabase() {
