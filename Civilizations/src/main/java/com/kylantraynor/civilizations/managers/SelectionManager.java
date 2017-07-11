@@ -141,18 +141,22 @@ public class SelectionManager {
 	public static boolean removeLastPoint(Player player) {
 		List<Location> locs = points.get(player.getUniqueId());
 		if(locs == null){
+			updateSelection(player);
 			return false;
 		} else{
 			if(locs.size() > 0){
 				if(locs.size() > 1){
 					locs.remove(locs.size() - 1);
+					updateSelection(player);
 					return true;
 				} else {
 					points.remove(player.getUniqueId());
+					updateSelection(player);
 					return true;
 				}
 			}
 		}
+		updateSelection(player);
 		return false;
 	}
 }
