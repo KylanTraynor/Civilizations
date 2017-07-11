@@ -936,7 +936,16 @@ public class Civilizations extends JavaPlugin{
 	}
 	
 	public static List<String> getSelectionToolLore(){
-		String[] s = new String[]{"Use this tool to select an area.", "Left Click to set the first corner.", "Right Click to set the second cornder.", "", "Use /Selection Start Hull to begin a polygonal", "selection, then Left Click to add a block to the", "point cloud. A Hull will be calculated to fit.", "them all in."};
+		String[] s = new String[]{
+				ChatColor.BLUE + "Use this tool to select a volume.", 
+				ChatColor.GREEN + "Left Click" + ChatColor.BLUE + " to set the " + ChatColor.GREEN + "first corner" + ChatColor.BLUE + ".", 
+				ChatColor.RED + "Right Click" + ChatColor.BLUE + " to set the " + ChatColor.RED + "second corner" + ChatColor.BLUE + ".", 
+				"", 
+				ChatColor.BLUE + "Use " + ChatColor.GOLD + "/Selection Start Hull" + ChatColor.BLUE + " to begin a polygonal", 
+				ChatColor.BLUE + "selection, then Left Click to add a block to the", 
+				ChatColor.BLUE + "point cloud. A Hull will be calculated to fit", 
+				ChatColor.BLUE + "them all in."
+				};
 		List<String> result = new ArrayList<String>();
 		for(String line : s){
 			result.add(line);
