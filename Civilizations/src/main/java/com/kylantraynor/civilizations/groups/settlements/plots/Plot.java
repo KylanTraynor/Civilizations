@@ -256,4 +256,11 @@ public class Plot extends Group {
 	public void setPersistent(boolean persistent) {
 		this.persistent = persistent;
 	}
+	
+	public boolean isChunkLoaded(){
+		for(Shape s : this.getProtection().getShapes()){
+			if(!s.getLocation().getWorld().isChunkLoaded(s.getLocation().getBlockX() >> 4, s.getLocation().getBlockZ() >> 4)) return false;
+		}
+		return true;
+	}
 }

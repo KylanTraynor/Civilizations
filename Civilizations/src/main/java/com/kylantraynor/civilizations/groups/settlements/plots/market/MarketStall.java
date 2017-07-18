@@ -40,6 +40,8 @@ import com.kylantraynor.civilizations.util.Util;
 
 public class MarketStall extends Plot implements Rentable{
 	
+	private List<String> waresStrings;
+	
 	public MarketStall(String name, Shape shape, Settlement settlement) {
 		super(name.isEmpty() ? "Stall" : name, shape, settlement);
 		CacheManager.marketstallListChanged = true;
@@ -143,11 +145,14 @@ public class MarketStall extends Plot implements Rentable{
 	}
 	
 	public List<String> getWaresToString(){
-		List<String> result = new ArrayList<String>();
-		for(Entry<ItemStack, Double> e : getWares().entrySet()){
-			result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + getNameOf(e.getKey()) + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
+		if(isChunkLoaded() || waresStrings == null){
+			List<String> result = new ArrayList<String>();
+			for(Entry<ItemStack, Double> e : getWares().entrySet()){
+				result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + getNameOf(e.getKey()) + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
+			}
+			waresStrings = result;
 		}
-		return result;
+		return waresStrings;
 	}
 	
 	private String getNameOf(ItemStack item) {
