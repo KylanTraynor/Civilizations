@@ -219,6 +219,7 @@ public class GroupSettings extends YamlConfiguration{
 		if(file == null) return;
 		try{
 			super.save(file);
+			this.setChanged(false);
 		} catch (IOException e){
 			e.printStackTrace();
 			this.setChanged(true);
