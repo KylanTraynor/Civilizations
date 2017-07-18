@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
@@ -88,7 +89,22 @@ public class LockpickMenu extends Menu{
 		*/
 		if(MenuManager.getMenus().get(player) != null){
 			PlayerData pd = PlayerData.get(player.getUniqueId());
-			Timer timer = new Timer();
+			BukkitRunnable br = new BukkitRunnable(){
+				@Override
+				public void run() {
+					BukkitRunnable b = new BukkitRunnable(){
+						@Override
+						public void run() {
+							if(MenuManager.getMenus().get(player) != null){
+								((LockpickMenu)MenuManager.getMenus().get(player)).update();
+							};
+						}
+					};
+					b.runTask(Civilizations.currentInstance);
+				}
+			};
+			br.runTaskLaterAsynchronously(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10));
+			/*Timer timer = new Timer();
 			timer.schedule (new TimerTask() {
 				public void run()
 		        {
@@ -96,7 +112,7 @@ public class LockpickMenu extends Menu{
 						((LockpickMenu)MenuManager.getMenus().get(player)).update();
 					};
 		        }
-		    }, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10) * 50);
+		    }, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10) * 50);*/
 			//bk.runTaskLater(Civilizations.currentInstance, Math.min(Math.max(pd.getSkillLevel("Lock Picking") - session.getLockLevel(), 3),10));
 		}
 	}
