@@ -14,7 +14,7 @@ import com.kylantraynor.draggyrpg.entities.RPGLevelCenter;
 
 public class DraggyRPGHook {
 	
-	public static Map<Object, RPGLevelCenter> levelCenters = new HashMap<Object, RPGLevelCenter>();
+	public static Map<String, RPGLevelCenter> levelCenters = new HashMap<String, RPGLevelCenter>();
 	
 	public static boolean isActive(){
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("DraggyRPG");
@@ -29,7 +29,7 @@ public class DraggyRPGHook {
 		RPGLevelCenter.create(location, startLevel, a, b, c, persist);
 	}
 	
-	public static boolean createTaggedLevelCenter(Object key, Location location, int startLevel, double a, double b, double c, boolean persist){
+	public static boolean createTaggedLevelCenter(String key, Location location, int startLevel, double a, double b, double c, boolean persist){
 		if(levelCenters.containsKey(key)){
 			return false;
 		} else {
@@ -38,25 +38,22 @@ public class DraggyRPGHook {
 		}
 	}
 	
-	public static boolean updateTaggedLevelCenter(Object key, Location location, int startLevel, double a, double b, double c){
-		if(levelCenters.containsKey(key)){
-			levelCenters.get(key).setLocation(location);
-			levelCenters.get(key).setLevel(startLevel);
-			levelCenters.get(key).setThirdOrder(a);
-			levelCenters.get(key).setSecondOrder(b);
-			levelCenters.get(key).setFirstOrder(c);
+	public static boolean updateTaggedLevelCenter(String key, Location location, int startLevel, double a, double b, double c){
+		RPGLevelCenter lc = levelCenters.get(key);
+		if(lc != null){
+			lc.setLocation(location);
+			lc.setLevel(startLevel);
+			lc.setThirdOrder(a);
+			lc.setSecondOrder(b);
+			lc.setFirstOrder(c);
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	public static RPGLevelCenter getTaggedLevelCenter(Object key){
-		if(levelCenters.containsKey(key)){
-			return levelCenters.get(key);
-		} else {
-			return null;
-		}
+	public static RPGLevelCenter getTaggedLevelCenter(String key){
+		return levelCenters.get(key);
 	}
 	
 	public static boolean removeTaggedLevelCenter(Object key){
@@ -71,7 +68,7 @@ public class DraggyRPGHook {
 		for(Settlement s : CacheManager.getSettlementList()){
 			int number = s.getMembers().size();
 			if(number > 0){
-				createTaggedLevelCenter(s, s.getLocation(), 1, 0, 0.01 / number, 0, false);
+				createTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
 				Civilizations.log("INFO", "Loaded LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 			}
 		}
@@ -79,12 +76,20 @@ public class DraggyRPGHook {
 	
 	public void updateLevelCenters(){
 		for(Settlement s : CacheManager.getSettlementList()){
-			if(levelCenters.containsKey(s)){
+			if(levelCenters.containsKey(s.getUniqueId().toString())){
 				int number = s.getMembers().size();
 				if(number > 0){
-					if(updateTaggedLevelCenter(s, s.getLocation(), 1, 0, 0.01 / number, 0)){
+					if(updateTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0)){
 						Civilizations.DEBUG("Updated LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 					}
+				} else {
+					removeTaggedLevelCenter(s.getUniqueId().toString());
+				}
+			} else {
+				int number = s.getMembers().size();
+				if(number > 0){
+					createTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
+					Civilizations.log("INFO", "Created LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 				}
 			}
 		}
