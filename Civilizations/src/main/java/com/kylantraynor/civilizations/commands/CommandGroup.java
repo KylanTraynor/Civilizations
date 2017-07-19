@@ -16,16 +16,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.Economy;
+import com.kylantraynor.civilizations.economy.TransactionResult;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.util.MaterialAndData;
@@ -34,14 +37,14 @@ public class CommandGroup implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0) args = new String[]{"Null", "MENU"};
-		Integer id = null;
+		UUID id = null;
 		try{
-			id = Integer.parseInt(args[0]);
-		} catch (NumberFormatException e){ id = null;}
+			id = UUID.fromString(args[0]);
+		} catch (IllegalArgumentException e){ id = null;}
 		Civilizations.log("INFO", "Group ID: " + id);
 		if(args.length == 1){ args = new String[]{"" + id, "MENU"};}
 		if(id != null && args.length >= 2){
-			Group g = Group.get(id);
+			Group g = GroupManager.get(id);
 			if(g == null) return true;
 			Civilizations.log("INFO", "Group: " + g.getName());
 			switch(args[1].toUpperCase()){
@@ -121,19 +124,8 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "SETNAME": case "RENAME":
 				if(sender instanceof Player){
-					if(g instanceof MarketStall){
-						if(((MarketStall)g).isOwner((Player) sender) || ((MarketStall)g).isRenter((Player)sender)){
-							StringBuilder sb = new StringBuilder();
-							for(int i = 2; i < args.length; i++){
-								sb.append(args[i] + " ");
-							}
-							g.setName(sb.toString().trim());
-							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Name changed!");
-						} else {
-							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
-						}
-					}else if(g instanceof Plot){
-						if(g.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
+					if(g instanceof Plot){
+						if(((Plot)g).isOwner((Player) sender) || ((Plot)g).isRenter((Player)sender)){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
 								sb.append(args[i] + " ");
@@ -199,12 +191,15 @@ public class CommandGroup implements CommandExecutor {
 			case "RENT":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
+					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
-						if(rentable.rent(p)){
+						TransactionResult r = rentable.rent(ee);
+						if(r.success){
 							p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You're now renting this plot!");
 						} else {
 							p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't rent this plot!");
+							p.sendMessage(r.getInfo());
 						}
 					}
 				}
@@ -212,12 +207,15 @@ public class CommandGroup implements CommandExecutor {
 			case "PURCHASE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
+					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.purchase(p)){
+						TransactionResult r = purchasable.purchase(ee);
+						if(r.success){
 							p.sendMessage(g.getChatHeader() + ChatColor.GREEN + "You've purchased this plot!");
 						} else {
 							p.sendMessage(g.getChatHeader() + ChatColor.RED + "You can't purchase this plot!");
+							p.sendMessage(r.getInfo());
 						}
 					}
 				}
@@ -277,9 +275,9 @@ public class CommandGroup implements CommandExecutor {
 			case "KICK":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						if(((MarketStall)g).isOwner(p)){
-							((MarketStall)g).setRenter(null);
+					if(g instanceof Rentable){
+						if(((Rentable)g).isOwner(p)){
+							((Rentable)g).setRenter(null);
 						}
 					}
 				}
@@ -287,10 +285,11 @@ public class CommandGroup implements CommandExecutor {
 			case "JOIN":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						if(((MarketStall)g).getRenter() == null){
-							((MarketStall)g).setRenter(p);
-							((MarketStall)g).payRent();
+					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
+					if(g instanceof Rentable){
+						if(((Rentable)g).getRenter() == null){
+							((Rentable)g).setRenter(ee);
+							((Rentable)g).payRent();
 						}
 					}
 				}
@@ -298,9 +297,9 @@ public class CommandGroup implements CommandExecutor {
 			case "LEAVE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					if(g instanceof MarketStall){
-						if(((MarketStall)g).getRenter() == p){
-							((MarketStall)g).setRenter(null);
+					if(g instanceof Rentable){
+						if(((Rentable)g).getRenter() == p){
+							((Rentable)g).setRenter(null);
 							sender.sendMessage(ChatColor.GREEN + "You are no longer renting " + g.getName() + ".");
 						}
 					}

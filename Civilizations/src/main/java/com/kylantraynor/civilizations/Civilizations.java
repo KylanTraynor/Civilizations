@@ -143,6 +143,7 @@ public class Civilizations extends JavaPlugin{
 	private static Server webServer;
 	public static boolean useChat = false;
 	public static boolean useDatabase = false;
+	public static boolean useVault = true;
 	
 	public static Server getWebServer(){
 		return webServer;

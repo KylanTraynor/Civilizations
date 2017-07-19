@@ -3,8 +3,6 @@ package com.kylantraynor.civilizations.economy;
 import java.time.Duration;
 import java.time.Instant;
 
-import com.kylantraynor.civilizations.Economy;
-
 public class Loan {
 	
 	private EconomicEntity lender;

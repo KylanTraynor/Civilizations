@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.hook.citizens.CitizensHook;
 import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;

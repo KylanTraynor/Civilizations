@@ -18,13 +18,14 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.Economy;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.InfluentSite;
@@ -212,12 +213,49 @@ public class DynmapHook {
 		} else if (group instanceof Settlement){
 			Settlement s = (Settlement) group;
 			DynmapHook.updateSettlement(s);
-		} else if (group instanceof MarketStall){
-			MarketStall m = (MarketStall) group;
-			DynmapHook.updateStall(m);
+		} else if (group instanceof Plot){
+			Plot p = (Plot) group;
+			DynmapHook.updatePlot(p);
 		}
 	}
 	
+	private static void updatePlot(Plot p) {
+		switch(p.getPlotType()){
+		case BANK:
+			break;
+		case BLACKSMITH:
+			break;
+		case CONSTRUCTIONSITE:
+			break;
+		case CROPFIELD:
+			break;
+		case HOUSE:
+			break;
+		case KEEP:
+			break;
+		case MARKETSTALL:
+			updateStall(p);
+			break;
+		case ROAD:
+			break;
+		case SHOP:
+			break;
+		case SHOPHOUSE:
+			break;
+		case TOWNHALL:
+			break;
+		case TOWNVAULT:
+			break;
+		case WAREHOUSE:
+			break;
+		case WOODCUTTER:
+			break;
+		default:
+			break;
+		
+		}
+	}
+
 	private static void updateSettlement(Settlement s) {
 		if(s.getProtection().getHull() == null) return;
 		if(!s.getProtection().getHull().exists()) return;
@@ -263,11 +301,9 @@ public class DynmapHook {
 	 * Updates the display of the given Stall.
 	 * @param c
 	 */
-	private static void updateStall(MarketStall m) {
-		String id = "" + m.getProtection().getCenter().getBlockX() + "_" +
-				m.getProtection().getCenter().getBlockY() + "_" +
-				m.getProtection().getCenter().getBlockZ() + "_stall";
-		String stallMarker = m.getIcon();
+	private static void updateStall(Plot p) {
+		String id = "" + p.getUniqueId().toString();
+		String stallMarker = p.getIcon();
 		MarkerIcon stallIcon = null;
 	    if (stallMarker != null)
 	    {
@@ -281,44 +317,44 @@ public class DynmapHook {
 	    if(stallIcon != null){
 	    	Marker stall = markerList.remove(id);
 	    	if (stall == null){
-	    		stall = stallsMarkerSet.createMarker(id, m.getName(), m.getProtection().getCenter().getWorld().getName(),
-	    				m.getProtection().getCenter().getBlockX(),
-	    				m.getProtection().getCenter().getBlockY(),
-	    				m.getProtection().getCenter().getBlockZ(), stallIcon, false);
+	    		stall = stallsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
+	    				p.getProtection().getCenter().getBlockX(),
+	    				p.getProtection().getCenter().getBlockY(),
+	    				p.getProtection().getCenter().getBlockZ(), stallIcon, false);
 	    	} else {
-	    		stall.setLocation(m.getProtection().getCenter().getWorld().getName(),
-	    				m.getProtection().getCenter().getBlockX(),
-	    				m.getProtection().getCenter().getBlockY(),
-	    				m.getProtection().getCenter().getBlockZ());
-	            stall.setLabel(m.getName());
+	    		stall.setLocation(p.getProtection().getCenter().getWorld().getName(),
+	    				p.getProtection().getCenter().getBlockX(),
+	    				p.getProtection().getCenter().getBlockY(),
+	    				p.getProtection().getCenter().getBlockZ());
+	            stall.setLabel(p.getName());
 	            stall.setMarkerIcon(stallIcon);
 	    	}
 	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.InfoBubble", "%Name%");
 	    	description = "<div class=\"regioninfo\">" + description + "</div>";
-	    	description = description.replace("%Name%", m.getName());
+	    	description = description.replace("%Name%", p.getName());
 	    	StringBuilder sb = new StringBuilder();
-	    	if(m.isForRent()){
-	    		if(m.getRenter() == null){
+	    	if(p.isForRent()){
+	    		if(p.getRenter() == null){
 		    		sb.append("Available For Rent");
 		    	} else {
-		    		sb.append(m.getRenter().getName());
+		    		sb.append(p.getRenter().getName());
 		    	}
 	    	} else {
-	    		if(m.getOwner() != null){
-	    			sb.append(m.getOwner().getName());
+	    		if(p.getOwner() != null){
+	    			sb.append(p.getOwner().getName());
 	    		} else {
-	    			if(m.getSettlement() != null){
-	    				sb.append(m.getSettlement().getName());
+	    			if(p.getSettlement() != null){
+	    				sb.append(p.getSettlement().getName());
 	    			}
 	    		}
 	    	}
-	    	String rent = m.isForRent() ? Economy.format(m.getRent()) : "Not for rent";
+	    	String rent = p.isForRent() ? Economy.format(p.getRent()) : "Not for rent";
 	    	description = description.replace("%RentStatus%", sb.toString());
 	    	description = description.replace("%Rent%", rent);
 	    	// Taxes
 	    	String taxes = "Transaction Taxes:<ul>";
-	    	if(m.getSettlement() != null){
-	    		taxes += "<li>" + m.getSettlement().getName() + ": " + (m.getSettlement().getSettings().getTransactionTax() * 100) + "%</li>";
+	    	if(p.getSettlement() != null){
+	    		taxes += "<li>" + p.getSettlement().getName() + ": " + (p.getSettlement().getSettings().getTransactionTax() * 100) + "%</li>";
 	    	}
 	    	/*Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
 	    	if(f != null){
@@ -329,7 +365,7 @@ public class DynmapHook {
 	    	// Wares
 	    	StringBuilder sb1 = new StringBuilder();
 	    	sb1.append("<ul>");
-	    	for(String s : m.getWaresToString()){
+	    	for(String s : p.getWaresToString()){
 	    		sb1.append("<li>" + s + "</li>");
 	    	}
     		sb1.append("</ul>");

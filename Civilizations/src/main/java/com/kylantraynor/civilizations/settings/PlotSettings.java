@@ -6,16 +6,17 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 
 public class PlotSettings extends GroupSettings{
 	
 	private Settlement settlement;
-	private OfflinePlayer owner;
+	private EconomicEntity owner;
 	private Boolean forRent;
 	private Boolean forSale;
-	private OfflinePlayer renter;
+	private EconomicEntity renter;
 	private Double rent;
 	private Double price;
 	private Instant nextPayment;
@@ -53,10 +54,10 @@ public class PlotSettings extends GroupSettings{
 	 * Gets the owner of this plot.
 	 * @return
 	 */
-	public OfflinePlayer getOwner() {
+	public EconomicEntity getOwner() {
 		if(owner != null) return owner;
 		if(this.contains("Economy.Owner")){
-			owner = Bukkit.getOfflinePlayer(UUID.fromString(this.getString("Economy.Owner")));
+			owner = EconomicEntity.get(UUID.fromString(this.getString("Economy.Owner")));
 		}
 		return owner;
 	}
@@ -65,7 +66,7 @@ public class PlotSettings extends GroupSettings{
 	 * Sets the owner of this plot.
 	 * @param owner
 	 */
-	public void setOwner(OfflinePlayer owner) {
+	public void setOwner(EconomicEntity owner) {
 		this.owner = owner;
 		if(owner != null){
 			this.set("Economy.Owner", owner.getUniqueId().toString());
@@ -79,10 +80,10 @@ public class PlotSettings extends GroupSettings{
 	 * Gets the renter of this plot.
 	 * @return
 	 */
-	public OfflinePlayer getRenter() {
+	public EconomicEntity getRenter() {
 		if(renter != null) return renter;
 		if(this.contains("Economy.Renter")){
-			renter = Bukkit.getOfflinePlayer(UUID.fromString(this.getString("Economy.Renter")));
+			renter = EconomicEntity.get(UUID.fromString(this.getString("Economy.Renter")));
 		}
 		return renter;
 	}
@@ -91,7 +92,7 @@ public class PlotSettings extends GroupSettings{
 	 * Sets the renter of this plot.
 	 * @param renter
 	 */
-	public void setRenter(OfflinePlayer renter) {
+	public void setRenter(EconomicEntity renter) {
 		this.renter = renter;
 		if(renter != null){
 			this.set("Economy.Renter", renter.getUniqueId().toString());

@@ -2,33 +2,58 @@ package com.kylantraynor.civilizations.groups.settlements.plots;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Bed;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.Economy;
+import com.kylantraynor.civilizations.economy.TransactionResult;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
+import com.kylantraynor.civilizations.groups.GroupInventory;
+import com.kylantraynor.civilizations.groups.HasInventory;
 import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.shops.Shop;
+import com.kylantraynor.civilizations.shops.ShopManager;
+import com.kylantraynor.civilizations.shops.ShopType;
+import com.kylantraynor.civilizations.util.Util;
 
-public class Plot extends Group {
+public class Plot extends Group implements Rentable, HasInventory {
 	private PlotType type;
 	private boolean persistent = false;
+	private int beds;
+	private int workbenches;
+	private List<Chest> chests;
+	private List<String> waresStrings;
 	
 	//Constructor for reloads from file
 	public Plot(){
@@ -89,18 +114,66 @@ public class Plot extends Group {
 	}
 	
 	/**
+	 * Gets the Icon name.
+	 * @return String
+	 */
+	public String getIcon(){
+		switch(getPlotType()){
+		case BANK:
+			return "bank";
+		case BLACKSMITH:
+			return "hammer";
+		case CONSTRUCTIONSITE:
+			return "construction";
+		case CROPFIELD:
+			break;
+		case HOUSE:
+			return "house";
+		case KEEP:
+			return "tower";
+		case MARKETSTALL:
+			return "scales";
+		case ROAD:
+			break;
+		case SHOP:
+			return "scales";
+		case SHOPHOUSE:
+			return "scales";
+		case TOWNHALL:
+			return "temple";
+		case TOWNVAULT:
+			break;
+		case WAREHOUSE:
+			return "bricks";
+		case WOODCUTTER:
+			break;
+		default:
+			break;
+		
+		}
+		return "";
+	}
+	
+	/**
 	 * Gets the type of this plot.
-	 * @return PlotType
+	 * @return {@link PlotType}
 	 */
 	public PlotType getPlotType() { return type; }
 	
 	/**
 	 * Sets the type of this plot.
-	 * @param type
+	 * @param type as {@link PlotType}
 	 */
 	public void setPlotType(PlotType type) { this.type = type; }
 	
+	@Override
 	public void update(){
+		if(getRenter() != null){
+			if(Instant.now().isAfter(getSettings().getNextPayment())){
+				payRent();
+				setChanged(true);
+			}
+		}
 		if(getSettlement() == null){
 			Settlement s = Settlement.getClosest(getProtection().getCenter());
 			if(s.canMergeWith(getProtection().getShapes().get(0))){
@@ -111,6 +184,9 @@ public class Plot extends Group {
 				setSettlement(Settlement.getAt(getProtection().getCenter()));
 			}
 			*/
+		}
+		if(!getIcon().isEmpty()){
+			DynmapHook.updateMap(this);
 		}
 		super.update();
 	}
@@ -189,12 +265,37 @@ public class Plot extends Group {
 		if(getSettlement() != null){
 			fm.command("/group " + getSettlement().getId() + " info");
 		}
-		fm.then(".").color(ChatColor.GRAY)
+		String renterCommand = getRenter() == null ? "" : "/p " + getRenter().getName();
+		String ownerCommand = getOwner() == null ? (getSettlement() == null ? "" : "/group " + getSettlement().getId() + " INFO") : "/p " + getOwner().getName(); 
+		String owner = getOwner() == null ? (getSettlement() == null ? "No one" : getSettlement().getName()) : getOwner().getName();
+		if(isForRent()){
+			fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
+			.then(getRenter() == null ? "Available" : getRenter().getName()).color(ChatColor.GOLD).command(renterCommand);
+		}
+		fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand)
+		.then(owner).color(ChatColor.GOLD).command(ownerCommand);
+		if(isForRent()){
+			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
+		}
+		if(getRenter() == player){
+			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), getSettings().getNextPayment()) + " hours").color(ChatColor.GOLD);
+		}
+		if(getPlotType() == PlotType.HOUSE){
+			fm.then(".").color(ChatColor.GRAY)
 			.then("\nMembers: ").color(ChatColor.GRAY)
 			.command("/group " + this.getId() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
 			.command("/group " + this.getId() + " members")
-			.then("\nActions: \n").color(ChatColor.GRAY);
+			.then("/").color(ChatColor.GRAY)
+			.then("" + getBedCount()).color(ChatColor.GOLD).tooltip("Beds under a roof.");
+		} else {
+			fm.then(".").color(ChatColor.GRAY)
+				.then("\nMembers: ").color(ChatColor.GRAY)
+				.command("/group " + this.getId() + " members")
+				.then("" + getMembers().size()).color(ChatColor.GOLD)
+				.command("/group " + this.getId() + " members");
+		}
+		fm.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
@@ -262,5 +363,376 @@ public class Plot extends Group {
 			if(!s.getLocation().getWorld().isChunkLoaded(s.getLocation().getBlockX() >> 4, s.getLocation().getBlockZ() >> 4)) return false;
 		}
 		return true;
+	}
+	
+	/*
+	public List<Chest> getAllChests(){
+		List<Chest> list = new ArrayList<Chest>();
+		Location l = null;
+		for(Shape s : getProtection().getShapes()){
+			l = s.getLocation().clone();
+			for(int x = s.getMinBlockX(); x <= s.getMaxBlockX(); x++){
+				for(int y = s.getMinBlockY(); y <= s.getMaxBlockY(); y++){
+					for(int z = s.getMinBlockZ(); z <= s.getMaxBlockZ(); z++){
+						l.setX(x);
+						l.setY(y);
+						l.setZ(z);
+						if(l.getBlock().getType() == Material.CHEST ||
+								l.getBlock().getType() == Material.TRAPPED_CHEST){
+							BlockState state = l.getBlock().getState();
+							if(state instanceof Chest){
+								list.add((Chest) state);
+							}
+						}
+					}
+				}
+			}
+		}
+		return list;
+	}
+	*/
+	
+	@Override
+	public GroupInventory getInventory() {
+		List<Chest> list = getChests();
+		GroupInventory inv = new GroupInventory(getSize());
+		int j = 0;
+		for(Chest c : list){
+			for(int i = 0; i < c.getBlockInventory().getSize(); i++){
+				inv.getContents()[j] = c.getBlockInventory().getContents()[i];
+				j++;
+			}
+		}
+		return inv;
+	}
+	
+	public int getUsedSize(){
+		List<Chest> list = getChests();
+		int used = 0;
+		for(Chest c : list){
+			for(ItemStack is : c.getBlockInventory().getContents()){
+				if(is == null) continue;
+				used += is.getAmount() * (64 / is.getMaxStackSize());
+			}
+		}
+		return used;
+	}
+	
+	public int getSize(){
+		List<Chest> list = getChests();
+		int chestSize = 0;
+		if(list.isEmpty()) return 0;
+		chestSize = list.get(0).getBlockInventory().getSize();
+		return chestSize * list.size() * 64;
+	}
+
+	@Override
+	public void addItem(ItemStack... items) {
+		List<Chest> list = getChests();
+		for(Chest c : list){
+			if(items.length == 0) return;
+			HashMap<Integer, ItemStack> result = c.getBlockInventory().addItem(items);
+			items = result.values().toArray(new ItemStack[result.size()]);
+		}
+	}
+
+	@Override
+	public void removeItem(ItemStack... items) {
+		List<Chest> list = getChests();
+		for(Chest c : list){
+			if(items.length == 0) return;
+			for(ItemStack is : c.getBlockInventory().getContents()){
+				if(is == null) continue;
+				for(ItemStack item : items){
+					if(item == null) continue;
+					if(item.getAmount() == 0) continue;
+					if(Util.isSameBlock(item, is)){
+						ItemStack temp = is.clone();
+						temp.setAmount(item.getAmount());
+						item.setAmount(Math.max(item.getAmount() - is.getAmount(), 0));
+						c.getBlockInventory().removeItem(temp);
+					}
+				}
+			}
+			/*HashMap<Integer, ItemStack> result = c.getBlockInventory().removeItem(items);
+			items = result.values().toArray(new ItemStack[result.size()]);*/
+		}
+	}
+	
+	@Override
+	public boolean containsAtLeast(ItemStack item, int amount){
+		/*if(chests == null) chests = getAllChests();
+		for(Chest c : chests){
+			if(c.getBlockInventory().containsAtLeast(item, amount)) return true;
+		}
+		return false;*/
+		return getInventory().containsAtLeast(item, amount);
+	}
+	
+	public int getBedCount(){
+		if(beds >= 0) return beds;
+		updateSpecialBlocks();
+		return beds;
+	}
+	
+	public int getWorkbenchesCount(){
+		if(workbenches >= 0) return workbenches;
+		updateSpecialBlocks();
+		return workbenches;
+	}
+	
+	public int getChestsCount(){
+		return getChests().size();
+	}
+	
+	public List<Chest> getChests(){
+		if(chests == null) updateSpecialBlocks();
+		return chests;
+	}
+	
+	public void updateSpecialBlocks(){
+		beds = 0;
+		workbenches = 0;
+		chests = new ArrayList<Chest>();
+		for(Shape s : getProtection().getShapes()){
+			for(Location l : s.getBlockLocations()){
+				switch(l.getBlock().getType()){
+				case BED_BLOCK:
+					BlockState state = l.getBlock().getState();
+					Bed bed = (Bed) state.getData();
+					if(bed.isHeadOfBed()){
+						beds++;
+					}
+					break;
+				case WORKBENCH:
+					workbenches++;
+					break;
+				case CHEST: case TRAPPED_CHEST:
+					BlockState chestState = l.getBlock().getState();
+					if(chestState instanceof Chest){
+						chests.add((Chest)chestState);
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	public boolean isValid(){
+		switch(getPlotType()){
+		case HOUSE:
+			return getBedCount() > 0 && getChestsCount() > 0 && getWorkbenchesCount() > 0;
+		case WAREHOUSE:
+			return getChestsCount() > 0 && getWorkbenchesCount() > 0;
+		}
+		return false;
+	}
+
+	@Override
+	public EconomicEntity getOwner() {
+		return getSettings().getOwner();
+	}
+
+	@Override
+	public boolean isOwner(OfflinePlayer player) {
+		if(getOwner().isPlayer()){
+			return getOwner().getUniqueId().equals(player.getUniqueId());
+		} else {
+			return ((Group) getOwner()).isMember(player);
+		}
+	}
+
+	@Override
+	public double getPrice() {
+		return this.getSettings().getPrice();
+	}
+
+	@Override
+	public void setPrice(double newPrice) {
+		this.getSettings().setPrice(newPrice);
+	}
+
+	@Override
+	public boolean isForSale() {
+		return getSettings().isForSale();
+	}
+
+	@Override
+	public void setForSale(boolean forSale) {
+		getSettings().setForSale(forSale);
+	}
+
+	@Override
+	public TransactionResult purchase(EconomicEntity ecoEntity) {
+		TransactionResult result = new TransactionResult();
+		if(!isForSale()){
+			result.success = false;
+			result.info = this.getChatHeader() + ChatColor.RED + "This plot is not for sale.";
+			return result;
+		}
+		if(Economy.tryTransferFunds(ecoEntity, getOwner(), "Purchase of " + this.getName(), getPrice())){
+			result.success = true;
+			result.info = this.getChatHeader() + ChatColor.GREEN + "Successfully purchased " + this.getName() + "!";
+			Economy.playCashinSound(getOwner());
+			Economy.playPaySound(ecoEntity);
+			return result;
+		} else {
+			result.success = false;
+			result.info = this.getChatHeader() + ChatColor.RED + "You don't have enough money to purchase this plot.";
+			return result;
+		}
+	}
+
+	@Override
+	public EconomicEntity getRenter() {
+		return getSettings().getRenter();
+	}
+
+	@Override
+	public boolean isRenter(OfflinePlayer player) {
+		if(getRenter().isPlayer()){
+			return getRenter().getUniqueId().equals(player.getUniqueId());
+		} else {
+			return ((Group) getRenter()).isMember(player);
+		}
+	}
+
+	@Override
+	public double getRent() {
+		return getSettings().getRent();
+	}
+
+	@Override
+	public void setRent(double rent) {
+		getSettings().setRent(rent);
+	}
+
+	@Override
+	public boolean isForRent() {
+		return getSettings().isForRent();
+	}
+
+	@Override
+	public void setForRent(boolean forRent) {
+		getSettings().setForRent(forRent);
+	}
+
+	@Override
+	public TransactionResult rent(EconomicEntity ecoEntity) {
+		TransactionResult result = new TransactionResult();
+		if(!isForRent()){
+			result.success = false;
+			result.info = this.getChatHeader() + ChatColor.RED + this.getName() + " isn't for rent.";
+			return result;
+		}
+		if(getRenter() != null){
+			result.success = false;
+			result.info = this.getChatHeader() + ChatColor.RED + this.getName() + " is already rented by someone.";
+			return result;
+		}
+		this.getSettings().setRenter(ecoEntity);
+		if(this.payRent().wasSuccessful()){
+			result.success = true;
+			result.info = this.getChatHeader() + ChatColor.GREEN + "You are now renting " + this.getName() + ".";
+			return result;
+		} else {
+			result.success = false;
+			result.info = this.getChatHeader() + ChatColor.RED + "You can't afford to rent " + this.getName() + ".";
+			this.getSettings().setRenter(null);
+			return result;
+		}
+	}
+
+	@Override
+	public Instant getNextRentDate() {
+		return getSettings().getNextPayment();
+	}
+	
+	@Override
+	public void setNextRentDate(Instant next) {
+		getSettings().setNextPayment(next);
+	}
+
+	@Override
+	public TransactionResult payRent() {
+		TransactionResult result = new TransactionResult();
+		if(getRenter() == null){
+			result.success = false;
+			return result;
+		}
+		setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
+		if(getOwner() != null){
+			if(Economy.tryTransferFunds(getRenter(), getOwner(), "Rent for " + getName(), getRent())){
+				result.success = true;
+				result.info = this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.";
+				Economy.playCashinSound(getOwner());
+				Economy.playPaySound(getRenter());
+				return result;
+			} else {
+				result.success = false;
+				result.info = this.getChatHeader() + ChatColor.RED + "You couldn't pay the rent of " + Economy.format(getRent()) + "!";
+				return result;
+			}
+		}
+		return result;
+	}
+	
+	public Map<ItemStack, Double> getWares(){
+		try{
+			Civilizations.DEBUG("Trying to find wares in stall.");
+		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
+		Location current = this.getProtection().getCenter().clone();
+		for(Shape s : getProtection().getShapes()){
+			for(int x = s.getMinBlockX(); x <= s.getMaxBlockX(); x++){
+				for(int y = s.getMinBlockY(); y <= s.getMaxBlockY(); y++){
+					for(int z = s.getMinBlockZ(); z <= s.getMaxBlockZ(); z++){
+						current.setX(x);
+						current.setY(y);
+						current.setZ(z);
+						if(current.getBlock().getType() == Material.CHEST || current.getBlock().getType() == Material.TRAPPED_CHEST){
+							Shop shop = ShopManager.getShop(current);
+							if(shop != null){
+								double multiplier = 1.0;
+								if(shop.getType() == ShopType.BUYING){
+									multiplier = -1.0;
+								}
+								wares.put(shop.getItem(), multiplier * shop.getPrice());
+							}
+						}
+					}
+				}
+			}
+		}
+		return wares;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new HashMap<ItemStack, Double>();
+		}
+	}
+	
+	public List<String> getWaresToString(){
+		if(isChunkLoaded() || waresStrings == null){
+			List<String> result = new ArrayList<String>();
+			for(Entry<ItemStack, Double> e : getWares().entrySet()){
+				result.add((e.getValue() < 0 ? "Buying: " : "Selling: ") + getNameOf(e.getKey()) + " (for " + Economy.format(Math.abs(e.getValue())) + ")");
+			}
+			waresStrings = result;
+		}
+		return waresStrings;
+	}
+	
+	private String getNameOf(ItemStack item) {
+		if(item.getItemMeta().getDisplayName() != null){
+			return item.getItemMeta().getDisplayName();
+		} else {
+			return Util.prettifyText(Util.getMaterialName(item));
+		}
+	}
+
+	@Override
+	public void setRenter(EconomicEntity entity) {
+		getSettings().setRenter(entity);
 	}
 }

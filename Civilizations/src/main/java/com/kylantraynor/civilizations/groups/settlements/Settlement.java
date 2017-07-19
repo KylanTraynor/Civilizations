@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
@@ -29,11 +28,13 @@ import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.Budget;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
@@ -428,7 +429,7 @@ public class Settlement extends Group implements HasBuilder{
 	public int getAmountOfWarehouses(){
 		int count = 0;
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
+			if(p.getPlotType() == PlotType.WAREHOUSE){
 				count++;
 			}
 		}
@@ -438,8 +439,8 @@ public class Settlement extends Group implements HasBuilder{
 	public int getTotalWarehousesSpace(){
 		int space = 0;
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
-				space += ((Warehouse) p).getSize();
+			if(p.getPlotType() == PlotType.WAREHOUSE){
+				space += p.getSize();
 			}
 		}
 		return space;
@@ -448,8 +449,8 @@ public class Settlement extends Group implements HasBuilder{
 	public int getTotalUsedWarehousesSpace(){
 		int space = 0;
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
-				space += ((Warehouse) p).getUsedSize();
+			if(p.getPlotType() == PlotType.WAREHOUSE){
+				space += p.getUsedSize();
 			}
 		}
 		return space;
@@ -473,31 +474,31 @@ public class Settlement extends Group implements HasBuilder{
 		return result;
 	}
 	
-	public List<Warehouse> getWarehouses(){
-		List<Warehouse> result = new ArrayList<Warehouse>();
+	public List<Plot> getWarehouses(){
+		List<Plot> result = new ArrayList<Plot>();
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
-				result.add((Warehouse) p);
+			if(p.getPlotType() == PlotType.WAREHOUSE){
+				result.add(p);
 			}
 		}
 		return result;
 	}
 	
-	public List<House> getHouses(){
-		List<House> result = new ArrayList<House>();
+	public List<Plot> getHouses(){
+		List<Plot> result = new ArrayList<Plot>();
 		for(Plot p : getPlots()){
-			if(p instanceof House){
-				result.add((House) p);
+			if(p.getPlotType() == PlotType.HOUSE){
+				result.add(p);
 			}
 		}
 		return result;
 	}
 	
-	public List<MarketStall> getMarketStalls(){
-		List<MarketStall> result = new ArrayList<MarketStall>();
+	public List<Plot> getMarketStalls(){
+		List<Plot> result = new ArrayList<Plot>();
 		for(Plot p : getPlots()){
-			if(p instanceof MarketStall){
-				result.add((MarketStall) p);
+			if(p.getPlotType() == PlotType.MARKETSTALL){
+				result.add(p);
 			}
 		}
 		return result;
@@ -529,9 +530,8 @@ public class Settlement extends Group implements HasBuilder{
 	public ItemStack getSupplies(Material material, short data) {
 		if(!canBuild()) return null;
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
-				Warehouse wh = (Warehouse) p;
-				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);
+			if(p.getPlotType() == PlotType.WAREHOUSE){
+				HashMap<Integer, ? extends ItemStack> hm = p.getInventory().all(material);
 				if(hm.isEmpty()) continue;
 				for(ItemStack is : hm.values()){
 					if(is.getType() == material && is.getData().getData() == data && is.getAmount() >= 1){

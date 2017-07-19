@@ -2,15 +2,18 @@ package com.kylantraynor.civilizations.groups;
 
 import org.bukkit.OfflinePlayer;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.TransactionResult;
+
 public interface Purchasable {
 	/**
 	 * Gets the owner of this group.
-	 * @return OfflinePlayer
+	 * @return {@link EconomicEntity}
 	 */
-	public OfflinePlayer getOwner();
+	public EconomicEntity getOwner();
 	/**
 	 * Checks if the given player is the owner of this group.
-	 * @param player
+	 * @param player as {@link OfflinePlayer}
 	 * @return true if the player owns the group, false otherwise.
 	 */
 	public boolean isOwner(OfflinePlayer player);
@@ -21,23 +24,23 @@ public interface Purchasable {
 	public double getPrice();
 	/**
 	 * Sets the price this group can be bought against.
-	 * @param newPrice
+	 * @param newPrice as double
 	 */
 	public void setPrice(double newPrice);
 	/**
-	 * Checks if the group is for sale.
-	 * @return true if the group is for sale, false otherwise.
+	 * Checks if the {@link Group} is for sale.
+	 * @return true if the {@link Group} is for sale, false otherwise.
 	 */
 	public boolean isForSale();
 	/**
-	 * Sets the forsale state of this group.
+	 * Sets the forsale state of this {@link Group}.
 	 * @param forSale
 	 */
 	public void setForSale(boolean forSale);
 	/**
-	 * Makes the given player purchase this group.
-	 * @param player
-	 * @return true if the transaction happened, false otherwise.
+	 * Makes the given {@link EconomicEntity} purchase this group.
+	 * @param ecoEntity as {@link EconomicEntity}
+	 * @return {@link TransactionResult}
 	 */
-	public boolean purchase(OfflinePlayer player);
+	public TransactionResult purchase(EconomicEntity ecoEntity);
 }

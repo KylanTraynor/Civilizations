@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations;
+package com.kylantraynor.civilizations.economy;
 
 import java.time.Instant;
 
@@ -13,8 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
 
-import com.kylantraynor.civilizations.economy.BudgetEntry;
-import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -132,15 +131,25 @@ public class Economy {
 		}
 	}
 	
-	public static void playCashinSound(Player player){
-		if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY) && !player.isSneaking()){
-			player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 1);
+	public static void playCashinSound(EconomicEntity entity){
+		if(!entity.isPlayer()) return;
+		OfflinePlayer op = entity.getOfflinePlayer();
+		if(op.isOnline()){
+			Player p = op.getPlayer();
+			if(!p.hasPotionEffect(PotionEffectType.INVISIBILITY) && !p.isSneaking()){
+				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 1);
+			}
 		}
 	}
 	
-	public static void playPaySound(Player player){
-		if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY) && !player.isSneaking()){
-			player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 0.5);
+	public static void playPaySound(EconomicEntity entity){
+		if(!entity.isPlayer()) return;
+		OfflinePlayer op = entity.getOfflinePlayer();
+		if(op.isOnline()){
+			Player p = op.getPlayer();
+			if(!p.hasPotionEffect(PotionEffectType.INVISIBILITY) && !p.isSneaking()){
+				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, (float) 0.5);
+			}
 		}
 	}
 

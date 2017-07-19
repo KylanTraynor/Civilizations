@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Bed;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.Economy;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -161,11 +161,6 @@ public class House extends Plot implements Rentable{
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
-	
-	@Override
-	public OfflinePlayer getOwner() {
-		return getSettings().getOwner();
-	}
 	@Override
 	public boolean isOwner(OfflinePlayer player) {
 		if(getOwner() != null){
@@ -193,44 +188,7 @@ public class House extends Plot implements Rentable{
 	public void setForSale(boolean forSale) {
 		getSettings().setForSale(forSale);
 	}
-	@Override
-	public boolean purchase(OfflinePlayer player) {
-		if(!isForSale()){
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house is not for sale.");
-			return false;
-		}
-		
-		if(Economy.withdrawPlayer(player, getPrice())){
-			Economy.playPaySound(player.getPlayer());
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've purchased this house for " + Economy.format(getPrice()));
-			double amount = getPrice();
-			
-			if(getSettlement() != null){
-				amount = getSettlement().taxTransaction(TaxType.TRANSACTION, amount);
-			}
-			
-			if(getOwner() == null){
-				Economy.depositSettlement(getSettlement(), amount);
-				getSettlement().sendMessage(getSettlement().getChatColor() + player.getPlayer().getDisplayName() + " just purchased a house for "+ Economy.format(amount) + "!", null);
-			} else {
-				Economy.depositPlayer(getOwner(), amount);
-				if(getOwner().isOnline()){
-					Economy.playCashinSound(getOwner().getPlayer());
-					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + player.getPlayer().getDisplayName() + " purchased this house! You've received " + Economy.format(amount) + "!");
-				}
-			}
-			this.getSettings().setOwner(player);
-			this.setForSale(false);
-			return true;
-		} else {
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You don't have enough money to buy this plot.");
-			return false;
-		}
-	}
-	@Override
-	public OfflinePlayer getRenter() {
-		return getSettings().getRenter();
-	}
+
 	@Override
 	public boolean isRenter(OfflinePlayer player) {
 		return getRenter() == player;
@@ -251,27 +209,7 @@ public class House extends Plot implements Rentable{
 	public void setForRent(boolean forRent) {
 		getSettings().setForRent(forRent);
 	}
-	@Override
-	public boolean rent(OfflinePlayer player) {
-		if(!isForRent()){
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house isn't for rent.");
-			return false;
-		}
-		if(getRenter() != null){
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "This house is already rented by someone.");
-			return false;
-		}
-		
-		this.getSettings().setRenter(player);
-		if(this.payRent()){
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You are now renting this house.");
-			return true;
-		} else {
-			player.getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You can't afford to rent this house.");
-			this.getSettings().setRenter(null);
-			return false;
-		}
-	}
+	
 	@Override
 	public Instant getNextRentDate() {
 		return getSettings().getNextPayment();
@@ -279,48 +217,5 @@ public class House extends Plot implements Rentable{
 	@Override
 	public void setNextRentDate(Instant next) {
 		getSettings().setNextPayment(next);
-	}
-	@Override
-	public boolean payRent() {
-		if(getRenter() == null)
-			return false;
-		
-		setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
-		
-		if(Economy.withdrawPlayer(getRenter(), getRent())){
-			if(getRenter().isOnline()){
-				Economy.playPaySound(getRenter().getPlayer());
-				getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.");
-			}
-			double amount = getRent();
-			
-			if(getSettlement() != null){
-				amount = getSettlement().taxTransaction(TaxType.RENT, amount);
-			}
-			
-			if(getOwner() != null){
-				Economy.depositPlayer(getOwner(), amount);
-				if(getOwner().isOnline()){
-					Economy.playCashinSound(getOwner().getPlayer());
-					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.GREEN + "You've received " + Economy.format(amount) + " in rent.");
-				}
-			} else if(getSettlement() != null) {
-				Economy.depositSettlement(getSettlement(), amount);
-			}
-			
-			return true;
-		} else {
-			if(getRenter().isOnline()){
-				getRenter().getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + "You couldn't pay " + Economy.format(getRent()) + " in rent today!");
-			}
-			if(getOwner() != null){
-				if(getOwner().isOnline()){
-					getOwner().getPlayer().sendMessage(this.getChatHeader() + ChatColor.RED + getRenter().getName() + " couldn't pay the rent of " + Economy.format(getRent()) + "!");
-				}
-			} else if(getSettlement() != null) {
-				getSettlement().sendMessage(ChatColor.RED + getRenter().getName() + " couldn't pay the rent of " + Economy.format(getRent()) + "!", PermissionType.MANAGE_PLOTS);
-			}
-			return false;
-		}
 	}
 }
