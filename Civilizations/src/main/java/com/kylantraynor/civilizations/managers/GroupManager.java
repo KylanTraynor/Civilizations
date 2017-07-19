@@ -24,6 +24,7 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
@@ -134,24 +135,27 @@ public class GroupManager {
 	}
 	
 	private static void loadPlots() {
-		loadDirectory(Keep.class, Civilizations.getKeepDirectory());
+		loadDirectory(PlotType.KEEP, Civilizations.getKeepDirectory());
 		//loadKeeps();
-		loadDirectory(MarketStall.class, Civilizations.getMarketStallDirectory());
+		loadDirectory(PlotType.MARKETSTALL, Civilizations.getMarketStallDirectory());
 		//loadStalls();
-		loadDirectory(com.kylantraynor.civilizations.groups.settlements.plots.House.class, Civilizations.getHousePlotDirectory());
+		loadDirectory(PlotType.HOUSE, Civilizations.getHousePlotDirectory());
 		//loadPlotHouses();
-		loadDirectory(Warehouse.class, Civilizations.getWarehousesDirectory());
+		loadDirectory(PlotType.WAREHOUSE, Civilizations.getWarehousesDirectory());
 		//loadWarehouses();
 	}
 
-	private static void loadDirectory(Class c, File directory){
+	private static void loadDirectory(PlotType type, File directory){
 		if(directory.exists()){
-			Civilizations.log("INFO", "Loading " + c.getSimpleName() + "...");
+			Civilizations.log("INFO", "Loading " + type.toString() + "...");
 			for(File f : directory.listFiles()){
 				try{
 					if(!f.getName().split("\\.")[1].equalsIgnoreCase("yml")) continue;
-					Civilizations.log("INFO", "Loading " + c.getSimpleName() + " from file: " + f.getPath());
-					load(f, (Group) c.newInstance());
+					Civilizations.log("INFO", "Loading " + type.toString() + " from file: " + f.getPath());
+					Plot p = new Plot();
+					load(f, p);
+					p.setPersistent(true);
+					p.setPlotType(type);
 					f.delete();
 				} catch (Exception e){
 					e.printStackTrace();
@@ -218,7 +222,9 @@ public class GroupManager {
 					f.delete();
 					continue;
 				}
-				load(f, new House());
+				Plot p = new Plot();
+				load(f, p);
+				p.setPlotType(PlotType.HOUSE);
 				f.delete();
 			}
 		}

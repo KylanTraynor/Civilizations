@@ -158,13 +158,13 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 * Gets the type of this plot.
 	 * @return {@link PlotType}
 	 */
-	public PlotType getPlotType() { return type; }
+	public PlotType getPlotType() { return getSettings().getPlotType(); }
 	
 	/**
 	 * Sets the type of this plot.
 	 * @param type as {@link PlotType}
 	 */
-	public void setPlotType(PlotType type) { this.type = type; }
+	public void setPlotType(PlotType type) { getSettings().setPlotType(type);; }
 	
 	@Override
 	public void update(){
@@ -213,7 +213,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(!dir.exists()){
 			dir.mkdir();
 		}
-		File f = new File(dir, "" + getId() + ".yml");
+		File f = new File(dir, "" + getUniqueId().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();

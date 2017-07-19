@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 
 public class PlotSettings extends GroupSettings{
 	
@@ -222,6 +223,17 @@ public class PlotSettings extends GroupSettings{
 	public void setNextPayment(Instant date) {
 		nextPayment = date == null ? Instant.now() : date;
 		this.set("Economy.NextPayment", nextPayment.toString());
+		this.setChanged(true);
+	}
+	
+	public PlotType getPlotType(){
+		String s = this.getString("General.Type");
+		if(s == null) return null;
+		return PlotType.valueOf(s);
+	}
+	
+	public void setPlotType(PlotType type){
+		this.set("General.Type", type.toString());
 		this.setChanged(true);
 	}
 	

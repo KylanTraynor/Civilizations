@@ -151,7 +151,7 @@ public class Camp extends Settlement{
 		if(Instant.now().isAfter(getExpireOn())) remove();
 		super.update();
 		if(this.getHouses().size() >= 1){
-			for(House h : getHouses()){
+			for(Plot h : getHouses()){
 				if(h.isValid()){
 					if(GroupManager.convertToSettlement(this) != null){
 						this.softRemove();

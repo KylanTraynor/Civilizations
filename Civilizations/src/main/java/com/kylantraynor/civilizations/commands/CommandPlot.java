@@ -13,6 +13,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
@@ -131,7 +132,10 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A house cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new House(args.length >= 3 ? Util.join(arguments, " ") : "House", s, set);
+							Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "House", s, set);
+							p.setPersistent(true);
+							p.setPlotType(PlotType.HOUSE);
+							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House created in " + set.getName() + "!");
 						}
@@ -141,7 +145,9 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A keep cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new Keep(args.length >= 3 ? Util.join(arguments, " ") : "Keep", s, set);
+							Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Keep", s, set);
+							p.setPersistent(true);
+							p.setPlotType(PlotType.KEEP);
 							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Keep created in " + set.getName() + "!");
@@ -152,18 +158,22 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A warehouse cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new Warehouse(args.length >= 3 ? Util.join(arguments, " ") : "Warehouse", s, set);
+							Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Warehouse", s, set);
+							p.setPersistent(true);
+							p.setPlotType(PlotType.WAREHOUSE);
 							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Warehouse created in " + set.getName() + "!");
 						}
 						break;
-					case "STALL":
+					case "STALL": case "MARKETSTALL":
 						if(set == null){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "A stall cannot be created outside of a settlement.");
 							return true;
 						} else {
-							Plot p = new MarketStall(args.length >= 3 ? Util.join(arguments, " ") : "Stall", s, set);
+							Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Stall", s, set);
+							p.setPersistent(true);
+							p.setPlotType(PlotType.MARKETSTALL);
 							SelectionManager.clear(player);
 							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Market stall created in " + set.getName() + "!");
