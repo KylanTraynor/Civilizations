@@ -593,6 +593,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 
 	@Override
 	public boolean isRenter(OfflinePlayer player) {
+		if(getRenter() == null) return false;
 		if(getRenter().isPlayer()){
 			return getRenter().getUniqueId().equals(player.getUniqueId());
 		} else {
