@@ -366,7 +366,7 @@ public class Protection {
 		Double maxZ = null;
 		for(Shape s : shapes){
 			if(w == null){
-				w = s.getLocation().getWorld();
+				w = s.getWorld();
 				minX = s.getMinX();
 				minY = s.getMinY();
 				minZ = s.getMinZ();

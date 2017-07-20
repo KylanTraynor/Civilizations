@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -69,6 +70,10 @@ public abstract class Shape implements Visualizable{
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	
+	public World getWorld(){
+		return getLocation().getWorld();
 	}
 	
 	/**
