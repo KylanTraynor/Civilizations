@@ -154,7 +154,7 @@ public class GroupManager {
 					load(f, p);
 					p.setPersistent(true);
 					p.setPlotType(type);
-					f.delete();
+					//f.delete();
 				} catch (Exception e){
 					e.printStackTrace();
 				}
