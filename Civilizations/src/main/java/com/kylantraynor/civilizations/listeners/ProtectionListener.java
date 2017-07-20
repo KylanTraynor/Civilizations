@@ -39,6 +39,9 @@ public class ProtectionListener implements Listener{
 		if(plot != null){
 			if(plot.getPlotType() == PlotType.MARKETSTALL){
 				if(plot.isOwner(event.getPlayer())){
+					if(plot.getSettlement() instanceof TownyTown){
+						HookManager.getTowny().bypassPermsFor(event.getBlock());
+					}
 					event.setCancelled(false);
 				} else if(event.getPlayer().equals(plot.getRenter())){
 					if(event.getBlock().getType() == Material.CHEST ||
@@ -118,6 +121,9 @@ public class ProtectionListener implements Listener{
 		if(plot != null){
 			if(plot.getPlotType() == PlotType.MARKETSTALL){
 				if(plot.isOwner(player)){
+					if(plot.getSettlement() instanceof TownyTown){
+						HookManager.getTowny().bypassPermsFor(event.getBlock());
+					}
 					event.setCancelled(false);
 				} else if(plot.isRenter(player)){
 					if(event.getBlock().getType() == Material.CHEST ||
