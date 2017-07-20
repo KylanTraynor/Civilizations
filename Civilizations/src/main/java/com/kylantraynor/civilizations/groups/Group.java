@@ -24,12 +24,10 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
-import com.kylantraynor.civilizations.economy.Budget;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxBase;
 import com.kylantraynor.civilizations.economy.TaxInfo;
-import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
@@ -60,12 +58,10 @@ public class Group extends EconomicEntity{
 	}
 	
 	private int id;
-	private List<UUID> members;
 	private boolean hasChanged = true;
 	protected Protection protection;
 	private ChatColor chatColor;
 	private GroupSettings settings;
-	private Budget budget;
 	private boolean removed;
 	private UUID parent;
 	
@@ -83,7 +79,6 @@ public class Group extends EconomicEntity{
 	}
 	
 	public void init(){
-		members = new ArrayList<UUID>();
 		chatColor = ChatColor.WHITE;
 		initProtection();
 		getSettings().setCreationDate(Instant.now());

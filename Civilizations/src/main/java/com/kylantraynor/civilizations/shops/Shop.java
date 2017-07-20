@@ -3,8 +3,7 @@ package com.kylantraynor.civilizations.shops;
 import java.util.List;
 import java.util.UUID;
 
-import net.md_5.bungee.api.ChatColor;
-
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.settings.ShopSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.Util;
@@ -24,7 +23,6 @@ public class Shop {
 	public ShopSettings settings = new ShopSettings();
 	private Location location;
 	private OfflinePlayer owner;
-	private List<Sign> signs;
 	
 	public Location getLocation(){
 		if(location == null){
@@ -41,7 +39,7 @@ public class Shop {
 	public boolean isInMarketStall(){
 		Plot plot = Plot.getAt(location);
 		if(plot != null){
-			if(plot instanceof MarketStall){
+			if(plot.getPlotType() == PlotType.MARKETSTALL){
 				return true;
 			}
 		}

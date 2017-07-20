@@ -1,16 +1,9 @@
 package com.kylantraynor.civilizations.managers;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.cache.Cache;
@@ -21,7 +14,6 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.voronoi.VTriangle;
 
@@ -38,7 +30,6 @@ public class CacheManager {
 	public static boolean plotListChanged = true;
 	public static boolean houseListChanged = true;
 	public static boolean fortListChanged = true;
-	public static boolean marketstallListChanged = true;
 	
 	private static List<Group> groupList;
 	private static List<Settlement> settlementList;
@@ -47,7 +38,6 @@ public class CacheManager {
 	private static List<Plot> plotList;
 	private static List<House> houseList;
 	private static List<Fort> fortList;
-	private static List<MarketStall> marketstallList;
 	
 	private static Cache<UUID, VTriangle> playerLocations;
 	
@@ -176,24 +166,6 @@ public class CacheManager {
 			}
 		}
 		return fortList;
-	}
-	
-	/**
-	 * Gets the list of MarketStalls.
-	 * @return List<MarketStall> of cached MarketStalls.
-	 */
-	public static List<MarketStall> getMarketstallList(){
-		if(marketstallListChanged || marketstallList == null){
-			Civilizations.DEBUG("Stalls list needs update. Updating... ");
-			marketstallListChanged = false;
-			marketstallList = new ArrayList<MarketStall>();
-			for(Plot p : getPlotList()){
-				if(p instanceof MarketStall){
-					marketstallList.add((MarketStall) p);
-				}
-			}
-		}
-		return marketstallList;
 	}
 	
 	/**

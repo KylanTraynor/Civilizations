@@ -19,15 +19,12 @@ import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.events.CampCreateEvent;
 import com.kylantraynor.civilizations.groups.Group;
-import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
-import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
 import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
@@ -271,7 +268,7 @@ public class GroupManager {
 	 * @param s The selection.
 	 * @return The new Market Stall.
 	 */
-	public static MarketStall createMarketStall(Selection s){
+	public static Plot createMarketStall(Selection s){
 		Settlement set = Settlement.getClosest(s.getLocation());
 		boolean canMerge = false;
 		for(Plot p : set.getPlots()){
@@ -285,7 +282,10 @@ public class GroupManager {
 			}
 		}
 		if(!canMerge) return null;
-		return new MarketStall("Stall", (Shape)s, set);
+		Plot p = new Plot("Stall", (Shape)s, set);
+		p.setPersistent(true);
+		p.setPlotType(PlotType.MARKETSTALL);
+		return p;
 	}
 
 	/**

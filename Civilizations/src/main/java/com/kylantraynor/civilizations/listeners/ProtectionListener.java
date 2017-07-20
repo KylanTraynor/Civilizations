@@ -21,7 +21,7 @@ import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.LockManager;
@@ -37,16 +37,15 @@ public class ProtectionListener implements Listener{
 		String reason = "";
 		Plot plot = Plot.getAt(event.getBlock().getLocation());
 		if(plot != null){
-			if(plot instanceof MarketStall){
-				MarketStall ms = (MarketStall) plot;
-				if(ms.isOwner(event.getPlayer())){
+			if(plot.getPlotType() == PlotType.MARKETSTALL){
+				if(plot.isOwner(event.getPlayer())){
 					event.setCancelled(false);
-				} else if(event.getPlayer().equals(ms.getRenter())){
+				} else if(event.getPlayer().equals(plot.getRenter())){
 					if(event.getBlock().getType() == Material.CHEST ||
 						event.getBlock().getType() == Material.TRAPPED_CHEST ||
 						event.getBlock().getType() == Material.SIGN ||
 						event.getBlock().getType() == Material.SIGN_POST){
-						if(ms.getSettlement() instanceof TownyTown){
+						if(plot.getSettlement() instanceof TownyTown){
 							HookManager.getTowny().bypassPermsFor(event.getBlock());
 						}
 						event.setCancelled(false);
@@ -117,16 +116,15 @@ public class ProtectionListener implements Listener{
 		Player player = event.getPlayer();
 		Plot plot = Plot.getAt(event.getBlock().getLocation());
 		if(plot != null){
-			if(plot instanceof MarketStall){
-				MarketStall ms = (MarketStall) plot;
-				if(ms.isOwner(player)){
+			if(plot.getPlotType() == PlotType.MARKETSTALL){
+				if(plot.isOwner(player)){
 					event.setCancelled(false);
-				} else if(ms.isRenter(player)){
+				} else if(plot.isRenter(player)){
 					if(event.getBlock().getType() == Material.CHEST ||
 						event.getBlock().getType() == Material.TRAPPED_CHEST ||
 						event.getBlock().getType() == Material.SIGN ||
 						event.getBlock().getType() == Material.SIGN_POST){
-						if(ms.getSettlement() instanceof TownyTown){
+						if(plot.getSettlement() instanceof TownyTown){
 							HookManager.getTowny().bypassPermsFor(event.getBlock());
 						}
 						event.setCancelled(false);
@@ -209,8 +207,8 @@ public class ProtectionListener implements Listener{
 		if(event.isCancelled()) return;
 		if(event.getEntityType() == EntityType.VILLAGER){
 			Plot p = Plot.getAt(event.getEntity().getLocation());
-			if(p instanceof MarketStall && event.getDamager() instanceof Player){
-				if(((MarketStall)p).isOwner((OfflinePlayer) event.getDamager())){
+			if(p.getPlotType() == PlotType.MARKETSTALL && event.getDamager() instanceof Player){
+				if(p.isOwner((OfflinePlayer) event.getDamager())){
 					
 				} else {
 					event.setCancelled(true);

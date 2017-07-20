@@ -9,7 +9,6 @@ import mkremins.fanciful.civilizations.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,6 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
@@ -105,10 +103,10 @@ public class CommandGroup implements CommandExecutor {
 				return true;
 			case "REMOVE":
 				if(sender instanceof Player){
-					if(g instanceof MarketStall){
-						if(((MarketStall) g).isOwner((Player) sender)){
+					if(g instanceof Plot){
+						if(((Plot) g).isOwner((Player) sender)){
 							g.remove();
-							sender.sendMessage(ChatColor.GREEN + "Stall has been removed.");
+							sender.sendMessage(ChatColor.GREEN + "Plot has been removed.");
 							return true;
 						}
 					} else {

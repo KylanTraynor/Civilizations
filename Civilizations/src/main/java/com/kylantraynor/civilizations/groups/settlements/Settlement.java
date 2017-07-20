@@ -26,20 +26,14 @@ import com.kylantraynor.civilizations.builder.BuildProject;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
-import com.kylantraynor.civilizations.economy.Budget;
-import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
-import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
-import com.kylantraynor.civilizations.groups.settlements.plots.Warehouse;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
-import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
@@ -50,7 +44,6 @@ import com.kylantraynor.civilizations.util.Util;
 public class Settlement extends Group implements HasBuilder{
 	
 	private List<Plot> plots = new ArrayList<Plot>();
-	private Location location;
 	private Builder builder;
 	
 	@Override
@@ -559,7 +552,7 @@ public class Settlement extends Group implements HasBuilder{
 	@Override
 	public boolean canBuild() {
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
+			if(p.getPlotType() == PlotType.HOUSE){
 				return true;
 			}
 		}
@@ -574,11 +567,10 @@ public class Settlement extends Group implements HasBuilder{
 		if(!canBuild()) return null;
 		Civilizations.DEBUG("Checking if warehouse contains " + supply.getData().getItemType().toString() + ":" + supply.getData().getData());
 		for(Plot p : getPlots()){
-			if(p instanceof Warehouse){
-				Warehouse wh = (Warehouse) p;
-				if(wh.containsAtLeast(supply, 1)){
+			if(p.getPlotType() == PlotType.WAREHOUSE){
+				if(p.containsAtLeast(supply, 1)){
 					Civilizations.DEBUG("Found!");
-					wh.removeItem(supply);
+					p.removeItem(supply);
 					return supply;
 				}/*
 				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);

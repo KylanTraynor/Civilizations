@@ -1,15 +1,15 @@
 package com.kylantraynor.civilizations.commands;
 
-import net.md_5.bungee.api.ChatColor;
-
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 
 public class CommandStall implements CommandExecutor{
 
@@ -24,8 +24,9 @@ public class CommandStall implements CommandExecutor{
 		player = (Player)sender;
 		
 		Civilizations.DEBUG("Trying to find Stall.");
-		MarketStall stall = null;
-		for(MarketStall s : CacheManager.getMarketstallList()){
+		Plot stall = null;
+		for(Plot s : CacheManager.getPlotList()){
+			if(s.getPlotType() != PlotType.MARKETSTALL) continue;
 			if(s.protects(player.getLocation())){
 				stall = s;
 				break;

@@ -13,32 +13,23 @@ import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
-import com.kylantraynor.civilizations.groups.settlements.plots.House;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
-import com.kylantraynor.civilizations.groups.settlements.towns.IsolatedDwelling;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.GroupTarget;
-import com.kylantraynor.civilizations.protection.Permission;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.CampSettings;
-import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -92,7 +83,6 @@ public class Camp extends Settlement{
 	@Override
 	public boolean isUpgradable(){
 		if(SmallOutpost.hasUpgradeRequirements(this)) return true;
-		if(IsolatedDwelling.hasUpgradeRequirements(this)) return true;
 		return false;
 	}
 	

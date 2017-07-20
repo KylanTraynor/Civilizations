@@ -4,10 +4,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.dynmap.DynmapAPI;
@@ -19,19 +17,15 @@ import org.dynmap.markers.MarkerSet;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.Economy;
-import com.kylantraynor.civilizations.economy.TaxType;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.groups.settlements.plots.market.MarketStall;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.kylantraynor.civilizations.territories.Region;
 import com.kylantraynor.civilizations.util.Util;
-import com.kylantraynor.voronoi.VCell;
 
 public class DynmapHook {
 	private static Plugin plugin;
