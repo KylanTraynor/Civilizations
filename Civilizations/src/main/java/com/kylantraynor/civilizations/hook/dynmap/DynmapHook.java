@@ -201,15 +201,19 @@ public class DynmapHook {
 	public static void updateMap(Group group){
 		if(!DynmapHook.isEnabled()) return;
 		Civilizations.DEBUG("Updating Dynmap for " + group.getName());
-		if(group instanceof Camp){
-			Camp c = (Camp) group;
-			DynmapHook.updateCamp(c);
-		} else if (group instanceof Settlement){
-			Settlement s = (Settlement) group;
-			DynmapHook.updateSettlement(s);
-		} else if (group instanceof Plot){
-			Plot p = (Plot) group;
-			DynmapHook.updatePlot(p);
+		try{
+			if(group instanceof Camp){
+				Camp c = (Camp) group;
+				DynmapHook.updateCamp(c);
+			} else if (group instanceof Settlement){
+				Settlement s = (Settlement) group;
+				DynmapHook.updateSettlement(s);
+			} else if (group instanceof Plot){
+				Plot p = (Plot) group;
+				DynmapHook.updatePlot(p);
+			}
+		} catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 	
