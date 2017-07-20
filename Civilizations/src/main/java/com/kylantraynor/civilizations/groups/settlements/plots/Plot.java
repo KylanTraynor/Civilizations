@@ -258,10 +258,10 @@ public class Plot extends Group implements Rentable, HasInventory {
 			.then("\nPart of ").color(ChatColor.GRAY)
 			.then(getNameOf(getSettlement())).color(ChatColor.GOLD);
 		if(getSettlement() != null){
-			fm.command("/group " + getSettlement().getId() + " info");
+			fm.command("/group " + getSettlement().getUniqueId().toString() + " info");
 		}
-		String renterCommand = getRenter() == null ? "" : "/p " + getRenter().getName();
-		String ownerCommand = getOwner() == null ? (getSettlement() == null ? "" : "/group " + getSettlement().getId() + " INFO") : "/p " + getOwner().getName(); 
+		String renterCommand = getRenter() == null ? "" : (getRenter().isPlayer() ? "/p " + getRenter().getName() : "/group " + getRenter().getUniqueId().toString() + " info");
+		String ownerCommand = getOwner() == null ? "" : (!getOwner().isPlayer() ? "/group " + getSettlement().getUniqueId().toString() + " INFO" : "/p " + getOwner().getName()); 
 		String owner = getOwner() == null ? (getSettlement() == null ? "No one" : getSettlement().getName()) : getOwner().getName();
 		if(isForRent()){
 			fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
@@ -278,17 +278,17 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(getPlotType() == PlotType.HOUSE){
 			fm.then(".").color(ChatColor.GRAY)
 			.then("\nMembers: ").color(ChatColor.GRAY)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("/").color(ChatColor.GRAY)
 			.then("" + getBedCount()).color(ChatColor.GOLD).tooltip("Beds under a roof.");
 		} else {
 			fm.then(".").color(ChatColor.GRAY)
 				.then("\nMembers: ").color(ChatColor.GRAY)
-				.command("/group " + this.getId() + " members")
+				.command("/group " + this.getUniqueId().toString() + " members")
 				.then("" + getMembers().size()).color(ChatColor.GOLD)
-				.command("/group " + this.getId() + " members");
+				.command("/group " + this.getUniqueId().toString() + " members");
 		}
 		fm.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
@@ -300,27 +300,27 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
 		
-		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		if(this instanceof Rentable){
 			if(((Rentable)this).isOwner(player)){
-				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForRent", ((Rentable)this).isForRent()));
-				list.add(new GroupAction("Kick", "Kick the player renting this plot", ActionType.COMMAND, "/group " + getId() + " kick", ((Rentable)this).getRenter() != null));
-				list.add(new GroupAction("Rent Price", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getId() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
+				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getUniqueId().toString() + " toggleForRent", ((Rentable)this).isForRent()));
+				list.add(new GroupAction("Kick", "Kick the player renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " kick", ((Rentable)this).getRenter() != null));
+				list.add(new GroupAction("Rent Price", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
 			} else if(((Rentable)this).isRenter(player)) {
-				list.add(new GroupAction("Leave", "Stop renting this plot", ActionType.COMMAND, "/group " + getId() + " leave", true));
+				list.add(new GroupAction("Leave", "Stop renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " leave", true));
 			} else {
-				list.add(new GroupAction("Rent", "Start renting this plot", ActionType.COMMAND, "/group " + getId() + " rent", ((Rentable)this).isForRent()));
+				list.add(new GroupAction("Rent", "Start renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " rent", ((Rentable)this).isForRent()));
 			}
 		}
 		if(this instanceof Purchasable){
 			if(((Purchasable)this).isOwner(player)){
-				list.add(new GroupAction("For Sale", "Toggle the for sale state of this plot", ActionType.TOGGLE, "/group " + getId() + " toggleForSale", ((Purchasable)this).isForSale()));
-				list.add(new GroupAction("Purchase Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getId() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
+				list.add(new GroupAction("For Sale", "Toggle the for sale state of this plot", ActionType.TOGGLE, "/group " + getUniqueId().toString() + " toggleForSale", ((Purchasable)this).isForSale()));
+				list.add(new GroupAction("Purchase Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
 			} else {
-				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getId() + " buy", ((Purchasable)this).isForSale()));
+				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " buy", ((Purchasable)this).isForSale()));
 			}
 		}
-		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getId() + " remove", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", this.hasPermission(PermissionType.MANAGE, null, player)));
 		
 		return list;
 	}

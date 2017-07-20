@@ -204,9 +204,9 @@ public class Camp extends Settlement{
 			.then(Util.durationToString(Instant.now(), getSettings().getExpiryDate())).color(ChatColor.GOLD)
 			.then(".").color(ChatColor.GRAY)
 			.then("\nMembers: ").color(ChatColor.GRAY)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -227,9 +227,9 @@ public class Camp extends Settlement{
 				list.add(new GroupAction("Claim", "Claim this abandonned camp", ActionType.COMMAND, "/camp join", true));
 			}
 		}
-		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getId() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		list.add(new GroupAction("Renew", "Renew the camp for " + campDuration + " hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
-		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getId() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
+		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getUniqueId().toString() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
 		return list;
 	}
 	/**

@@ -354,8 +354,8 @@ public class Group extends EconomicEntity{
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -420,12 +420,12 @@ public class Group extends EconomicEntity{
 			if(pr != null){
 				fm.then(" (" + pr.getName() + ")");
 				fm.color(ChatColor.GOLD);
-				fm.command("/group " + this.getId() + " rank " + pr.getName() + " members");
+				fm.command("/group " + this.getUniqueId().toString() + " rank " + pr.getName() + " members");
 			}
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
-			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page - 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -434,7 +434,7 @@ public class Group extends EconomicEntity{
 		fm.then(" - ").color(ChatColor.GRAY);
 		fm.then("Next ->");
 		if(page < getMembers().size() / 8){
-			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page + 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -462,7 +462,7 @@ public class Group extends EconomicEntity{
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
-			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page - 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -471,7 +471,7 @@ public class Group extends EconomicEntity{
 		fm.then(" - ").color(ChatColor.GRAY);
 		fm.then("Next ->");
 		if(page < getMembers().size() / 8){
-			fm.color(ChatColor.BLUE).command("/group " + this.getId() + " members " + (page + 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -536,8 +536,8 @@ public class Group extends EconomicEntity{
 	 */
 	public FancyMessage getInteractiveRankPanel(Rank playerRank) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(playerRank.getName().toUpperCase(), null));
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " rank " + playerRank.getName() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " rank " + playerRank.getName() + " members");
 		//fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		//fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);

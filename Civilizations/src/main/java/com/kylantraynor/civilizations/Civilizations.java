@@ -44,6 +44,7 @@ import com.kylantraynor.civilizations.commands.CommandSelection;
 import com.kylantraynor.civilizations.commands.CommandStall;
 import com.kylantraynor.civilizations.database.Database;
 import com.kylantraynor.civilizations.database.SQLite;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -603,7 +604,13 @@ public class Civilizations extends JavaPlugin{
 				}
 				if(p == null) return;
 				if(!p.protects(fromL.getBlock().getLocation())){
-					TitleManagerHook.sendActionBar(p.getName(), player, false);
+					if(p.isForRent()){
+						TitleManagerHook.sendActionBar(ChatColor.GOLD + p.getName() + " [For Rent! " + ChatColor.GREEN + Economy.format(p.getRent()) + ChatColor.GOLD + " daily]", player, false);
+					} else if(p.isForSale()){
+						TitleManagerHook.sendActionBar(ChatColor.GOLD + p.getName() + " [For Sale! " + ChatColor.GREEN + Economy.format(p.getPrice()) + ChatColor.GOLD + " daily]", player, false);
+					} else {
+						TitleManagerHook.sendActionBar(p.getName(), player, false);
+					}
 				}
 			}
 			

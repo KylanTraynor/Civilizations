@@ -149,9 +149,9 @@ public class Settlement extends Group implements HasBuilder{
 			.then("\nStalls: ").color(ChatColor.GRAY)
 			.then("" + getMarketStalls().size()).color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
-			.command("/group " + this.getId() + " members")
+			.command("/group " + this.getUniqueId().toString() + " members")
 			.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);

@@ -50,7 +50,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		for(int i = houses.size() - 1; i >= 0; i--){
 			fm.then("\n");
 			fm.then(ChatColor.GOLD + houses.get(i).getName() + " (Lord " + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
-			.command("/group " + houses.get(i).getId() + " info");
+			.command("/group " + houses.get(i).getUniqueId().toString() + " info");
 		}
 		fm.then("\n");
 		fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -166,7 +166,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveInfoPanel(Player player) {
-		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("HOUSE " + getName().toUpperCase(), null));
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("House " + getName(), null));
 		fm.then("\nWords: ").color(ChatColor.GRAY).then(getWords()).color(ChatColor.GOLD);
 		DateFormat format = new SimpleDateFormat("MMMM, dd, yyyy");
 		if(getSettings().getCreationDate() != null){
@@ -180,8 +180,8 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		for(HonorificTitle t : getTitles()){
 			fm.then("\n\t" + t.getName()).color(ChatColor.GOLD);
 		}
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
 		fm.then("\nVassals: ").color(ChatColor.GRAY).command("/house " + this.getName() + " Vassals").
 			then("" + getVassals().size()).color(ChatColor.GOLD).command("/house " + this.getName() + " Vassals");
 		fm.then("\nActions: \n").color(ChatColor.GRAY);
@@ -260,11 +260,11 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 	 * @return
 	 */
 	public FancyMessage getInteractiveVassalsList() {
-		FancyMessage fm = new FancyMessage("========== House " + getName() + " Vassals ==========").color(ChatColor.GOLD);
+		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("House " + getName() + " Vassals",null));
 		for(House h : getVassals()){
 			fm.then("\n" + h.getName()).command("/House " + h.getName() + " INFO");
 		}
-		fm.then("\n==============================").color(ChatColor.GOLD);
+		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
 	
