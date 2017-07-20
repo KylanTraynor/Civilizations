@@ -315,6 +315,9 @@ public class Hull extends Shape {
 	public void addBlock(Block block){
 		if(block == null) return;
 		//Add the 4 corners of the block at BlockY;
+		if(getWorld() == null){
+			setWorld(block.getWorld());
+		}
 		if(points.size() == 0){
 			minY = (double) block.getY();
 			maxY = (double) block.getY() + 1;
@@ -331,6 +334,9 @@ public class Hull extends Shape {
 	}
 	
 	public void addPoint(Location l){
+		if(getWorld() == null){
+			setWorld(l.getWorld());
+		}
 		if(points.size() == 0){
 			minY = l.getY();
 			maxY = l.getY();
@@ -352,7 +358,7 @@ public class Hull extends Shape {
 	public void addPoints(List<Location> locations){
 		for(Location l : locations){
 			if(l == null) continue;
-			points.add(l);
+			addPoint(l);
 		}
 		setChanged(true);
 	}
