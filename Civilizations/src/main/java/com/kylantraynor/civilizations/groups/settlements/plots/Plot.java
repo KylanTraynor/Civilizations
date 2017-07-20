@@ -48,7 +48,6 @@ import com.kylantraynor.civilizations.shops.ShopType;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Plot extends Group implements Rentable, HasInventory {
-	private PlotType type;
 	private boolean persistent = false;
 	private int beds;
 	private int workbenches;
@@ -209,11 +208,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 */
 	@Override
 	public File getFile(){
-		File dir = new File(Civilizations.getPlotDirectory(), getPlotType().toString());
-		if(!dir.exists()){
-			dir.mkdir();
-		}
-		File f = new File(dir, "" + getUniqueId().toString() + ".yml");
+		File f = new File(Civilizations.getPlotDirectory(getPlotType()), "" + getUniqueId().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -526,13 +521,19 @@ public class Plot extends Group implements Rentable, HasInventory {
 			return getBedCount() > 0 && getChestsCount() > 0 && getWorkbenchesCount() > 0;
 		case WAREHOUSE:
 			return getChestsCount() > 0 && getWorkbenchesCount() > 0;
+		default:
+			return true;
 		}
-		return false;
 	}
 
 	@Override
 	public EconomicEntity getOwner() {
-		return getSettings().getOwner();
+		EconomicEntity ee = getSettings().getOwner();
+		if(ee == null){
+			getSettings().setOwner(getSettlement());
+			ee = getSettlement();
+		}
+		return ee;
 	}
 
 	@Override

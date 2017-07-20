@@ -76,16 +76,18 @@ public class SelectionManager {
 		UUID id = p.getUniqueId();
 		List<Location> locs = points.get(id);
 		if(locs == null) selections.remove(id);
-		if(locs.size() == 2){
+		if(locs.size() >= 2 && getSelectionMode(p).equals("PRISM")){
 			if(locs.get(0) != null && locs.get(1) != null){
 				selections.put(id, new PrismSelection(locs.get(0), locs.get(1)));
 			}
-		} else if(locs.size() > 2){
+		} else if(locs.size() >= 2 && getSelectionMode(p).equals("HULL")){
 			HullSelection hull = new HullSelection();
 			for(Location l : locs){
 				hull.addBlock(l.getBlock());
 			}
 			selections.put(id, hull);
+		} else {
+			selections.remove(id);
 		}
 	}
 	

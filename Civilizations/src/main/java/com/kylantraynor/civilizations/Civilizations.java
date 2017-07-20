@@ -1,7 +1,6 @@
 package com.kylantraynor.civilizations;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -20,7 +19,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -50,14 +48,12 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.hook.HookManager;
-import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.hook.lwc.LWCHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.CommandTownyTown;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
-import com.kylantraynor.civilizations.hook.towny.TownyListener;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.listeners.ChatListener;
 import com.kylantraynor.civilizations.listeners.CivilizationsListener;
@@ -717,6 +713,20 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static File getPlotDirectory() {
 		File f = new File(currentInstance.getDataFolder(), "Plots");
+		if(f.exists()){
+			return f;
+		} else {
+			f.mkdir();
+			return f;
+		}
+	}
+	/**
+	 * Gets the directory the plot files of the specific type are stored in.
+	 * @param type as {@link PlotType}
+	 * @return File
+	 */
+	public static File getPlotDirectory(PlotType type){
+		File f = new File(getPlotDirectory(), type.toString());
 		if(f.exists()){
 			return f;
 		} else {

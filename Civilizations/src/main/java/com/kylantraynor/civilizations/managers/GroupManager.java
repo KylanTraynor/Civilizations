@@ -19,6 +19,7 @@ import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.events.CampCreateEvent;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.House;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -132,13 +133,13 @@ public class GroupManager {
 	}
 	
 	private static void loadPlots() {
-		loadDirectory(PlotType.KEEP, Civilizations.getKeepDirectory());
+		loadDirectory(PlotType.KEEP, Civilizations.getPlotDirectory(PlotType.KEEP));
 		//loadKeeps();
-		loadDirectory(PlotType.MARKETSTALL, Civilizations.getMarketStallDirectory());
+		loadDirectory(PlotType.MARKETSTALL, Civilizations.getPlotDirectory(PlotType.MARKETSTALL));
 		//loadStalls();
-		loadDirectory(PlotType.HOUSE, Civilizations.getHousePlotDirectory());
+		loadDirectory(PlotType.HOUSE, Civilizations.getPlotDirectory(PlotType.HOUSE));
 		//loadPlotHouses();
-		loadDirectory(PlotType.WAREHOUSE, Civilizations.getWarehousesDirectory());
+		loadDirectory(PlotType.WAREHOUSE, Civilizations.getPlotDirectory(PlotType.WAREHOUSE));
 		//loadWarehouses();
 	}
 
@@ -219,9 +220,7 @@ public class GroupManager {
 					f.delete();
 					continue;
 				}
-				Plot p = new Plot();
-				load(f, p);
-				p.setPlotType(PlotType.HOUSE);
+				load(f, new House());
 				f.delete();
 			}
 		}
