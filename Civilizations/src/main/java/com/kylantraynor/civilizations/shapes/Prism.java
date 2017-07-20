@@ -219,4 +219,24 @@ public class Prism extends Shape {
 			return false;
 		}
 	}
+
+	@Override
+	public double[] getVerticesX() {
+		double[] result = new double[4];
+		result[0] = getMaxX();
+		result[1] = getMaxX();
+		result[2] = getMinX();
+		result[3] = getMinX();
+		return result;
+	}
+
+	@Override
+	public double[] getVerticesZ() {
+		double[] result = new double[4];
+		result[0] = getMinZ();
+		result[1] = getMaxZ();
+		result[2] = getMaxZ();
+		result[3] = getMinZ();
+		return result;
+	}
 }

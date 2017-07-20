@@ -190,4 +190,24 @@ public class Sphere extends Shape {
 	public double distanceSquared(Location l) {
 		return Math.max(getLocation().distanceSquared(l) - (getRadius() * getRadius()), 0);
 	}
+
+	@Override
+	public double[] getVerticesX() {
+		double[] result = new double[4];
+		result[0] = getMaxX();
+		result[1] = getLocation().getX();
+		result[2] = getMinX();
+		result[3] = getLocation().getX();
+		return result;
+	}
+
+	@Override
+	public double[] getVerticesZ() {
+		double[] result = new double[4];
+		result[0] = getLocation().getZ();
+		result[1] = getMaxZ();
+		result[2] = getLocation().getZ();
+		result[3] = getMinZ();
+		return result;
+	}
 }

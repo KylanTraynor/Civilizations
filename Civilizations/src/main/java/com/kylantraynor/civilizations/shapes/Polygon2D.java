@@ -11,8 +11,8 @@ import com.kylantraynor.civilizations.util.Util;
 import com.kylantraynor.voronoi.VectorXZ;
 
 public class Polygon2D extends Shape {
-	private int[] xVertices;
-	private int[] zVertices;
+	private double[] xVertices;
+	private double[] zVertices;
 	
 	private VectorXZ[] normals;
 	
@@ -24,8 +24,8 @@ public class Polygon2D extends Shape {
 	
 	public Polygon2D(Location... locations) {
 		super(get2DCenter(locations));
-		xVertices = new int[locations.length];
-		zVertices = new int[locations.length];
+		xVertices = new double[locations.length];
+		zVertices = new double[locations.length];
 		
 		normals = new VectorXZ[locations.length];
 		
@@ -151,8 +151,8 @@ public class Polygon2D extends Shape {
 	@Override
 	public int getMinBlockX() {
 		int result = getLocation().getBlockX();
-		for(int x : xVertices){
-			result = x < result ? x : result;
+		for(double x : xVertices){
+			result = x < result ? (int)x : result;
 		}
 		return result;
 	}
@@ -166,8 +166,8 @@ public class Polygon2D extends Shape {
 	@Override
 	public int getMinBlockZ() {
 		int result = getLocation().getBlockZ();
-		for(int z : zVertices){
-			result = z < result ? z : result;
+		for(double z : zVertices){
+			result = z < result ? (int)z : result;
 		}
 		return result;
 	}
@@ -175,8 +175,8 @@ public class Polygon2D extends Shape {
 	@Override
 	public int getMaxBlockX() {
 		int result = getLocation().getBlockX();
-		for(int x : xVertices){
-			result = (x-1) > result ? (x-1) : result;
+		for(double x : xVertices){
+			result = (x-1) > result ? (int)(x-1) : result;
 		}
 		return result;
 	}
@@ -190,8 +190,8 @@ public class Polygon2D extends Shape {
 	@Override
 	public int getMaxBlockZ() {
 		int result = getLocation().getBlockZ();
-		for(int z : zVertices){
-			result = (z-1) > result ? (z-1) : result;
+		for(double z : zVertices){
+			result = (z-1) > result ? (int)(z-1) : result;
 		}
 		return result;
 	}
@@ -263,6 +263,16 @@ public class Polygon2D extends Shape {
 		x /= locations.length;
 		z /= locations.length;
 		return new Location(locations[0].getWorld(), x, y, z);
+	}
+
+	@Override
+	public double[] getVerticesX() {
+		return xVertices;
+	}
+
+	@Override
+	public double[] getVerticesZ() {
+		return zVertices;
 	}
 
 }

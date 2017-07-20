@@ -48,6 +48,8 @@ public abstract class Shape implements Visualizable{
 	public abstract String toString();
 	public abstract Location[] getBlockLocations();
 	public abstract Block[] getBlockSurface();
+	public abstract double[] getVerticesX();
+	public abstract double[] getVerticesZ();
 	
 	public boolean isInside(Location location){
 		if(location.getWorld().equals(getLocation().getWorld())){
@@ -55,6 +57,10 @@ public abstract class Shape implements Visualizable{
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean isInside(Block block){
+		return isInside(block.getLocation());
 	}
 
 	public Location getLocation() {

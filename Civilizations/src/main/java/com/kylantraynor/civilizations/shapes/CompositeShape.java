@@ -259,4 +259,16 @@ public class CompositeShape extends Shape{
 		}
 		return 0;
 	}
+
+	@Override
+	public double[] getVerticesX() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double[] getVerticesZ() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

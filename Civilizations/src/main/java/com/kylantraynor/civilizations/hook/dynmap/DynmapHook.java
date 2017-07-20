@@ -33,7 +33,7 @@ public class DynmapHook {
 	private static MarkerAPI markerAPI;
 	private static boolean reload;
 	private static MarkerSet campMarkerSet;
-	private static MarkerSet stallsMarkerSet;
+	private static MarkerSet plotsMarkerSet;
 	private static MarkerSet regionsMarkerSet;
 	private static HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	private static MarkerSet settlementsMarkerSet;
@@ -82,9 +82,9 @@ public class DynmapHook {
 					settlementsMarkerSet.deleteMarkerSet();
 					settlementsMarkerSet = null;
 				}
-				if (stallsMarkerSet != null){
-					stallsMarkerSet.deleteMarkerSet();
-					stallsMarkerSet = null;
+				if (plotsMarkerSet != null){
+					plotsMarkerSet.deleteMarkerSet();
+					plotsMarkerSet = null;
 				}
 				if(regionsMarkerSet != null){
 					regionsMarkerSet.deleteMarkerSet();
@@ -94,7 +94,7 @@ public class DynmapHook {
 		    	reload = true;
 		    }
 			loadCampMarkerSet();
-			loadStallsMarkerSet();
+			loadPlotsMarkerSet();
 			loadRegionsMarkerSet();
 			loadSettlementsMarkerSet();
 		} catch (Exception e) {
@@ -174,24 +174,24 @@ public class DynmapHook {
 	/**
 	 * Loads the marker set for Stalls
 	 */
-	private static void loadStallsMarkerSet() {
+	private static void loadPlotsMarkerSet() {
 		if(!isEnabled()) return;
-		stallsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.stalls");
-		if (stallsMarkerSet == null) {
-			stallsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.stalls", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Name", "Market Stalls"), null, false);
+		plotsMarkerSet = markerAPI.getMarkerSet("civilizations.markerset.plots");
+		if (plotsMarkerSet == null) {
+			plotsMarkerSet = markerAPI.createMarkerSet("civilizations.markerset.plots", Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.Name", "Plots"), null, false);
 		} else {
-			stallsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.Name", "Market Stalls"));
+			plotsMarkerSet.setMarkerSetLabel(Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.Name", "Plots"));
 		}
-		if (stallsMarkerSet == null){
+		if (plotsMarkerSet == null){
 			Civilizations.log("SEVERE", "Error creating marker set");
 			return;
 		}
-		int minzoom = Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.MinZoom", 5);
+		int minzoom = Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Plots.MinZoom", 5);
 		if (minzoom > 0) {
-		   stallsMarkerSet.setMinZoom(minzoom);
+		   plotsMarkerSet.setMinZoom(minzoom);
 		}
-		stallsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Stalls.LayerPrio", 1));
-	    stallsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Stalls.HideByDefault", false));
+		plotsMarkerSet.setLayerPriority(Civilizations.getInstanceConfig().getInt("Dynmap.Layer.Plots.LayerPrio", 1));
+	    plotsMarkerSet.setHideByDefault(Civilizations.getInstanceConfig().getBoolean("Dynmap.Layer.Plots.HideByDefault", false));
 	}
 	
 	/**
@@ -296,7 +296,8 @@ public class DynmapHook {
 	 * @param c
 	 */
 	private static void updateStall(Plot p) {
-		String id = "" + p.getUniqueId().toString();
+		String id = "" + p.getUniqueId().toString() + "_icon";
+		String areaId = "" + p.getUniqueId().toString() + "_area";
 		String stallMarker = p.getIcon();
 		MarkerIcon stallIcon = null;
 	    if (stallMarker != null)
@@ -308,10 +309,18 @@ public class DynmapHook {
 	          stallIcon = markerAPI.getMarkerIcon("scales");
 	        }
 	    }
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getProtection().getCenter().getWorld().getName(), p.getProtection().getShapes().get(0).getVerticesX(), p.getProtection().getShapes().get(0).getVerticesZ(), false);
+		if(m == null){
+			m = plotsMarkerSet.findAreaMarker(areaId);
+			if(m == null){
+				Civilizations.log("SEVERE", "Failed to create marker area.");
+				return;
+			}
+		}
 	    if(stallIcon != null){
 	    	Marker stall = markerList.remove(id);
 	    	if (stall == null){
-	    		stall = stallsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
+	    		stall = plotsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
 	    				p.getProtection().getCenter().getBlockX(),
 	    				p.getProtection().getCenter().getBlockY(),
 	    				p.getProtection().getCenter().getBlockZ(), stallIcon, false);
@@ -323,7 +332,7 @@ public class DynmapHook {
 	            stall.setLabel(p.getName());
 	            stall.setMarkerIcon(stallIcon);
 	    	}
-	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Stalls.InfoBubble", "%Name%");
+	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.InfoBubble", "%Name%");
 	    	description = "<div class=\"regioninfo\">" + description + "</div>";
 	    	description = description.replace("%Name%", p.getName());
 	    	StringBuilder sb = new StringBuilder();
