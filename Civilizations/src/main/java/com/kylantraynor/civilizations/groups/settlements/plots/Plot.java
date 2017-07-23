@@ -169,7 +169,12 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public void update(){
 		if(getRenter() != null){
 			if(Instant.now().isAfter(getSettings().getNextPayment())){
-				payRent();
+				TransactionResult r = payRent();
+				if(getRenter().isPlayer()){
+					if(getRenter().getOfflinePlayer().isOnline()){
+						getRenter().getOfflinePlayer().getPlayer().sendMessage(r.getInfo());
+					}
+				}
 				setChanged(true);
 			}
 		}
@@ -634,7 +639,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 			result.info = this.getChatHeader() + ChatColor.RED + this.getName() + " is already rented by someone.";
 			return result;
 		}
-		this.getSettings().setRenter(ecoEntity);
+		this.setRenter(ecoEntity);
 		if(this.payRent().wasSuccessful()){
 			result.success = true;
 			result.info = this.getChatHeader() + ChatColor.GREEN + "You are now renting " + this.getName() + ".";
@@ -664,17 +669,18 @@ public class Plot extends Group implements Rentable, HasInventory {
 			result.success = false;
 			return result;
 		}
-		setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
 		if(getOwner() != null){
 			if(Economy.tryTransferFunds(getRenter(), getOwner(), "Rent for " + getName(), getRent())){
 				result.success = true;
 				result.info = this.getChatHeader() + ChatColor.GREEN + "You've paid " + Economy.format(getRent()) + " in rent.";
 				Economy.playCashinSound(getOwner());
 				Economy.playPaySound(getRenter());
+				setNextRentDate(Instant.now().plus(1, ChronoUnit.DAYS));
 				return result;
 			} else {
 				result.success = false;
 				result.info = this.getChatHeader() + ChatColor.RED + "You couldn't pay the rent of " + Economy.format(getRent()) + "!";
+				setNextRentDate(Instant.now().plus(1, ChronoUnit.HOURS));
 				return result;
 			}
 		}
