@@ -291,7 +291,7 @@ public class DynmapHook {
 		}
 		sb.append("Area: " + s.getProtection().getHull().getArea() + "m²");
 		sb.append("<h2>Taxes: </h2><br />");
-		sb.append("Daily Server Tax: " + s.getNextTaxationAmount("Land"));
+		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
 		m.setDescription(sb.toString());
 	}
 

@@ -318,7 +318,14 @@ public class GroupManager {
 	}
 	
 	public static void updateForEconomy() {
-		
+		for(Group g : CacheManager.getGroupList()){
+			if(g != null){
+				// Lets the parent (or the server) tax this group.
+				if(!(g instanceof Camp)){
+				//g.processTaxes();
+				}
+			}
+		}
 	}
 
 	public static Group get(UUID groupId) {

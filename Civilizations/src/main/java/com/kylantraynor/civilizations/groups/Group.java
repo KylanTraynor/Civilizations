@@ -557,7 +557,7 @@ public class Group extends EconomicEntity{
 			taxInfo = Civilizations.getSettings().getTaxInfo(tax);
 		}
 		if(taxInfo != null){
-			return calculateTax(taxInfo);
+			return (((int) (calculateTax(taxInfo) * 100)) / 100.0);
 		}
 		return 0;
 	}

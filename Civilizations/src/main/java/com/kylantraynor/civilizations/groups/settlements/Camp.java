@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.groups.ActionType;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -307,5 +308,43 @@ public class Camp extends Settlement{
 			}
 		}
 		return closest;
+	}
+	
+	@Override
+	public double calculateTax(TaxInfo taxInfo){
+		switch(taxInfo.getBase()){
+		case FromBalance:
+			if(taxInfo.isPercent()){
+				return this.getBalance() * (taxInfo.getValue() / 100.0);
+			} else {
+				return taxInfo.getValue();
+			}
+		case PerMember:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * getMembers().size();
+			} else {
+				return taxInfo.getValue() * getMembers().size();
+			}
+		case PerPlot:
+			return 0;
+		case PerArea:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * getSize() * getSize() * Math.PI;
+			} else {
+				return taxInfo.getValue() * (getSize() * getSize()) * Math.PI;
+			}
+		case PerVolume:
+			if(taxInfo.isPercent()){
+				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
+				return val * (getSize() * getSize() * getSize() * ((4.0/3.0) * Math.PI));
+			} else {
+				return taxInfo.getValue() * (getSize() * getSize() * getSize() * ((4.0/3.0) * Math.PI));
+			}
+		default:
+			break;
+		}
+		return 0;
 	}
 }
