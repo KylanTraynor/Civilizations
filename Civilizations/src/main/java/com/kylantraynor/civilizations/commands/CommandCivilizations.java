@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.util.MaterialAndData;
 
@@ -44,7 +45,7 @@ public class CommandCivilizations implements CommandExecutor{
 					if(p.getUniqueId() == null) {sender.sendMessage(ChatColor.RED + "No player exists with this name.");return true;}
 					EconomicEntity e = EconomicEntity.get(p.getUniqueId());
 					if(e == null) {sender.sendMessage(ChatColor.RED + "This players isn't a valid Economic Entity."); return true;}
-					sender.sendMessage(ChatColor.GREEN + p.getName() + " Balance: " + e.getBalance());
+					sender.sendMessage(ChatColor.GREEN + p.getName() + " Balance: " + Economy.format(e.getBalance()));
 					Civilizations.DEBUG("Is Player? " + e.isPlayer());
 					break;
 				}
