@@ -49,6 +49,7 @@ public class CommandCivilizations implements CommandExecutor{
 					Civilizations.DEBUG("Is Player? " + e.isPlayer());
 					break;
 				}
+				break;
 			case "SET":
 				if(!sender.isOp()) {sender.sendMessage(ChatColor.RED + "You don't have the permission to do this."); return true;}
 				if(args.length <= 2) {sender.sendMessage(ChatColor.RED + "/Civilizations Set <property> <value>"); return true;}
