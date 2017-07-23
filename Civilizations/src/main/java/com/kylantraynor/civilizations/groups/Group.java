@@ -549,8 +549,6 @@ public class Group extends EconomicEntity{
 	 * @return double Amount
 	 */
 	public double getNextTaxationAmount(String tax) {
-		if(this.getParent() == null)
-			return 0;
 		Group parent = getParent();
 		TaxInfo taxInfo;
 		if(parent != null){
@@ -619,11 +617,15 @@ public class Group extends EconomicEntity{
 	 */
 	public void processTaxes(){
 		Group parent = getParent();
+		Set<String> taxes;
 		String taxTarget = "Server";
 		if(parent != null){
 			taxTarget = parent.getName();
+			taxes = parent.getTaxes();
+		} else {
+			taxes = Civilizations.getSettings().getTaxes();
 		}
-		for(String tax : getTaxes()){
+		for(String tax : taxes){
 			double transfer = getNextTaxationAmount(tax);
 			if(Economy.tryTransferFunds(this, parent, taxTarget + " " + tax, transfer)){
 				this.sendMessage(ChatColor.GREEN + "Payed tax " + tax + " to " + taxTarget + ": " + Economy.format(transfer), PermissionType.TAX_NOTIFICATIONS);

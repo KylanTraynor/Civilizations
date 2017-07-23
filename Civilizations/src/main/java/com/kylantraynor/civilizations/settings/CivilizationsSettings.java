@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.settings;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -134,5 +135,10 @@ public class CivilizationsSettings extends YamlConfiguration {
 		this.set(root + tax + ".base", base.toString());
 		
 		this.setChanged(true);
+	}
+	
+	public Set<String> getTaxes() {
+		String root = "Economy.Taxes";
+		return this.getConfigurationSection(root).getKeys(false);
 	}
 }
