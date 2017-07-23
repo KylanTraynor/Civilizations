@@ -14,7 +14,7 @@ import com.kylantraynor.civilizations.groups.Group;
  * Represents an entity which can own a balance and take part in transactions.
  * @author Baptiste Jacquet
  */
-public abstract class EconomicEntity {
+public class EconomicEntity {
 	
 	private static Map<String, EconomicEntity> entities = new HashMap<String, EconomicEntity>();
 	
@@ -154,6 +154,10 @@ public abstract class EconomicEntity {
 	 * @return {@link EconomicEntity}
 	 */
 	public static EconomicEntity get(UUID id){
-		return entities.get(id.toString());
+		EconomicEntity e = entities.get(id.toString());
+		if(e == null){
+			e = new EconomicEntity(id);
+		}
+		return e;
 	}
 }
