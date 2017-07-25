@@ -289,6 +289,7 @@ public class DynmapHook {
 			sb.append(s.getName().replace(" ", "_"));
 			sb.append("\" target=\"_blank\">Wiki</a><br />");
 		}
+		sb.append("Bank: " + Economy.format(s.getBalance()));
 		sb.append("Area: " + s.getProtection().getHull().getArea() + "m²");
 		sb.append("<h2>Taxes: </h2><br />");
 		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));

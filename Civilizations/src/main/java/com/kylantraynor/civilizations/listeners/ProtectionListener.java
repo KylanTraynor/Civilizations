@@ -43,7 +43,7 @@ public class ProtectionListener implements Listener{
 						HookManager.getTowny().bypassPermsFor(event.getBlock());
 					}
 					event.setCancelled(false);
-				} else if(event.getPlayer().equals(plot.getRenter())){
+				} else if(plot.isRenter(event.getPlayer())){
 					if(event.getBlock().getType() == Material.CHEST ||
 						event.getBlock().getType() == Material.TRAPPED_CHEST ||
 						event.getBlock().getType() == Material.SIGN ||
