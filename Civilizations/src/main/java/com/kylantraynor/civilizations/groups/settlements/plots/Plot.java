@@ -277,7 +277,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(isForRent()){
 			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
 		}
-		if(getRenter() == player){
+		if(isRenter(player)){
 			fm.then("\nNext Payment in ").color(ChatColor.GRAY).then("" + ChronoUnit.HOURS.between(Instant.now(), getSettings().getNextPayment()) + " hours").color(ChatColor.GOLD);
 		}
 		if(getPlotType() == PlotType.HOUSE){
