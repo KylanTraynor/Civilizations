@@ -322,7 +322,7 @@ public class GroupManager {
 			if(g != null){
 				// Lets the parent (or the server) tax this group.
 				if(!(g instanceof Camp)){
-				//g.processTaxes();
+					g.processTaxes();
 				}
 			}
 		}

@@ -629,8 +629,10 @@ public class Group extends EconomicEntity{
 			double transfer = getNextTaxationAmount(tax);
 			if(Economy.tryTransferFunds(this, parent, taxTarget + " " + tax, transfer)){
 				this.sendMessage(ChatColor.GREEN + "Payed tax " + tax + " to " + taxTarget + ": " + Economy.format(transfer), PermissionType.TAX_NOTIFICATIONS);
+				Civilizations.currentInstance.getLogger().info(ChatColor.GREEN + "" + this.getName() + " payed " + tax + " tax to " + taxTarget + ": " + Economy.format(transfer));
 			} else {
 				this.sendMessage(ChatColor.RED + "Couldn't pay tax " + tax + " to " + taxTarget + ": " + Economy.format(transfer), PermissionType.TAX_NOTIFICATIONS);
+				Civilizations.currentInstance.getLogger().info(ChatColor.RED + "" + this.getName() + " coudln't pay " + tax + " tax to " + taxTarget + ": " + Economy.format(transfer));
 			}
 		}
 	}
