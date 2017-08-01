@@ -73,7 +73,12 @@ public class EconomicEntity {
 	 */
 	public double getBalance(){
 		if(Civilizations.useVault && isPlayer()){
-			return Economy.getVault().getBalance(getOfflinePlayer());
+			try{
+				return Economy.getVault().getBalance(getOfflinePlayer());
+			} catch (RuntimeException e){
+				Civilizations.currentInstance.getLogger().warning("Error while trying to get " + getName() + "'s Vault Balance:");
+				e.printStackTrace();
+			}
 		}
 		return balance;
 	}
