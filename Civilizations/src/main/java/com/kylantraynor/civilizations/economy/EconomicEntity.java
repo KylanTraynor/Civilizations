@@ -104,6 +104,11 @@ public class EconomicEntity {
 	 * @param amount as double
 	 */
 	public void giveFunds(double amount){
+		if(Civilizations.useVault && isPlayer()) {
+			Economy.getVault().depositPlayer(getOfflinePlayer(), amount);
+			balance = getBalance() + amount;
+			return;
+		}
 		setBalance(getBalance() + amount);
 	}
 	
@@ -113,6 +118,11 @@ public class EconomicEntity {
 	 * @param amount
 	 */
 	public void takeFunds(double amount){
+		if(Civilizations.useVault && isPlayer()) {
+			Economy.getVault().withdrawPlayer(getOfflinePlayer(), amount);
+			balance = getBalance() - amount;
+			return;
+		}
 		setBalance(getBalance() - amount);
 	}
 	

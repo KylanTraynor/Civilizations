@@ -465,7 +465,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public void giveFunds(double amount){
 		try {
-			townyTown.pay(amount, "");
+			townyTown.collect(amount);
 		} catch (EconomyException e) {
 			e.printStackTrace();
 		}
@@ -474,7 +474,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	@Override
 	public void takeFunds(double amount){
 		try {
-			townyTown.collect(amount);
+			townyTown.pay(amount, "");
 		} catch (EconomyException e) {
 			e.printStackTrace();
 		}
