@@ -265,6 +265,7 @@ public class DynmapHook {
 				Civilizations.log("SEVERE", "Failed to create marker area.");
 				return;
 			}
+			m.setCornerLocations(s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ());
 		}
 		m.setLabel(Util.prettifyText(s.getName()));
 		if(s instanceof NationMember){
@@ -289,8 +290,8 @@ public class DynmapHook {
 			sb.append(s.getName().replace(" ", "_"));
 			sb.append("\" target=\"_blank\">Wiki</a><br />");
 		}
-		sb.append("Bank: " + Economy.format(s.getBalance()));
-		sb.append("Area: " + s.getProtection().getHull().getArea() + "m²");
+		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
+		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m²");
 		sb.append("<h2>Taxes: </h2><br />");
 		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
 		m.setDescription(sb.toString());
