@@ -75,7 +75,10 @@ public class SelectionManager {
 	private static void updateSelection(Player p) {
 		UUID id = p.getUniqueId();
 		List<Location> locs = points.get(id);
-		if(locs == null) selections.remove(id);
+		if(locs == null){
+			selections.remove(id);
+			return;
+		}
 		if(locs.size() >= 2 && getSelectionMode(p).equals("PRISM")){
 			if(locs.get(0) != null && locs.get(1) != null){
 				selections.put(id, new PrismSelection(locs.get(0), locs.get(1)));
