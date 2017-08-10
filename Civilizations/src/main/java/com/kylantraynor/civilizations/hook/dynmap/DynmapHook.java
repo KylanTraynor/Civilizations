@@ -228,6 +228,7 @@ public class DynmapHook {
 		case CONSTRUCTIONSITE:
 			break;
 		case CROPFIELD:
+			updateField(p);
 			break;
 		case HOUSE:
 			break;
@@ -299,7 +300,7 @@ public class DynmapHook {
 		m.setDescription(sb.toString());
 	}
 
-	private static void updateFields(Plot p){
+	private static void updateField(Plot p){
 		String id = "" + p.getUniqueId().toString() + "_icon";
 		String areaId = "" + p.getUniqueId().toString() + "_area";
 		String fieldMarker = p.getIcon();
