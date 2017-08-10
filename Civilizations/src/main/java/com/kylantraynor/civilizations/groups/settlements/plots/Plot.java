@@ -93,12 +93,11 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	@Override
 	public void postLoad(){
-		if(getSettlement() == null){
-			this.setProtection(new Protection());
-		} else {
-			this.setProtection(new Protection(getSettlement().getProtection()));
-		}
+		this.setProtection(new Protection());
 		this.getProtection().setShapes(getSettings().getShapes());
+		if(getSettlement() != null){
+			this.getProtection().setParent(getSettlement().getProtection());
+		}
 	}
 	
 	@Override

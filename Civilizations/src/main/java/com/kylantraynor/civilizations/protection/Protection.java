@@ -307,7 +307,7 @@ public class Protection {
 	 * @return
 	 */
 	public boolean isInside(Location location){
-		for(Shape s : shapes){
+		for(Shape s : getShapes()){
 			if(s.isInside(location)) return true;
 		}
 		return false;
@@ -319,7 +319,7 @@ public class Protection {
 	 * @return
 	 */
 	public boolean intersect(Shape s){
-		for(Shape s1 : shapes){
+		for(Shape s1 : getShapes()){
 			if(s1.intersect(s)) return true;
 		}
 		return false;
@@ -364,7 +364,7 @@ public class Protection {
 		Double maxX = null;
 		Double maxY = null;
 		Double maxZ = null;
-		for(Shape s : shapes){
+		for(Shape s : getShapes()){
 			if(w == null){
 				w = s.getWorld();
 				minX = s.getMinX();
@@ -382,7 +382,7 @@ public class Protection {
 				maxZ = Math.max(maxZ, s.getMaxZ());
 			}
 		}
-		if(w == null) return null;
+		if(w == null) throw new NullPointerException("World can't be null.");
 		return new Location(w, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 	}
 	
