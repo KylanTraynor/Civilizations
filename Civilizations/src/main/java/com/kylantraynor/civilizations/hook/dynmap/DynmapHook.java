@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.dynmap.DynmapAPI;
@@ -14,6 +15,7 @@ import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
+import org.fusesource.jansi.Ansi.Color;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.Economy;
@@ -297,6 +299,91 @@ public class DynmapHook {
 		m.setDescription(sb.toString());
 	}
 
+	private static void updateFields(Plot p){
+		String id = "" + p.getUniqueId().toString() + "_icon";
+		String areaId = "" + p.getUniqueId().toString() + "_area";
+		String fieldMarker = p.getIcon();
+		MarkerIcon fieldIcon = null;
+	    if (fieldMarker != null)
+	    {
+	    	fieldIcon = markerAPI.getMarkerIcon(fieldMarker);
+	        if (fieldIcon == null)
+	        {
+	          Civilizations.log("INFO", "Invalid FieldIcon: " + fieldMarker);
+	          fieldIcon = markerAPI.getMarkerIcon("sign");
+	        }
+	    }
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getProtection().getCenter().getWorld().getName(), p.getProtection().getShapes().get(0).getVerticesX(), p.getProtection().getShapes().get(0).getVerticesZ(), false);
+		if(m == null){
+			m = plotsMarkerSet.findAreaMarker(areaId);
+			if(m == null){
+				Civilizations.log("SEVERE", "Failed to create marker area.");
+				return;
+			}
+			m.setFillStyle(0.25, DyeColor.YELLOW.getColor().asRGB());
+			m.setLineStyle(1, 1, DyeColor.YELLOW.getColor().asRGB());
+		}
+	    if(fieldIcon != null){
+	    	Marker field = markerList.remove(id);
+	    	if (field == null){
+	    		field = plotsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
+	    				p.getProtection().getCenter().getBlockX(),
+	    				p.getProtection().getCenter().getBlockY(),
+	    				p.getProtection().getCenter().getBlockZ(), fieldIcon, false);
+	    	} else {
+	    		field.setLocation(p.getProtection().getCenter().getWorld().getName(),
+	    				p.getProtection().getCenter().getBlockX(),
+	    				p.getProtection().getCenter().getBlockY(),
+	    				p.getProtection().getCenter().getBlockZ());
+	            field.setLabel(p.getName());
+	            field.setMarkerIcon(fieldIcon);
+	    	}
+	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.Fields.InfoBubble", "%Name%");
+	    	description = "<div class=\"regioninfo\">" + description + "</div>";
+	    	description = description.replace("%Name%", p.getName());
+	    	StringBuilder sb = new StringBuilder();
+	    	if(p.isForRent()){
+	    		if(p.getRenter() == null){
+		    		sb.append("Available For Rent");
+		    	} else {
+		    		sb.append(p.getRenter().getName());
+		    	}
+	    	} else {
+	    		if(p.getOwner() != null){
+	    			sb.append(p.getOwner().getName());
+	    		} else {
+	    			if(p.getSettlement() != null){
+	    				sb.append(p.getSettlement().getName());
+	    			}
+	    		}
+	    	}
+	    	String rent = p.isForRent() ? Economy.format(p.getRent()) : "Not for rent";
+	    	description = description.replace("%RentStatus%", sb.toString());
+	    	description = description.replace("%Rent%", rent);
+	    	// Taxes
+	    	String taxes = "Transaction Taxes:<ul>";
+	    	if(p.getSettlement() != null){
+	    		taxes += "<li>" + p.getSettlement().getName() + ": " + (p.getSettlement().getSettings().getTransactionTax() * 100) + "%</li>";
+	    	}
+	    	/*Fort f = InfluenceMap.getInfluentFortAt(m.getProtection().getCenter());
+	    	if(f != null){
+	    		taxes += "<li>" + f.getName() + ": " + (f.getSettings().getTransactionTax() * 100) + "%</li>";
+	    	}*/
+	    	taxes += "</ul>";
+	    	description = description.replace("%Taxes%", taxes);
+	    	// Wares
+	    	StringBuilder sb1 = new StringBuilder();
+	    	sb1.append("<ul>");
+	    	for(String s : p.getWaresToString()){
+	    		sb1.append("<li>" + s + "</li>");
+	    	}
+    		sb1.append("</ul>");
+    		description = description.replace("%WaresList%", sb1.toString());
+	    	field.setDescription(description);
+	    	markerList.put(id, field);
+	    }
+	}
+	
 	/**
 	 * Updates the display of the given Stall.
 	 * @param c

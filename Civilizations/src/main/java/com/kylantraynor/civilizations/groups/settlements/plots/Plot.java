@@ -128,7 +128,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		case CONSTRUCTIONSITE:
 			return "construction";
 		case CROPFIELD:
-			break;
+			return "sign";
 		case HOUSE:
 			return "house";
 		case KEEP:
