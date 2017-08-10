@@ -630,7 +630,17 @@ public class Civilizations extends JavaPlugin{
 			}
 			
 		} else {
-			
+			Plot pFrom = Plot.getAt(fromL);
+			Plot pTo = Plot.getAt(toL);
+			if(pFrom != pTo && pTo != null){
+				if(pTo.isForRent() && pTo.getRenter() == null){
+					TitleManagerHook.sendActionBar(ChatColor.GOLD + pTo.getName() + " [For Rent! " + ChatColor.GREEN + Economy.format(pTo.getRent()) + ChatColor.GOLD + " daily]", player, false);
+				} else if(pTo.isForSale()){
+					TitleManagerHook.sendActionBar(ChatColor.GOLD + pTo.getName() + " [For Sale! " + ChatColor.GREEN + Economy.format(pTo.getPrice()) + ChatColor.GOLD + " daily]", player, false);
+				} else {
+					TitleManagerHook.sendActionBar(pTo.getName(), player, false);
+				}
+			}
 		}
 	}
 	
