@@ -595,7 +595,8 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(getOwner().isPlayer()){
 			return getOwner().getUniqueId().equals(player.getUniqueId());
 		} else {
-			return ((Group) getOwner()).isMember(player);
+			return ProtectionManager.hasPermission(((Group) getOwner()).getProtection(), PermissionType.MANAGE_PLOTS, player, false);
+			//return ((Group) getOwner()).isMember(player);
 		}
 	}
 
