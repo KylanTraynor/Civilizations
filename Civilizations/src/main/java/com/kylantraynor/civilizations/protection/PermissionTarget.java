@@ -2,6 +2,8 @@ package com.kylantraynor.civilizations.protection;
 
 public class PermissionTarget {
 	
+	public static final PermissionTarget OUTSIDERS = new PermissionTarget(TargetType.OUTSIDERS);
+	public static final PermissionTarget SERVER = new PermissionTarget(TargetType.SERVER);
 	final private TargetType type;
 	public TargetType getType(){
 		return type;

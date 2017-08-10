@@ -38,8 +38,12 @@ import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.protection.GroupTarget;
+import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.protection.Permissions;
 import com.kylantraynor.civilizations.protection.Protection;
+import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;
@@ -157,13 +161,48 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 * Gets the type of this plot.
 	 * @return {@link PlotType}
 	 */
-	public PlotType getPlotType() { return getSettings().getPlotType(); }
+	public PlotType getPlotType() {
+		return getSettings().getPlotType();
+	}
 	
 	/**
 	 * Sets the type of this plot.
 	 * @param type as {@link PlotType}
 	 */
-	public void setPlotType(PlotType type) { getSettings().setPlotType(type);; }
+	public void setPlotType(PlotType type) {
+		getSettings().setPlotType(type);
+		setDefaultPermissions();
+	}
+	
+	public void setDefaultPermissions() {
+		Protection p = this.getProtection();
+		//Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
+		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
+		//Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
+		
+		/*resPerm.put(PermissionType.MANAGE, true);
+		resPerm.put(PermissionType.MANAGE_RANKS, true);
+		resPerm.put(PermissionType.MANAGE_PLOTS, true);
+		resPerm.put(PermissionType.UPGRADE, true);
+		resPerm.put(PermissionType.BREAK, true);
+		resPerm.put(PermissionType.PLACE, true);
+		resPerm.put(PermissionType.FIRE, true);
+		resPerm.put(PermissionType.INVITE, true);*/
+		
+		/*outsiderPerm.put(PermissionType.BREAK, false);
+		outsiderPerm.put(PermissionType.PLACE, false);*/
+		
+		serverPerm.put(PermissionType.EXPLOSION, false);
+		serverPerm.put(PermissionType.ERODE, false);
+		serverPerm.put(PermissionType.FIRE, true);
+		serverPerm.put(PermissionType.FIRESPREAD, false);
+		serverPerm.put(PermissionType.DEGRADATION, false);
+		serverPerm.put(PermissionType.MOBSPAWNING, false);
+		
+		//p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
+		//p.setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
+		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
+	}
 	
 	@Override
 	public void update(){

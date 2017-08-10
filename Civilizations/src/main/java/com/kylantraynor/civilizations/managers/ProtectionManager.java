@@ -47,6 +47,21 @@ public class ProtectionManager {
 		}
 	}
 	
+	public static Boolean getPermission(Protection protection, PermissionTarget target, PermissionType type){
+		Permissions perms = protection.getPermissions(target);
+		Boolean result = null;
+		if(perms != null){
+			result = perms.get(type);
+		}
+		if(result == null){
+			Protection parent = protection.getParent();
+			if(parent != null){
+				result = getPermission(parent, target, type);
+			}
+		}
+		return result;
+	}
+	
 	public static void setPermission(Protection protection, PermissionTarget target, PermissionType type, Boolean value){
 		Permissions perms = protection.getPermissions(target);
 		if(perms != null){
@@ -106,12 +121,10 @@ public class ProtectionManager {
 					}
 				}
 			}
-			if(result != null){
-				break;
-			}
+			if(result != null){ break; }
 			// If not, check if the protection has a permission set for outsiders
-			PermissionTarget o = new PermissionTarget(TargetType.OUTSIDERS);
-			if(currentProtection.getPermissionSet().isSet(type, o)){
+			result = getPermission(currentProtection, PermissionTarget.OUTSIDERS, type);
+			/*if(currentProtection.getPermissionSet().isSet(type, o)){
 				result = currentProtection.getPermission(type, o);
 				break;
 			}
@@ -121,12 +134,17 @@ public class ProtectionManager {
 				currentProtection = currentProtection.getParent();
 			} else {
 				currentProtection = null;
-			}
+			}*/
+			currentProtection = currentProtection.getParent();
 		}
 		
 		if(player == null){
-			while(currentProtection != null){
-				PermissionTarget o = new PermissionTarget(TargetType.SERVER);
+			result = getPermission(currentProtection, PermissionTarget.SERVER, type);
+			if(result == null){
+				result = true;
+			}
+			/*while(currentProtection != null){
+				PermissionTarget o = PermissionTarget.SERVER;
 				if(currentProtection.getPermissionSet().isSet(type, o)){
 					result = currentProtection.getPermission(type, o);
 				}
@@ -136,7 +154,7 @@ public class ProtectionManager {
 				} else {
 					currentProtection = null;
 				}
-			}
+			}*/
 		}
 		
 		if(result == false && displayResult){
