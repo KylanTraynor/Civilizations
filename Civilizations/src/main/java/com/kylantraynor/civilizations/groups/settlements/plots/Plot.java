@@ -80,7 +80,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	public Plot(Shape shape, Settlement settlement){
 		super();
-		this.setProtection(new Protection(settlement.getProtection()));
+		//this.setProtection(new Protection(settlement.getProtection()));
 		this.getProtection().add(shape);
 		setSettlement(settlement);
 		CacheManager.plotListChanged = true;
@@ -178,16 +178,13 @@ public class Plot extends Group implements Rentable, HasInventory {
 				setChanged(true);
 			}
 		}
-		if(getSettlement() == null){
+		if(getSettlement() == null && getPlotType() != PlotType.CROPFIELD){
 			Settlement s = Settlement.getClosest(getProtection().getCenter());
 			if(s.canMergeWith(getProtection().getShapes().get(0))){
 				setSettlement(s);
 			}
-			/*
-			if(Settlement.getAt(getProtection().getCenter()) != null){
-				setSettlement(Settlement.getAt(getProtection().getCenter()));
-			}
-			*/
+		} else if(getSettlement() != null && getPlotType() == PlotType.CROPFIELD){
+			getSettlement().removePlot(this);
 		}
 		if(!getIcon().isEmpty()){
 			DynmapHook.updateMap(this);
@@ -236,7 +233,13 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 * Gets the settlement owning this plot.
 	 * @return Settlement
 	 */
-	public Settlement getSettlement() { return getSettings().getSettlement(); }
+	public Settlement getSettlement() {
+		if(getPlotType() == PlotType.CROPFIELD){
+			return Settlement.getClosest(this.getProtection().getCenter());
+		} else {
+			return getSettings().getSettlement();
+		}
+	}
 	/**
 	 * Sets the settlement this plot belongs to.
 	 * @param settlement
@@ -249,6 +252,9 @@ public class Plot extends Group implements Rentable, HasInventory {
 		getSettings().setSettlement(settlement);
 		if(getSettlement() != null){
 			getSettlement().addPlot(this);
+			this.getProtection().setParent(getSettlement().getProtection());
+		} else {
+			this.getProtection().setParent(null);
 		}
 		setChanged(true);
 	}
@@ -325,7 +331,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " buy", ((Purchasable)this).isForSale()));
 			}
 		}
-		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", this.hasPermission(PermissionType.MANAGE, null, player) || isOwner(player)));
 		
 		return list;
 	}

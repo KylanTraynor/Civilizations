@@ -134,13 +134,11 @@ public class GroupManager {
 	
 	private static void loadPlots() {
 		loadDirectory(PlotType.KEEP, Civilizations.getPlotDirectory(PlotType.KEEP));
-		//loadKeeps();
 		loadDirectory(PlotType.MARKETSTALL, Civilizations.getPlotDirectory(PlotType.MARKETSTALL));
-		//loadStalls();
 		loadDirectory(PlotType.HOUSE, Civilizations.getPlotDirectory(PlotType.HOUSE));
-		//loadPlotHouses();
 		loadDirectory(PlotType.WAREHOUSE, Civilizations.getPlotDirectory(PlotType.WAREHOUSE));
-		//loadWarehouses();
+		loadDirectory(PlotType.CROPFIELD, Civilizations.getPlotDirectory(PlotType.CROPFIELD));
+		loadDirectory(PlotType.BANK, Civilizations.getPlotDirectory(PlotType.BANK));
 	}
 
 	private static void loadDirectory(PlotType type, File directory){

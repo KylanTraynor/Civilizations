@@ -11,11 +11,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.material.Crops;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
@@ -28,6 +30,18 @@ import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class ProtectionListener implements Listener{
+	
+	public void onBlockFade(BlockFadeEvent event){
+		if(event.getBlock().getType() == Material.SOIL){
+			Plot plot = Plot.getAt(event.getBlock().getLocation());
+			if(plot != null){
+				if(plot.getPlotType() == PlotType.CROPFIELD){
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
@@ -60,6 +74,16 @@ public class ProtectionListener implements Listener{
 				} else {
 					canPlace = false;
 					reason = "this stall doesn't belong to you";
+				}
+			} else if(plot.getPlotType() == PlotType.CROPFIELD){
+				if(plot.isOwner(player)){
+					return;
+				} else if(plot.isRenter(player)){
+					canPlace = false;
+					reason = "although you're renting this field, only its owner can modify it";
+				} else {
+					canPlace = false;
+					reason = "this field dosen't belong to you";
 				}
 			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.PLACE, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
@@ -141,6 +165,18 @@ public class ProtectionListener implements Listener{
 				} else {
 					canBreak = false;
 					reason = "this stall doesn't belong to you";
+				}
+			} else if(plot.getPlotType() == PlotType.CROPFIELD){
+				if(plot.isOwner(player)){
+					return;
+				} else if(plot.isRenter(player)){
+					if(!(event.getBlock().getState() instanceof Crops)){
+						canBreak = false;
+						reason = "although you're renting this field, only its owner can modify it";
+					}
+				} else {
+					canBreak = false;
+					reason = "this field doen't belong to you";
 				}
 			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;

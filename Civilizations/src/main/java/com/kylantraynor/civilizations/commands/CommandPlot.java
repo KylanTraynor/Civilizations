@@ -174,6 +174,26 @@ public class CommandPlot implements CommandExecutor {
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Market stall created in " + set.getName() + "!");
 						}
 						break;
+					case "FIELD": case "CROPFIELD": case "FARMLAND":
+						long requiredArea = 16 * 32;
+						long maxArea = 128 * 128;
+						if(s.getArea() < requiredArea){
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This area is too small for a field. Required: " + requiredArea + "  m² ("+s.getArea()+")" );
+							return true;
+						} else if(s.getArea() > maxArea){
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This area is too big for a single field. Max: " + maxArea + " m² ("+s.getArea()+")");
+						}
+						if(set != null){
+							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This field is too close to " + set.getName());
+							return true;
+						}
+						Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Field", s, null);
+						p.setPersistent(true);
+						p.setPlotType(PlotType.CROPFIELD);
+						SelectionManager.clear(player);
+						Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Field created!");
+						break;
 					}
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Use /plot create [plot type]");
