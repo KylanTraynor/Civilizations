@@ -53,7 +53,8 @@ public abstract class Shape implements Visualizable{
 	public abstract double[] getVerticesZ();
 	
 	public boolean isInside(Location location){
-		if(location.getWorld().equals(getLocation().getWorld())){
+		if(location == null) throw new NullPointerException("Location can't be null.");
+		if(location.getWorld().equals(getWorld())){
 			return isInside(location.getX(), location.getY(), location.getZ());
 		} else {
 			return false;
