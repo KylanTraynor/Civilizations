@@ -27,6 +27,7 @@ import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.util.MaterialAndData;
@@ -104,7 +105,7 @@ public class CommandGroup implements CommandExecutor {
 			case "REMOVE":
 				if(sender instanceof Player){
 					if(g instanceof Plot){
-						if(((Plot) g).isOwner((Player) sender)){
+						if(((Plot) g).isOwner((Player) sender) || ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player)sender, true)){
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + "Plot has been removed.");
 							return true;

@@ -38,6 +38,7 @@ import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -49,6 +50,7 @@ import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;
 import com.kylantraynor.civilizations.shops.ShopManager;
 import com.kylantraynor.civilizations.shops.ShopType;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Plot extends Group implements Rentable, HasInventory {
@@ -273,7 +275,10 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 */
 	public Settlement getSettlement() {
 		if(getPlotType() == PlotType.CROPFIELD){
-			return Settlement.getClosest(this.getProtection().getCenter());
+			Location center = this.getProtection().getCenter();
+			InfluenceMap map = Civilizations.getInfluenceMap(center.getWorld());
+			if(map == null) return null;
+			return (Settlement) map.getInfluentSiteAt(center);
 		} else {
 			return getSettings().getSettlement();
 		}
@@ -349,7 +354,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
 		
-		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename NEW NAME", this.hasPermission(PermissionType.MANAGE, null, player)));
 		if(this instanceof Rentable){
 			if(((Rentable)this).isOwner(player)){
 				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getUniqueId().toString() + " toggleForRent", ((Rentable)this).isForRent()));
@@ -369,7 +374,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " buy", ((Purchasable)this).isForSale()));
 			}
 		}
-		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", this.hasPermission(PermissionType.MANAGE, null, player) || isOwner(player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", ProtectionManager.hasPermission(this.getProtection(), PermissionType.MANAGE, player, false) || isOwner(player)));
 		
 		return list;
 	}

@@ -321,6 +321,7 @@ public class DynmapHook {
 				Civilizations.log("SEVERE", "Failed to create marker area.");
 				return;
 			}
+		} else {
 			m.setFillStyle(0.25, DyeColor.YELLOW.getColor().asRGB());
 			m.setLineStyle(1, 1, DyeColor.YELLOW.getColor().asRGB());
 		}
