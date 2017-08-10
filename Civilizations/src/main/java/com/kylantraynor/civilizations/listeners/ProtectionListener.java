@@ -28,11 +28,11 @@ import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.LockManager;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 
 public class ProtectionListener implements Listener{
 	
+	@EventHandler
 	public void onBlockFade(BlockFadeEvent event){
 		if(event.getBlock().getType() == Material.SOIL){
 			Plot plot = Plot.getAt(event.getBlock().getLocation());
