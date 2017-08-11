@@ -6,11 +6,9 @@ import org.bukkit.plugin.Plugin;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.Shop.Shop;
 
-import com.kylantraynor.civilizations.shops.ShopType;
-
 public class QuickshopHook {
 	
-	public static boolean isActive(){
+	public boolean isActive(){
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("QuickShop");
 		if(plugin == null){
 			return false;
@@ -19,7 +17,7 @@ public class QuickshopHook {
 		}
 	}
 	
-	public static boolean isQuickShop(Location location){
+	public boolean isQuickShop(Location location){
 		if(QuickShop.instance.getShopManager().getShop(location) != null){
 			return true;
 		} else {
@@ -27,7 +25,7 @@ public class QuickshopHook {
 		}
 	}
 	
-	public static QuickShopShop getShop(Location location){
+	public QuickShopShop getShop(Location location){
 		Shop shop = QuickShop.instance.getShopManager().getShop(location);
 		if(shop == null) return null;
 		QuickShopShop s = new QuickShopShop(shop);

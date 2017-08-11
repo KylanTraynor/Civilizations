@@ -17,6 +17,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -549,16 +550,18 @@ public class Plot extends Group implements Rentable, HasInventory {
 				case BED_BLOCK:
 					BlockState state = l.getBlock().getState();
 					Bed bed = (Bed) state.getData();
-					if(bed.isHeadOfBed()){
+					if(bed.isHeadOfBed() && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
 						beds++;
 					}
 					break;
 				case WORKBENCH:
-					workbenches++;
+					if(l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
+						workbenches++;
+					}
 					break;
 				case CHEST: case TRAPPED_CHEST:
 					BlockState chestState = l.getBlock().getState();
-					if(chestState instanceof Chest){
+					if(chestState instanceof Chest && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
 						chests.add((Chest)chestState);
 					}
 					break;

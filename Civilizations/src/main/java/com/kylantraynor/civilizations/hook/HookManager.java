@@ -14,6 +14,7 @@ import com.kylantraynor.civilizations.hook.draggyrpg.DraggyRPGHook;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.hook.livelyworld.LivelyWorldHook;
 import com.kylantraynor.civilizations.hook.lwc.LWCHook;
+import com.kylantraynor.civilizations.hook.quickshop.QuickShopListener;
 import com.kylantraynor.civilizations.hook.quickshop.QuickshopHook;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.hook.towny.TownyHook;
@@ -65,6 +66,13 @@ public class HookManager {
 			lwc = new LWCHook();
 		} else {log.info("LWC: NO"); }
 		
+		if(pm.getPlugin("citizens") != null){
+			log.info("Citizens: OK");
+			citizens = new CitizensHook();
+		} else {
+			log.info("Citizens: NO");
+		}
+		
 		if(dynmap != null) dynmap.activateDynmap();
 		if(towny != null){
 			towny.loadTownyTowns();
@@ -80,6 +88,12 @@ public class HookManager {
 			draggyRPG = new DraggyRPGHook();
 			draggyRPG.loadLevelCenters();
 		} else {log.info("DraggyRPG: NO");}
+		
+		if(pm.getPlugin("QuickShop") != null){
+			log.info("QuickShop: OK");
+			quickshop = new QuickshopHook();
+			pm.registerEvents(new QuickShopListener(), Civilizations.currentInstance);
+		} else { log.info("Quickshop: NO");}
 	}
 	
 	public static CitizensHook getCitizens() {

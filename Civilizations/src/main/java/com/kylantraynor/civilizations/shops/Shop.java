@@ -1,28 +1,24 @@
 package com.kylantraynor.civilizations.shops;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.settings.ShopSettings;
-import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.util.Util;
 
 public class Shop {
 	
 	public ShopSettings settings = new ShopSettings();
 	private Location location;
-	private OfflinePlayer owner;
+	private EconomicEntity owner;
 	
 	public Location getLocation(){
 		if(location == null){
@@ -56,14 +52,14 @@ public class Shop {
 		return remaining;
 	}
 	
-	public OfflinePlayer getOwner(){
+	public EconomicEntity getOwner(){
 		if(owner != null){
 			owner = settings.getOwner();
 		}
 		return owner;
 	}
 	
-	public void setOwner(OfflinePlayer newOwner){
+	public void setOwner(EconomicEntity newOwner){
 		owner = newOwner;
 		settings.setOwner(newOwner);
 	}

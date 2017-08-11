@@ -5,7 +5,7 @@ import org.bukkit.plugin.Plugin;
 
 public class CitizensHook {
 	
-	public static boolean isEnabled(){
+	public boolean isEnabled(){
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Citizens");
 		if(plugin == null){
 			return false;
@@ -14,7 +14,7 @@ public class CitizensHook {
 		}
 	}
 	
-	public static boolean isSentryEnabled(){
+	public boolean isSentryEnabled(){
 		if(!isEnabled()) return false;
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("Sentry");
 		if(plugin == null){

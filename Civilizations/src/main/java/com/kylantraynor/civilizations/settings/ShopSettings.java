@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.shops.ShopType;
 
 public class ShopSettings extends YamlConfiguration{
@@ -37,10 +38,10 @@ public class ShopSettings extends YamlConfiguration{
 		}
 	}
 
-	public OfflinePlayer getOwner() {
+	public EconomicEntity getOwner() {
 		if(this.contains("owner")){
 			try{
-				return Bukkit.getOfflinePlayer(UUID.fromString(this.getString("owner")));
+				return EconomicEntity.get(UUID.fromString(this.getString("owner")));
 			} catch (Exception e){
 				return null;
 			}
@@ -48,7 +49,7 @@ public class ShopSettings extends YamlConfiguration{
 		return null;
 	}
 	
-	public void setOwner(OfflinePlayer newOwner) {
+	public void setOwner(EconomicEntity newOwner) {
 		if(newOwner != null){
 			this.set("owner", newOwner.getUniqueId().toString());
 		} else {

@@ -14,10 +14,13 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.territories.InfluenceMap;
+import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.kylantraynor.civilizations.util.Util;
 
 public class CommandPlot implements CommandExecutor {
@@ -186,6 +189,17 @@ public class CommandPlot implements CommandExecutor {
 						if(set != null){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This field is too close to " + set.getName());
 							return true;
+						}
+						InfluenceMap map = Civilizations.getInfluenceMap(s.getWorld());
+						if(map != null){
+							set = (Settlement) map.getInfluentSiteAt(s.getLocation());
+							if(set != null){
+								if(ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
+									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to manage plots in " + ((InfluentSite) set).getRegion().getName()+ ".");
+									return true;
+								}
+							}
+							
 						}
 						Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Field", s, null);
 						p.setPersistent(true);
