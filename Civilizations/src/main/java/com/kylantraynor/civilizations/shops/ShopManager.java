@@ -38,13 +38,19 @@ public class ShopManager {
 	}
 
 
-	public static void startPurchase(QuickShopShop shop, EconomicEntity entity, int amount, boolean alreadyHandled) {
+	public static boolean startPurchase(QuickShopShop shop, EconomicEntity entity, int amount, boolean alreadyHandled) {
 		
 		double fullPrice = shop.getPrice() * amount;
 		
 		if(!alreadyHandled){
 			// If a plugin didn't already handle the transaction, then let Civs do it.
-			Economy.transferFunds(entity, shop.getOwner(), "Transaction for " + amount + " " + shop.getItemName(), fullPrice);
+			EconomicEntity buyer = shop.getType() == ShopType.BUYING ? shop.getOwner() : entity;
+			EconomicEntity seller = shop.getType() == ShopType.SELLING ? shop.getOwner() : entity;
+			if(Economy.tryTransferFunds(buyer, seller, "Transaction for " + amount + " " + shop.getItemName(), fullPrice)){
+				
+			} else {
+				return false;
+			}
 		}
 		
 		//Takes care of the taxes.
@@ -69,5 +75,6 @@ public class ShopManager {
 			//TODO Do things if the transaction is not already handled by another plugin.
 		}
 		
+		return true;
 	}
 }

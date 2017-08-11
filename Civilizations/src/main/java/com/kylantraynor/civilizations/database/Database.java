@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.BudgetEntry;
+import com.kylantraynor.civilizations.protection.Lock;
+import com.kylantraynor.civilizations.protection.LockKey;
 import com.kylantraynor.civilizations.util.Util;
 
 public abstract class Database {
@@ -27,7 +30,8 @@ public abstract class Database {
 		GROUPS("civs_groups"),
 		PLOTS("civs_plots"),
 		MEMBERS("civs_members"),
-		ECONOMY("civs_eco");
+		ECONOMY("civs_eco"),
+		LOCKS("civs_locks");
 		
 		private String name;
 		
@@ -116,6 +120,29 @@ public abstract class Database {
 		return;
 	}
 	
+	public void setLock(Location location, Lock lock){
+		//TODO adds the lock to the database.
+	}
+	
+	public Lock getLock(Location location){
+		//TODO gets the lock from the database.
+		return null;
+	}
+	
+	public void addLockKey(LockKey key){
+		//TODO adds the key to the database;
+	}
+	
+	public LockKey getLockKey(UUID id){
+		//TODO gets the key from the databse.
+		return null;
+	}
+	
+	/**
+	 * Inserts a Budget Entry into the DataBase.
+	 * To avoid lag, use this method in an async task.
+	 * @param entry
+	 */
 	public void insertBudgetEntry(BudgetEntry entry){
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -144,6 +171,14 @@ public abstract class Database {
 		}
 	}
 	
+	/**
+	 * Gets a Budget Entry from the databse.
+	 * To avoid lag, use it in an async task.
+	 * @param involving
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public List<BudgetEntry> getBudgetEntries(UUID involving, Instant from, Instant to){
 		Connection conn = null;
 		PreparedStatement ps = null;

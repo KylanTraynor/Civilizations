@@ -131,6 +131,10 @@ public class Economy {
 		}
 	}
 	
+	/**
+	 * Plays a sound to the entity to indicate that they just received money, unless they are not a player, currently offline, sneaking or invisible.
+	 * @param entity
+	 */
 	public static void playCashinSound(EconomicEntity entity){
 		if(!entity.isPlayer()) return;
 		OfflinePlayer op = entity.getOfflinePlayer();
@@ -142,6 +146,10 @@ public class Economy {
 		}
 	}
 	
+	/**
+	 * Plays a sound to the entity to indicate that they just payed money, unless they are not a player, currently offline, sneaking or invisible.
+	 * @param entity
+	 */
 	public static void playPaySound(EconomicEntity entity){
 		if(!entity.isPlayer()) return;
 		OfflinePlayer op = entity.getOfflinePlayer();
@@ -153,6 +161,14 @@ public class Economy {
 		}
 	}
 
+	/**
+	 * Transfer funds without checking for balance. (DEBT)
+	 * The transfer will always happen.
+	 * @param emiter
+	 * @param receiver
+	 * @param label
+	 * @param amount
+	 */
 	public static void transferFunds(
 			EconomicEntity emiter, EconomicEntity receiver,
 			String label, double amount){
@@ -161,6 +177,15 @@ public class Economy {
 		addEntry(new BudgetEntry(emiter, receiver, label, amount, Instant.now()));
 	}
 	
+	/**
+	 * Transfer funds if the emiter's balance has enough money.
+	 * Will return false if the transfer couldn't happen.
+	 * @param emiter
+	 * @param receiver
+	 * @param label
+	 * @param amount
+	 * @return
+	 */
 	public static boolean tryTransferFunds(
 			EconomicEntity emiter, EconomicEntity receiver,
 			String label, double amount){
