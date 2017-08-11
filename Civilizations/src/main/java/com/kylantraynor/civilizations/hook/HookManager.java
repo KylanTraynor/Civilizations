@@ -61,12 +61,12 @@ public class HookManager {
 		if(Economy.load(pm)){ log.info("Economy: OK");
 		} else { log.warning("Economy: NO, " + Civilizations.PLUGIN_NAME + " will not be working properly."); }
 		
-		if(pm.getPlugin("lwc") != null) {
+		if(pm.getPlugin("LWC") != null) {
 			log.info("LWC: OK"); 
 			lwc = new LWCHook();
 		} else {log.info("LWC: NO"); }
 		
-		if(pm.getPlugin("citizens") != null){
+		if(pm.getPlugin("Citizens") != null){
 			log.info("Citizens: OK");
 			citizens = new CitizensHook();
 		} else {
