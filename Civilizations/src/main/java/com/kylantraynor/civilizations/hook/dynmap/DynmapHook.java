@@ -260,8 +260,20 @@ public class DynmapHook {
 	private static void updateSettlement(Settlement s) {
 		if(s.getProtection().getHull() == null) return;
 		if(!s.getProtection().getHull().exists()) return;
-		String id = "" + s.getLocation().getBlockX() + "_" + s.getLocation().getBlockY() + "_" + s.getLocation().getBlockZ() + "_settlement";
+		String id = s.getUniqueId().toString() + "_area";
+		String icon_id = s.getUniqueId().toString() + "_icon";
+		String icon = s.getIcon();
 		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ(), false);
+		MarkerIcon setIcon = null;
+	    if (icon != null)
+	    {
+	    	setIcon = markerAPI.getMarkerIcon(icon);
+	        if (setIcon == null)
+	        {
+	          Civilizations.log("INFO", "Invalid FieldIcon: " + icon);
+	          setIcon = markerAPI.getMarkerIcon("sign");
+	        }
+	    }
 		if(m == null){
 			m = settlementsMarkerSet.findAreaMarker(id);
 			if(m == null){
@@ -269,6 +281,35 @@ public class DynmapHook {
 				return;
 			}
 			m.setCornerLocations(s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ());
+		}
+		if(setIcon != null){
+	    	Marker set = markerList.remove(icon_id);
+	    	if (set == null){
+	    		set = settlementsMarkerSet.createMarker(id, Util.prettifyText(s.getName()), s.getProtection().getCenter().getWorld().getName(),
+	    				s.getProtection().getCenter().getBlockX(),
+	    				s.getProtection().getCenter().getBlockY(),
+	    				s.getProtection().getCenter().getBlockZ(), setIcon, false);
+	    	} else {
+	    		set.setLocation(s.getProtection().getCenter().getWorld().getName(),
+	    				s.getProtection().getCenter().getBlockX(),
+	    				s.getProtection().getCenter().getBlockY(),
+	    				s.getProtection().getCenter().getBlockZ());
+	            set.setLabel(Util.prettifyText(s.getName()));
+	            set.setMarkerIcon(setIcon);
+	            StringBuilder sb = new StringBuilder();
+	    		sb.append("<h1>"+s.getName()+"</h1><br />");
+	    		if(Civilizations.getSettings().getWikiUrl() != null){
+	    			sb.append("<a href=\"");
+	    			sb.append(Civilizations.getSettings().getWikiUrl());
+	    			sb.append(s.getName().replace(" ", "_"));
+	    			sb.append("\" target=\"_blank\">Wiki</a><br />");
+	    		}
+	    		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
+	    		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m²");
+	    		sb.append("<h2>Taxes: </h2><br />");
+	    		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
+	    		set.setDescription(sb.toString());
+	    	}
 		}
 		m.setLabel(Util.prettifyText(s.getName()));
 		if(s instanceof NationMember){
@@ -285,33 +326,19 @@ public class DynmapHook {
 			m.setFillStyle(0.1, 0x999999);
 			m.setLineStyle(2 ,1, 0x999999);
 		}
-		StringBuilder sb = new StringBuilder();
-		sb.append("<h1>"+s.getName()+"</h1><br />");
-		if(Civilizations.getSettings().getWikiUrl() != null){
-			sb.append("<a href=\"");
-			sb.append(Civilizations.getSettings().getWikiUrl());
-			sb.append(s.getName().replace(" ", "_"));
-			sb.append("\" target=\"_blank\">Wiki</a><br />");
-		}
-		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
-		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m²");
-		sb.append("<h2>Taxes: </h2><br />");
-		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
-		m.setDescription(sb.toString());
 	}
 
 	private static void updateField(Plot p){
 		String id = "" + p.getUniqueId().toString() + "_icon";
 		String areaId = "" + p.getUniqueId().toString() + "_area";
-		String fieldMarker = p.getIcon();
-		MarkerIcon fieldIcon = null;
-	    if (fieldMarker != null)
-	    {
-	    	fieldIcon = markerAPI.getMarkerIcon(fieldMarker);
-	        if (fieldIcon == null)
+		String icon = p.getIcon();
+		MarkerIcon fieldMarker = null;
+	    if (icon != null){
+	    	fieldMarker = markerAPI.getMarkerIcon(icon);
+	        if (fieldMarker == null)
 	        {
-	          Civilizations.log("INFO", "Invalid FieldIcon: " + fieldMarker);
-	          fieldIcon = markerAPI.getMarkerIcon("sign");
+	          Civilizations.log("INFO", "Invalid FieldIcon: " + icon);
+	          fieldMarker = markerAPI.getMarkerIcon("sign");
 	        }
 	    }
 	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getProtection().getCenter().getWorld().getName(), p.getProtection().getShapes().get(0).getVerticesX(), p.getProtection().getShapes().get(0).getVerticesZ(), false);
@@ -325,20 +352,20 @@ public class DynmapHook {
 			m.setFillStyle(0.25, DyeColor.YELLOW.getColor().asRGB());
 			m.setLineStyle(1, 1, DyeColor.YELLOW.getColor().asRGB());
 		}
-	    if(fieldIcon != null){
+	    if(fieldMarker != null){
 	    	Marker field = markerList.remove(id);
 	    	if (field == null){
 	    		field = plotsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
 	    				p.getProtection().getCenter().getBlockX(),
 	    				p.getProtection().getCenter().getBlockY(),
-	    				p.getProtection().getCenter().getBlockZ(), fieldIcon, false);
+	    				p.getProtection().getCenter().getBlockZ(), fieldMarker, false);
 	    	} else {
 	    		field.setLocation(p.getProtection().getCenter().getWorld().getName(),
 	    				p.getProtection().getCenter().getBlockX(),
 	    				p.getProtection().getCenter().getBlockY(),
 	    				p.getProtection().getCenter().getBlockZ());
 	            field.setLabel(p.getName());
-	            field.setMarkerIcon(fieldIcon);
+	            field.setMarkerIcon(fieldMarker);
 	    	}
 	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.Fields.InfoBubble", "%Name%");
 	    	description = "<div class=\"regioninfo\">" + description + "</div>";

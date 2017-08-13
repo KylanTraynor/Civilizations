@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
@@ -217,8 +218,10 @@ public class Protection {
 	 * @param type
 	 * @return
 	 */
+	@Deprecated
 	public boolean hasPermission(OfflinePlayer player, PermissionType type){
-		// First, check if the player is op
+		return ProtectionManager.hasPermission(this, type, player, false);
+		/*// First, check if the player is op
 		if(player.isOp()) return true;
 		// If not, check if the protection has a specific permission set for the player
 		PlayerTarget pt = new PlayerTarget(player);
@@ -264,6 +267,7 @@ public class Protection {
 		} else {
 			return false;
 		}
+		*/
 	}
 	
 	/**
