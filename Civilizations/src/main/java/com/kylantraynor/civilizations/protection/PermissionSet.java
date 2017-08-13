@@ -18,12 +18,19 @@ public class PermissionSet extends HashMap<PermissionTarget, Permissions>{
 	}
 	
 	public boolean isSet(PermissionType type, PermissionTarget target){
-		if(hasTarget(target)){
-			if(this.get(target).contains(type)){
+		Permissions p = get(target);
+		if(p != null){
+			if(p.contains(type)){
 				return true;
 			}
 		}
 		return false;
+	}
+	public Boolean get(PermissionTarget target, PermissionType type){
+		Permissions p = get(target);
+		if(p == null) return null;
+		if(type == null) throw new NullPointerException("PermissionType cannot be Null");
+		return p.get(type);
 	}
 	/**
 	 * Adds a permission with the given target to the list of permissions.

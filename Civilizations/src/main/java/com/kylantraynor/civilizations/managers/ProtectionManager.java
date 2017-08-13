@@ -48,11 +48,8 @@ public class ProtectionManager {
 	}
 	
 	public static Boolean getPermission(Protection protection, PermissionTarget target, PermissionType type){
-		Permissions perms = protection.getPermissions(target);
-		Boolean result = null;
-		if(perms != null){
-			result = perms.get(type);
-		}
+		//Permissions perms = protection.getPermissions(target);
+		Boolean result = protection.getPermission(target, type);
 		if(result == null){
 			Protection parent = protection.getParent();
 			if(parent != null){
@@ -78,63 +75,39 @@ public class ProtectionManager {
 	public static boolean hasPermission(Protection protection, PermissionType type, OfflinePlayer player, boolean displayResult){
 		Protection currentProtection = protection;
 		Boolean result = null;
-		while(currentProtection != null && result == null && player != null){
-			// First, check if the player is op
+		// First, check if the player is op
+		if(player != null){
 			if(player.isOp()) return true;
-			// If not, check if the protection has a specific permission set for the player
+		}
+		
+		
+		while(currentProtection != null && result == null && player != null){
+			// Check if the protection has a specific permission set for the player
 			PlayerTarget pt = new PlayerTarget(player);
-			if(currentProtection.getPermissionSet().isSet(type, pt)){
-				result = currentProtection.getPermission(type, pt);
-				break;
-			}
+			result = currentProtection.getPermission(pt, type);
+			if(result != null) break;
 			// If not, check if the protection has a specific permission set for the player's rank
 			Rank r = currentProtection.getRank(player);
-			if(r != null){
-				if(currentProtection.getPermissionSet().isSet(type, r)){
-					result = currentProtection.getPermission(type, r);
-					break;
-				} else {
-					while(r.getParentId() != null){
-						Rank rParent = currentProtection.getRank(r.getParentId());
-						if(currentProtection.getPermissionSet().isSet(type, rParent)){
-							result = currentProtection.getPermission(type, rParent);
-							break;
-						} else {
-							r = rParent;
-						}
-					}
-					if(result != null){
-						break;
-					}
-				}
+			while(r != null){
+				result = currentProtection.getPermission(r, type);
+				if(result != null) break; else r = currentProtection.getRank(r.getParentId());
 			}
 			
 			// If not, check if the protection has a permission set for any group the player belongs to
 			for(PermissionTarget target : currentProtection.getPermissionSet().getTargets()){
 				if(target instanceof GroupTarget){
 					if(((GroupTarget) target).isPartOf(player)){
-						if(currentProtection.getPermissionSet().isSet(type, target)){
-							result = currentProtection.getPermission(type, target);
-							break;
-						}
-						
+						result = currentProtection.getPermission(target, type);
+						if(result != null) break;
 					}
 				}
 			}
-			if(result != null){ break; }
+			if(result != null) break;
 			// If not, check if the protection has a permission set for outsiders
-			result = getPermission(currentProtection, PermissionTarget.OUTSIDERS, type);
-			/*if(currentProtection.getPermissionSet().isSet(type, o)){
-				result = currentProtection.getPermission(type, o);
-				break;
-			}
+			//result = getPermission(currentProtection, PermissionTarget.OUTSIDERS, type);
+			result = currentProtection.getPermission(PermissionTarget.OUTSIDERS, type);
 			
 			// If not, just return false.
-			if(currentProtection.getParent() != null){
-				currentProtection = currentProtection.getParent();
-			} else {
-				currentProtection = null;
-			}*/
 			currentProtection = currentProtection.getParent();
 		}
 		

@@ -168,6 +168,7 @@ public class Protection {
 	}
 	
 	public Rank getRank(UUID uuid){
+		if(uuid == null) return null;
 		for(PermissionTarget r : permissionSet.getTargets()){
 			if(r instanceof Rank){
 				if(((Rank)r).getUniqueId() == (uuid)){
@@ -179,6 +180,7 @@ public class Protection {
 	}
 	
 	public Rank getRank(String string) {
+		if(string == null) return null;
 		for(PermissionTarget r : permissionSet.getTargets()){
 			if(r instanceof Rank){
 				if(((Rank)r).getName().equalsIgnoreCase(string)){
@@ -190,6 +192,7 @@ public class Protection {
 	}
 	
 	public Rank getRank(OfflinePlayer player){
+		if(player == null) return null;
 		for(PermissionTarget r : permissionSet.getTargets()){
 			if(r instanceof Rank){
 				if(((Rank)r).includes(player)){
@@ -288,17 +291,16 @@ public class Protection {
 	
 	/**
 	 * Gets the value of the permission of a certain type for the given target.
-	 * @param type
 	 * @param target
+	 * @param type
 	 * @return
 	 */
-	public boolean getPermission(PermissionType type, PermissionTarget target){
-		if(permissionSet.isSet(type, target)){
-			return permissionSet.get(target).get(type);
+	public boolean getPermission(PermissionTarget target, PermissionType type){
+		return permissionSet.get(target, type);
 		/*} else if(parent != null) {
 			return parent.getPermission(type, target);*/
-		}
-		if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
+		
+		//if(target.getType() != TargetType.SERVER) {return false;} else {return true;}
 	}
 	
 	/**
