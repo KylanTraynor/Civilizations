@@ -31,6 +31,7 @@ import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -512,13 +513,15 @@ public class Group extends EconomicEntity{
 	 * @return
 	 */
 	public boolean hasPermission(PermissionType perm, Block block, Player player) {
+		return ProtectionManager.hasPermission(getProtection(), perm, player, false);
+		/*
 		boolean result = false;
 		if(player != null){
 			return getProtection().hasPermission(player, perm);
 		} else {
 			result = getProtection().getPermission(perm, new PermissionTarget(TargetType.SERVER));
 		}
-		return result;
+		return result;*/
 	}
 	/**
 	 * Checks if the given player has a certain rank.
