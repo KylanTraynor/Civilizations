@@ -105,6 +105,7 @@ public class EconomicEntity {
 	 */
 	public void giveFunds(double amount){
 		if(Civilizations.useVault && isPlayer()) {
+			Civilizations.currentInstance.getLogger().info("Giving " + Economy.format(amount) + " to " + getName() + ".");
 			Economy.getVault().depositPlayer(getOfflinePlayer(), amount);
 			balance = getBalance() + amount;
 			return;

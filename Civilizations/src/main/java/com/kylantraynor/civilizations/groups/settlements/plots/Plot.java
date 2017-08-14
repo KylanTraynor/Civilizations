@@ -176,8 +176,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		setDefaultPermissions();
 	}
 	
-	public void setDefaultPermissions() {
-		Protection p = this.getProtection();
+	private void setDefaultPermissions() {
 		//Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
 		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
 		//Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
@@ -203,7 +202,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		
 		//p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
 		//p.setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
-		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
+		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
 	}
 	
 	@Override

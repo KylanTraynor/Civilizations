@@ -20,22 +20,22 @@ import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Protection {
-	Protection parent;
-	List<Shape> shapes;
+	private Protection parent;
+	private List<Shape> shapes;
 	private PermissionSet permissionSet;
-	List<Rank> ranks;
+	//private List<Rank> ranks;
 	
 	public Protection(){
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
-		ranks = new ArrayList<Rank>();
+		//ranks = new ArrayList<Rank>();
 	}
 	
 	public Protection(Protection parent){
 		this.parent = parent;
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
-		ranks = new ArrayList<Rank>();
+		//ranks = new ArrayList<Rank>();
 	}
 	
 	public void setParent(Protection newParent){
