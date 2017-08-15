@@ -310,6 +310,7 @@ public class DynmapHook {
     		sb.append("<h2>Taxes: </h2><br />");
     		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
     		set.setDescription(sb.toString());
+    		markerList.put(icon_id, set);
 		}
 		m.setLabel(Util.prettifyText(s.getName()));
 		if(s instanceof NationMember){

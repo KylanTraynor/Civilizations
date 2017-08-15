@@ -795,4 +795,12 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public void setRenter(EconomicEntity entity) {
 		getSettings().setRenter(entity);
 	}
+
+	public void setOwner(OfflinePlayer player) {
+		setOwner(EconomicEntity.get(player.getUniqueId()));
+	}
+	
+	public void setOwner(EconomicEntity entity){
+		getSettings().setOwner(entity);
+	}
 }

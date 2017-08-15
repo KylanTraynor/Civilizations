@@ -204,8 +204,9 @@ public class CommandPlot implements CommandExecutor {
 						Plot p = new Plot(args.length >= 3 ? Util.join(arguments, " ") : "Field", s, null);
 						p.setPersistent(true);
 						p.setPlotType(PlotType.CROPFIELD);
+						p.setOwner(player);
 						SelectionManager.clear(player);
-						Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+						Civilizations.getSelectedProtections().put(player, p.getProtection());
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Field created!");
 						break;
 					}
