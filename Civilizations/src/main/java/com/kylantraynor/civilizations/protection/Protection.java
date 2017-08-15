@@ -300,6 +300,9 @@ public class Protection {
 	 * @return
 	 */
 	public boolean getPermission(PermissionTarget target, PermissionType type){
+		if(permissionSet == null) throw new NullPointerException("PermissionSet is somehow null.");
+		if(target == null) throw new NullPointerException("PermissionTarget can't be null.");
+		if(type == null) throw new NullPointerException("PermissionType can't be null.");
 		return permissionSet.get(target, type);
 		/*} else if(parent != null) {
 			return parent.getPermission(type, target);*/
