@@ -1,5 +1,8 @@
 package com.kylantraynor.civilizations.listeners;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -22,6 +25,7 @@ import org.bukkit.material.Crops;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
@@ -290,5 +294,15 @@ public class ProtectionListener implements Listener{
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
 		Civilizations.displayProtectionStatus(event.getFrom(), event.getTo(), event.getPlayer());
+		if(event.getFrom().getBlock() != event.getTo().getBlock()){
+			Camp c = Camp.getCampAt(event.getTo());
+			if(c != null){
+				if(c.isMember(event.getPlayer())){
+					if(c.getExpireOn().isBefore(Instant.now().plus(Camp.campDuration - 2, ChronoUnit.HOURS))){
+						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
+					}
+				}
+			}
+		}
 	}
 }
