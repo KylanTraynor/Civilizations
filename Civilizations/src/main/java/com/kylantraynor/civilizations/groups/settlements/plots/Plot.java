@@ -315,14 +315,23 @@ public class Plot extends Group implements Rentable, HasInventory {
 			fm.command("/group " + getSettlement().getUniqueId().toString() + " info");
 		}
 		String renterCommand = getRenter() == null ? "" : (getRenter().isPlayer() ? "/p " + getRenter().getName() : "/group " + getRenter().getUniqueId().toString() + " info");
-		String ownerCommand = getOwner() == null ? "" : (!getOwner().isPlayer() ? "/group " + getSettlement().getUniqueId().toString() + " INFO" : "/p " + getOwner().getName()); 
-		String owner = getOwner() == null ? (getSettlement() == null ? "No one" : getSettlement().getName()) : getOwner().getName();
+		String ownerCommand = getOwner() == null ? "" : (!getOwner().isPlayer() ? "/group " + getSettlement().getUniqueId().toString() + " INFO" : "/p " + getOwner().getName());
+		// Display Renter of the Plot.
 		if(isForRent()){
 			fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
 			.then(getRenter() == null ? "Available" : getRenter().getName()).color(ChatColor.GOLD).command(renterCommand);
 		}
-		fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand)
-		.then(owner).color(ChatColor.GOLD).command(ownerCommand);
+		// Display Owner of the Plot.
+		if(getOwner() == null && getSettlement() == null){
+			fm.then("\nNot owned by anyone.").color(ChatColor.GRAY);
+		} else {
+			fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand);
+			if(getOwner() != null){
+				fm.then(getOwner().getName()).color(ChatColor.GOLD).command(ownerCommand);
+			} else {
+				fm.then(getSettlement().getName()).color(ChatColor.GOLD).command(ownerCommand);
+			}
+		}
 		if(isForRent()){
 			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
 		}
