@@ -296,20 +296,20 @@ public class DynmapHook {
 	    				s.getProtection().getCenter().getBlockZ());
 	            set.setLabel(Util.prettifyText(s.getName()));
 	            set.setMarkerIcon(setIcon);
-	            StringBuilder sb = new StringBuilder();
-	    		sb.append("<h1>"+s.getName()+"</h1><br />");
-	    		if(Civilizations.getSettings().getWikiUrl() != null){
-	    			sb.append("<a href=\"");
-	    			sb.append(Civilizations.getSettings().getWikiUrl());
-	    			sb.append(s.getName().replace(" ", "_"));
-	    			sb.append("\" target=\"_blank\">Wiki</a><br />");
-	    		}
-	    		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
-	    		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m²");
-	    		sb.append("<h2>Taxes: </h2><br />");
-	    		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
-	    		set.setDescription(sb.toString());
 	    	}
+	    	StringBuilder sb = new StringBuilder();
+    		sb.append("<h1>"+s.getName()+"</h1><br />");
+    		if(Civilizations.getSettings().getWikiUrl() != null){
+    			sb.append("<a href=\"");
+    			sb.append(Civilizations.getSettings().getWikiUrl());
+    			sb.append(s.getName().replace(" ", "_"));
+    			sb.append("\" target=\"_blank\">Wiki</a><br />");
+    		}
+    		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
+    		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m²");
+    		sb.append("<h2>Taxes: </h2><br />");
+    		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
+    		set.setDescription(sb.toString());
 		}
 		m.setLabel(Util.prettifyText(s.getName()));
 		if(s instanceof NationMember){
