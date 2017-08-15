@@ -315,22 +315,19 @@ public class Plot extends Group implements Rentable, HasInventory {
 			fm.command("/group " + getSettlement().getUniqueId().toString() + " info");
 		}
 		String renterCommand = getRenter() == null ? "" : (getRenter().isPlayer() ? "/p " + getRenter().getName() : "/group " + getRenter().getUniqueId().toString() + " info");
-		String ownerCommand = getOwner() == null ? "" : (!getOwner().isPlayer() ? "/group " + getSettlement().getUniqueId().toString() + " INFO" : "/p " + getOwner().getName());
+		String ownerCommand = getOwner() == null ? "" : (!getOwner().isPlayer() ? "/group " + getOwner().getUniqueId().toString() + " INFO" : "/p " + getOwner().getName());
 		// Display Renter of the Plot.
 		if(isForRent()){
 			fm.then("\nRented by: ").color(ChatColor.GRAY).command(renterCommand)
 			.then(getRenter() == null ? "Available" : getRenter().getName()).color(ChatColor.GOLD).command(renterCommand);
 		}
 		// Display Owner of the Plot.
-		if(getOwner() == null && getSettlement() == null){
+		if(getOwner() == null){
 			fm.then("\nNot owned by anyone.").color(ChatColor.GRAY);
 		} else {
+			Civilizations.currentInstance.getLogger().info("Name: " + getOwner().getName() + "; Command: " + ownerCommand);
 			fm.then("\nOwned by: ").color(ChatColor.GRAY).command(ownerCommand);
-			if(getOwner() != null){
-				fm.then(getOwner().getName()).color(ChatColor.GOLD).command(ownerCommand);
-			} else {
-				fm.then(getSettlement().getName()).color(ChatColor.GOLD).command(ownerCommand);
-			}
+			fm.then(getOwner().getName()).color(ChatColor.GOLD).command(ownerCommand);
 		}
 		if(isForRent()){
 			fm.then("\nDaily rent: ").color(ChatColor.GRAY).then("" + getRent()).color(ChatColor.GOLD);
