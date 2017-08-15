@@ -297,12 +297,12 @@ public class Protection {
 	 * Gets the value of the permission of a certain type for the given target.
 	 * @param target
 	 * @param type
-	 * @return
+	 * @return true or false if the permission is set. Null otherwise.
 	 */
-	public boolean getPermission(PermissionTarget target, PermissionType type){
-		if(permissionSet == null) throw new NullPointerException("PermissionSet is somehow null.");
+	public Boolean getPermission(PermissionTarget target, PermissionType type){
+		/*if(permissionSet == null) throw new NullPointerException("PermissionSet is somehow null.");
 		if(target == null) throw new NullPointerException("PermissionTarget can't be null.");
-		if(type == null) throw new NullPointerException("PermissionType can't be null.");
+		if(type == null) throw new NullPointerException("PermissionType can't be null.");*/
 		return permissionSet.get(target, type);
 		/*} else if(parent != null) {
 			return parent.getPermission(type, target);*/
