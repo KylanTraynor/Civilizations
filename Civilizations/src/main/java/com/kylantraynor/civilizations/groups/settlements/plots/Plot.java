@@ -594,10 +594,11 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(ee == null){
 			//getSettings().setOwner(getSettlement());
 			ee = getSettlement();
-		}
-		if(ee.getName().isEmpty()){
-			getSettings().setOwner(null);
-			return null;
+		} else {
+			if(ee.getName().isEmpty()){
+				getSettings().setOwner(null);
+				ee = getSettlement();
+			}
 		}
 		return ee;
 	}
