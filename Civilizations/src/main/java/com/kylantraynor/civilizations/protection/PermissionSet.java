@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -12,7 +11,8 @@ import org.bukkit.ChatColor;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 public class PermissionSet extends HashMap<PermissionTarget, Permissions>{
-	
+	private static final long serialVersionUID = 1L;
+
 	public Set<PermissionTarget> getTargets(){
 		return this.keySet();
 	}

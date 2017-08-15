@@ -80,7 +80,7 @@ public class ProtectionManager {
 			if(player.isOp()) return true;
 		}
 		
-		
+		try{
 		while(currentProtection != null && result == null && player != null){
 			// Check if the protection has a specific permission set for the player
 			PlayerTarget pt = new PlayerTarget(player);
@@ -128,6 +128,10 @@ public class ProtectionManager {
 					currentProtection = null;
 				}
 			}*/
+		}
+		} catch (Exception e){
+			e.printStackTrace();
+			result = false;
 		}
 		
 		if(result == false && displayResult){
