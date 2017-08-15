@@ -135,7 +135,7 @@ public class EconomicEntity {
 	 * @return true if the entity represents a player, false otherwise
 	 */
 	public boolean isPlayer(){
-		return !(this instanceof Group);
+		return true;
 	}
 	
 	/**
@@ -155,9 +155,8 @@ public class EconomicEntity {
 	public String getName(){
 		if(isPlayer()){
 			return getOfflinePlayer().getName();
-		} else {
-			return ((Group)this).getName();
 		}
+		return "Entity";
 	}
 	
 	// ===========================

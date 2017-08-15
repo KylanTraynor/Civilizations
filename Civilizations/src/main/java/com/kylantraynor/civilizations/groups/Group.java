@@ -66,6 +66,11 @@ public class Group extends EconomicEntity{
 	private boolean removed;
 	private UUID parent;
 	
+	@Override
+	public boolean isPlayer(){return false;}
+	@Override
+	public OfflinePlayer getOfflinePlayer(){return null;}
+	
 	public Group(){
 		list.add(this);
 		if(availableIds.size() > 0){
