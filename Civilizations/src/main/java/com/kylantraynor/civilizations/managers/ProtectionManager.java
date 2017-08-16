@@ -88,11 +88,11 @@ public class ProtectionManager {
 			if(result != null) break;
 			// If not, check if the protection has a specific permission set for the player's rank
 			Rank r = currentProtection.getRank(player);
-			while(r != null){
+			while(r != null && result == null){
 				result = currentProtection.getPermission(r, type);
-				if(result != null) break; else r = currentProtection.getRank(r.getParentId());
+				r = currentProtection.getRank(r.getParentId());
 			}
-			
+			if(result != null) break;
 			// If not, check if the protection has a permission set for any group the player belongs to
 			for(PermissionTarget target : currentProtection.getPermissionSet().getTargets()){
 				if(target instanceof GroupTarget){
