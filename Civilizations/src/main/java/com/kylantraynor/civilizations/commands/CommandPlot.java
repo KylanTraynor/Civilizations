@@ -178,7 +178,7 @@ public class CommandPlot implements CommandExecutor {
 						}
 						break;
 					case "FIELD": case "CROPFIELD": case "FARMLAND":
-						long requiredArea = 16 * 16;
+						long requiredArea = 80;
 						long maxArea = 128 * 128;
 						if(s.getArea() < requiredArea){
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This area is too small for a field. Required: " + requiredArea + "  m² ("+s.getArea()+")" );
