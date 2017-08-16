@@ -112,7 +112,11 @@ public class ProtectionManager {
 		}
 		
 		if(player == null){
-			result = getPermission(currentProtection, PermissionTarget.SERVER, type);
+			while(currentProtection != null && result == null){
+				result = getPermission(currentProtection, PermissionTarget.SERVER, type);
+				
+				currentProtection = currentProtection.getParent();
+			}
 			if(result == null){
 				result = true;
 			}
@@ -131,6 +135,10 @@ public class ProtectionManager {
 		}
 		} catch (Exception e){
 			e.printStackTrace();
+			result = false;
+		}
+		
+		if(result == null){
 			result = false;
 		}
 		
