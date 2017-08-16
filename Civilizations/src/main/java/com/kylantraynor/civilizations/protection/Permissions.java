@@ -121,7 +121,7 @@ public class Permissions {
 				false;
 	}
 
-	public boolean get(PermissionType type) {
+	public Boolean get(PermissionType type) {
 		return types.get(type);
 	}
 	
