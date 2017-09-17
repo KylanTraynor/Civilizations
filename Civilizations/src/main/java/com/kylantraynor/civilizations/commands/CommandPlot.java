@@ -209,6 +209,9 @@ public class CommandPlot implements CommandExecutor {
 						Civilizations.getSelectedProtections().put(player, p.getProtection());
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Field created!");
 						break;
+					default:
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "This is not a valid plot type. Try House, Warehouse, Stall, Field.");
+						break;
 					}
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "Use /plot create [plot type]");

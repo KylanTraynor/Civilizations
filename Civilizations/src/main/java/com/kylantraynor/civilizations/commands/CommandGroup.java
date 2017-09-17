@@ -296,8 +296,9 @@ public class CommandGroup implements CommandExecutor {
 			case "LEAVE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
+					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
 					if(g instanceof Rentable){
-						if(((Rentable)g).getRenter() == p){
+						if(((Rentable)g).getRenter() == ee){
 							((Rentable)g).setRenter(null);
 							sender.sendMessage(ChatColor.GREEN + "You are no longer renting " + g.getName() + ".");
 						}

@@ -20,6 +20,7 @@ public class CommandSelection implements CommandExecutor{
 			case "HELP":
 				sender.sendMessage(ChatTools.formatTitle("Selection", ChatColor.GRAY));
 				sender.sendMessage(ChatColor.GOLD + "/Selection Start Hull" + ChatColor.GRAY + "  Start a point cloud selection.");
+				sender.sendMessage(ChatColor.GOLD + "/Selection Stop Hull" + ChatColor.GRAY + "  Stop a point cloud selection.");
 				return true;
 			case "START":
 				if(args.length >= 2){
@@ -27,6 +28,15 @@ public class CommandSelection implements CommandExecutor{
 					case "HULL":
 						SelectionManager.startHullSelection((Player)sender);
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.GOLD + "Point Cloud selection started.");
+					}
+				}
+				return true;
+			case "STOP":
+				if(args.length >= 2){
+					switch(args[1].toUpperCase()){
+					case "HULL":
+						SelectionManager.stopHullSelection((Player)sender);
+						sender.sendMessage(Civilizations.messageHeader + ChatColor.GOLD + "Two-Corners selection started.");
 					}
 				}
 				return true;
