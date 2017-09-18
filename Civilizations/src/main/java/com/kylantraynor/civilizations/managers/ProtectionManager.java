@@ -108,6 +108,7 @@ public class ProtectionManager {
 			result = currentProtection.getPermission(PermissionTarget.OUTSIDERS, type);
 			
 			// If not, just return false.
+			if(currentProtection.getParent() == null) break;
 			currentProtection = currentProtection.getParent();
 		}
 		
@@ -115,6 +116,7 @@ public class ProtectionManager {
 			while(currentProtection != null && result == null){
 				result = getPermission(currentProtection, PermissionTarget.SERVER, type);
 				
+				if(currentProtection.getParent() == null) break;
 				currentProtection = currentProtection.getParent();
 			}
 			if(result == null){
