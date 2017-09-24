@@ -37,6 +37,7 @@ import com.kylantraynor.civilizations.commands.CommandBlueprint;
 import com.kylantraynor.civilizations.commands.CommandCamp;
 import com.kylantraynor.civilizations.commands.CommandCivilizations;
 import com.kylantraynor.civilizations.commands.CommandGroup;
+import com.kylantraynor.civilizations.commands.CommandGuild;
 import com.kylantraynor.civilizations.commands.CommandHouse;
 import com.kylantraynor.civilizations.commands.CommandPlot;
 import com.kylantraynor.civilizations.commands.CommandRegion;
@@ -372,6 +373,7 @@ public class Civilizations extends JavaPlugin{
 		this.getCommand("Blueprint").setExecutor(new CommandBlueprint());
 		
 		this.getCommand("Group").setExecutor(new CommandGroup());
+		this.getCommand("Guild").setExecutor(new CommandGuild());
 		this.getCommand("House").setExecutor(new CommandHouse());
 		this.getCommand("Camp").setExecutor(new CommandCamp());
 		
