@@ -123,7 +123,7 @@ public class SelectionManager {
 	}
 	
 	public static void stopHullSelection(Player player){
-		selectionMode.remove(player.getUniqueId());
+		clear(player);
 	}
 
 	public static String getSelectionMode(Player player) {
