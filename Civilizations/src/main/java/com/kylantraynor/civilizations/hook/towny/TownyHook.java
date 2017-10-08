@@ -120,12 +120,17 @@ public class TownyHook {
 		if(residentCacheManager.containsKey(res)){
 			return Bukkit.getServer().getOfflinePlayer(residentCacheManager.get(res));
 		} else {
-			OfflinePlayer p = Bukkit.getServer().getOfflinePlayer((res.getName()));
-			if(p != null){
-				residentCacheManager.put(res, p.getUniqueId());
-				return p;
-			} else {
-				Civilizations.log("WARNING", "Couldn't find player for resident " + res.getName() + ".");
+			try{
+				OfflinePlayer p = Bukkit.getServer().getOfflinePlayer((res.getName()));
+				if(p != null){
+					residentCacheManager.put(res, p.getUniqueId());
+					return p;
+				} else {
+					Civilizations.log("WARNING", "Couldn't find player for resident " + res.getName() + ".");
+				}
+			} catch (Exception ex) {
+				Civilizations.log("WARNING", "Error while loading resident " + res.getName() + ".");
+				ex.printStackTrace();
 			}
 		}
 		return null;
