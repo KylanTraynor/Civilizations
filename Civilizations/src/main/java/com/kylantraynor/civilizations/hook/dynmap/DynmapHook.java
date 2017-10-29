@@ -455,7 +455,7 @@ public class DynmapHook {
 	            stall.setLabel(p.getName());
 	            stall.setMarkerIcon(stallIcon);
 	    	}
-	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.InfoBubble", "%Name%");
+	    	String description = Civilizations.getInstanceConfig().getString("Dynmap.Layer.Plots.Stalls.InfoBubble", "%Name%");
 	    	description = "<div class=\"regioninfo\">" + description + "</div>";
 	    	description = description.replace("%Name%", p.getName());
 	    	StringBuilder sb = new StringBuilder();
