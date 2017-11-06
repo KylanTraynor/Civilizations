@@ -37,11 +37,13 @@ public class CommandGroup implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0) args = new String[]{"Null", "MENU"};
 		UUID id = null;
+		Civilizations.log("INFO", "Group ID: " + args[0]);
 		try{
 			id = UUID.fromString(args[0]);
-		} catch (IllegalArgumentException e){ id = null;}
-		Civilizations.log("INFO", "Group ID: " + id);
-		if(args.length == 1){ args = new String[]{"" + id, "MENU"};}
+		} catch (IllegalArgumentException e){
+			id = null;
+		}
+		if(args.length == 1){ args = new String[]{id.toString(), "MENU"};}
 		if(id != null && args.length >= 2){
 			Group g = GroupManager.get(id);
 			if(g == null) return true;

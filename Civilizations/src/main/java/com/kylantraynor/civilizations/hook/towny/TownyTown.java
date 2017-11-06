@@ -366,19 +366,19 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			fm.then("" + getTotalUsedWarehousesSpace() + "/" + getTotalWarehousesSpace()).color(ChatColor.GOLD);
 			fm.then("\nBuild Projects: ").color(ChatColor.GRAY)
 			.tooltip("Click here to see the list of projects.")
-			.command("/group " + this.getId() + " Builder List");;
+			.command("/group " + this.getUniqueId().toString() + " Builder List");;
 		fm.then("" + getBuilder().getProjects().size()).color(ChatColor.GOLD)
 			.tooltip("Click here to see the list of projects.")
-			.command("/group " + this.getId() + " Builder List");
+			.command("/group " + this.getUniqueId().toString() + " Builder List");
 		} else {
 			fm.then("No Warehouses");
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY)
 			.tooltip("Click here to see the list of all members.")
-			.command("/group " + this.getId() + " members");
+			.command("/group " + this.getUniqueId().toString() + " members");
 		fm.then("" + getMembers().size()).color(ChatColor.GOLD)
 			.tooltip("Click here to see the list of all members.")
-			.command("/group " + this.getId() + " members");
+			.command("/group " + this.getUniqueId().toString() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);

@@ -167,7 +167,7 @@ public class Builder {
 			.tooltip("Actual block : " + Util.getMaterialName(supply))
 			.color(ChatColor.GOLD)
 			.then("! Click ")
-			.then("HERE").command("/group " + ((Group)getOwner()).getId() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
+			.then("HERE").command("/group " + ((Group)getOwner()).getUniqueId().toString() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
 			.color(ChatColor.GOLD)
 			.then(" to skip this type of block.");
 			((Group)getOwner()).sendMessage(notification, PermissionType.BLUEPRINT_NOTIFICATIONS);
