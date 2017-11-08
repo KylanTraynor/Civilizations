@@ -80,7 +80,7 @@ public class CommandGroup implements CommandExecutor {
 							FancyMessage fm = new FancyMessage(ChatTools.formatTitle(g.getName() + " Build Projects", ChatColor.GOLD));
 							int i = 1;
 							for(BuildProject bp : builder.getProjects()){
-								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
+								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getUniqueId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 								fm.then("Project #" + i++ + "  at " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 							}
 							fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
