@@ -111,8 +111,10 @@ public class Shop {
 	public String getItemName(){
 		if(getItem() != null){
 			if(getItem().getItemMeta() != null){
-				if(!getItem().getItemMeta().getDisplayName().isEmpty()){
-					return ChatColor.GOLD + getItem().getItemMeta().getDisplayName();
+				if(getItem().getItemMeta().getDisplayName() != null){
+					if(!getItem().getItemMeta().getDisplayName().isEmpty()){
+						return ChatColor.GOLD + getItem().getItemMeta().getDisplayName();
+					}
 				}
 			}
 			return Util.getMaterialName(getItem());
