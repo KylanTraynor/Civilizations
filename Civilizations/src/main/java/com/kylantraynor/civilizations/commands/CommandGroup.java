@@ -94,6 +94,7 @@ public class CommandGroup implements CommandExecutor {
 										if(bp.getLocation().getBlockZ() == Integer.parseInt(args[5])){
 											builder2.removeProject(bp);
 											sender.sendMessage(ChatColor.GREEN + "Project removed!");
+											return true;
 										}
 									}
 								}
