@@ -214,13 +214,13 @@ public class Hull extends Shape {
 	}
 	
 	public boolean isInside(Block b){
-		return isInside(b.getX() + 0.5, b.getY(), b.getZ() + 0.5);
+		return isInside(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
 	}
 
 	@Override
 	public boolean isInside(double x, double y, double z) {
 		if(verticesHaveChanged) updateHull();
-		//if(y < getMinY() || y > getMaxY()) return false;
+		if(y < getMinY() || y >= getMaxY()) return false;
 		if(x < getMinX() || x >= getMaxX()) return false;
 		if(z < getMinZ() || z >= getMaxZ()) return false;
 		if(constant == null || multiple == null){
@@ -297,7 +297,7 @@ public class Hull extends Shape {
 		for(int x = getMinBlockX(); x <= getMaxBlockX(); x++){
 			for(int z = getMinBlockZ(); z <= getMaxBlockZ(); z++){
 				for(int y = getMinBlockY(); y <= getMaxBlockY(); y++){
-					if(isInside(x + 0.5, y, z + 0.5)){
+					if(isInside(x + 0.5, y + 0.5, z + 0.5)){
 						list.add(w.getBlockAt(x, y, z).getLocation());
 					}
 				}
@@ -321,9 +321,17 @@ public class Hull extends Shape {
 		if(points.size() == 0){
 			minY = (double) block.getY();
 			maxY = (double) block.getY() + 1;
+			minX = (double) block.getX();
+			maxX = (double) block.getX() + 1;
+			minZ = (double) block.getZ();
+			maxZ = (double) block.getZ() + 1;
 		} else {
 			minY = Math.min(minY, block.getY());
 			maxY = Math.max(maxY, block.getY() + 1);
+			minX = Math.min(minX, block.getX());
+			maxX = Math.max(maxX, block.getX() + 1);
+			minZ = Math.min(minZ, block.getZ());
+			maxZ = Math.max(maxZ, block.getZ() + 1);
 		}
 		for(int x = 0; x <= 1; x++){
 			for(int z = 0; z <= 1; z++){
@@ -340,9 +348,17 @@ public class Hull extends Shape {
 		if(points.size() == 0){
 			minY = l.getY();
 			maxY = l.getY();
+			minX = l.getX();
+			maxX = l.getX();
+			minZ = l.getZ();
+			maxZ = l.getZ();
 		} else {
 			minY = Math.min(minY, l.getY());
 			maxY = Math.max(maxY, l.getY());
+			minX = Math.min(minX, l.getX());
+			maxX = Math.max(maxX, l.getX());
+			minZ = Math.min(minZ, l.getZ());
+			maxZ = Math.max(maxZ, l.getZ());
 		}
 		points.add(l);
 		setChanged(true);
@@ -453,12 +469,12 @@ public class Hull extends Shape {
 		verticesHaveChanged = true;
 		massCenter = null;
 		maxDistanceSquared = Double.NaN;
-		minX = null;
+		//minX = null;
 		//minY = null;
-		minZ = null;
-		maxX = null;
+		//minZ = null;
+		//maxX = null;
 		//maxY = null;
-		maxZ = null;
+		//maxZ = null;
 	}
 	
 	public boolean hasChanged(){
@@ -646,7 +662,7 @@ public class Hull extends Shape {
 	public boolean intersect(Shape s) {
 		if(!s.getLocation().getWorld().equals(getLocation().getWorld())) return false;
 		for(Location l : s.getBlockLocations()){
-			if(isInside(l)) return true;
+			if(isInside(l.getBlock())) return true;
 		}
 		return false;
 	}
