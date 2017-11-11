@@ -194,7 +194,7 @@ public class CommandPlot implements CommandExecutor {
 						if(map != null){
 							set = (Settlement) map.getInfluentSiteAt(s.getLocation());
 							if(set != null){
-								if(ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
+								if(!ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
 									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to manage plots in " + ((InfluentSite) set).getRegion().getName()+ ".");
 									return true;
 								}
