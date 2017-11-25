@@ -609,7 +609,7 @@ public class Civilizations extends JavaPlugin{
 					if(p.isForRent() && p.getRenter() == null){
 						TitleManagerHook.sendActionBar(ChatColor.GOLD + p.getName() + " [For Rent! " + ChatColor.GREEN + Economy.format(p.getRent()) + ChatColor.GOLD + " daily]", player, false);
 					} else if(p.isForSale()){
-						TitleManagerHook.sendActionBar(ChatColor.GOLD + p.getName() + " [For Sale! " + ChatColor.GREEN + Economy.format(p.getPrice()) + ChatColor.GOLD + " daily]", player, false);
+						TitleManagerHook.sendActionBar(ChatColor.GOLD + p.getName() + " [For Sale! " + ChatColor.GREEN + Economy.format(p.getPrice()) + ChatColor.GOLD + "]", player, false);
 					} else {
 						TitleManagerHook.sendActionBar(p.getName(), player, false);
 					}

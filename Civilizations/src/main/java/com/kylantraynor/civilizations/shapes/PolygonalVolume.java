@@ -22,8 +22,8 @@ public class PolygonalVolume extends Polygon2D{
 	
 	@Override
 	public boolean isInside(double x, double y, double z){
-		if(!super.isInside(x, y, z)) return false;
-		return getMinY() < y && y < getMaxY();
+		if(y < getMinY() || getMaxY() > y) return false;
+		return super.isInside(x,y,z);
 	}
 	
 	@Override

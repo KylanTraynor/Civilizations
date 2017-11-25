@@ -28,12 +28,12 @@ public class Hull extends Shape {
 	private double[] xVertices;
 	private double[] zVertices;
 	
-	private Double minX = null;
-	private Double minY = null;
-	private Double minZ = null;
-	private Double maxX = null;
-	private Double maxY = null;
-	private Double maxZ = null;
+	private double minX = Double.NaN;
+	private double minY = Double.NaN;
+	private double minZ = Double.NaN;
+	private double maxX = Double.NaN;
+	private double maxY = Double.NaN;
+	private double maxZ = Double.NaN;
 	
 	private World world = null;
 
@@ -198,7 +198,7 @@ public class Hull extends Shape {
 
 	@Override
 	public long getVolume() {
-		return 0;
+		return getArea() * getBlockHeight();
 	}
 
 	@Override
@@ -318,21 +318,12 @@ public class Hull extends Shape {
 		if(getWorld() == null){
 			setWorld(block.getWorld());
 		}
-		if(points.size() == 0){
-			minY = (double) block.getY();
-			maxY = (double) block.getY() + 1;
-			minX = (double) block.getX();
-			maxX = (double) block.getX() + 1;
-			minZ = (double) block.getZ();
-			maxZ = (double) block.getZ() + 1;
-		} else {
-			minY = Math.min(minY, block.getY());
-			maxY = Math.max(maxY, block.getY() + 1);
-			minX = Math.min(minX, block.getX());
-			maxX = Math.max(maxX, block.getX() + 1);
-			minZ = Math.min(minZ, block.getZ());
-			maxZ = Math.max(maxZ, block.getZ() + 1);
-		}
+		minY = Double.isNaN(minY) ? (double) block.getY()     : Math.min(minY, block.getY()    );
+		maxY = Double.isNaN(maxY) ? (double) block.getY() + 1 : Math.max(maxY, block.getY() + 1);
+		minX = Double.isNaN(minX) ? (double) block.getX()     : Math.min(minX, block.getX()    );
+		maxX = Double.isNaN(maxX) ? (double) block.getX() + 1 : Math.max(maxX, block.getX() + 1);
+		minZ = Double.isNaN(minZ) ? (double) block.getZ()     : Math.min(minZ, block.getZ()    );
+		maxZ = Double.isNaN(maxZ) ? (double) block.getZ() + 1 : Math.max(maxZ, block.getZ() + 1);
 		for(int x = 0; x <= 1; x++){
 			for(int z = 0; z <= 1; z++){
 				points.add(block.getLocation().clone().add(x, 0, z));
@@ -345,21 +336,12 @@ public class Hull extends Shape {
 		if(getWorld() == null){
 			setWorld(l.getWorld());
 		}
-		if(points.size() == 0){
-			minY = l.getY();
-			maxY = l.getY();
-			minX = l.getX();
-			maxX = l.getX();
-			minZ = l.getZ();
-			maxZ = l.getZ();
-		} else {
-			minY = Math.min(minY, l.getY());
-			maxY = Math.max(maxY, l.getY());
-			minX = Math.min(minX, l.getX());
-			maxX = Math.max(maxX, l.getX());
-			minZ = Math.min(minZ, l.getZ());
-			maxZ = Math.max(maxZ, l.getZ());
-		}
+		minY = Double.isNaN(minY) ? (double) l.getY() : Math.min(minY, l.getY());
+		maxY = Double.isNaN(maxY) ? (double) l.getY() : Math.max(maxY, l.getY());
+		minX = Double.isNaN(minX) ? (double) l.getX() : Math.min(minX, l.getX());
+		maxX = Double.isNaN(maxX) ? (double) l.getX() : Math.max(maxX, l.getX());
+		minZ = Double.isNaN(minZ) ? (double) l.getZ() : Math.min(minZ, l.getZ());
+		maxZ = Double.isNaN(maxZ) ? (double) l.getZ() : Math.max(maxZ, l.getZ());
 		points.add(l);
 		setChanged(true);
 	}
@@ -382,13 +364,11 @@ public class Hull extends Shape {
 	public Location getMassCenter(){
 		double totalX = 0;
 		double totalZ = 0;
-		double totalY = 0;
 		for(Location l : points){
 			totalX += l.getX();
 			totalZ += l.getZ();
-			totalY += l.getY();
 		}
-		massCenter =  new Location(getWorld(), totalX * (1.0 / points.size()), totalY * (1.0 / points.size()), totalZ * (1.0 / points.size()));
+		massCenter =  new Location(getWorld(), totalX * (1.0 / points.size()), (getMaxBlockY() + getMinBlockY()) * 0.5, totalZ * (1.0 / points.size()));
 		return massCenter;
 	}
 	
@@ -484,119 +464,31 @@ public class Hull extends Shape {
 	
 	@Override
 	public double getMinX() {
-		if(minX != null) return minX;
-		if(exists()){
-			for(Location l : getVertices()){
-				if(minX == null){
-					minX = l.getX();
-				} else if (l.getX() < minX){
-					minX = l.getX();
-				}
-			}
-		} else {
-			for(Location l : points){
-				if(minX == null){
-					minX = l.getX();
-				} else if (l.getX() < minX){
-					minX = l.getX();
-				}
-			}
-		}
 		return minX;
 	}
 
 	@Override
 	public double getMinY() {
-		if(minY != null) return minY;
-		for(Location l : points){
-			if(minY == null){
-				minY = l.getY();
-			} else if (l.getY() < minY){
-				minY = l.getY();
-			}
-		}
 		return minY;
 	}
 
 	@Override
 	public double getMinZ() {
-		if(minZ != null) return minZ;
-		if(exists()){
-			for(Location l : getVertices()){
-				if(minZ == null){
-					minZ = l.getZ();
-				} else if (l.getZ() < minZ){
-					minZ = l.getZ();
-				}
-			}
-		} else {
-			for(Location l : points){
-				if(minZ == null){
-					minZ = l.getZ();
-				} else if (l.getZ() < minZ){
-					minZ = l.getZ();
-				}
-			}
-		}
 		return minZ;
 	}
 
 	@Override
 	public double getMaxX() {
-		if(maxX != null) return maxX;
-		if(exists()){
-			for(Location l : getVertices()){
-				if(maxX == null){
-					maxX = l.getX();
-				} else if (l.getX() > maxX){
-					maxX = l.getX();
-				}
-			}
-		} else {
-			for(Location l : points){
-				if(maxX == null){
-					maxX = l.getX();
-				} else if (l.getX() > maxX){
-					maxX = l.getX();
-				}
-			}
-		}
 		return maxX;
 	}
 
 	@Override
 	public double getMaxY() {
-		if(maxY != null) return maxY;
-		for(Location l : points){
-			if(maxY == null){
-				maxY = l.getY();
-			} else if (l.getY() > maxY){
-				maxY = l.getY();
-			}
-		}
 		return maxY;
 	}
 
 	@Override
 	public double getMaxZ() {
-		if(maxZ != null) return maxZ;
-		if(exists()){
-			for(Location l : getVertices()){
-				if(maxZ == null){
-					maxZ = l.getZ();
-				} else if (l.getZ() > maxZ){
-					maxZ = l.getZ();
-				}
-			}
-		} else {
-			for(Location l : points){
-				if(maxZ == null){
-					maxZ = l.getZ();
-				} else if (l.getZ() > maxZ){
-					maxZ = l.getZ();
-				}
-			}
-		}
 		return maxZ;
 	}
 	
