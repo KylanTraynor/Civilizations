@@ -123,8 +123,9 @@ public class MaterialAndData {
 			return new MaterialAndData(Material.WOOD, data);
 		case PURPUR_DOUBLE_SLAB:
 			return new MaterialAndData(Material.PURPUR_BLOCK, (byte) 0);
+		default:
+			return this;
 		}
-		return this;
 	}
 	
 	public boolean isSimilar(MaterialAndData md){
@@ -229,6 +230,8 @@ public class MaterialAndData {
 				if(item.getType() == Material.WOOD && item.getData().getData() == data) return true; break;
 			case PURPUR_DOUBLE_SLAB:
 				if(item.getType() == Material.PURPUR_BLOCK) return true; break;
+			default:
+				return false;
 			}
 			return false;
 		}
