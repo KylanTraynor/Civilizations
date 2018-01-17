@@ -18,12 +18,14 @@ import org.bukkit.entity.Player;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.FortComponent;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
@@ -74,8 +76,8 @@ public class Keep extends Plot implements FortComponent{
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
 		
 		fm.then("\nActions: ").color(ChatColor.GRAY);
-		if(this.isMember(player)){
-			if(getSettlement().hasPermission(PermissionType.MANAGE_PLOTS, null, player)){
+		if(this.isMember(EconomicEntity.get(player.getUniqueId()))){
+			if(ProtectionManager.hasPermission(getSettlement().getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
 				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getId() + " setname NEW NAME");
 			} else {
 				fm.then("\nRename").color(ChatColor.GRAY).tooltip("You don't have the MANAGE PLOTS permission here.");

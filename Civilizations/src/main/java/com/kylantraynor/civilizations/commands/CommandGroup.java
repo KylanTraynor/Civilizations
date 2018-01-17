@@ -114,11 +114,13 @@ public class CommandGroup implements CommandExecutor {
 							return true;
 						}
 					} else {
-						if(g.hasPermission(PermissionType.MANAGE, null, (Player) sender)){
+						if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player) sender, false)){
 							String name = g.getName();
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + name + " has been removed.");
 							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "You don't have the permission to remove " + g.getName() + ".");
 						}
 					}
 				}
@@ -138,7 +140,7 @@ public class CommandGroup implements CommandExecutor {
 							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
 						}
 					} else {
-						if(g.hasPermission(PermissionType.MANAGE, null, (Player) sender)){
+						if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player) sender, false)){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
 								sb.append(args[i] + " ");
@@ -248,7 +250,7 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "UPGRADE":
 				if(sender instanceof Player){
-					if(g.hasPermission(PermissionType.UPGRADE, null, ((Player)sender))){
+					if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.UPGRADE, ((Player)sender), false)){
 						if(g.upgrade()){
 							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
 						} else {

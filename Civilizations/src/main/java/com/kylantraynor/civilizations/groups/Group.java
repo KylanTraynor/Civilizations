@@ -33,6 +33,7 @@ import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
@@ -185,11 +186,11 @@ public class Group extends EconomicEntity{
 	 */
 	public void setMembers(List<UUID> members) { this.getSettings().setMembers(members); }
 	/**
-	 * Adds the given player to the list of members of this group.
+	 * Adds the given entity to the list of members of this group.
 	 * @param member
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
-	public boolean addMember(OfflinePlayer member){
+	public boolean addMember(EconomicEntity member){
 		if(getMembers().contains(member.getUniqueId())) return false;
 		List<UUID> members = getMembers();
 		members.add(member.getUniqueId());
@@ -201,7 +202,7 @@ public class Group extends EconomicEntity{
 	 * @param member
 	 * @return true if the player has been removed, false otherwise.
 	 */
-	public boolean removeMember(OfflinePlayer member){
+	public boolean removeMember(EconomicEntity member){
 		if(getMembers().contains(member.getUniqueId())){
 			List<UUID> members = getMembers();
 			members.remove(member.getUniqueId());
@@ -215,16 +216,31 @@ public class Group extends EconomicEntity{
 	 * @param player
 	 * @return true if the player is a member, false otherwise.
 	 */
-	public boolean isMember(OfflinePlayer player){return getMembers().contains(player.getUniqueId());}
+	public boolean isMember(Player player){
+		boolean result = false;
+		result = result || getMembers().contains(player.getUniqueId());
+		result = result || getMembers().contains(CivilizationsAccount.get(player.getUniqueId()).getCurrentCharacterId());
+		return result;
+	}
+	/**
+	 * Checks if the given entity is a member of this group.
+	 * @param entity
+	 * @return true if the entity is a member, false otherwise.
+	 */
+	public boolean isMember(EconomicEntity entity){
+		return getMembers().contains(entity.getUniqueId());
+	}
 	/**
 	 * Checks if at least one players in this list of members of this group is online.
 	 * @return true if at least one player is online, false otehrwise.
 	 */
 	public boolean hasOneMemberOnline(){
 		for(UUID i : getMembers()){
-			OfflinePlayer op = Bukkit.getServer().getOfflinePlayer(i);
-			if(op.isOnline()){
-				return true;
+			EconomicEntity en = EconomicEntity.get(i);//Bukkit.getServer().getOfflinePlayer(i);
+			if(en.isPlayer()){
+				if(en.getOfflinePlayer().isOnline()){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -492,7 +508,7 @@ public class Group extends EconomicEntity{
 	public void sendMessage(FancyMessage message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-				if(!hasPermission(permission, null, p)) continue;
+				if(!ProtectionManager.hasPermission(getProtection(), permission, p, false)) continue;
 			}
 			message.send(p);
 		}
@@ -505,7 +521,7 @@ public class Group extends EconomicEntity{
 	public void sendMessage(String message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-				if(!hasPermission(permission, null, p)) continue;
+				if(!ProtectionManager.hasPermission(getProtection(), permission, p, false)) continue;
 			}
 			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
@@ -517,6 +533,7 @@ public class Group extends EconomicEntity{
 	 * @param player
 	 * @return
 	 */
+	@Deprecated
 	public boolean hasPermission(PermissionType perm, Block block, Player player) {
 		return ProtectionManager.hasPermission(getProtection(), perm, player, false);
 		/*

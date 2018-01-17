@@ -20,6 +20,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.pages.GroupMainPage;
 import com.kylantraynor.civilizations.menus.pages.MenuPage;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -37,7 +38,6 @@ public class GroupMenu extends Menu{
 	private Group group;
 	private Inventory top;
 	private Inventory bottom;
-	private Player player;
 	private int linesTop = 6; // Navigation Bar
 	private int linesBottom = 6; // Menus
 	
@@ -85,7 +85,7 @@ public class GroupMenu extends Menu{
 	 */
 	@Override
 	public void update(){
-		ButtonManager.clearButtons(player);
+		ButtonManager.clearButtons(getPlayer());
 		//this.bottom.clear();
 		this.top.clear();
 		currentPage.refresh(this);
@@ -112,7 +112,7 @@ public class GroupMenu extends Menu{
 		case RANKS_SELECTION: updateForRankSelection(); break;
 		}
 		*/
-		player.updateInventory();
+		getPlayer().updateInventory();
 	}
 	/**
 	 * Update the menu to display the Main Screen.
@@ -191,7 +191,7 @@ public class GroupMenu extends Menu{
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.WHITE + "Type: " + ChatColor.GOLD + group.getType());
 		lore.add(ChatColor.WHITE + "Members: " + ChatColor.GOLD + group.getMembers().size());
-		Button mainButton = new Button(player, Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
+		Button mainButton = new Button(getPlayer(), Material.GOLD_BLOCK, group.getChatHeader(), lore, new BukkitRunnable(){
 
 			@Override
 			public void run() {
@@ -206,7 +206,7 @@ public class GroupMenu extends Menu{
 	 * @return
 	 */
 	public Button getManageButton(){
-		Button manageButton = new Button(player, validButton, "Manage " + group.getType(), null,
+		Button manageButton = new Button(getPlayer(), validButton, "Manage " + group.getType(), null,
 				new BukkitRunnable(){
 
 					@Override
@@ -214,7 +214,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE, getPlayer(), false));
 		return manageButton;
 	}
 	/**
@@ -222,7 +222,7 @@ public class GroupMenu extends Menu{
 	 * @return
 	 */
 	public Button getRanksButton(){
-		Button manageButton = new Button(player, validButton, "Ranks", null,
+		Button manageButton = new Button(getPlayer(), validButton, "Ranks", null,
 				new BukkitRunnable(){
 
 					@Override
@@ -230,7 +230,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
 		return manageButton;
 	}
 	/**
@@ -240,15 +240,15 @@ public class GroupMenu extends Menu{
 	public Button getNewRankButton(){
 		List<String> lore = new ArrayList<String>();
 		lore.add("Create a new rank");
-		Button button = new Button(player, validButton, "Ranks", lore,
+		Button button = new Button(getPlayer(), validButton, "Ranks", lore,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).initTextInput("RANK_NEW", null);
+						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NEW", null);
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
 		return button;
 	}
 	/**
@@ -259,15 +259,15 @@ public class GroupMenu extends Menu{
 	public Button getChangeRankNameButton(final Rank rank){
 		List<String> lore = new ArrayList<String>();
 		lore.add("Changes the name of this rank");
-		Button nameButton = new Button(player, validButton, "Change Name", lore,
+		Button nameButton = new Button(getPlayer(), validButton, "Change Name", lore,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).initTextInput("RANK_NAMING", rank.getName());
+						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NAMING", rank.getName());
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
 		return nameButton;
 	}
 	/**
@@ -282,7 +282,7 @@ public class GroupMenu extends Menu{
 		} else {
 			lore.add("None");
 		}
-		Button parentButton = new Button(player, validButton, "Parent Rank", lore,
+		Button parentButton = new Button(getPlayer(), validButton, "Parent Rank", lore,
 				new BukkitRunnable(){
 
 					@Override
@@ -290,7 +290,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
 		return parentButton;
 	}
 	/**
@@ -314,15 +314,15 @@ public class GroupMenu extends Menu{
 			parentName = group.getProtection().getRank(r.getParentId()).getName();
 		}
 		lore.add("Parent: " + parentName);
-		Button rankButton = new Button(player, Material.GOLD_BLOCK, r.getName(), lore,
+		Button rankButton = new Button(getPlayer(), Material.GOLD_BLOCK, r.getName(), lore,
 				new BukkitRunnable(){
 
 					@Override
 					public void run() {
-						((GroupMenu)MenuManager.getMenus().get(player)).selectionReturned(r.getName());
+						((GroupMenu)MenuManager.getMenus().get(getPlayer())).selectionReturned(r.getName());
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE_RANKS, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
 		return rankButton;
 	}
 	/**
@@ -354,19 +354,12 @@ public class GroupMenu extends Menu{
 			p = new GroupMainPage(player, this.group);
 		}
 		this.currentPage = p;
-		this.player = player;
-		update();
-		player.openInventory(this);
+		this.open(player);
 	}
 
 	@Override
 	public Inventory getBottomInventory() {
-		return this.player.getInventory();
-	}
-
-	@Override
-	public Player getPlayer() {
-		return this.player;
+		return getPlayer().getInventory();
 	}
 
 	@Override
@@ -413,6 +406,7 @@ public class GroupMenu extends Menu{
 		currentPage = page;
 		update();
 	}
+	
 	public Group getGroup() {
 		return group;
 	}

@@ -10,6 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import ru.tehkode.permissions.PermissionManager;
+
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.HasBuilder;
@@ -17,6 +19,7 @@ import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.managers.CacheManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.selection.Selection;
@@ -156,7 +159,6 @@ public class CommandBlueprint implements CommandExecutor{
 				}
 			}
 			
-			// TODO Check if in a settlement
 			HasBuilder settlement = null;
 			for(Settlement g : CacheManager.getSettlementList()){
 				if(!(g instanceof HasBuilder)) continue;
@@ -170,12 +172,11 @@ public class CommandBlueprint implements CommandExecutor{
 				return true;
 			}
 			
-			if(!((Group)settlement).hasPermission(PermissionType.BUILD_BLUEPRINTS, null, player)){
+			if(!ProtectionManager.hasPermission(((Group)settlement).getProtection(), PermissionType.BUILD_BLUEPRINTS, player, false)){
 				player.sendMessage(messageHeader + ChatColor.RED + "You don't have the permission to use blueprints in " + ((Group)settlement).getName() + ".");
 				return true;
 			}
 			
-			// TODO Add to settlement buildprojects.
 			if(!settlement.canBuild()){
 				player.sendMessage(messageHeader + ChatColor.RED + ((Settlement)settlement).getName() + " doesn't have the requirements to set build projects.");
 				return true;
@@ -188,8 +189,6 @@ public class CommandBlueprint implements CommandExecutor{
 			}
 			return true;
 		}
-		//player.sendMessage(messageHeader + ChatColor.RED + "Blueprints are not yet activated.");
-		//return false;
 	}
 
 }

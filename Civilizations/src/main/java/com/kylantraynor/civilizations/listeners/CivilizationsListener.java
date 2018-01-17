@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -28,18 +29,18 @@ public class CivilizationsListener implements Listener{
 		if(settlement instanceof TownyTown) return;
 		switch(event.getCause()){
 		case SPREAD:
-			if(!settlement.hasPermission(PermissionType.FIRESPREAD, event.getBlock(), null)){
+			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRESPREAD, null, false)){
 				event.setCancelled(true);
 			}
 			break;
 		case FLINT_AND_STEEL:
-			if(!settlement.hasPermission(PermissionType.FIRE, event.getBlock(), event.getPlayer())){
+			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRE, event.getPlayer(), false)){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't start a fire here.");
 			}
 			break;
 		default:
-			if(!settlement.hasPermission(PermissionType.FIRE, event.getBlock(), null)){
+			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRE, null, false)){
 				event.setCancelled(true);
 			}
 			break;
@@ -100,5 +101,10 @@ public class CivilizationsListener implements Listener{
 				}
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event){
+		CivilizationsAccount ca = 
 	}
 }

@@ -25,6 +25,7 @@ import org.bukkit.material.Crops;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -198,7 +199,6 @@ public class ProtectionListener implements Listener{
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
-				if(settlement instanceof TownyTown) return;
 				if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
 					//reason = "you don't have the BREAK permission in " + settlement.getName();
@@ -297,7 +297,7 @@ public class ProtectionListener implements Listener{
 		if(event.getFrom().getBlock() != event.getTo().getBlock()){
 			Camp c = Camp.getCampAt(event.getTo());
 			if(c != null){
-				if(c.isMember(event.getPlayer())){
+				if(c.isMember(EconomicEntity.get(event.getPlayer().getUniqueId()))){
 					if(c.getExpireOn().isBefore(Instant.now().plus(Camp.campDuration - 2, ChronoUnit.HOURS))){
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
 					}

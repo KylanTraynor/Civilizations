@@ -8,11 +8,10 @@ import java.util.Map;
 
 import com.kylantraynor.civilizations.util.MutableDouble;
 
-// TODO Add the buffs.
 // TODO Add this to influent sites instead of a simple float number.
 
 public class Influence {
-	private Map<InfluenceType, MutableDouble> influences = new HashMap<InfluenceType, MutableDouble>();
+	private Map<InfluenceType, Double> influences = new HashMap<InfluenceType, Double>();
 	private List<InfluenceBuff> buffs = new ArrayList<InfluenceBuff>();
 	
 	/**
@@ -22,7 +21,7 @@ public class Influence {
 	 */
 	public double getInfluence(InfluenceType type){
 		if(influences.containsKey(type))
-			return influences.get(type).value;
+			return influences.get(type);
 		else 
 			return 0.0;
 	}
@@ -33,7 +32,7 @@ public class Influence {
 	 * @param value
 	 */
 	public void setInfluence(InfluenceType type, double value){
-		influences.put(type, new MutableDouble(value));
+		influences.put(type, value);
 	}
 	
 	/**
@@ -41,19 +40,20 @@ public class Influence {
 	 * @return
 	 */
 	public double getTotalInfluence(){
-		float result = 1f;
-		for(MutableDouble f : influences.values()){
-			if(f != null) result += f.value;
+		double result = 1;
+		for(Double d : influences.values()){
+			if(d != null) result += d;
 		}
-		return result > 1 ? result : 1f;
+		return result > 1 ? result : 1;
 	}
 	
 	/**
 	 * Adds the buffs to the influence. (Should only be called once a day or so)
 	 */
-	private void update(){
+	public void update(){
 		for(InfluenceBuff buff : buffs.toArray(new InfluenceBuff[buffs.size()])){
-			influences.put(buff.getType(), new MutableDouble(getInfluence(buff.getType()) + buff.getBuff()));
+			double d = getInfluence(buff.getType());
+			influences.put(buff.getType(), d + buff.getBuff());
 			if(buff.getUntil().isBefore(Instant.now())){
 				buffs.remove(buff);
 			}

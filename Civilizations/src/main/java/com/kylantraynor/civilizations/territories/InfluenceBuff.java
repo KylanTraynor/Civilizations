@@ -47,4 +47,20 @@ public class InfluenceBuff {
 	public String getLabel() {
 		return label;
 	}
+	
+	@Override
+	public String toString(){
+		return String.format("%s|%f|%s|\"%s\"", type.toString(), buff, until.toString(), label);
+	}
+	
+	public static InfluenceBuff parse(String s){
+		if(!s.matches(".+\\|.+\\|.+\\|\".+\"")) return null;
+		String[] sss = s.split("\"");
+		String label = sss[1];
+		String[] ss = s.split("\\|");
+		InfluenceType type = InfluenceType.valueOf(ss[0]);
+		float buff = Float.parseFloat(ss[1]);
+		Instant until = Instant.parse(ss[2]);
+		return new InfluenceBuff(type, buff, label, until);
+	}
 }

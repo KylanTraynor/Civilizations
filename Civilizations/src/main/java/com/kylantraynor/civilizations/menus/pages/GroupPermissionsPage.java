@@ -106,7 +106,7 @@ public class GroupPermissionsPage implements MenuPage {
 						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE, player, false));
 		return permissionsButton;
 	}
 

@@ -111,7 +111,7 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				if(set != null){
-					if(!set.hasPermission(PermissionType.MANAGE_PLOTS, null, (Player) sender)){
+					if(!ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, (Player) sender, false)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
 						return true;
 					}

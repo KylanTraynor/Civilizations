@@ -40,6 +40,7 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
+import com.kylantraynor.civilizations.managers.SettlementManager;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -87,9 +88,23 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	public Plot(Shape shape, Settlement settlement){
 		super();
-		//this.setProtection(new Protection(settlement.getProtection()));
 		this.getProtection().add(shape);
 		setSettlement(settlement);
+		CacheManager.plotListChanged = true;
+		setChanged(true);
+	}
+	
+	public Plot(String name, List<Shape> shapes){
+		super();
+		this.setName(name);
+		this.getProtection().setShapes(shapes);
+		CacheManager.plotListChanged = true;
+		setChanged(true);
+	}
+	
+	public Plot(Shape shape){
+		super();
+		this.getProtection().add(shape);
 		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
@@ -126,7 +141,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		switch(getPlotType()){
 		case BANK:
 			return "bank";
-		case BLACKSMITH:
+		case SMITHY:
 			return "hammer";
 		case CONSTRUCTIONSITE:
 			return "construction";
@@ -221,10 +236,8 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(getSettlement() == null && getPlotType() != PlotType.CROPFIELD){
 			Settlement s = Settlement.getClosest(getProtection().getCenter());
 			if(s.canMergeWith(getProtection().getShapes().get(0))){
-				setSettlement(s);
+				SettlementManager.addPlot(s, this);
 			}
-		} else if(getSettlement() != null && getPlotType() == PlotType.CROPFIELD){
-			getSettlement().removePlot(this);
 		}
 		if(!getIcon().isEmpty()){
 			DynmapHook.updateMap(this);
@@ -284,22 +297,18 @@ public class Plot extends Group implements Rentable, HasInventory {
 		}
 	}
 	/**
-	 * Sets the settlement this plot belongs to.
+	 * Sets the settlement this plot belongs to, but does not
+	 * update the settlement's plots list.
 	 * @param settlement
 	 */
+	@Deprecated
 	public void setSettlement(Settlement settlement) {
-		Settlement oldSettlement = getSettlement();
-		if(oldSettlement != null){
-			oldSettlement.removePlot(this);
-		}
 		getSettings().setSettlement(settlement);
-		if(getSettlement() != null){
-			getSettlement().addPlot(this);
-			this.getProtection().setParent(getSettlement().getProtection());
+		if(settlement != null){
+			getProtection().setParent(settlement.getProtection());
 		} else {
-			this.getProtection().setParent(null);
+			getProtection().setParent(null);
 		}
-		setChanged(true);
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.

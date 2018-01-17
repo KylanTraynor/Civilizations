@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
@@ -53,7 +54,7 @@ public class GroupManagePage implements MenuPage {
 						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
-		}, group.hasPermission(PermissionType.MANAGE, null, player));
+		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE, player, false));
 		return manageButton;
 	}
 

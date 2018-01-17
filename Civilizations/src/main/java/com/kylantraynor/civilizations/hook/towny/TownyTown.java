@@ -29,6 +29,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.GroupTarget;
@@ -284,14 +285,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 	
 	@Override
-	public boolean addMember(OfflinePlayer p){
+	public boolean addMember(EconomicEntity p){
 		return false;
-	}
-	
-	@Override
-	public boolean hasPermission(PermissionType perm, Block b, Player player){
-		return true;
-		//return getProtection().hasPermission(player, perm);
 	}
 	
 	public void removeUnusedTownyPerms(){

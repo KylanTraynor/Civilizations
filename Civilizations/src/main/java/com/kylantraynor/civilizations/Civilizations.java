@@ -32,6 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.eclipse.jetty.server.Server;
 
+import com.kylantraynor.civilizations.commands.CommandAccount;
 import com.kylantraynor.civilizations.commands.CommandAnswer;
 import com.kylantraynor.civilizations.commands.CommandBlueprint;
 import com.kylantraynor.civilizations.commands.CommandCamp;
@@ -383,6 +384,8 @@ public class Civilizations extends JavaPlugin{
 		
 		this.getCommand("Plot").setExecutor(new CommandPlot());
 		this.getCommand("Stall").setExecutor(new CommandStall());
+		
+		this.getCommand("Account").setExecutor(new CommandAccount());
 		
 		if(TownyHook.isActive()){
 			this.getCommand("TownyTown").setExecutor(new CommandTownyTown());

@@ -43,3 +43,7 @@ commands:
     description: Access all blueprint commands.
     permission: civilizations.blueprint
     aliases: [bp]
+  account:
+    description: Access the account commands.
+    permission: civilizations.account
+    aliases: [civaccount,civacc]

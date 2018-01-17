@@ -176,15 +176,15 @@ public class Settlement extends Group implements HasBuilder{
 		setChanged(true);
 	}
 	/**
-	 * Adds a plot to this settlement.
+	 * Adds a plot to this settlement but does not update the plot itself.
 	 * @param p
 	 * @return true if the plot has been added, false otherwise.
 	 */
+	@Deprecated
 	public boolean addPlot(Plot p){
 		if(this.plots.contains(p)){
 			return false;
 		} else {
-			p.getProtection().setParent(this.getProtection());
 			this.plots.add(p);
 			getProtection().hullNeedsUpdate();
 			setChanged(true);
@@ -192,14 +192,14 @@ public class Settlement extends Group implements HasBuilder{
 		}
 	}
 	/**
-	 * Removes a plot from this settlement.
+	 * Removes a plot from this settlement but does not update the plot itself.
 	 * @param p
 	 * @return true if the plot has been remove, false otherwise.
 	 */
+	@Deprecated
 	public boolean removePlot(Plot p){
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
-			p.getProtection().setParent(null);
 			getProtection().hullNeedsUpdate();
 			setChanged(true);
 			return true;

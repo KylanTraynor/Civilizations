@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.players.CivilizationsCharacter;
 
 /**
  * Represents an entity which can own a balance and take part in transactions.
@@ -165,6 +166,7 @@ public class EconomicEntity {
 	
 	/**
 	 * Gets the {@link EconomicEntity} associated to the given {@link UUID}.
+	 * If none is found, creates one with the given {@link UUID}.
 	 * @param id as {@link UUID}
 	 * @return {@link EconomicEntity}
 	 */
@@ -174,5 +176,14 @@ public class EconomicEntity {
 			e = new EconomicEntity(id);
 		}
 		return e;
+	}
+	/**
+	 * Gets the {@link EconomicEntity} associated to the given {@link UUID}.
+	 * If none is found, returns {@link Null}.
+	 * @param id as {@link UUID}
+	 * @return {@link EconomicEntity}
+	 */
+	public static EconomicEntity getOrNull(UUID id) {
+		return entities.get(id.toString());
 	}
 }

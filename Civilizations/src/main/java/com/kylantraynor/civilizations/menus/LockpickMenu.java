@@ -28,7 +28,6 @@ public class LockpickMenu extends Menu{
 	private int linesTop = 2;
 	private Inventory top;
 	private Inventory bottom;
-	private Player player;
 	private int currentHighlight = 0;
 
 	public LockpickMenu(LockpickSession s){
@@ -58,7 +57,7 @@ public class LockpickMenu extends Menu{
 	 */
 	@Override
 	public synchronized void update(){
-		ButtonManager.clearButtons(player);
+		ButtonManager.clearButtons(getPlayer());
 		currentHighlight = (currentHighlight + 1) % 9;
 		
 		this.top.clear();
@@ -66,17 +65,17 @@ public class LockpickMenu extends Menu{
 		
 		for(int i = 0; i < 9; i++){
 			if(i == currentHighlight){
-				top.setItem(pos(i, 0), new Button(player, Material.GOLD_BLOCK, " ", new ArrayList<String>(), null, true));
+				top.setItem(pos(i, 0), new Button(getPlayer(), Material.GOLD_BLOCK, " ", new ArrayList<String>(), null, true));
 			} else if(i == code){
-				top.setItem(pos(i, 0), new Button(player, Material.LAPIS_BLOCK, " ", new ArrayList<String>(), null, true));
+				top.setItem(pos(i, 0), new Button(getPlayer(), Material.LAPIS_BLOCK, " ", new ArrayList<String>(), null, true));
 			} else {
-				top.setItem(pos(i, 0), new Button(player, Material.IRON_BLOCK, " ", new ArrayList<String>(), null, true));
+				top.setItem(pos(i, 0), new Button(getPlayer(), Material.IRON_BLOCK, " ", new ArrayList<String>(), null, true));
 			}
 		}
 		
 		top.setItem(pos(8,1), getPickButton());
 		top.setItem(pos(0,1), getPickingLevelButton());
-		player.updateInventory();
+		getPlayer().updateInventory();
 		/*
 		BukkitRunnable bk = new BukkitRunnable(){
 			@Override
@@ -87,16 +86,16 @@ public class LockpickMenu extends Menu{
 			}
 		};
 		*/
-		if(MenuManager.getMenus().get(player) != null){
-			PlayerData pd = PlayerData.get(player.getUniqueId());
+		if(MenuManager.getMenus().get(getPlayer()) != null){
+			PlayerData pd = PlayerData.get(getPlayer().getUniqueId());
 			BukkitRunnable br = new BukkitRunnable(){
 				@Override
 				public void run() {
 					BukkitRunnable b = new BukkitRunnable(){
 						@Override
 						public void run() {
-							if(MenuManager.getMenus().get(player) != null){
-								((LockpickMenu)MenuManager.getMenus().get(player)).update();
+							if(MenuManager.getMenus().get(getPlayer()) != null){
+								((LockpickMenu)MenuManager.getMenus().get(getPlayer())).update();
 							};
 						}
 					};
@@ -127,11 +126,11 @@ public class LockpickMenu extends Menu{
 	 */
 	public Button getPickButton(){
 		List<String> lore = new ArrayList<String>();
-		Button mainButton = new Button(player, Material.GOLD_BLOCK, "Pick", lore, new BukkitRunnable(){
+		Button mainButton = new Button(getPlayer(), Material.GOLD_BLOCK, "Pick", lore, new BukkitRunnable(){
 
 			@Override
 			public void run() {
-				((LockpickMenu)MenuManager.getMenus().get(player)).tryPick();
+				((LockpickMenu)MenuManager.getMenus().get(getPlayer())).tryPick();
 			}
 			
 		}, true);
@@ -145,27 +144,27 @@ public class LockpickMenu extends Menu{
 	 */
 	public Button getPickingLevelButton(){
 		List<String> lore = new ArrayList<String>();
-		PlayerData pd = PlayerData.get(player.getUniqueId());
+		PlayerData pd = PlayerData.get(getPlayer().getUniqueId());
 		lore.add("Exp: " + pd.getSkillLevelExp("Lock Picking") + "/" + pd.getSkillExpToNextLevel("Lock Picking"));
-		Button mainButton = new Button(player, Material.EMERALD_BLOCK, "Lock Picking Level", lore, null, true);
-		mainButton.setAmount(PlayerData.get(player.getUniqueId()).getSkillLevel("Lock Picking"));
+		Button mainButton = new Button(getPlayer(), Material.EMERALD_BLOCK, "Lock Picking Level", lore, null, true);
+		mainButton.setAmount(PlayerData.get(getPlayer().getUniqueId()).getSkillLevel("Lock Picking"));
 		return mainButton;
 	}
 	
 	protected void tryPick() {
 		if(isValidPick()){
-			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
+			PlayerData.get(getPlayer().getUniqueId()).giveSkillExperience("Lock Picking", 1);
 			if(session.getStage() == 1){
-				LockManager.removePickFromInventory(player.getInventory(), 1);
+				LockManager.removePickFromInventory(getPlayer().getInventory(), 1);
 				session.end();
 				this.close();
 			}
 			session.passStage();
 		} else {
-			LockManager.removePickFromInventory(player.getInventory(), 1);
-			player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-			PlayerData.get(player.getUniqueId()).giveSkillExperience("Lock Picking", 1);
-			if(!player.getInventory().containsAtLeast(LockManager.getLockpick(1), 1)){
+			LockManager.removePickFromInventory(getPlayer().getInventory(), 1);
+			getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+			PlayerData.get(getPlayer().getUniqueId()).giveSkillExperience("Lock Picking", 1);
+			if(!getPlayer().getInventory().containsAtLeast(LockManager.getLockpick(1), 1)){
 				session.end();
 				this.close();
 			} else {
@@ -174,25 +173,9 @@ public class LockpickMenu extends Menu{
 		}
 	}
 	
-	/**
-	 * Opens this view to the given player at the given page.
-	 * @param player
-	 * @param p
-	 */
-	public void open(Player player){
-		this.player = player;
-		update();
-		player.openInventory(this);
-	}
-	
 	@Override
 	public Inventory getBottomInventory() {
 		return bottom;
-	}
-
-	@Override
-	public HumanEntity getPlayer() {
-		return player;
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.events.CampCreateEvent;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.House;
@@ -133,15 +134,15 @@ public class GroupManager {
 	}
 	
 	private static void loadPlots() {
-		loadDirectory(PlotType.KEEP, Civilizations.getPlotDirectory(PlotType.KEEP));
-		loadDirectory(PlotType.MARKETSTALL, Civilizations.getPlotDirectory(PlotType.MARKETSTALL));
-		loadDirectory(PlotType.HOUSE, Civilizations.getPlotDirectory(PlotType.HOUSE));
-		loadDirectory(PlotType.WAREHOUSE, Civilizations.getPlotDirectory(PlotType.WAREHOUSE));
-		loadDirectory(PlotType.CROPFIELD, Civilizations.getPlotDirectory(PlotType.CROPFIELD));
-		loadDirectory(PlotType.BANK, Civilizations.getPlotDirectory(PlotType.BANK));
+		loadPlotDirectory(PlotType.KEEP, Civilizations.getPlotDirectory(PlotType.KEEP));
+		loadPlotDirectory(PlotType.MARKETSTALL, Civilizations.getPlotDirectory(PlotType.MARKETSTALL));
+		loadPlotDirectory(PlotType.HOUSE, Civilizations.getPlotDirectory(PlotType.HOUSE));
+		loadPlotDirectory(PlotType.WAREHOUSE, Civilizations.getPlotDirectory(PlotType.WAREHOUSE));
+		loadPlotDirectory(PlotType.CROPFIELD, Civilizations.getPlotDirectory(PlotType.CROPFIELD));
+		loadPlotDirectory(PlotType.BANK, Civilizations.getPlotDirectory(PlotType.BANK));
 	}
 
-	private static void loadDirectory(PlotType type, File directory){
+	private static void loadPlotDirectory(PlotType type, File directory){
 		if(directory.exists()){
 			Civilizations.log("INFO", "Loading " + type.toString() + "...");
 			for(File f : directory.listFiles()){
@@ -254,7 +255,7 @@ public class GroupManager {
 		Bukkit.getPluginManager().callEvent(event);
 		if(!event.isCancelled()){
 			Camp camp = new Camp(l);
-			camp.addMember(p);
+			camp.addMember(EconomicEntity.get(p.getUniqueId()));
 			return camp;
 		}
 		return null;

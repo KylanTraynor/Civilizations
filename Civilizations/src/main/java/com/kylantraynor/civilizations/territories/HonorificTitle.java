@@ -1,35 +1,34 @@
 package com.kylantraynor.civilizations.territories;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.settings.HonorificTitleSettings;
 
-public class HonorificTitle {
-	
-	private static Map<UUID, HonorificTitle> all = new HashMap<UUID, HonorificTitle>();
-	private HonorificTitleSettings settings = new HonorificTitleSettings();
-	
+public class HonorificTitle extends Group {
 	public String getName() {
 		return getSettings().getName();
 	}
+	
+	public void initSettings(){
+		setSettings(new HonorificTitleSettings());
+	}
 
 	public HonorificTitleSettings getSettings(){
-		return settings;
+		return (HonorificTitleSettings) super.getSettings();
 	}
 	
 	public HonorificTitle(String name){
+		super();
 		getSettings().setName(name);
-		all.put(getSettings().getUniqueId(), this);
-	}
-	
-	public HonorificTitle(HonorificTitleSettings settings){
-		this.settings = settings;
-		all.put(getSettings().getUniqueId(), this);
 	}
 
 	public static HonorificTitle get(UUID id) {
-		return all.get(id);
+		for(Group g : Group.getList()){
+			if(g instanceof HonorificTitle && g.getUniqueId().equals(id)){
+				return (HonorificTitle) g;
+			}
+		}
+		return null;
 	}
 }
