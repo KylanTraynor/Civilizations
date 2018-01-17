@@ -212,11 +212,11 @@ public class Group extends EconomicEntity{
 		return false;
 	}
 	/**
-	 * Checks if the given player is a member of this group.
-	 * @param player
+	 * Checks if the given {@linkplain OfflinePlayer} is a member of this {@linkplain Group}.
+	 * @param player as {@link OfflinePlayer}
 	 * @return true if the player is a member, false otherwise.
 	 */
-	public boolean isMember(Player player){
+	public boolean isMember(OfflinePlayer player){
 		boolean result = false;
 		result = result || getMembers().contains(player.getUniqueId());
 		result = result || getMembers().contains(CivilizationsAccount.get(player.getUniqueId()).getCurrentCharacterId());
