@@ -109,6 +109,10 @@ public class CivilizationsCharacter extends EconomicEntity {
 	public Influence getInfluence(){
 		return influence;
 	}
+	
+	public void setInfluence(Influence influence) {
+		this.influence = influence;
+	}
 
 	public Location getLocation() {
 		return location;

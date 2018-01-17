@@ -2,9 +2,7 @@ package com.kylantraynor.civilizations.settings;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +14,7 @@ import com.kylantraynor.civilizations.Utils;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.players.CivilizationsCharacter;
 import com.kylantraynor.civilizations.players.CivilizationsCharacter.Gender;
+import com.kylantraynor.civilizations.territories.Influence;
 
 public class AccountSettings extends YamlConfiguration{
 	
@@ -29,6 +28,7 @@ public class AccountSettings extends YamlConfiguration{
 	private static final String CHARACTERINVENTORY = "Characters.%s.Inventory";
 	private static final String CHARACTERARMOR = "Characters.%s.Armor";
 	private static final String CHARACTERENDERCHEST = "Characters.%s.EnderChest";
+	private static final String CHARACTERINFLUENCE = "Characters.%s.Influence";
 	
 	public UUID playerId;
 	public UUID currentCharacter;
@@ -75,6 +75,7 @@ public class AccountSettings extends YamlConfiguration{
 		set(String.format(CHARACTERINVENTORY, cc.getUniqueId().toString()), cc.getInventory().getContents());
 		set(String.format(CHARACTERARMOR, cc.getUniqueId().toString()), cc.getInventory().getArmorContents());
 		set(String.format(CHARACTERENDERCHEST, cc.getUniqueId().toString()), cc.getEnderChest().getContents());
+		set(String.format(CHARACTERINFLUENCE, cc.getUniqueId().toString()), cc.getInfluence().toString());
 	}
 	
 	public CivilizationsCharacter getCharacter(UUID id){
@@ -95,6 +96,7 @@ public class AccountSettings extends YamlConfiguration{
 		cc.getInventory().setContents(contents);
 		cc.getInventory().setArmorContents(armor);
 		cc.getEnderChest().setContents(enderChest);
+		cc.setInfluence(Influence.parse(this.getString(String.format(CHARACTERINFLUENCE, id.toString()))));
 		return cc;
 	}
 

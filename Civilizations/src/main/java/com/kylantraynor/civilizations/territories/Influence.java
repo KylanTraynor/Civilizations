@@ -62,6 +62,42 @@ public class Influence {
 	
 	
 	public void addBuff(InfluenceType type, float buff, String label, Instant until){
-		buffs.add(new InfluenceBuff(type, buff, label, until));
+		addBuff(new InfluenceBuff(type, buff, label, until));
+	}
+	
+	private void addBuff(InfluenceBuff buff) {
+		buffs.add(buff);
+	}
+
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("TOTAL 5");
+		sb.append("\n" + InfluenceType.LEGITIMACY.toString()+":"+getInfluence(InfluenceType.LEGITIMACY));
+		sb.append("\n" + InfluenceType.MILITARY.toString()+":"+getInfluence(InfluenceType.MILITARY));
+		sb.append("\n" + InfluenceType.DIPLOMATIC.toString()+":"+getInfluence(InfluenceType.DIPLOMATIC));
+		sb.append("\n" + InfluenceType.CULTURAL.toString()+":"+getInfluence(InfluenceType.CULTURAL));
+		sb.append("\n" + InfluenceType.COMMERCIAL.toString()+":"+getInfluence(InfluenceType.COMMERCIAL));
+		sb.append("\nBUFFS");
+		for(InfluenceBuff b : buffs){
+			sb.append("\n" + b.toString());
+		}
+		return sb.toString();
+	}
+	
+	public static Influence parse(String string) {
+		String[] lines = string.split("\n");
+		int types = Integer.parseInt(lines[0].split("\\s")[1]);
+		Influence result = new Influence();
+		for(int i = 1; i < 1 + types; i++){
+			String[] ss = lines[i].split("\\:");
+			InfluenceType t = InfluenceType.valueOf(ss[0]);
+			double value = Double.parseDouble(ss[1]);
+			result.setInfluence(t, value);
+		}
+		for(int i = 1 + types + 1; i < lines.length; i++){
+			result.addBuff(InfluenceBuff.parse(lines[i]));
+		}
+		return result;
 	}
 }

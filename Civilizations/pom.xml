@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kylantraynor</groupId>
   <artifactId>Civilizations</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <name>Civilizations</name>
   <description>Plugin making it possible to create entire Civilizations.</description>
   <build>
@@ -208,16 +208,6 @@
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.12-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>craftbukkit</artifactId>
-				<version>1.12-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
 				<groupId>org.maxgamer</groupId>
 				<artifactId>QuickShop</artifactId>
 				<version>0.9.34</version>
@@ -230,7 +220,12 @@
 			<dependency>
 				<groupId>org.spigotmc</groupId>
 				<artifactId>spigot-api</artifactId>
-				<version>1.12.1-R0.1-SNAPSHOT</version>
+				<version>1.12.2-R0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bukkit</groupId>
+				<artifactId>craftbukkit</artifactId>
+				<version>1.12.2-R0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
