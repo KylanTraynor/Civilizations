@@ -113,16 +113,11 @@
     	<!--Spigot API-->
     	<dependency>
            <groupId>org.spigotmc</groupId>
-           <artifactId>spigot-api</artifactId>
+           <artifactId>spigot</artifactId>
            <scope>provided</scope>
     	</dependency>
     	<!--Bukkit API-->
     	<!--CraftBukkit-->
-    	<dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <scope>provided</scope>
-    	</dependency>
     	<!-- World Border -->
     	<dependency>
     		<groupId>com.wimbli</groupId>
@@ -194,11 +189,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.kylantraynor</groupId>
-				<artifactId>DraggyRPG</artifactId>
-				<version>0.0.21</version>
-			</dependency>
-			<dependency>
-				<groupId>com.kylantraynor</groupId>
 				<artifactId>LivelyWorld</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
@@ -213,13 +203,13 @@
 				<version>0.0.4-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.spigotmc</groupId>
-				<artifactId>spigot-api</artifactId>
-				<version>1.12.2-R0.1-SNAPSHOT</version>
+				<groupId>com.kylantraynor</groupId>
+				<artifactId>DraggyRPG</artifactId>
+				<version>0.0.21</version>
 			</dependency>
 			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>craftbukkit</artifactId>
+				<groupId>org.spigotmc</groupId>
+				<artifactId>spigot</artifactId>
 				<version>1.12.2-R0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
