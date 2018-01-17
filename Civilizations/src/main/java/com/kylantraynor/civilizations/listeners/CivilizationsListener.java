@@ -10,13 +10,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.players.CivilizationsCharacter;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Protection;
 
@@ -104,7 +108,18 @@ public class CivilizationsListener implements Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event){
-		CivilizationsAccount ca = 
+	public void onPlayerJoin(PlayerJoinEvent event){
+		CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
+		CivilizationsCharacter cc = ca.getCurrentCharacter();
+		if(cc != null){
+			event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+		} else {
+			event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event){
+		CivilizationsAccount.logout(event.getPlayer());
 	}
 }
