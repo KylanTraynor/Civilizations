@@ -186,6 +186,28 @@ public class Group extends EconomicEntity{
 	 */
 	public void setMembers(List<UUID> members) { this.getSettings().setMembers(members); }
 	/**
+	 * Adds the given {@linkplain OfflinePlayer} to the list of members of this {@linkplain Group}.
+	 * @param member
+	 * @return true if the player wasn't already in the list, false otherwise.
+	 */
+	public boolean addMember(OfflinePlayer member){
+		CivilizationsAccount account = CivilizationsAccount.get(member.getUniqueId());
+		if(account.getCurrentCharacterId() != null){
+			if(getMembers().contains(account.getCurrentCharacterId())) return false;
+		} else {
+			if(getMembers().contains(account.getPlayerId())) return false;
+		}
+		List<UUID> members = getMembers();
+		if(account.getCurrentCharacterId() != null){
+			members.add(account.getCurrentCharacterId());
+		} else {
+			members.add(account.getPlayerId());
+		}
+		setMembers(members);
+		return true;
+	}
+	
+	/**
 	 * Adds the given entity to the list of members of this group.
 	 * @param member
 	 * @return true if the player wasn't already in the list, false otherwise.
@@ -217,10 +239,12 @@ public class Group extends EconomicEntity{
 	 * @return true if the player is a member, false otherwise.
 	 */
 	public boolean isMember(OfflinePlayer player){
-		boolean result = false;
-		result = result || getMembers().contains(player.getUniqueId());
-		result = result || getMembers().contains(CivilizationsAccount.get(player.getUniqueId()).getCurrentCharacterId());
-		return result;
+		CivilizationsAccount account = CivilizationsAccount.get(player.getUniqueId());
+		if(account.getCurrentCharacterId() != null){
+			return getMembers().contains(account.getCurrentCharacterId());
+		} else {
+			return getMembers().contains(account.getPlayerId());
+		}
 	}
 	/**
 	 * Checks if the given entity is a member of this group.
