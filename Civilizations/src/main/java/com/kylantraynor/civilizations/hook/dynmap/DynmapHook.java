@@ -15,7 +15,6 @@ import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
-import org.fusesource.jansi.Ansi.Color;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.Economy;
@@ -223,7 +222,7 @@ public class DynmapHook {
 		switch(p.getPlotType()){
 		case BANK:
 			break;
-		case BLACKSMITH:
+		case SMITHY:
 			break;
 		case CONSTRUCTIONSITE:
 			break;

@@ -220,7 +220,26 @@ public class Group extends EconomicEntity{
 		return true;
 	}
 	/**
-	 * Removes the given player from the list of members of this group.
+	 * Removes the given {@linkplain OfflinePlayer} from the list of members of this {@linkplain Group}.
+	 * @param member
+	 * @return true if the player has been removed, false otherwise.
+	 */
+	public boolean removeMember(OfflinePlayer member){
+		CivilizationsAccount account = CivilizationsAccount.get(member.getUniqueId());
+		UUID id = account.getPlayerId();
+		if(account.getCurrentCharacterId() != null){
+			id = account.getCurrentCharacterId();
+		}
+		if(getMembers().contains(id)){
+			List<UUID> members = getMembers();
+			members.remove(id);
+			setMembers(members);
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Removes the given entity from the list of members of this group.
 	 * @param member
 	 * @return true if the player has been removed, false otherwise.
 	 */
