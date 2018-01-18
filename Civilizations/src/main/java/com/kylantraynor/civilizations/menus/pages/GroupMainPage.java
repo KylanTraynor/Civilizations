@@ -47,7 +47,7 @@ public class GroupMainPage implements MenuPage {
 		if(!(menu instanceof GroupMenu)) return;
 		GroupMenu gMenu = (GroupMenu) menu;
 		buttons.clear();
-		if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
+		if(gMenu.getTopInventory().getSize() / 9 <= getRows()){
 			return;
 		}
 		if(parentPage != null){

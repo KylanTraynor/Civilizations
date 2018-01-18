@@ -42,7 +42,7 @@ public class AccountMainPage implements MenuPage{
 		if(!(menu instanceof AccountMenu)) return;
 		AccountMenu aMenu = (AccountMenu) menu;
 		buttons.clear();
-		if(aMenu.getBottomInventory().getSize() / 9 <= getRows()){
+		if(aMenu.getTopInventory().getSize() / 9 <= getRows()){
 			return;
 		}
 		buttons.put(aMenu.pos(4, 0), charactersPage.getIconButton());
