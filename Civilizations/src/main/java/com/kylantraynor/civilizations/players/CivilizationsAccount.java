@@ -233,8 +233,8 @@ public class CivilizationsAccount {
 	public static void logout(Player p){
 		CivilizationsAccount ca = accounts.get(p.getUniqueId().toString());
 		if(ca != null){
-			CivilizationsCharacter c = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(ca.currentCharacter);
-			if(c != null) {
+			if(ca.currentCharacter != null){
+				CivilizationsCharacter c = ca.getCurrentCharacter();
 				c.update();
 				ca.settings.setCharacter(c);
 			}
@@ -260,8 +260,8 @@ public class CivilizationsAccount {
 	public static void logoutAllPlayers(){
 		for(CivilizationsAccount ca : accounts.values().toArray(new CivilizationsAccount[0])){
 			if(ca != null){
-				CivilizationsCharacter c = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(ca.currentCharacter);
-				if(c != null) {
+				if(ca.currentCharacter != null){
+					CivilizationsCharacter c = ca.getCurrentCharacter();
 					c.update();
 					ca.settings.setCharacter(c);
 				}
