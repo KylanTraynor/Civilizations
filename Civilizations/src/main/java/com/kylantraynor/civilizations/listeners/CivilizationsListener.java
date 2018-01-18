@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.listeners;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -125,6 +127,35 @@ public class CivilizationsListener implements Listener{
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		CivilizationsAccount.logout(event.getPlayer());
+	}
+	
+	@EventHandler
+	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event){
+		List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
+		if(civsWorld.contains(event.getPlayer().getLocation().getWorld().getName())){
+			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL){
+				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
+				if(ca.getCurrentCharacterId() != null){
+					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your character.");
+				} else {
+					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " account.");
+				}
+			} else if(event.getNewGameMode() == GameMode.SURVIVAL){
+				BukkitRunnable bk = new BukkitRunnable(){
+					@Override
+					public void run() {
+						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
+						CivilizationsCharacter cc = ca.getCurrentCharacter();
+						if(cc != null){
+							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+						} else {
+							event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+						}
+					}
+				};
+				bk.runTaskLater(Civilizations.currentInstance, 10);
+			}
+		}
 	}
 	
 	@EventHandler 
