@@ -116,6 +116,7 @@ public class AccountSettings extends YamlConfiguration{
 	public UUID[] getCharacterIds(){
 		List<UUID> result = new ArrayList<UUID>();
 		ConfigurationSection s = this.getConfigurationSection("Characters");
+		if(s == null) return new UUID[0];
 		Set<String> keys = s.getKeys(false);
 		for(String key : keys){
 			result.add(UUID.fromString(key));
