@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.managers.ButtonManager;
+import com.kylantraynor.civilizations.menus.pages.AccountMainPage;
 import com.kylantraynor.civilizations.menus.pages.MenuPage;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 
@@ -104,6 +105,12 @@ public class AccountMenu extends Menu{
 	@Override
 	public InventoryType getType() {
 		return InventoryType.CHEST;
+	}
+	
+	@Override
+	public void open(Player player){
+		currentPage = new AccountMainPage(player, account);
+		super.open(player);
 	}
 
 }
