@@ -1,6 +1,7 @@
 package com.kylantraynor.civilizations.util;
 
 import java.nio.ByteBuffer;
+import java.text.ParseException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -13,8 +14,10 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -29,6 +32,34 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Util {
 
+	public static Location parseLocation(String s){
+		String[] ss = s.split(",");
+		try {
+			if(ss.length != 6){
+				throw new ParseException("Couldn't parse location from: " + s + ".", 0);
+			} else {
+				World w = Bukkit.getWorld(UUID.fromString(ss[0]));
+				double x = Double.parseDouble(ss[1]);
+				double y = Double.parseDouble(ss[2]);
+				double z = Double.parseDouble(ss[3]);
+				float yaw = Float.parseFloat(ss[4]);
+				float pitch = Float.parseFloat(ss[5]);
+				return new Location(w, x, y, z, yaw, pitch);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NumberFormatException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String locationToString(Location loc){
+		String format = "%s,%d,%d,%d,%f,%f";
+		return String.format(format, loc.getWorld().getUID().toString(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+	}
+	
 	public static UUID asUuid(byte[] bytes) {
 	    ByteBuffer bb = ByteBuffer.wrap(bytes);
 	    long firstLong = bb.getLong();

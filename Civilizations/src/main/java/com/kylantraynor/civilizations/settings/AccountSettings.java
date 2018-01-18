@@ -10,11 +10,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.kylantraynor.civilizations.Utils;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.players.CivilizationsCharacter;
 import com.kylantraynor.civilizations.players.CivilizationsCharacter.Gender;
 import com.kylantraynor.civilizations.territories.Influence;
+import com.kylantraynor.civilizations.util.Util;
 
 public class AccountSettings extends YamlConfiguration{
 	
@@ -71,7 +71,7 @@ public class AccountSettings extends YamlConfiguration{
 		set(String.format(CHARACTERLASTNAME, cc.getUniqueId().toString()), cc.getFamilyName());
 		set(String.format(CHARACTERGENDER, cc.getUniqueId().toString()), cc.getGender().toString());
 		set(String.format(CHARACTERBIRTHDATE, cc.getUniqueId().toString()), cc.getBirthDate().toString());
-		set(String.format(CHARACTERLOCATION, cc.getUniqueId().toString()), Utils.locationToString(cc.getLocation()));
+		set(String.format(CHARACTERLOCATION, cc.getUniqueId().toString()), Util.locationToString(cc.getLocation()));
 		set(String.format(CHARACTERINVENTORY, cc.getUniqueId().toString()), cc.getInventory().getContents());
 		set(String.format(CHARACTERARMOR, cc.getUniqueId().toString()), cc.getInventory().getArmorContents());
 		set(String.format(CHARACTERENDERCHEST, cc.getUniqueId().toString()), cc.getEnderChest().getContents());
@@ -89,7 +89,7 @@ public class AccountSettings extends YamlConfiguration{
 		cc.setFamilyName(this.getString(String.format(CHARACTERLASTNAME, id.toString())));
 		cc.setGender(Gender.valueOf(this.getString(String.format(CHARACTERGENDER, id.toString()))));
 		cc.setBirthDate(Instant.parse(this.getString(String.format(CHARACTERBIRTHDATE, id.toString()))));
-		cc.setLocation(Utils.parseLocation(this.getString(String.format(CHARACTERLOCATION, id.toString()))));
+		cc.setLocation(Util.parseLocation(this.getString(String.format(CHARACTERLOCATION, id.toString()))));
 		ItemStack[] contents = ((List<ItemStack>) this.get(String.format(CHARACTERINVENTORY, id.toString()))).toArray(new ItemStack[0]);
 		ItemStack[] armor = ((List<ItemStack>) this.get(String.format(CHARACTERARMOR, id.toString()))).toArray(new ItemStack[0]);
 		ItemStack[] enderChest = ((List<ItemStack>) this.get(String.format(CHARACTERENDERCHEST, id.toString()))).toArray(new ItemStack[0]);
