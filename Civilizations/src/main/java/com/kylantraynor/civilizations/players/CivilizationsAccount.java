@@ -268,24 +268,27 @@ public class CivilizationsAccount {
 	 * Reloads the data of the account attached to the given {@linkplain Player}
 	 * then adds the resulting {@linkplain CivilizationsAccount} to the list of active accounts.
 	 * @param p as {@link Player}
+	 * @param loadCharacter 
 	 * @return {@link CivilizationsAccount}
 	 */
-	public static CivilizationsAccount login(Player p){
+	public static CivilizationsAccount login(Player p, boolean loadCharacter){
 		CivilizationsAccount ac = get(p.getUniqueId());
-		if(ac.getCurrentCharacterId() == null){
-			Location loc = ac.settings.getBaseLocation();
-			ItemStack[] inventory = ac.settings.getBaseInventory();
-			ItemStack[] armor = ac.settings.getBaseArmor();
-			ItemStack[] ec = ac.settings.getBaseEnderChest();
-			if(loc != null && inventory != null && armor != null && ec != null){
-				p.teleport(loc, TeleportCause.PLUGIN);
-				p.getInventory().setContents(inventory);
-				p.getInventory().setArmorContents(armor);
-				p.getEnderChest().setContents(ec);
+		if(loadCharacter){
+			if(ac.getCurrentCharacterId() == null){
+				Location loc = ac.settings.getBaseLocation();
+				ItemStack[] inventory = ac.settings.getBaseInventory();
+				ItemStack[] armor = ac.settings.getBaseArmor();
+				ItemStack[] ec = ac.settings.getBaseEnderChest();
+				if(loc != null && inventory != null && armor != null && ec != null){
+					p.teleport(loc, TeleportCause.PLUGIN);
+					p.getInventory().setContents(inventory);
+					p.getInventory().setArmorContents(armor);
+					p.getEnderChest().setContents(ec);
+				}
+			} else {
+				CivilizationsCharacter current = ac.getCurrentCharacter();
+				current.restore();
 			}
-		} else {
-			CivilizationsCharacter current = ac.getCurrentCharacter();
-			current.restore();
 		}
 		return ac;
 	}

@@ -115,18 +115,24 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
-		CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
-		CivilizationsCharacter cc = ca.getCurrentCharacter();
-		if(cc != null){
-			event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
-		} else {
-			event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
+			if(event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
+			CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), false);
+			CivilizationsCharacter cc = ca.getCurrentCharacter();
+			if(cc != null){
+				event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+			} else {
+				event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+			}
 		}
 	}
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
-		CivilizationsAccount.logout(event.getPlayer());
+		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
+			if(event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
+			CivilizationsAccount.logout(event.getPlayer());
+		}
 	}
 	
 	@EventHandler
@@ -145,7 +151,7 @@ public class CivilizationsListener implements Listener{
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
-						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
+						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), true);
 						CivilizationsCharacter cc = ca.getCurrentCharacter();
 						if(cc != null){
 							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
@@ -171,7 +177,7 @@ public class CivilizationsListener implements Listener{
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
-						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
+						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), true);
 						CivilizationsCharacter cc = ca.getCurrentCharacter();
 						if(cc != null){
 							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
