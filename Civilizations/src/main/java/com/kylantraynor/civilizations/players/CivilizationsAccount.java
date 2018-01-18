@@ -34,7 +34,7 @@ public class CivilizationsAccount {
 	
 	private UUID currentCharacter;
 	private UUID playerId;
-	private AccountSettings settings;
+	private AccountSettings settings = new AccountSettings();
 	
 	public CivilizationsAccount(Player p){
 		this(p.getUniqueId());
