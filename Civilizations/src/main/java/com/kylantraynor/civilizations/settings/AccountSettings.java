@@ -78,6 +78,7 @@ public class AccountSettings extends YamlConfiguration{
 		set(String.format(CHARACTERINFLUENCE, cc.getUniqueId().toString()), cc.getInfluence().toString());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public CivilizationsCharacter getCharacter(UUID id){
 		if(id == null) throw new NullPointerException();
 		CivilizationsCharacter cc = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(id);
