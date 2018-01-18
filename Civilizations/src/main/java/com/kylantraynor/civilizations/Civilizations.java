@@ -126,7 +126,7 @@ public class Civilizations extends JavaPlugin{
 	 */
 	private static Map<World, InfluenceMap> influenceMaps = new HashMap<World, InfluenceMap>();
 	
-	private static Location newCharacterSpawn = Bukkit.getWorld("world").getSpawnLocation();
+	private static Location newCharacterSpawn;
 	/**
 	 * Returns the main listener of Civilizations.
 	 * @return CivilizationsListener
@@ -174,7 +174,7 @@ public class Civilizations extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		currentInstance = this;
-		
+		newCharacterSpawn = Bukkit.getWorld("world").getSpawnLocation();
 		saveDefaultConfig();
 		
 		File f = new File(this.getDataFolder(), "config.yml");
