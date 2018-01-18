@@ -10,8 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import ru.tehkode.permissions.PermissionManager;
-
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Blueprint;
 import com.kylantraynor.civilizations.builder.HasBuilder;
