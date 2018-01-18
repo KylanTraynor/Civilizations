@@ -252,4 +252,22 @@ public class CivilizationsAccount {
 	public static CivilizationsAccount login(Player p){
 		return get(p.getUniqueId());
 	}
+	
+	/**
+	 * Saves the data of {@linkplain CivilizationsAccount} and current
+	 * {@linkplain CivilizationsCharacter} for all the active accounts.
+	 */
+	public static void logoutAllPlayers(){
+		for(CivilizationsAccount ca : accounts.values().toArray(new CivilizationsAccount[0])){
+			if(ca != null){
+				CivilizationsCharacter c = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(ca.currentCharacter);
+				if(c != null) {
+					c.update();
+					ca.settings.setCharacter(c);
+				}
+				ca.save();
+			}
+			accounts.remove(ca.getPlayerId().toString());
+		}
+	}
 }

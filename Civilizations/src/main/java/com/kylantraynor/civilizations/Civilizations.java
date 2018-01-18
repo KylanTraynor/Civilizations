@@ -69,6 +69,7 @@ import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.managers.SelectionManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
@@ -495,6 +496,7 @@ public class Civilizations extends JavaPlugin{
 			GroupManager.cancelAllBuilds();
 		
 		GroupManager.updateAllGroups();
+		CivilizationsAccount.logoutAllPlayers();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}
