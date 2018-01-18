@@ -121,6 +121,16 @@
 		<groupId>net.milkbowl.vault</groupId>
 		<artifactId>VaultAPI</artifactId>
 		<scope>provided</scope>
+		<exclusions>
+			<exclusion>
+				<artifactId>bukkit</artifactId>
+				<groupId>org.bukkit</groupId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	<dependency>
+		<groupId>fr.rhaz</groupId>
+		<artifactId>webservers</artifactId>
 	</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -184,6 +194,11 @@
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>VaultAPI</artifactId>
 				<version>1.5</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.rhaz</groupId>
+				<artifactId>webservers</artifactId>
+				<version>1.4.9</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
