@@ -71,8 +71,10 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public Location getBaseLocation(){
+		String s = this.getString(BASELOCATION);
+		if(s == null) return null;
 		try{
-			return Util.parseLocation(this.getString(BASELOCATION));
+			return Util.parseLocation(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
