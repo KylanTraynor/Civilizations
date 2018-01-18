@@ -135,6 +135,7 @@ public class CivilizationsListener implements Listener{
 		if(civsWorld.contains(event.getPlayer().getLocation().getWorld().getName())){
 			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL){
 				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
+				if(ca == null) return;
 				if(ca.getCurrentCharacterId() != null){
 					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your character.");
 				} else {
@@ -182,6 +183,7 @@ public class CivilizationsListener implements Listener{
 				bk.runTaskLater(Civilizations.currentInstance, 10);
 			} else if(isCivsFrom){
 				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
+				if(ca == null) return;
 				if(ca.getCurrentCharacterId() != null){
 					event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world. You have been logged out of your character.");
 				} else {
