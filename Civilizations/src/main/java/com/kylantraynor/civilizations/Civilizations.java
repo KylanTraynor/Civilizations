@@ -126,6 +126,7 @@ public class Civilizations extends JavaPlugin{
 	 */
 	private static Map<World, InfluenceMap> influenceMaps = new HashMap<World, InfluenceMap>();
 	
+	private static Location newCharacterSpawn = Bukkit.getWorld("world").getSpawnLocation();
 	/**
 	 * Returns the main listener of Civilizations.
 	 * @return CivilizationsListener
@@ -993,5 +994,13 @@ public class Civilizations extends JavaPlugin{
 
 	public Database getDatabase() {
 		return this.database;
+	}
+
+	public static Location getNewCharacterSpawn() {
+		return newCharacterSpawn;
+	}
+
+	public static void setNewCharacterSpawn(Location newCharacterSpawn) {
+		Civilizations.newCharacterSpawn = newCharacterSpawn;
 	}
 }

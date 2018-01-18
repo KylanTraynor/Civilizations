@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.managers.MenuManager;
@@ -211,6 +213,30 @@ public class CivilizationsAccount {
 	}
 	
 	/**
+	 * Saves the data of the current {@linkplain CivilizationsCharacter}
+	 * and of the {@linkplain CivilizationsAccount}, and removes
+	 * it from the list of active accounts.
+	 */
+	public void logout(){
+		if(this.currentCharacter != null){
+			CivilizationsCharacter c = this.getCurrentCharacter();
+			c.update();
+			this.settings.setCharacter(c);
+		} else {
+			OfflinePlayer op = Bukkit.getOfflinePlayer(getPlayerId());
+			if(op.isOnline()){
+				Player p = op.getPlayer();
+				settings.setBaseInventory(p.getInventory().getContents());
+				settings.setBaseArmor(p.getInventory().getArmorContents());
+				settings.setBaseEnderChest(p.getEnderChest().getContents());
+				settings.setBaseLocation(p.getLocation());
+			}
+		}
+		this.save();
+		accounts.remove(playerId.toString());
+	}
+	
+	/**
 	 * Gets the {@linkplain CivilizationsAccount} associated to the given player ID,
 	 * or creates one if none exists.
 	 * @param playerId as {@link UUID}
@@ -230,17 +256,12 @@ public class CivilizationsAccount {
 	 * it from the list of active accounts. 
 	 * @param p as {@link Player}
 	 */
-	public static void logout(Player p){
+	public static CivilizationsAccount logout(Player p){
 		CivilizationsAccount ca = accounts.get(p.getUniqueId().toString());
 		if(ca != null){
-			if(ca.currentCharacter != null){
-				CivilizationsCharacter c = ca.getCurrentCharacter();
-				c.update();
-				ca.settings.setCharacter(c);
-			}
-			ca.save();
+			ca.logout();
 		}
-		accounts.remove(p.getUniqueId().toString());
+		return ca;
 	}
 	
 	/**
@@ -250,7 +271,23 @@ public class CivilizationsAccount {
 	 * @return {@link CivilizationsAccount}
 	 */
 	public static CivilizationsAccount login(Player p){
-		return get(p.getUniqueId());
+		CivilizationsAccount ac = get(p.getUniqueId());
+		if(ac.getCurrentCharacterId() == null){
+			Location loc = ac.settings.getBaseLocation();
+			ItemStack[] inventory = ac.settings.getBaseInventory();
+			ItemStack[] armor = ac.settings.getBaseArmor();
+			ItemStack[] ec = ac.settings.getBaseEnderChest();
+			if(loc != null && inventory != null && armor != null && ec != null){
+				p.teleport(loc, TeleportCause.PLUGIN);
+				p.getInventory().setContents(inventory);
+				p.getInventory().setArmorContents(armor);
+				p.getEnderChest().setContents(ec);
+			}
+		} else {
+			CivilizationsCharacter current = ac.getCurrentCharacter();
+			current.restore();
+		}
+		return ac;
 	}
 	
 	/**
@@ -260,14 +297,8 @@ public class CivilizationsAccount {
 	public static void logoutAllPlayers(){
 		for(CivilizationsAccount ca : accounts.values().toArray(new CivilizationsAccount[0])){
 			if(ca != null){
-				if(ca.currentCharacter != null){
-					CivilizationsCharacter c = ca.getCurrentCharacter();
-					c.update();
-					ca.settings.setCharacter(c);
-				}
-				ca.save();
+				ca.logout();
 			}
-			accounts.remove(ca.getPlayerId().toString());
 		}
 	}
 }

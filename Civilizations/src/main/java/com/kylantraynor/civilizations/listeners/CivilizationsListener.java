@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.listeners;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
@@ -121,5 +125,38 @@ public class CivilizationsListener implements Listener{
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		CivilizationsAccount.logout(event.getPlayer());
+	}
+	
+	@EventHandler 
+	public void onPlayerTeleport(PlayerTeleportEvent event){
+		if(event.getTo().getWorld() != event.getFrom().getWorld()){
+			List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
+			boolean isCivsFrom = civsWorld.contains(event.getFrom().getWorld().getName());
+			boolean isCivsTo = civsWorld.contains(event.getTo().getWorld().getName());
+			if(isCivsTo && isCivsFrom){
+				
+			} else if(isCivsTo){
+				BukkitRunnable bk = new BukkitRunnable(){
+					@Override
+					public void run() {
+						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer());
+						CivilizationsCharacter cc = ca.getCurrentCharacter();
+						if(cc != null){
+							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+						} else {
+							event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+						}
+					}
+				};
+				bk.runTaskLater(Civilizations.currentInstance, 10);
+			} else if(isCivsFrom){
+				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
+				if(ca.getCurrentCharacterId() != null){
+					event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world. You have been logged out of your character.");
+				} else {
+					event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world.");
+				}
+			}
+		}
 	}
 }

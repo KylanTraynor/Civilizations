@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +21,10 @@ public class AccountSettings extends YamlConfiguration{
 	
 	private static final String PLAYERID = "PlayerId";
 	private static final String CURRENTID = "CurrentId";
+	private static final String BASELOCATION = "Base.Location";
+	private static final String BASEINVENTORY = "Base.Inventory";
+	private static final String BASEARMOR = "Base.Armor";
+	private static final String BASEENDERCHEST = "Base.EnderChest";
 	private static final String CHARACTERFIRSTNAME = "Characters.%s.FirstName";
 	private static final String CHARACTERLASTNAME = "Characters.%s.LastName";
 	private static final String CHARACTERGENDER = "Characters.%s.Gender";
@@ -63,6 +68,43 @@ public class AccountSettings extends YamlConfiguration{
 	public void setCurrentId(UUID id){
 		currentCharacter = id;
 		this.set(CURRENTID, id.toString());
+	}
+	
+	public Location getBaseLocation(){
+		try{
+			return Util.parseLocation(this.getString(BASELOCATION));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public void setBaseLocation(Location l){
+		this.set(BASELOCATION, Util.locationToString(l));
+	}
+	
+	public ItemStack[] getBaseInventory(){
+		return ((List<ItemStack>) this.get(BASEINVENTORY)).toArray(new ItemStack[0]);
+	}
+	
+	public void setBaseInventory(ItemStack[] contents){
+		this.set(BASEINVENTORY, contents);
+	}
+	
+	public ItemStack[] getBaseArmor(){
+		return ((List<ItemStack>) this.get(BASEARMOR)).toArray(new ItemStack[0]);
+	}
+	
+	public void setBaseArmor(ItemStack[] contents){
+		this.set(BASEARMOR, contents);
+	}
+	
+	public ItemStack[] getBaseEnderChest(){
+		return ((List<ItemStack>) this.get(BASEENDERCHEST)).toArray(new ItemStack[0]);
+	}
+	
+	public void setBaseEnderChest(ItemStack[] contents){
+		this.set(BASEENDERCHEST, contents);
 	}
 	
 	public void setCharacter(CivilizationsCharacter cc){

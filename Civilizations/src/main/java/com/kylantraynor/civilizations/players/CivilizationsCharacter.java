@@ -10,9 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.territories.HonorificTitle;
@@ -35,7 +37,7 @@ public class CivilizationsCharacter extends EconomicEntity {
 	
 	private CivilizationsAccount account;
 	private CivilizationsCharacter[] parents = new CivilizationsCharacter[2];
-	private Location location;
+	private Location location = Civilizations.getNewCharacterSpawn();
 	private Instant birthday;
 	private List<UUID> marriedTo = new ArrayList<UUID>();
 	private String name = "Jon";
@@ -152,6 +154,18 @@ public class CivilizationsCharacter extends EconomicEntity {
 			inventory.setContents(p.getInventory().getContents());
 			inventory.setArmorContents(p.getInventory().getArmorContents());
 			enderChest.setContents(p.getEnderChest().getContents());
+		}
+	}
+
+	public void restore() {
+		OfflinePlayer op = account.getOfflinePlayer();
+		if(op.isOnline()){
+			Player p = op.getPlayer();
+			
+			p.teleport(location, TeleportCause.PLUGIN);
+			p.getInventory().setContents(inventory.getContents());
+			p.getInventory().setArmorContents(inventory.getArmorContents());
+			p.getEnderChest().setContents(enderChest.getContents());
 		}
 	}
 }
