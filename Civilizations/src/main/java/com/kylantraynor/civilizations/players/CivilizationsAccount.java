@@ -192,7 +192,7 @@ public class CivilizationsAccount {
 		if(!Directory.exists()){
 			Directory.mkdirs();
 		}
-		File f = new File(Directory, this.playerId.toString() + "yml");
+		File f = new File(Directory, this.playerId.toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
