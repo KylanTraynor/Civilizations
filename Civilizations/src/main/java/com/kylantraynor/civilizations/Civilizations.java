@@ -30,7 +30,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.eclipse.jetty.server.Server;
 
 import com.kylantraynor.civilizations.commands.CommandAccount;
 import com.kylantraynor.civilizations.commands.CommandAnswer;
@@ -77,8 +76,6 @@ import com.kylantraynor.civilizations.util.Util;
 import com.kylantraynor.draggydata.AdvancementAPI;
 import com.kylantraynor.draggydata.AdvancementAPI.FrameType;
 import com.kylantraynor.draggydata.AdvancementAPI.TriggerType;
-
-import fr.rhaz.webservers.WebServers.API;
 
 public class Civilizations extends JavaPlugin{
 	
@@ -139,14 +136,14 @@ public class Civilizations extends JavaPlugin{
 		return currentInstance.getConfig();
 	}
 	
-	private static Server webServer;
+	//private static Server webServer;
 	public static boolean useChat = false;
 	public static boolean useDatabase = false;
 	public static boolean useVault = true;
 	
-	public static Server getWebServer(){
+	/*public static Server getWebServer(){
 		return webServer;
-	}
+	}*/
 	/**
 	 * Sends a message to the console with the specified level.
 	 * @param level of the message.
@@ -316,7 +313,7 @@ public class Civilizations extends JavaPlugin{
 		AchievementManager.registerAchievement(createCamp);*/
 	}
 
-	private void startWebServer(int port) throws Exception {
+	/*private void startWebServer(int port) throws Exception {
 		
 		createServerViews();
 		
@@ -327,7 +324,7 @@ public class Civilizations extends JavaPlugin{
 
 	private void createServerViews() {
 		
-	}
+	}*/
 
 	private Listener getMenuListener() {
 		return Civilizations.menuListener;
