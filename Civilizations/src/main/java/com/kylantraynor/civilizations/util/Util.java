@@ -56,8 +56,8 @@ public class Util {
 	}
 	
 	public static String locationToString(Location loc){
-		String format = "%s,%d,%d,%d,%f,%f";
-		return String.format(format, loc.getWorld().getUID().toString(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+		//String format = "%s,%d,%d,%d,%f,%f";
+		return loc.getWorld().getUID().toString() +","+ loc.getX() +","+ loc.getY() +","+ loc.getZ() +","+ loc.getYaw() +","+ loc.getPitch();
 	}
 	
 	public static UUID asUuid(byte[] bytes) {
