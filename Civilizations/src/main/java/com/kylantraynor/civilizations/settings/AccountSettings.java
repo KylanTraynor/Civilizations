@@ -84,7 +84,9 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public ItemStack[] getBaseInventory(){
-		return ((List<ItemStack>) this.get(BASEINVENTORY)).toArray(new ItemStack[0]);
+		List<ItemStack> list = ((List<ItemStack>) this.get(BASEINVENTORY));
+		if(list == null) return null;
+		return list.toArray(new ItemStack[0]);
 	}
 	
 	public void setBaseInventory(ItemStack[] contents){
@@ -92,7 +94,9 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public ItemStack[] getBaseArmor(){
-		return ((List<ItemStack>) this.get(BASEARMOR)).toArray(new ItemStack[0]);
+		List<ItemStack> list = ((List<ItemStack>) this.get(BASEARMOR));
+		if(list == null) return null;
+		return list.toArray(new ItemStack[0]);
 	}
 	
 	public void setBaseArmor(ItemStack[] contents){
@@ -100,7 +104,9 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public ItemStack[] getBaseEnderChest(){
-		return ((List<ItemStack>) this.get(BASEENDERCHEST)).toArray(new ItemStack[0]);
+		List<ItemStack> list = ((List<ItemStack>) this.get(BASEENDERCHEST));
+		if(list == null) return null;
+		return list.toArray(new ItemStack[0]);
 	}
 	
 	public void setBaseEnderChest(ItemStack[] contents){
