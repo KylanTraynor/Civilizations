@@ -41,9 +41,6 @@ public class AccountCharactersPage implements MenuPage {
 		if(!(menu instanceof AccountMenu)) return;
 		AccountMenu aMenu = (AccountMenu) menu;
 		buttons.clear();
-		if(aMenu.getTopInventory().getSize() / 9 <= getRows()){
-			return;
-		}
 		UUID[] ids = account.getCharacterIds();
 		buttons.put(aMenu.pos(0, 0), getNewCharacterButton());
 		for(int i = 0; i < ids.length; i++){

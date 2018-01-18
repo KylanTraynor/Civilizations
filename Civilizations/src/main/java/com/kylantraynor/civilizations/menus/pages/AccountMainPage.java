@@ -34,17 +34,13 @@ public class AccountMainPage implements MenuPage{
 	
 	@Override
 	public int getRows() {
-		return 6;
+		return 2;
 	}
 
 	@Override
 	public void refresh(Menu menu) {
 		if(!(menu instanceof AccountMenu)) return;
 		AccountMenu aMenu = (AccountMenu) menu;
-		buttons.clear();
-		if(aMenu.getTopInventory().getSize() / 9 <= getRows()){
-			return;
-		}
 		buttons.put(aMenu.pos(4, 0), charactersPage.getIconButton());
 	}
 
