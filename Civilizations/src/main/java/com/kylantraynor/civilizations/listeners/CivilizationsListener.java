@@ -135,11 +135,17 @@ public class CivilizationsListener implements Listener{
 		}
 	}
 	
+	public boolean isCivsGameMode(GameMode mode){
+		if(mode == GameMode.SURVIVAL) return true;
+		if(mode == GameMode.SPECTATOR) return true;
+		return false;
+	}
+	
 	@EventHandler
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event){
 		List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
 		if(civsWorld.contains(event.getPlayer().getLocation().getWorld().getName())){
-			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL){
+			if(isCivsGameMode(event.getPlayer().getGameMode()) && !isCivsGameMode(event.getNewGameMode())){
 				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
 				if(ca == null) return;
 				if(ca.getCurrentCharacterId() != null){
@@ -147,7 +153,7 @@ public class CivilizationsListener implements Listener{
 				} else {
 					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " account.");
 				}
-			} else if(event.getNewGameMode() == GameMode.SURVIVAL){
+			} else if(!isCivsGameMode(event.getPlayer().getGameMode()) && isCivsGameMode(event.getNewGameMode())){
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
