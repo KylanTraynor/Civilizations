@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.util.UUID;
+
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.shapes.Hull;
@@ -7,9 +9,8 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class TownyTownProtection extends SettlementProtection {
 
-	public TownyTownProtection(TownyTown town) {
-		super(town);
-		// TODO Auto-generated constructor stub
+	public TownyTownProtection(UUID townId) {
+		super(townId);
 	}
 	
 	@Override

@@ -27,6 +27,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
+import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -40,8 +41,8 @@ public class Keep extends Plot implements FortComponent{
 		super(name.isEmpty() ? "Keep" : name, shapes, settlement);
 	}
 	
-	public Keep() {
-		super();
+	public Keep(PlotSettings settings) {
+		super(settings);
 	}
 
 	public PlotType getPlotType(){

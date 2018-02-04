@@ -16,7 +16,7 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class SettlementProtection extends Protection{
 	protected boolean hullNeedsUpdate;
-	Hull hull;
+	protected Hull hull;
 	
 	public SettlementProtection(UUID settlementId) {
 		super(settlementId);
