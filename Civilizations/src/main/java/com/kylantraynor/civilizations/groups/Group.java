@@ -6,9 +6,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
@@ -48,15 +51,14 @@ import com.kylantraynor.civilizations.settings.GroupSettings;
  */
 public class Group extends EconomicEntity{
 	
-	private static ArrayList<Group> list = new ArrayList<Group>();
-	public static ArrayList<Group> getList() {return list;}
-	public static void setList(ArrayList<Group> list) {Group.list = list;}
+	private static Map<String, Group> all = new HashMap<String, Group>();
+	//private static ArrayList<Group> list = new ArrayList<Group>();
+	public static Collection<Group> getList() {return all.values();}
 	
 	public static Stack<Integer> availableIds = new Stack<Integer>();
 	
 	public static void clearAll(){
-		list.clear();
-		list = null;
+		all.clear();
 	}
 	
 	private int id;
@@ -64,7 +66,6 @@ public class Group extends EconomicEntity{
 	protected Protection protection;
 	private ChatColor chatColor;
 	private GroupSettings settings;
-	private boolean removed;
 	private UUID parent;
 	
 	@Override
@@ -73,26 +74,31 @@ public class Group extends EconomicEntity{
 	public OfflinePlayer getOfflinePlayer(){return null;}
 	
 	public Group(){
-		list.add(this);
-		if(availableIds.size() > 0){
-			this.setId(availableIds.pop());
-		} else {
-			this.setId(list.size() - 1);
-		}
 		initSettings();
 		init();
-		CacheManager.groupListChanged = true;
+		getSettings().setCreationDate(Instant.now());
+		all.put(getUniqueId().toString(), this);
+		setChanged(true);
+	}
+	
+	/**
+	 * Creates a Group using the data in the given {@linkplain GroupSettings} file.
+	 * @param settings
+	 */
+	public Group(GroupSettings settings){
+		this.settings = settings;
+		init();
+		all.put(getUniqueId().toString(), this);
 		setChanged(true);
 	}
 	
 	public void init(){
 		chatColor = ChatColor.WHITE;
 		initProtection();
-		getSettings().setCreationDate(Instant.now());
 	}
 	
 	public void initProtection(){
-		protection = new Protection();
+		protection = new Protection(getUniqueId());
 	}
 	
 	public UUID getUniqueId(){
@@ -139,28 +145,24 @@ public class Group extends EconomicEntity{
 	 */
 	public void setId(int id) {this.id = id;}
 	/**
-	 * Get the group with the given ID.
+	 * Gets the group with the given ID.
+	 * @deprecated Use get(UUID) instead.
 	 * @param id
 	 * @return Group
 	 */
 	public static Group get(int id){
-		for(Group g : list){
+		for(Group g : all.values()){
 			if(g.getId() == id) return g;
 		}
 		return null;
 	}
 	/**
 	 * Gets the group with the given Unique ID.
-	 * @param uid
+	 * @param uid as {@link UUID}
 	 * @return Group
 	 */
 	public static Group get(UUID uid){
-		for(Group g : list){
-			if(g.getSettings().getUniqueId().equals(uid)){
-				return g;
-			}
-		}
-		return null;
+		return all.get(uid.toString());
 	}
 	/**
 	 * Gets the protection of this group.
@@ -312,12 +314,7 @@ public class Group extends EconomicEntity{
 		if(f != null){
 			if(f.exists()) f.delete();
 		}
-		boolean result = list.remove(this);
-		if(result){
-			CacheManager.groupListChanged = true;
-			availableIds.push(this.getId());
-			removed = result;
-		}
+		boolean result = all.remove(getUniqueId().toString()) != null;
 		return result;
 	}
 	/**
@@ -349,6 +346,7 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Loads the data from the file into the given group.
+	 * @deprecated Use the constructor receiving a {@linkplain GroupSettings} instead.
 	 * @param file
 	 * @param group
 	 * @return
@@ -366,6 +364,7 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Do things right after the settings of the group are loaded.
+	 * @deprecated Too confusing, put stuff into the constructor with {@linkplain GroupSettings} instead.
 	 */
 	public void postLoad(){ }
 	/**
@@ -388,7 +387,6 @@ public class Group extends EconomicEntity{
 	 * Updates the group.
 	 */
 	public void update(){
-		if(removed) return;
 		if(isChanged() || getSettings().hasChanged()){
 			try{save();} catch (Exception e) {e.printStackTrace();};
 		}

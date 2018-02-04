@@ -13,7 +13,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 
 public class PlotSettings extends GroupSettings{
 	
-	private Settlement settlement;
+	private UUID settlement;
 	private EconomicEntity owner;
 	private Boolean forRent;
 	private Boolean forSale;
@@ -26,12 +26,12 @@ public class PlotSettings extends GroupSettings{
 	 * Gets the settlement this plot belongs to.
 	 * @return
 	 */
-	public Settlement getSettlement() {
+	public UUID getSettlementId() {
 		if(settlement != null) return settlement;
 		if(this.contains("General.Settlement")){
-			Settlement s = (Settlement) Group.get(UUID.fromString(this.getString("General.Settlement")));
-			if(s != null){
-				settlement = s;
+			UUID id = UUID.fromString(this.getString("General.Settlement"));
+			if(id != null){
+				settlement = id;
 			}
 		}
 		return settlement;
@@ -41,9 +41,9 @@ public class PlotSettings extends GroupSettings{
 	 * Sets the settlement this plot belongs to.
 	 * @param settlement
 	 */
-	public void setSettlement(Settlement settlement) {
+	public void setSettlementId(UUID settlement) {
 		if(settlement != null){
-			this.set("General.Settlement", settlement.getSettings().getUniqueId().toString());
+			this.set("General.Settlement", settlement.toString());
 		} else {
 			this.set("General.Settlement", null);
 		}

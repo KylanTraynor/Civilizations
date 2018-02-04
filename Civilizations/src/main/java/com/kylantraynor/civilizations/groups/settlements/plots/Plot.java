@@ -62,10 +62,16 @@ public class Plot extends Group implements Rentable, HasInventory {
 	private List<Chest> chests;
 	private List<String> waresStrings;
 	
-	//Constructor for reloads from file
-	public Plot(){
-		super();
-		CacheManager.plotListChanged = true;
+	/**
+	 * Reloads the plot from the given {@linkplain PlotSettings}.
+	 * @param settings
+	 */
+	public Plot(PlotSettings settings){
+		super(settings);
+		getProtection().setShapes(settings.getShapes());
+		if(settings.getSettlementId() != null){
+			getProtection().setParentId(settings.getSettlementId());
+		}
 	}
 	
 	public Plot(String name, Shape shape, Settlement settlement){
@@ -107,15 +113,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 		this.getProtection().add(shape);
 		CacheManager.plotListChanged = true;
 		setChanged(true);
-	}
-	
-	@Override
-	public void postLoad(){
-		this.setProtection(new Protection());
-		this.getProtection().setShapes(getSettings().getShapes());
-		if(getSettlement() != null){
-			this.getProtection().setParent(getSettlement().getProtection());
-		}
 	}
 	
 	@Override
@@ -293,21 +290,22 @@ public class Plot extends Group implements Rentable, HasInventory {
 			if(map == null) return null;
 			return (Settlement) map.getInfluentSiteAt(center);
 		} else {
-			return getSettings().getSettlement();
+			return (Settlement) Group.get(getSettings().getSettlementId());
 		}
 	}
 	/**
 	 * Sets the settlement this plot belongs to, but does not
 	 * update the settlement's plots list.
+	 * @deprecated Use {@linkplain SettlementManager#addPlotAndUpdate(Settlement, Plot)} instead.
 	 * @param settlement
 	 */
-	@Deprecated
 	public void setSettlement(Settlement settlement) {
-		getSettings().setSettlement(settlement);
 		if(settlement != null){
-			getProtection().setParent(settlement.getProtection());
+			getSettings().setSettlementId(settlement.getUniqueId());
+			getProtection().setParentId(settlement.getUniqueId());
 		} else {
-			getProtection().setParent(null);
+			getSettings().setSettlementId(null);
+			getProtection().setParentId(null);
 		}
 	}
 	/**

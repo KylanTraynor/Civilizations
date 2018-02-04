@@ -17,7 +17,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -53,10 +55,16 @@ public class TownyHook {
 				Civilizations.log("INFO", "Loading " + t.getName() + ".");
 				try {
 					if(!isTownLoaded(t.getName())){
+						TownyTown town = null;
 						if(uniqueIds.containsKey(t.getName())){
-							new TownyTown(t, uniqueIds.get(t.getName()));
+							town = new TownyTown(t, uniqueIds.get(t.getName()));
 						} else {
-							new TownyTown(t);
+							town = new TownyTown(t);
+						}
+						for(Group g : Group.getList()){
+							if(g instanceof Plot){
+								Plot p = (Plot) g;
+							}
 						}
 					}
 				} catch (Exception e) {

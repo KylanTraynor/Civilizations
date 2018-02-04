@@ -29,7 +29,6 @@ public class SettlementManager {
 	 * @param p as Plot
 	 * @return true if the plot has been added, false otherwise.
 	 */
-	@SuppressWarnings("deprecation")
 	public static boolean addPlot(Settlement s, Plot p){
 		if(p == null) throw new NullPointerException();
 		if(s == null) throw new NullPointerException();

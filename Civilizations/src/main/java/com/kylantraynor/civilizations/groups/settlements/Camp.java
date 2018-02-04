@@ -48,6 +48,12 @@ public class Camp extends Settlement{
 		CacheManager.campListChanged = true;
 	}
 	
+	public Camp(CampSettings settings){
+		super(settings);
+		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
+		this.setDefaultPermissions();
+	}
+	
 	@Override
 	public void postLoad(){
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);

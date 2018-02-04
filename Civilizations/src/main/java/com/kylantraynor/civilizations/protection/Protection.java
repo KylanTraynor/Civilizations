@@ -20,30 +20,43 @@ import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shapes.Sphere;
 
 public class Protection {
-	private Protection parent;
+	private UUID groupId;
+	private UUID parentId;
 	private List<Shape> shapes;
 	private PermissionSet permissionSet;
 	//private List<Rank> ranks;
 	
-	public Protection(){
+	public Protection(UUID groupId){
+		this.groupId = groupId;
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
 		//ranks = new ArrayList<Rank>();
 	}
 	
-	public Protection(Protection parent){
-		this.parent = parent;
+	public Protection(UUID groupId, UUID parentId){
+		this.groupId = groupId;
+		this.parentId = parentId;
 		shapes = new ArrayList<Shape>();
 		permissionSet = new PermissionSet();
 		//ranks = new ArrayList<Rank>();
 	}
 	
-	public void setParent(Protection newParent){
-		this.parent = newParent;
+	public void setParentId(UUID parentId){
+		this.parentId = parentId;
+	}
+	
+	public UUID getParentId(){
+		return this.parentId;
 	}
 	
 	public Protection getParent(){
-		return this.parent;
+		if(this.parentId != null){
+			Group g = Group.get(parentId);
+			if(g != null){
+				return g.getProtection();
+			}
+		}
+		return null;
 	}
 	
 	public void show(final Player p){
@@ -358,9 +371,9 @@ public class Protection {
 	}
 	
 	public void refreshParent(){
-		if(parent != null){
-			if(parent instanceof SettlementProtection){
-				((SettlementProtection) parent).hullNeedsUpdate();
+		if(parentId != null){
+			if(getParent() instanceof SettlementProtection){
+				((SettlementProtection) getParent()).hullNeedsUpdate();
 			}
 		}
 	}
@@ -396,10 +409,6 @@ public class Protection {
 	}
 	
 	public Group getGroup(){
-		for(Group g : Group.getList())
-			if(g.getProtection().equals(this)){
-				return g;
-			}
-		return null;
+		return Group.get(groupId);
 	}
 }

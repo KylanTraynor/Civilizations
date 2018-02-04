@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.protection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 
@@ -15,11 +16,10 @@ import com.kylantraynor.civilizations.shapes.Shape;
 
 public class SettlementProtection extends Protection{
 	protected boolean hullNeedsUpdate;
-	private Settlement settlement;
-	protected Hull hull;
+	Hull hull;
 	
-	public SettlementProtection(Settlement settlement) {
-		this.settlement = settlement;
+	public SettlementProtection(UUID settlementId) {
+		super(settlementId);
 	}
 	
 	public void hullNeedsUpdate(){
@@ -55,13 +55,7 @@ public class SettlementProtection extends Protection{
 	}
 	
 	public Settlement getSettlement(){
-		if(settlement != null) return settlement;
-		for(Settlement s : CacheManager.getSettlementList())
-			if(s.getProtection().equals(this)){
-				settlement = s;
-				return settlement;
-			}
-		return null;
+		return (Settlement) getGroup();
 	}
 	
 	@Override

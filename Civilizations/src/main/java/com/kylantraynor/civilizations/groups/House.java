@@ -73,6 +73,10 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		CacheManager.houseListChanged = true;
 	}
 	
+	public House(HouseSettings settings){
+		super(settings);
+	}
+	
 	public House() {
 		super();
 		CacheManager.houseListChanged = true;

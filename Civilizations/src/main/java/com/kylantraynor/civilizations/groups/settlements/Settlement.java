@@ -87,6 +87,10 @@ public class Settlement extends Group implements HasBuilder{
 		CacheManager.settlementListChanged = true;
 	}
 	
+	public Settlement(SettlementSettings settings){
+		super(settings);
+	}
+	
 	@Override
 	public void init(){
 		super.init();
@@ -95,7 +99,7 @@ public class Settlement extends Group implements HasBuilder{
 	
 	@Override
 	public void initProtection(){
-		super.protection = new SettlementProtection(this);
+		super.protection = new SettlementProtection(this.getUniqueId());
 	}
 	
 	@Override
@@ -170,7 +174,7 @@ public class Settlement extends Group implements HasBuilder{
 	public void setPlots(List<Plot> plts) {
 		this.plots = plts;
 		for(Plot p : plots){
-			p.getProtection().setParent(this.getProtection());
+			p.getProtection().setParentId(this.getUniqueId());
 		}
 		getProtection().hullNeedsUpdate();
 		setChanged(true);

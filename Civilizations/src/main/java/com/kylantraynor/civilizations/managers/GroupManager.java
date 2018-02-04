@@ -26,10 +26,13 @@ import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
-import com.kylantraynor.civilizations.groups.settlements.plots.fort.Keep;
 import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
+import com.kylantraynor.civilizations.settings.CampSettings;
+import com.kylantraynor.civilizations.settings.HouseSettings;
+import com.kylantraynor.civilizations.settings.PlotSettings;
+import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class GroupManager {
@@ -38,10 +41,6 @@ public class GroupManager {
 	
 	public static Group createGroup(){
 		return new Group();
-	}
-	
-	public static Settlement createSettlement(){
-		return null;
 	}
 	
 	public static void loadAll(){
@@ -57,14 +56,19 @@ public class GroupManager {
 		File settlementDir = Civilizations.getSettlementDirectory();
 		if(settlementDir.exists()){
 			for(File f : settlementDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(Civilizations.isClearing() ){
-					Civilizations.log("INFO", "Cleared file " + f.getName());
-					f.delete();
-					continue;
+				try {
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					if(Civilizations.isClearing() ){
+						Civilizations.log("INFO", "Cleared file " + f.getName());
+						f.delete();
+						continue;
+					}
+					SettlementSettings ss = new SettlementSettings();
+					ss.load(f);
+					new Settlement(ss);
+				} catch (IOException | InvalidConfigurationException e) {
+					e.printStackTrace();
 				}
-				load(f, new Settlement());
-				f.delete();
 			}
 		}
 	}
@@ -83,8 +87,15 @@ public class GroupManager {
 		}
 	}
 	
+	/**
+	 * Makes sure that all the plots declaring a settlement are
+	 * indeed in the plot list of that settlement.
+	 * @deprecated This method is weird and should be avoided.
+	 */
 	public static void ensurePlotsAreLinked(){
-		for(Plot p : CacheManager.getPlotList()){
+		for(Group g : Group.getList()){
+			if(!(g instanceof Plot)) continue;
+			Plot p = (Plot) g;
 			if(p.getSettlement() != null){
 				//Will not add the plot if it's already included, so it's all good.
 				p.getSettlement().addPlot(p);
@@ -94,6 +105,7 @@ public class GroupManager {
 
 	/**
 	 * Loads the data from the file into the given group.
+	 * @deprecated Use {@link Group#Group(GroupSettings)}
 	 * @param file
 	 * @param group
 	 * @return
@@ -149,8 +161,10 @@ public class GroupManager {
 				try{
 					if(!f.getName().split("\\.")[1].equalsIgnoreCase("yml")) continue;
 					Civilizations.log("INFO", "Loading " + type.toString() + " from file: " + f.getPath());
-					Plot p = new Plot();
-					load(f, p);
+					PlotSettings settings = new PlotSettings();
+					settings.load(f);
+					Plot p = new Plot(settings);
+					//load(f, p);
 					p.setPersistent(true);
 					p.setPlotType(type);
 					//f.delete();
@@ -161,6 +175,7 @@ public class GroupManager {
 		}
 	}
 
+	@Deprecated
 	public static Settlement loadSettlement(String path){
 		Civilizations.log("INFO", "Getting settlement from " + path);
 		if(path.contains("TOWNY: ")){
@@ -197,14 +212,19 @@ public class GroupManager {
 		File campDir = Civilizations.getCampDirectory();
 		if(campDir.exists()){
 			for(File f : campDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(Civilizations.isClearing() ){
-					Civilizations.log("INFO", "Cleared file " + f.getName());
-					f.delete();
-					continue;
+				try {
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					if(Civilizations.isClearing() ){
+						Civilizations.log("INFO", "Cleared file " + f.getName());
+						f.delete();
+						continue;
+					}
+					CampSettings cs = new CampSettings();
+					cs.load(f);
+					new Camp(cs);
+				} catch (IOException | InvalidConfigurationException e) {
+					e.printStackTrace();
 				}
-				load(f, new Camp());
-				f.delete();
 			}
 		}
 	}
@@ -213,14 +233,19 @@ public class GroupManager {
 		File houseDir = Civilizations.getHouseDirectory();
 		if(houseDir.exists()){
 			for(File f : houseDir.listFiles()){
-				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				if(Civilizations.isClearing() ){
-					Civilizations.log("INFO", "Cleared file " + f.getName());
-					f.delete();
-					continue;
+				try {
+					if(!f.getName().split("\\.")[1].equals("yml")) continue;
+					if(Civilizations.isClearing() ){
+						Civilizations.log("INFO", "Cleared file " + f.getName());
+						f.delete();
+						continue;
+					}
+					HouseSettings settings = new HouseSettings();
+					settings.load(f);
+					new House(settings);
+				} catch (IOException | InvalidConfigurationException e) {
+					e.printStackTrace();
 				}
-				load(f, new House());
-				f.delete();
 			}
 		}
 	}
