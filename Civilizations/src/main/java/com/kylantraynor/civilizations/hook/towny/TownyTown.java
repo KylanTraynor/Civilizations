@@ -93,7 +93,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	@Override
 	public void initProtection(){
-		super.protection = new TownyTownProtection(this);
+		super.protection = new TownyTownProtection(this.getUniqueId());
 	}
 	
 	@Override
