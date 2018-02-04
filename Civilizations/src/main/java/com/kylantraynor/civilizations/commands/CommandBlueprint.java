@@ -158,7 +158,7 @@ public class CommandBlueprint implements CommandExecutor{
 			}
 			
 			HasBuilder settlement = null;
-			for(Settlement g : CacheManager.getSettlementList()){
+			for(Settlement g : Settlement.getAll()){
 				if(!(g instanceof HasBuilder)) continue;
 				if(g.canMergeWith((Shape)selection)){
 					settlement = (HasBuilder) g;

@@ -19,6 +19,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.groups.ActionType;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -45,7 +46,6 @@ public class Camp extends Settlement{
 	
 	public Camp() {
 		super();
-		CacheManager.campListChanged = true;
 	}
 	
 	public Camp(CampSettings settings){
@@ -58,7 +58,6 @@ public class Camp extends Settlement{
 	public void postLoad(){
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setDefaultPermissions();
-		CacheManager.campListChanged = true;
 		super.postLoad();
 	}
 	
@@ -67,7 +66,6 @@ public class Camp extends Settlement{
 		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setExpireOn(Instant.now().plus(campDuration, ChronoUnit.HOURS));
 		this.setDefaultPermissions();
-		CacheManager.campListChanged = true;
 	}
 
 	@Override
@@ -152,7 +150,6 @@ public class Camp extends Settlement{
 				if(h.isValid()){
 					if(GroupManager.convertToSettlement(this) != null){
 						this.softRemove();
-						CacheManager.campListChanged = true;
 					}
 					return;
 				}
@@ -162,7 +159,6 @@ public class Camp extends Settlement{
 	
 	@Override
 	public boolean remove(){
-		CacheManager.campListChanged = true;
 		for(Plot p : getPlots()){
 			p.remove();
 		}
@@ -245,7 +241,7 @@ public class Camp extends Settlement{
 	 * @return Camp or null if no camp could be found.
 	 */
 	public static Camp getCampAt(Location location) {
-		for(Camp c : getCampList()){
+		for(Camp c : getAll()){
 			if(c.protects(location)){
 				return c;
 			}
@@ -274,12 +270,17 @@ public class Camp extends Settlement{
 		getSettings().setExpiryDate(expireOn);
 	}
 	/**
-	 * Gets the CacheManagerd list of camps.
-	 * @return List<Camp> of camps.
-	 * @see CacheManager
-	 */
-	public static List<Camp> getCampList(){
-		return CacheManager.getCampList();
+	 * Gets a list of all camps registered on the server.
+	 * @return {@link List} of {@link Camp Camps} extracted from {@link Group#getList()}.
+	 **/
+	public static List<Camp> getAll(){
+		List<Camp> result = new ArrayList<Camp>();
+		for(Group g : Group.getList()){
+			if(g instanceof Camp){
+				result.add((Camp) g);
+			}
+		}
+		return result;
 	}
 	/**
 	 * Gets the file where this camp is saved.
@@ -305,7 +306,7 @@ public class Camp extends Settlement{
 	public static Camp getClosest(Location l){
 		Double distanceSquared = null;
 		Camp closest = null;
-		for(Camp s : getCampList()){
+		for(Camp s : getAll()){
 			if(distanceSquared == null){
 				closest = s;
 			} else if(distanceSquared > l.distanceSquared(s.getLocation())) {

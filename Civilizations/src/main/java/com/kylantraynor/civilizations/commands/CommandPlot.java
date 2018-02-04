@@ -65,7 +65,7 @@ public class CommandPlot implements CommandExecutor {
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
 				Protection protection = null;
-				for(Plot plot : CacheManager.getPlotList()){
+				for(Plot plot : Plot.getAll()){
 					if(plot.getProtection().intersect(s)){
 						plotsIntersecting++;
 						protection = plot.getProtection();
@@ -95,7 +95,7 @@ public class CommandPlot implements CommandExecutor {
 				Shape s = (Shape) SelectionManager.getSelection((Player) sender);
 				
 				// Checks if the shape intersects with another plot.
-				for(Plot plot : CacheManager.getPlotList()){
+				for(Plot plot : Plot.getAll()){
 					if(plot.getProtection().intersect(s)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
 						return true;

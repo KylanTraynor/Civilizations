@@ -47,6 +47,7 @@ import com.kylantraynor.civilizations.commands.CommandStall;
 import com.kylantraynor.civilizations.database.Database;
 import com.kylantraynor.civilizations.database.SQLite;
 import com.kylantraynor.civilizations.economy.Economy;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
@@ -529,10 +530,12 @@ public class Civilizations extends JavaPlugin{
 			//Try getting a plot
 			Plot plot = null;
 			Protection newProt = null;
-			for(Plot p : CacheManager.getPlotList()){
-				if(p.protects(l)){
-					plot = p;
-					newProt = p.getProtection();
+			for(Group g : Group.getList()){
+				if(g instanceof Plot){
+					if(((Plot) g).protects(l)){
+						plot = (Plot) g;
+						newProt = plot.getProtection();
+					}
 				}
 			}
 			Settlement s = null;

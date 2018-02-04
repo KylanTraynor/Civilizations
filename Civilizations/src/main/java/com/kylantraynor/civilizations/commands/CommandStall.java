@@ -25,7 +25,7 @@ public class CommandStall implements CommandExecutor{
 		
 		Civilizations.DEBUG("Trying to find Stall.");
 		Plot stall = null;
-		for(Plot s : CacheManager.getPlotList()){
+		for(Plot s : Plot.getAll()){
 			if(s.getPlotType() != PlotType.MARKETSTALL) continue;
 			if(s.protects(player.getLocation())){
 				stall = s;

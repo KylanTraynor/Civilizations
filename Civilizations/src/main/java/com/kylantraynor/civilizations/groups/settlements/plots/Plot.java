@@ -79,7 +79,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 		this.setName(name);
 		this.getProtection().add(shape);
 		setSettlement(settlement);
-		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -88,7 +87,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 		this.setName(name);
 		this.getProtection().setShapes(shapes);
 		setSettlement(settlement);
-		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -96,7 +94,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 		super();
 		this.getProtection().add(shape);
 		setSettlement(settlement);
-		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -104,14 +101,12 @@ public class Plot extends Group implements Rentable, HasInventory {
 		super();
 		this.setName(name);
 		this.getProtection().setShapes(shapes);
-		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
 	public Plot(Shape shape){
 		super();
 		this.getProtection().add(shape);
-		CacheManager.plotListChanged = true;
 		setChanged(true);
 	}
 	
@@ -250,7 +245,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
 			getProtection().hide(p);
 		}
-		CacheManager.plotListChanged = true;
 		return super.remove();
 	}
 	
@@ -311,7 +305,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	/**
 	 * Gets an interactive info panel adapted to the given player.
 	 * @param player Context
-	 * @return FancyMessage
+	 * @return {@link FancyMessage}
 	 */
 	@Override
 	public FancyMessage getInteractiveInfoPanel(Player player) {
@@ -393,7 +387,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 	
 	/**
-	 * Checks if this plot protects the given location.
+	 * Checks if this {@linkplain Plot} protects the given {@linkplain Location}.
 	 * @param location
 	 * @return true if the location is protected, false otherwise.
 	 */
@@ -401,13 +395,32 @@ public class Plot extends Group implements Rentable, HasInventory {
 		return getProtection().isInside(location);
 	}
 	
+	/**
+	 * Gets a list of all plots registered on the server.
+	 * @return {@link List} of {@link Plot Plots} extracted from {@link Group#getList()}.
+	 */
 	public static List<Plot> getAll(){
-		return CacheManager.getPlotList();
+		List<Plot> result = new ArrayList<Plot>();
+		for(Group g : Group.getList()){
+			if(g instanceof Plot){
+				result.add((Plot) g);
+			}
+		}
+		return result;
 	}
 	
+	/**
+	 * Gets the {@linkplain Plot} protecting the given {@linkplain Location} if it exists.
+	 * @param location
+	 * @return {@link Plot} or {@link Null}.
+	 */
 	public static Plot getAt(Location location){
-		for(Plot p : getAll()){
-			if(p.protects(location)) return p;
+		for(Group g : Group.getList()){
+			if(g instanceof Plot){
+				if(((Plot) g).protects(location)){
+					return (Plot) g;
+				}
+			}
 		}
 		return null;
 	}

@@ -78,13 +78,11 @@ public class Settlement extends Group implements HasBuilder{
 	
 	public Settlement() {
 		super();
-		CacheManager.settlementListChanged = true;
 	}
 	
 	public Settlement(Location l){
 		super();
 		setLocation(l);
-		CacheManager.settlementListChanged = true;
 	}
 	
 	public Settlement(SettlementSettings settings){
@@ -290,7 +288,6 @@ public class Settlement extends Group implements HasBuilder{
 		for(Plot p : getPlots()){
 			p.remove();
 		}
-		CacheManager.settlementListChanged = true;
 		return super.remove();
 	}
 	/**
@@ -301,16 +298,20 @@ public class Settlement extends Group implements HasBuilder{
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
 			getProtection().hide(p);
 		}
-		CacheManager.settlementListChanged = true;
 		return super.remove();
 	}
 	/**
 	 * Gets the list of all the settlements.
-	 * @return Returns the cached list.
-	 * @see Cache
+	 * @return {@link List} of {@link Settlement Settlements} extracted from {@link Group#getList()}.
 	 */
-	public static List<Settlement> getSettlementList() {
-		return CacheManager.getSettlementList();
+	public static List<Settlement> getAll() {
+		List<Settlement> result = new ArrayList<Settlement>();
+		for(Group g : Group.getList()){
+			if(g instanceof Settlement){
+				result.add((Settlement) g);
+			}
+		}
+		return result;
 	}
 	/**
 	 * Checks if the given location is under the protection of this settlement.
@@ -330,7 +331,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return Settlement or null if no settlement could be found.
 	 */
 	public static Settlement getAt(Location location) {
-		for(Settlement s : getSettlementList()){
+		for(Settlement s : getAll()){
 			if(s.protects(location)) return s;
 		}
 		return null;
@@ -341,7 +342,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public static boolean isProtected(Location l){
-		for(Settlement s : getSettlementList()){
+		for(Settlement s : getAll()){
 			if(s.protects(l)){
 				return true;
 			}
@@ -356,7 +357,7 @@ public class Settlement extends Group implements HasBuilder{
 	public static Settlement getClosest(Location l){
 		Double distanceSquared = null;
 		Settlement closest = null;
-		for(Settlement s : getSettlementList()){
+		for(Settlement s : getAll()){
 			if(distanceSquared == null){
 				closest = s;
 			} else if(distanceSquared > s.distanceSquared(l)) {
