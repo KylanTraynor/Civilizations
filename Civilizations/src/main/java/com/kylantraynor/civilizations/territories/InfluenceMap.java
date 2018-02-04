@@ -40,7 +40,7 @@ public class InfluenceMap {
 	}
 
 	public void generateFull(){
-		for(Settlement s : Settlement.getSettlementList())
+		for(Settlement s : Settlement.getAll())
 			if(s instanceof InfluentSite){
 				if(s.getLocation().getWorld() == world)
 					influentSites.put(

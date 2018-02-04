@@ -27,7 +27,7 @@ public class TownyListener implements Listener{
 	
 	@EventHandler
 	public void onDeleteTown(DeleteTownEvent event){
-		for(TownyTown t : CacheManager.getTownyTownList()){
+		for(TownyTown t : TownyTown.getAllTownyTowns()){
 			if(t.getName().equalsIgnoreCase(event.getTownName())){
 				t.remove();
 			}
@@ -48,7 +48,7 @@ public class TownyListener implements Listener{
 			e.printStackTrace();
 		}
 		if(town != null){
-			for(TownyTown t : TownyTown.getTownyTownList()){
+			for(TownyTown t : TownyTown.getAllTownyTowns()){
 				if(t.getName().equalsIgnoreCase(town.getName())){
 					try {
 						t.addTownyPlot(tb);
@@ -66,7 +66,7 @@ public class TownyListener implements Listener{
 		Town town = event.getTown();
 		WorldCoord w = event.getWorldCoord();
 		if(town != null){
-			for(TownyTown t : TownyTown.getTownyTownList()){
+			for(TownyTown t : TownyTown.getAllTownyTowns()){
 				if(t.getName().equalsIgnoreCase(town.getName())){
 					try {
 						t.removeTownyPlot(w.getTownBlock());

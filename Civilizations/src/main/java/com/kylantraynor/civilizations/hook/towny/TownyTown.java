@@ -31,6 +31,7 @@ import com.kylantraynor.civilizations.builder.HasBuilder;
 import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.TaxInfo;
+import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.protection.GroupTarget;
 import com.kylantraynor.civilizations.protection.PermissionTarget;
@@ -55,7 +56,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	static TownyTown get(String string) {
-		for(TownyTown t : getTownyTownList()){
+		for(TownyTown t : getAllTownyTowns()){
 			if(t.getName().equalsIgnoreCase(string)){
 				return t;
 			}
@@ -72,17 +73,10 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	static final int NOTIFICATION_SPAM_DELAY = 30;
 	private List<Shape> townyPlots = new ArrayList<Shape>();
 	private boolean payTaxes;
-	/**
-	 * Gets the CacheManagerd list of Towns from Towny.
-	 * @return List<TownyTown> of Towns.
-	 */
-	public static List<TownyTown> getTownyTownList(){
-		return CacheManager.getTownyTownList();
-	}
+
 
 	public TownyTown(Location l) {
 		super(l);
-		CacheManager.townyTownListChanged = true;
 	}
 	
 	@Override
@@ -126,7 +120,6 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}
 		}
 		this.getProtection().hullNeedsUpdate();
-		CacheManager.townyTownListChanged = true;
 	}
 	public TownyTown(Town t, UUID uuid) throws TownyException {
 		this(t);
@@ -263,7 +256,6 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	@Override
 	public boolean remove(){
-		CacheManager.townyTownListChanged = true;
 		return super.remove();
 	}
 	
@@ -482,5 +474,19 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			return super.calculateTax(taxInfo);
 		}
 		return 0;
+	}
+	
+	/**
+	 * Gets the list of all the Towny towns registered on the server.
+	 * @return {@link List} of {@link TownyTown TownyTowns} extracted from {@link Group#getList()}.
+	 */
+	public static List<TownyTown> getAllTownyTowns(){
+		List<TownyTown> result = new ArrayList<TownyTown>();
+		for(Group g : Group.getList()){
+			if(g instanceof TownyTown){
+				result.add((TownyTown) g);
+			}
+		}
+		return result;
 	}
 }

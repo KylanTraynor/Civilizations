@@ -241,7 +241,7 @@ public class Camp extends Settlement{
 	 * @return Camp or null if no camp could be found.
 	 */
 	public static Camp getCampAt(Location location) {
-		for(Camp c : getAll()){
+		for(Camp c : getAllCamps()){
 			if(c.protects(location)){
 				return c;
 			}
@@ -273,7 +273,7 @@ public class Camp extends Settlement{
 	 * Gets a list of all camps registered on the server.
 	 * @return {@link List} of {@link Camp Camps} extracted from {@link Group#getList()}.
 	 **/
-	public static List<Camp> getAll(){
+	public static List<Camp> getAllCamps(){
 		List<Camp> result = new ArrayList<Camp>();
 		for(Group g : Group.getList()){
 			if(g instanceof Camp){
@@ -306,7 +306,7 @@ public class Camp extends Settlement{
 	public static Camp getClosest(Location l){
 		Double distanceSquared = null;
 		Camp closest = null;
-		for(Camp s : getAll()){
+		for(Camp s : getAllCamps()){
 			if(distanceSquared == null){
 				closest = s;
 			} else if(distanceSquared > l.distanceSquared(s.getLocation())) {

@@ -65,7 +65,7 @@ public class DraggyRPGHook {
 	}
 
 	public void loadLevelCenters() {
-		for(Settlement s : CacheManager.getSettlementList()){
+		for(Settlement s : Settlement.getAll()){
 			int number = s.getMembers().size();
 			if(number > 0){
 				createTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
@@ -75,7 +75,7 @@ public class DraggyRPGHook {
 	}
 	
 	public void updateLevelCenters(){
-		for(Settlement s : CacheManager.getSettlementList()){
+		for(Settlement s : Settlement.getAll()){
 			if(levelCenters.containsKey(s.getUniqueId().toString())){
 				int number = s.getMembers().size();
 				if(number > 0){

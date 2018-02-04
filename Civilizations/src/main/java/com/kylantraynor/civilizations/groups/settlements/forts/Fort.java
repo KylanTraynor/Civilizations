@@ -22,21 +22,15 @@ public class Fort extends Settlement implements BannerOwner{
 		super(l);
 		this.house = house;
 		setName("Fort");
-		CacheManager.fortListChanged = true;
 	}
 	
 	public Fort() {
 		super();
-		CacheManager.fortListChanged = true;
 	}
 
 	@Override
 	public String getType(){
 		return "Fort";
-	}
-	
-	public static List<Fort> getAll(){
-		return CacheManager.getFortList();
 	}
 
 	@Override
@@ -68,21 +62,6 @@ public class Fort extends Settlement implements BannerOwner{
 
 	public void setInfluence(int influence) {
 		this.influence = influence;
-	}
-	
-	@Override
-	public void update(){
-		super.update();
-	}
-	
-	/**
-	 * Destroys this settlement.
-	 * @return true if the settlement has been removed, false otherwise.
-	 */
-	@Override
-	public boolean remove(){
-		CacheManager.fortListChanged = true;
-		return super.remove();
 	}
 	
 	/**

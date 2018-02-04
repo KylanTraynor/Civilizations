@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 	
 	public static FancyMessage getHousesListChatMessage(){
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("Noble Houses", ChatColor.GRAY));
-		List<House> houses = CacheManager.getHouseList();
+		List<House> houses = getAll();
 		houses.sort(getInfluenceComparator());
 		
 		for(int i = houses.size() - 1; i >= 0; i--){
@@ -70,7 +71,6 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		super();
 		setName(name);
 		setBanner(b);
-		CacheManager.houseListChanged = true;
 	}
 	
 	public House(HouseSettings settings){
@@ -79,7 +79,6 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 	
 	public House() {
 		super();
-		CacheManager.houseListChanged = true;
 	}
 	
 	@Override
@@ -110,11 +109,17 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		getSettings().setBanner(newBanner);
 	}
 	/**
-	 * Gets the list of all Houses.
-	 * @return
+	 * Gets the list of all Houses registered on the server.
+	 * @return {@link List} of {@link House Houses} from {@link Group#getList()}.
 	 */
 	public static List<House> getAll(){
-		return CacheManager.getHouseList();
+		List<House> result = new ArrayList<House>();
+		for(Group g: Group.getList()){
+			if(g instanceof House){
+				result.add((House) g);
+			}
+		}
+		return result;
 	}
 	/**
 	 * Gets the house the given banner represents.
@@ -154,15 +159,6 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 			}
 		}
 		return null;
-	}
-	/**
-	 * Destroys this house.
-	 * @return true if the house has been removed, false otherwise.
-	 */
-	@Override
-	public boolean remove(){
-		CacheManager.houseListChanged = true;
-		return super.remove();
 	}
 	/**
 	 * Gets an interactive info panel of this group.

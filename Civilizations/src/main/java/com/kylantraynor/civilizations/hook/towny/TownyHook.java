@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -97,7 +98,7 @@ public class TownyHook {
 	}
 	
 	public static boolean isTownLoaded(String name){
-		for(TownyTown t : CacheManager.getTownyTownList()){
+		for(TownyTown t : TownyTown.getAllTownyTowns()){
 			if(t.getName().equalsIgnoreCase(name)){
 				return true;
 			}
@@ -107,7 +108,7 @@ public class TownyHook {
 	
 	public TownyTown loadTownyTown(String name){
 		if(isActive()){
-			for(TownyTown t : CacheManager.getTownyTownList()){
+			for(TownyTown t : TownyTown.getAllTownyTowns()){
 				if(t.getName().equalsIgnoreCase(name)){
 					return t;
 				}

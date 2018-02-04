@@ -44,7 +44,7 @@ public class Nation extends GroupContainer<Settlement> implements BannerOwner{
 	//===============================================
 	
 	public static Nation get(Banner banner) {
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g instanceof Nation){
 				if(((Nation) g).getBanner().isSimilar(banner)) return (Nation) g;
 			}
@@ -53,7 +53,7 @@ public class Nation extends GroupContainer<Settlement> implements BannerOwner{
 	}
 	
 	public static Nation get(String name){
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g instanceof Nation){
 				if(g.getName().equalsIgnoreCase(name)) return (Nation) g;
 			}
@@ -62,7 +62,7 @@ public class Nation extends GroupContainer<Settlement> implements BannerOwner{
 	}
 	
 	public static Nation get(Player p) {
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g instanceof Nation){
 				if(g.isMember(p)) return (Nation) g;
 			}

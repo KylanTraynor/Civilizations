@@ -254,7 +254,7 @@ public class GroupManager {
 	 * Update each individual group in the group list.
 	 */
 	public static void updateAllGroups(){
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			g.update();
 		}
 		if(HookManager.getDraggyRPG() != null){
@@ -315,7 +315,7 @@ public class GroupManager {
 	 * Updates all the builders, in all concerned groups.
 	 */
 	public static void updateAllBuilders() {
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g instanceof HasBuilder){
 				((HasBuilder) g).getBuilder().update();
 			}
@@ -326,7 +326,7 @@ public class GroupManager {
 	 * Cancels all the builds in all builders.
 	 */
 	public static void cancelAllBuilds() {
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g instanceof HasBuilder){
 				((HasBuilder) g).getBuilder().clearProjects();
 			}
@@ -342,7 +342,7 @@ public class GroupManager {
 	}
 	
 	public static void updateForEconomy() {
-		for(Group g : CacheManager.getGroupList()){
+		for(Group g : Group.getList()){
 			if(g != null){
 				// Lets the parent (or the server) tax this group.
 				if(!(g instanceof Camp)){
@@ -353,11 +353,6 @@ public class GroupManager {
 	}
 
 	public static Group get(UUID groupId) {
-		for(Group g : CacheManager.getGroupList()){
-			if(g.getUniqueId().equals(groupId)){
-				return g;
-			}
-		}
-		return null;
+		return Group.get(groupId);
 	}
 }
