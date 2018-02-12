@@ -44,7 +44,6 @@ public class Builder {
 	}
 	
 	public void update(){
-		Civilizations.DEBUG("Checking if buildprojects are empty.");
 		if(getProjects().isEmpty()){
 			currentProject = null;
 			return;
