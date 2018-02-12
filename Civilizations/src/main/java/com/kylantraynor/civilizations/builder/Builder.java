@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
@@ -43,6 +44,7 @@ public class Builder {
 	}
 	
 	public void update(){
+		Civilizations.DEBUG("Checking if buildprojects are empty.");
 		if(getProjects().isEmpty()){
 			currentProject = null;
 			return;
@@ -53,6 +55,7 @@ public class Builder {
 			removeProject(currentProject);
 			warnProjectComleted(currentProject);
 			currentProject = null;
+			Civilizations.DEBUG("Project was completed");
 			return;
 		}
 		/* The builder nees to check what block needs to be built.
@@ -61,6 +64,7 @@ public class Builder {
 		 * It will try to build.
 		 */
 		
+		Civilizations.DEBUG("Trying to build project.");
 		while(true){
 			MaterialAndData plan = currentProject.getNext();
 			// If there is no plan, then the build is likely one or was remove.
@@ -72,6 +76,7 @@ public class Builder {
 			if(!currentProject.nextRequiresSupply()){
 				currentProject.buildNext();
 				this.getSettings().setChanged(true);
+				Civilizations.DEBUG("Did not require supplies. Built.");
 			} else {
 				ItemStack supply = getSupplies(plan.toItemStack());
 				if(supply == null){

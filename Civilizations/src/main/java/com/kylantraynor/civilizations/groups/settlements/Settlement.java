@@ -557,7 +557,7 @@ public class Settlement extends Group implements HasBuilder{
 	@Override
 	public boolean canBuild() {
 		for(Plot p : getPlots()){
-			if(p.getPlotType() == PlotType.HOUSE){
+			if(p.getPlotType() == PlotType.WAREHOUSE){
 				return true;
 			}
 		}
