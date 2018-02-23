@@ -77,8 +77,10 @@ public class Builder {
 				this.getSettings().setChanged(true);
 				Civilizations.DEBUG("Did not require supplies. Built.");
 			} else {
+				Civilizations.DEBUG("Trying to get the supplies.");
 				ItemStack supply = getSupplies(plan.toItemStack());
 				if(supply == null){
+					Civilizations.DEBUG("Getting Default supplies.");
 					supply = getSupplies(plan.getDefault().toItemStack());
 				}
 				if(supply == null){
@@ -92,6 +94,7 @@ public class Builder {
 						currentProject = null;
 						break;
 					} else {
+						Civilizations.DEBUG("Supply was NULL and skipped next.");
 						this.getSettings().setChanged(true);
 						break;
 					}

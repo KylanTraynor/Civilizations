@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,6 +32,10 @@ public class GroupSettings extends YamlConfiguration{
 	private Instant creationDate;
 	private List<UUID> members;
 	private boolean changed = true;
+	
+	private static final String PERMISSIONSROOT = "Permissions";
+	private static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
+	private static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
 
 	/**
 	 * Checks if the settings need to be saved.
@@ -212,6 +218,57 @@ public class GroupSettings extends YamlConfiguration{
 	public void setTransactionTax(double newTax){
 		this.set("Economy.Taxes.Transactions", newTax);
 		this.setChanged(true);
+	}
+	
+	/**
+	 * Gets the state of the given permission for the entity with the given
+	 * {@linkplain UUID}.
+	 * @param id as {@link UUID}
+	 * @param permission as {@link String}
+	 * @return {@link Boolean}, or {@link Null} if the permission was not set.
+	 */
+	public Boolean getPermission(UUID id, String permission){
+		String path = String.format(PERMISSIONS, id.toString(), permission);
+		if(!this.contains(path)) return null;
+		return this.getBoolean(path);
+	}
+	
+	/**
+	 * Gets the permission level of entity with the given {@linkplain UUID}.
+	 * @param id as {@link UUID}
+	 * @return {@link Integer} containing the value, or {@link Null} if the
+	 * permission was not set.
+	 */
+	public Integer getPermissionLevel(UUID id){
+		String path = String.format(PERMISSIONSLEVEL, id.toString());
+		if(!this.contains(path)) return null;
+		return this.getInt(path);
+	}
+	
+	/**
+	 * Sets the given permission to the given value or the entity with the given {@linkplain UUID}.
+	 * @param id as {@link UUID}
+	 * @param permission as {@link String}
+	 * @param value as {@link Boolean}
+	 * @return {@link Boolean} of the previous value of the permission, or {@link Null} if it was not set.
+	 */
+	public Boolean setPermission(UUID id, String permission, Boolean value){
+		Boolean oldValue = getPermission(id, permission);
+		this.set(String.format(PERMISSIONS, id.toString(), permission), value);
+		return oldValue;
+	}
+	
+	/**
+	 * Sets the level for the entity with the given {@linkplain UUID}.
+	 * @param id as {@link UUID}
+	 * @param value as {@link Integer}
+	 * @return {@link Integer} containing the previous level, or {@link Null}
+	 * if it was not set.
+	 */
+	public Integer setPermissionLevel(UUID id, Integer value){
+		Integer oldValue = getPermissionLevel(id);
+		this.set(String.format(PERMISSIONSLEVEL, id.toString()), value);
+		return oldValue;
 	}
 	
 	@Override
