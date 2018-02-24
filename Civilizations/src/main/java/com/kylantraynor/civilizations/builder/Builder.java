@@ -88,6 +88,8 @@ public class Builder {
 						if(plan.changeForPaste().getMaterial() == Material.AIR){
 							currentProject.buildInstead(plan.changeForPaste());
 							this.getSettings().setChanged(true);
+							Civilizations.DEBUG("Plan : " + plan.getMaterial().toString());
+							Civilizations.DEBUG("PlanChange: " + plan.changeForPaste().getMaterial().toString());
 							break;
 						}
 						warnLackOfSupplies(plan);
@@ -99,6 +101,7 @@ public class Builder {
 						break;
 					}
 				}
+				Civilizations.DEBUG("Built!");
 				currentProject.buildNext();
 				this.getSettings().setChanged(true);
 				break;

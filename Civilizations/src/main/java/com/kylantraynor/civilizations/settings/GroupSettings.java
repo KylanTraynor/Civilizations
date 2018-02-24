@@ -259,7 +259,7 @@ public class GroupSettings extends YamlConfiguration{
 	}
 	
 	/**
-	 * Sets the level for the entity with the given {@linkplain UUID}.
+	 * Sets the permission level for the entity with the given {@linkplain UUID}.
 	 * @param id as {@link UUID}
 	 * @param value as {@link Integer}
 	 * @return {@link Integer} containing the previous level, or {@link Null}
