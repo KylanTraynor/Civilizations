@@ -187,7 +187,13 @@ public class Plot extends Group implements Rentable, HasInventory {
             getSettings().setPermissionLevel(g.getUniqueId(), 0);
             return g;
         } else {
-            return Group.get(id);
+            Group g = Group.get(id);
+            if(g== null){
+                g = GroupManager.createGroup("Owner", this);
+                getSettings().setOwnerGroupId(g.getUniqueId());
+                getSettings().setPermissionLevel(g.getUniqueId(), 0);
+            }
+            return g;
         }
     }
 
@@ -199,7 +205,13 @@ public class Plot extends Group implements Rentable, HasInventory {
             getSettings().setPermissionLevel(g.getUniqueId(), 10);
             return g;
         } else {
-            return Group.get(id);
+            Group g = Group.get(id);
+            if(g==null){
+                g = GroupManager.createGroup("Renter", this);
+                getSettings().setRenterGroupId(g.getUniqueId());
+                getSettings().setPermissionLevel(g.getUniqueId(), 10);
+            }
+            return g;
         }
     }
 	
