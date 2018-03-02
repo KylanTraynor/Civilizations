@@ -4,6 +4,7 @@ import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -30,7 +31,7 @@ public class GroupExplorer extends Menu {
     }
 
     private void initInventory() {
-        top = Bukkit.createInventory(null, 6 * 9, "Select a Group");
+        top = Bukkit.createInventory(null, 6 * 9, ""+ChatColor.BOLD + ChatColor.GOLD+"Select a Group");
     }
 
     @Override
@@ -60,7 +61,7 @@ public class GroupExplorer extends Menu {
         int pos = 0;
         for(int i = offset * 8; i < groups.length && i < ((offset+6) * 8); i++){
             top.setItem(pos++, getButtonFor(groups[i]));
-            if(pos == 8 || pos == 16 || pos == 24 || pos == 32 || pos == 40 || pos == 48){
+            if(pos == 8 || pos == 17 || pos == 26 || pos == 35 || pos == 44 || pos == 53){
                 pos++;
             }
         }
