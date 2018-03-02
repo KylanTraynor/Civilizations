@@ -62,15 +62,16 @@ public class GroupSettings extends YamlConfiguration{
 		return uniqueId;
 	}
 
-	/**
-	 * Sets the parent ID of the group.
-	 * @param id
-	 */
-	public void setParentId(UUID id){
-		if(id == null) id = UUID.randomUUID();
-		this.set(PARENT, id.toString());
-		parentId = id;
-	}
+    /**
+     * Sets the unique ID of the group. Null will set a new random Unique ID.
+     * @param id
+     */
+    public void setUniqueId(UUID id){
+        if(id == null) id = UUID.randomUUID();
+        this.set("General.UniqueId", id.toString());
+        uniqueId = id;
+        setChanged(true);
+    }
 
     /**
      * Gets the parent ID of the group.
@@ -80,21 +81,23 @@ public class GroupSettings extends YamlConfiguration{
         if(parentId != null) return parentId;
         if(this.contains(PARENT)){
             parentId = UUID.fromString(this.getString(PARENT));
-        } else {
-            setUniqueId(null);
         }
         return parentId;
     }
 
-    /**
-     * Sets the unique ID of the group. Null will set a new random Unique ID.
-     * @param id
-     */
-    public void setUniqueId(UUID id){
-        if(id == null) id = UUID.randomUUID();
-        this.set("General.UniqueId", id.toString());
-        uniqueId = id;
-    }
+	/**
+	 * Sets the parent ID of the group.
+	 * @param id
+	 */
+	public void setParentId(UUID id){
+		if(id == null){
+		    this.set(PARENT, null);
+        } else {
+            this.set(PARENT, id.toString());
+        }
+		parentId = id;
+		setChanged(true);
+	}
 	
 	/**
 	 * Gets the group's balance.
@@ -113,6 +116,7 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public void setBalance(double newBalance){
 		this.set("Economy.Balance", newBalance);
+		setChanged(true);
 	}
 	
 	/**
@@ -313,6 +317,7 @@ public class GroupSettings extends YamlConfiguration{
 	    if(id == getUniqueId()) return setSelfPermission(permission, value);
 		Boolean oldValue = getPermission(id, permission);
 		this.set(String.format(PERMISSIONS, id.toString(), permission), value);
+		setChanged(true);
 		return oldValue;
 	}
 
@@ -325,6 +330,7 @@ public class GroupSettings extends YamlConfiguration{
     public Boolean setServerPermission(String permission, Boolean value){
         Boolean oldValue = getServerPermission(permission);
         this.set(String.format(PERMISSIONS, "SERVER", permission), value);
+        setChanged(true);
         return oldValue;
     }
 
@@ -337,6 +343,7 @@ public class GroupSettings extends YamlConfiguration{
     public Boolean setOutsidersPermission(String permission, Boolean value){
         Boolean oldValue = getOutsidersPermission(permission);
         this.set(String.format(PERMISSIONS, "OUTSIDERS", permission), value);
+        setChanged(true);
         return oldValue;
     }
 
@@ -349,6 +356,7 @@ public class GroupSettings extends YamlConfiguration{
     public Boolean setSelfPermission(String permission, Boolean value){
         Boolean oldValue = getSelfPermission(permission);
         this.set(String.format(PERMISSIONS, "SELF", permission), value);
+        setChanged(true);
         return oldValue;
     }
 
@@ -362,6 +370,7 @@ public class GroupSettings extends YamlConfiguration{
 	public Integer setPermissionLevel(UUID id, Integer value){
 		Integer oldValue = getPermissionLevel(id);
 		this.set(String.format(PERMISSIONSLEVEL, id.toString()), value);
+		setChanged(true);
 		return oldValue;
 	}
 
