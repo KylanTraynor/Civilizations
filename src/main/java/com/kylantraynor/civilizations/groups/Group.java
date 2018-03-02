@@ -748,8 +748,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return Null if this group has no parent.
 	 */
 	public Group getParent() {
-		if(this.parent != null){
-			return GroupManager.get(this.parent);
+		if(this.getParentId() != null){
+			return GroupManager.get(this.getParentId());
 		}
 		return null;
 	}
@@ -759,23 +759,23 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 */
 	public void setParent(Group group){
 		if(group != null)
-			this.parent = group.getUniqueId();
+			setParentId(group.getUniqueId());
 		else
-			this.parent = null;
+			setParentId(null);
 	}
 	/**
 	 * Gets the parent's id, if it exists.
 	 * @return UUID
 	 */
 	public UUID getParentId(){
-		return this.parent;
+		return getSettings().getParentId();
 	}
 	/**
 	 * Sets the parent's id.
 	 * @param id
 	 */
 	public void setParentId(UUID id){
-		this.parent = id;
+		getSettings().setParentId(id);
 	}
 	/**
 	 * Opens an inventory menu for the given player.

@@ -22,10 +22,12 @@ import com.kylantraynor.civilizations.util.Util;
 public class GroupSettings extends YamlConfiguration{
 	
 	private UUID uniqueId;
+	private UUID parentId;
 	private Instant creationDate;
 	private List<UUID> members;
 	private boolean changed = true;
-	
+
+	private static final String PARENT = "General.Parent";
 	private static final String PERMISSIONSROOT = "Permissions";
 	private static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
 	private static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
@@ -59,16 +61,40 @@ public class GroupSettings extends YamlConfiguration{
 		}
 		return uniqueId;
 	}
-	
+
 	/**
-	 * Sets the unique ID of the group. Null will set a new random Unique ID.
+	 * Sets the parent ID of the group.
 	 * @param id
 	 */
-	public void setUniqueId(UUID id){
+	public void setParentId(UUID id){
 		if(id == null) id = UUID.randomUUID();
-		this.set("General.UniqueId", id.toString());
-		uniqueId = id;
+		this.set(PARENT, id.toString());
+		parentId = id;
 	}
+
+    /**
+     * Gets the parent ID of the group.
+     * @return
+     */
+    public UUID getParentId(){
+        if(parentId != null) return parentId;
+        if(this.contains(PARENT)){
+            parentId = UUID.fromString(this.getString(PARENT));
+        } else {
+            setUniqueId(null);
+        }
+        return parentId;
+    }
+
+    /**
+     * Sets the unique ID of the group. Null will set a new random Unique ID.
+     * @param id
+     */
+    public void setUniqueId(UUID id){
+        if(id == null) id = UUID.randomUUID();
+        this.set("General.UniqueId", id.toString());
+        uniqueId = id;
+    }
 	
 	/**
 	 * Gets the group's balance.
