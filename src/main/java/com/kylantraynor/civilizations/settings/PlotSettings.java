@@ -26,7 +26,7 @@ public class PlotSettings extends GroupSettings{
 	private Double rent;
 	private Double price;
 	private Instant nextPayment;
-	private List<Shape> shapes = new ArrayList<>();
+	private List<Shape> shapes;
 
 	/**
 	 * Gets the settlement this plot belongs to.
@@ -310,9 +310,11 @@ public class PlotSettings extends GroupSettings{
     public List<Shape> getShapes(){
 	    if(shapes != null) return shapes;
         if(this.contains("Protection.Shape")){
-            return shapes = Util.parseShapes(this.getString("Protection.Shape"));
+            shapes = Util.parseShapes(this.getString("Protection.Shape"));
+        } else {
+            shapes = new ArrayList<>();
         }
-        return shapes = new ArrayList<Shape>();
+        return shapes;
     }
 
     public void addShape(Shape s){
