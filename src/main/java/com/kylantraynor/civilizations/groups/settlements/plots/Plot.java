@@ -682,7 +682,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		if(owners.getMembers().isEmpty()){
 		    return getSettlement();
         } else {
-		    return EconomicEntity.get(owners.getMembers().get(0));
+		    return EconomicEntity.get(owners.getMembersArray()[0]);
         }
 	}
 
@@ -743,7 +743,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public EconomicEntity getRenter() {
 	    Group renterGroup = getRenterGroup();
 	    if(renterGroup.getMembers().isEmpty()) return null;
-	    return EconomicEntity.getOrNull(renterGroup.getMembers().get(0));
+	    return EconomicEntity.getOrNull(renterGroup.getMembersArray()[0]);
 	}
 
 	public boolean isRenter(OfflinePlayer player){

@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 import com.kylantraynor.civilizations.managers.GroupManager;
@@ -297,8 +294,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 	
 	@Override
-	public List<UUID> getMembers(){
-		List<UUID> list = new ArrayList<UUID>();
+	public Set<UUID> getMembers(){
+		Set<UUID> list = new TreeSet<UUID>();
 		for(Resident r : this.townyTown.getResidents()){
 			OfflinePlayer p = TownyHook.getPlayer(r);
 			if(p != null){

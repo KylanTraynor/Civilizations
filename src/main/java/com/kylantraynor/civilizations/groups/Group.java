@@ -5,16 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 import com.kylantraynor.civilizations.exceptions.RecursiveParentException;
 import mkremins.fanciful.civilizations.FancyMessage;
@@ -57,7 +48,6 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	private boolean hasChanged = true;
 	private ChatColor chatColor;
 	private GroupSettings settings;
-	private UUID parent;
 	
 	@Override
 	public boolean isPlayer(){return false;}
@@ -162,21 +152,29 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 
 	/**
 	 * Gets the list of all the members of this group.
-	 * @return List<UUID> of the members
+	 * @return Set<UUID> of the members
 	 */
-	public List<UUID> getMembers() {return this.getSettings().getMembers();}
+	public Set<UUID> getMembers() {return this.getSettings().getMembers();}
+
+    /**
+     * Gets an array of all the members of this group.
+     * @return Array of {@link UUID}.
+     */
+	public UUID[] getMembersArray(){
+	    return getMembers().toArray(new UUID[getMembers().size()]);
+    }
 
 	/**
 	 * Sets the list of all the members of this group.
 	 * @param members The new list of members.
 	 */
-	public void setMembers(List<UUID> members) { this.getSettings().setMembers(members); }
+	public void setMembers(Set<UUID> members) { this.getSettings().setMembers(members); }
 
     /**
      * Clears all the {@linkplain Group}'s members.
      */
 	public void clearMembers(){
-	    this.getSettings().setMembers(new ArrayList<>());
+	    this.getSettings().setMembers(new TreeSet<>());
     }
 
 	/**
@@ -192,8 +190,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		} else {
 			id = account.getPlayerId();
 		}
-		List<UUID> members = getMembers();
-		if(members.contains(id)) return false;
+		Set<UUID> members = getMembers();
 		if(members.add(id)){
 		    setMembers(members);
 		    return true;
@@ -209,10 +206,12 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 */
 	public boolean addMember(EconomicEntity member){
 		if(getMembers().contains(member.getUniqueId())) return false;
-		List<UUID> members = getMembers();
-		members.add(member.getUniqueId());
-		setMembers(members);
-		return true;
+		Set<UUID> members = getMembers();
+		if(members.add(member.getUniqueId())){
+            setMembers(members);
+		    return true;
+        }
+		return false;
 	}
 
 	/**
@@ -226,9 +225,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		if(account.getCurrentCharacterId() != null){
 			id = account.getCurrentCharacterId();
 		}
-		if(getMembers().contains(id)){
-			List<UUID> members = getMembers();
-			members.remove(id);
+        Set<UUID> members = getMembers();
+		if(members.remove(id)){
 			setMembers(members);
 			return true;
 		}
@@ -240,9 +238,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the player has been removed, false otherwise.
 	 */
 	public boolean removeMember(EconomicEntity member){
-		if(getMembers().contains(member.getUniqueId())){
-			List<UUID> members = getMembers();
-			members.remove(member.getUniqueId());
+        Set<UUID> members = getMembers();
+		if(members.remove(member.getUniqueId())){
 			setMembers(members);
 			return true;
 		}
@@ -509,8 +506,9 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public FancyMessage getInteractiveMembersList(int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("MEMBERS", null));
-		for(int i = 8 * (page - 1); i < getMembers().size() && i < 8 * (page); i+=1){
-		    EconomicEntity en = EconomicEntity.get(getMembers().get(i));
+		UUID[] members = getMembers().toArray(new UUID[getMembers().size()]);
+		for(int i = 8 * (page - 1); i < members.length && i < 8 * (page); i+=1){
+		    EconomicEntity en = EconomicEntity.get(members[i]);
 			fm.then("\n" + en.getName());
 			if(en.isPlayer()){
                 if(en.getOfflinePlayer().isOnline()){
@@ -521,7 +519,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
                 fm.command("/p " + en.getName());
             } else {
                 fm.color(ChatColor.GOLD);
-                fm.command("/group " + getMembers().get(i).toString() + " INFO");
+                fm.command("/group " + members[i].toString() + " INFO");
             }
 			/*Rank pr = getProtection().getRank(p);
 			if(pr != null){
@@ -557,8 +555,9 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public FancyMessage getInteractiveRankMembers(Group r, int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(r.getName().toUpperCase(), null));
-		for(int i = 8 * (page - 1); i < r.getMembers().size() && i < 8 * (page); i+=1){
-			EconomicEntity p = EconomicEntity.get(r.getMembers().get(i));
+		UUID[] members = r.getMembers().toArray(new UUID[r.getMembers().size()]);
+		for(int i = 8 * (page - 1); i < members.length && i < 8 * (page); i+=1){
+			EconomicEntity p = EconomicEntity.get(members[i]);
 			fm.then("\n" + p.getName());
 			if(p.isPlayer()){
 			    if(p.getOfflinePlayer().isOnline()) {

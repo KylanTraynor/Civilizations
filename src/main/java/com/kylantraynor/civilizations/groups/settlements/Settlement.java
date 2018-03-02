@@ -3,12 +3,8 @@ package com.kylantraynor.civilizations.groups.settlements;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import com.kylantraynor.civilizations.shapes.Hull;
@@ -417,8 +413,8 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return List<UUID>
 	 */
 	@Override
-	public List<UUID> getMembers(){
-		List<UUID> list = new ArrayList<UUID>();
+	public Set<UUID> getMembers(){
+		Set<UUID> list = new TreeSet<UUID>();
 		for(Plot p : getPlots()){
 			for(UUID id : p.getMembers()){
 				if(!list.contains(id)){

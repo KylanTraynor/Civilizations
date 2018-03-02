@@ -66,6 +66,7 @@ public class Button extends ItemStack{
 				ButtonManager.buttons.remove(this);
 			} catch (Exception e){
 				MenuManager.getMenus().get(getPlayer()).close();
+				ButtonManager.clearButtons(getPlayer());
 				getPlayer().sendMessage("" + ChatColor.BOLD + ChatColor.RED + "An error happened clicking on this button. Please report it to a staff member.");
 				e.printStackTrace();
 			}

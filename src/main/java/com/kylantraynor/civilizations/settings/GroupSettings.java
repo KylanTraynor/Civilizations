@@ -24,7 +24,7 @@ public class GroupSettings extends YamlConfiguration{
 	private UUID uniqueId;
 	private UUID parentId;
 	private Instant creationDate;
-	private List<UUID> members;
+	private Set<UUID> members;
 	private boolean changed = true;
 
 	private static final String PARENT = "General.Parent";
@@ -165,9 +165,9 @@ public class GroupSettings extends YamlConfiguration{
 	 * Gets the list of members of this group.
 	 * @return List<UUID>
 	 */
-	public List<UUID> getMembers(){
+	public Set<UUID> getMembers(){
 		if(this.members == null) {
-			this.members = new ArrayList<UUID>();
+			this.members = new TreeSet<>();
 			if(this.contains("Members")){
 				List<?> l = this.getList("Members");
 				for(Object o : l){
@@ -182,16 +182,16 @@ public class GroupSettings extends YamlConfiguration{
 	
 	/**
 	 * Sets the list of members of this group.
-	 * @param list
+	 * @param set
 	 */
-	public void setMembers(List<UUID> list){
+	public void setMembers(Set<UUID> set){
 		List<String> l = new ArrayList<String>();
-		if(list != null){
-			for(UUID id : list){
+		if(set != null){
+			for(UUID id : set){
 				l.add(id.toString());
 			}
 		}
-		this.members = list;
+		this.members = set;
 		this.set("Members", l);
 		this.setChanged(true);
 	}
