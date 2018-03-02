@@ -29,6 +29,7 @@ import com.kylantraynor.civilizations.util.Util;
 public class GroupSettings extends YamlConfiguration{
 	
 	private UUID uniqueId;
+	private UUID parentId;
 	private Instant creationDate;
 	private List<UUID> members;
 	private boolean changed = true;
@@ -75,6 +76,31 @@ public class GroupSettings extends YamlConfiguration{
 		if(id == null) id = UUID.randomUUID();
 		this.set("General.UniqueId", id.toString());
 		uniqueId = id;
+	}
+
+	/**
+	 * Gets the {@linkplain UUID} of the {@linkplain com.kylantraynor.civilizations.groups.Group}.
+	 * @return Null if there is no parent.
+	 */
+	public UUID getParentId(){
+		if(parentId != null) return parentId;
+		if(this.contains("General.ParentId")){
+			parentId = UUID.fromString(this.getString("General.ParentId"));
+		}
+		return parentId;
+	}
+
+	/**
+	 * Sets the {@linkplain UUID} of the {@linkplain com.kylantraynor.civilizations.groups.Group}.
+	 * @param id
+	 */
+	public void setParentId(UUID id){
+		if(id != null) {
+            this.set("General.ParentId", id.toString());
+        } else {
+		    this.set("General.ParentId", null);
+        }
+		parentId = id;
 	}
 	
 	/**

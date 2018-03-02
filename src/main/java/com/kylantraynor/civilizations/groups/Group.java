@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.exceptions.RecursiveParentException;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -707,34 +708,49 @@ public class Group extends EconomicEntity{
 	 * @return Null if this group has no parent.
 	 */
 	public Group getParent() {
-		if(this.parent != null){
-			return GroupManager.get(this.parent);
+		if(getParentId() != null){
+			return GroupManager.get(getParentId());
 		}
 		return null;
 	}
 	/**
 	 * Sets the parent group of this group.
-	 * @param group
+     * @throws RecursiveParentException if the given {@link Group} is already a child of this one.
+	 * @param group {@link Group} to set as the parent.
 	 */
-	public void setParent(Group group){
-		if(group != null)
-			this.parent = group.getUniqueId();
-		else
-			this.parent = null;
+	public void setParent(Group group) throws RecursiveParentException {
+        if (group != null){
+            if (group.hasRecursiveParent(this)) {
+                throw new RecursiveParentException(group, this);
+            }
+        setParentId(group.getUniqueId());
+        } else setParentId(null);
 	}
+
+    /**
+     * Checks recursively if the given {@linkplain Group} is a parent
+     * of this {@linkplain Group}
+     * @param potentialParent as {@link Group}
+     * @return true if the given {@link Group} is a parent, false otherwise.
+     */
+	public boolean hasRecursiveParent(Group potentialParent) {
+        return getParentId() == potentialParent.getUniqueId() ||
+                getParentId() != null && getParent().hasRecursiveParent(potentialParent);
+    }
+
 	/**
 	 * Gets the parent's id, if it exists.
 	 * @return UUID
 	 */
 	public UUID getParentId(){
-		return this.parent;
+		return getSettings().getParentId();
 	}
 	/**
 	 * Sets the parent's id.
 	 * @param id
 	 */
 	public void setParentId(UUID id){
-		this.parent = id;
+		getSettings().setParentId(id);
 	}
 	/**
 	 * Opens an inventory menu for the given player.

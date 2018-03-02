@@ -159,6 +159,24 @@ public class EconomicEntity {
 		}
 		return "Entity";
 	}
+
+    /**
+     * Checks if this {@linkplain EconomicEntity} belongs to the
+     * {@linkplain EconomicEntity} with the given {@linkplain UUID}.
+     * @param id as {@link UUID}
+     * @return true if the given {@linkplain UUID} is the same as the
+     * {@linkplain UUID} of this {@linkplain EconomicEntity}, or if this
+     * entity belongs to the {@linkplain Group} with the given id, and
+     * false otherwise.
+     */
+	public boolean isMemberOf(UUID id) {
+        if (id == this.getUniqueId()) return true;
+        EconomicEntity ee = getOrNull(id);
+        return ee != null &&
+                !ee.isPlayer() &&
+                ee instanceof Group &&
+                ((Group) ee).isMember(this);
+    }
 	
 	// ===========================
 	// Static Methods
