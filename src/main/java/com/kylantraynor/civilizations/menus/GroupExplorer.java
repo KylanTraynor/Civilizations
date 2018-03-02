@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.menus;
 
 import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,6 +37,7 @@ public class GroupExplorer extends Menu {
 
     @Override
     public void update() {
+        ButtonManager.clearButtons(getPlayer());
         top.clear();
         Group[] groups = getGroupsIn(current);
         Arrays.sort(groups);
