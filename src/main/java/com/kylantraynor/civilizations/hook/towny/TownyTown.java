@@ -233,6 +233,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 
 		getMayorGroup().addMember(TownyHook.getPlayer(townyTown.getMayor()));
 
+		getMayorGroup().clearMembers();
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
 				if(rank.equalsIgnoreCase("co-mayor")){
@@ -240,6 +241,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				}
 			}
 		}
+
+		getAssistantGroup().clearMembers();
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
 				if(rank.equalsIgnoreCase("assistant")){

@@ -46,11 +46,8 @@ import com.kylantraynor.civilizations.settings.GroupSettings;
  */
 public class Group extends EconomicEntity implements Comparable<Group>{
 	
-	private static Map<String, Group> all = new HashMap<String, Group>();
-	//private static ArrayList<Group> list = new ArrayList<Group>();
+	private static Map<String, Group> all = new HashMap<>();
 	public static Collection<Group> getList() {return all.values();}
-	
-	public static Stack<Integer> availableIds = new Stack<Integer>();
 	
 	public static void clearAll(){
 		all.clear();
@@ -196,6 +193,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 			id = account.getPlayerId();
 		}
 		List<UUID> members = getMembers();
+		if(members.contains(id)) return false;
 		if(members.add(id)){
 		    setMembers(members);
 		    return true;
