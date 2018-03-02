@@ -373,6 +373,7 @@ public class GroupSettings extends YamlConfiguration{
 	    List<Permissions> perms = new ArrayList<>();
 	    ConfigurationSection cs = this.getConfigurationSection(PERMISSIONSROOT);
 	    for(String s : cs.getKeys(false)){
+	        if(s.equalsIgnoreCase("SELF") || s.equalsIgnoreCase("OUTSIDERS") || s.equalsIgnoreCase("SeRVER")) continue;
 	        UUID target = UUID.fromString(s);
 	        int level = 0;
             ConfigurationSection cs2 = cs.getConfigurationSection(s);
