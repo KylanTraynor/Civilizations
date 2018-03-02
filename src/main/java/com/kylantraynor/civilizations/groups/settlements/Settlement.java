@@ -121,6 +121,7 @@ public class Settlement extends Group implements HasBuilder{
 	}
 
     public boolean isInside(Location location){
+        if(!getLocation().getWorld().equals(location.getWorld())) return false;
         if(getHull().exists()){
             return getHull().isInside(location);
         }
@@ -250,6 +251,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return
 	 */
 	public double distanceSquared(Location location){
+        if(!getLocation().getWorld().equals(location.getWorld())) return Double.NaN;
 		if(protects(location)) return 0.0;
 		double distanceSquared = location.distanceSquared(getLocation());
 		if(getHull().exists()){
@@ -437,6 +439,7 @@ public class Settlement extends Group implements HasBuilder{
 	}
 	
 	public double distanceSquared(Shape s){
+        if(!getLocation().getWorld().equals(s.getWorld())) return Double.NaN;
 		double distanceSquared = s.getLocation().distanceSquared(this.getLocation());
 		if(this.getHull().exists()){
 			return distanceSquared = Math.min(this.getHull().distanceSquared(s), distanceSquared);

@@ -302,6 +302,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
     public boolean intersect(Shape s){
+        if(!getCenter().getWorld().equals(s.getWorld())) return false;
         for(Shape s1 : getShapes()){
             if(s1.intersect(s)) return true;
         }
@@ -444,6 +445,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
     public boolean isInside(Location location){
+        if(!getCenter().getWorld().equals(location.getWorld())) return false;
         for(Shape s : getShapes()){
             if(s.isInside(location)) return true;
         }

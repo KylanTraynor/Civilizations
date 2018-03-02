@@ -82,10 +82,12 @@ public class Camp extends Settlement{
 	}
 
     public boolean isInside(Location location){
+	    if(!getLocation().getWorld().equals(location.getWorld())) return false;
         return getLocation().distanceSquared(location) <= Camp.getSize() * Camp.getSize();
     }
 
     public double distanceSquared(Location location){
+        if(!getLocation().getWorld().equals(location.getWorld())) return Double.NaN;
 	    return Math.max(0, getLocation().distanceSquared(location) - (Camp.getSize()*Camp.getSize()));
     }
 
