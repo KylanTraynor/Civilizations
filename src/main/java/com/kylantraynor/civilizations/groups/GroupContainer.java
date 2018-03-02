@@ -1,9 +1,7 @@
 
 package com.kylantraynor.civilizations.groups;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.bukkit.OfflinePlayer;
 
@@ -14,11 +12,11 @@ import org.bukkit.OfflinePlayer;
  */
 public class GroupContainer<T extends Group> extends Group {
 	
-	private List<T> groups = new ArrayList<T>();
+	private Set<T> groups = new TreeSet<T>();
 	
 	@Override
-	public List<UUID> getMembers(){
-		List<UUID> list = new ArrayList<UUID>();
+	public Set<UUID> getMembers(){
+		Set<UUID> list = new TreeSet<UUID>();
 		for(T g : getGroups()){
 			if(g != null){
 				for(UUID id : g.getMembers()){
@@ -30,15 +28,15 @@ public class GroupContainer<T extends Group> extends Group {
 	}
 	
 	@Override
-	public void setMembers(List<UUID> list){
+	public void setMembers(Set<UUID> list){
 		return;
 	}
 
-	public List<T> getGroups() {
+	public Set<T> getGroups() {
 		return groups;
 	}
 	
-	public void setGroups(List<T> groups) {
+	public void setGroups(Set<T> groups) {
 		this.groups = groups;
 	}	
 }
