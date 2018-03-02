@@ -94,6 +94,7 @@ public class ProtectionManager {
 	            // Check Server Permissions
                 result = current.getSettings().getServerPermission(type.toString());
             } else {
+	            if(isOp(target)) return true;
                 Permissions[] perms = current.getSettings().getPermissions();
                 // Check low levels first (higher priority)
                 Arrays.sort(perms);
@@ -192,6 +193,16 @@ public class ProtectionManager {
 	        // Wilderness Permissions
 	        return true;
         }
+    }
+
+    /**
+     * Checks if the given {@linkplain UUID} is OP.
+     * @param id {@link UUID} to check OP state for.
+     * @return true if is OP, false otherwise.
+     */
+    private static boolean isOp(UUID id){
+        EconomicEntity entity = EconomicEntity.get(id);
+        return entity.isPlayer() && entity.getOfflinePlayer().isOp();
     }
 	
 }
