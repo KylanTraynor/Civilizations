@@ -551,20 +551,24 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	}
 	/**
 	 * Gets a fancy message showing the list of rank members for the given rank.
-	 * @param r The {@link Rank} to display.
+	 * @param r The {@link Group} to display.
 	 * @param page The displayed page.
 	 * @return A {@link FancyMessage} to display.
 	 */
-	public FancyMessage getInteractiveRankMembers(Rank r, int page){
+	public FancyMessage getInteractiveRankMembers(Group r, int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(r.getName().toUpperCase(), null));
-		for(int i = 8 * (page - 1); i < r.getPlayers().size() && i < 8 * (page); i+=1){
-			OfflinePlayer p = r.getPlayers().get(i);
+		for(int i = 8 * (page - 1); i < r.getMembers().size() && i < 8 * (page); i+=1){
+			EconomicEntity p = EconomicEntity.get(r.getMembers().get(i));
 			fm.then("\n" + p.getName());
-			if(p.isOnline()){
-				fm.color(ChatColor.GREEN);
+			if(p.isPlayer()){
+			    if(p.getOfflinePlayer().isOnline()) {
+			        fm.color(ChatColor.GREEN);
+                } else {
+			        fm.color(ChatColor.GRAY);
+                }
 			} else {
-				fm.color(ChatColor.GRAY);
+				fm.color(ChatColor.GOLD);
 			}
 			fm.command("/p " + p.getName());
 		}
@@ -637,7 +641,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @param playerRank
 	 * @return
 	 */
-	public FancyMessage getInteractiveRankPanel(Rank playerRank) {
+	public FancyMessage getInteractiveRankPanel(Group playerRank) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(playerRank.getName().toUpperCase(), null));
 		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " rank " + playerRank.getName() + " members");

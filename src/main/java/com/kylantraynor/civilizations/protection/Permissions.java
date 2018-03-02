@@ -1,7 +1,5 @@
 package com.kylantraynor.civilizations.protection;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,7 +27,7 @@ public class Permissions implements Comparable<Permissions>{
      * @param perm permission to check.
      * @return A {@link Boolean}, or Null.
      */
-	public Boolean getPermission(@NotNull String perm){
+	public Boolean getPermission(String perm){
 	    if(perm == null) throw new NullPointerException("Permission can't be Null.");
 	    return perms.get(perm);
     }

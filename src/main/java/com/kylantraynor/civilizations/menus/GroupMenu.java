@@ -143,7 +143,7 @@ public class GroupMenu extends Menu{
 	 * Update the menu to display the Mangement screen of the given Rank.
 	 * @param rank
 	 */
-	private void updateForRank(Rank rank) {
+	private void updateForRank(Group rank) {
 		//Get the Buttons.
 		ItemStack mainButton = getMainButton();
 		ItemStack manageButton = getManageButton();
@@ -259,7 +259,7 @@ public class GroupMenu extends Menu{
 	 * @param rank
 	 * @return
 	 */
-	public Button getChangeRankNameButton(final Rank rank){
+	public Button getChangeRankNameButton(final Group rank){
 		List<String> lore = new ArrayList<String>();
 		lore.add("Changes the name of this rank");
 		Button nameButton = new Button(getPlayer(), validButton, "Change Name", lore,
@@ -278,7 +278,7 @@ public class GroupMenu extends Menu{
 	 * @param rank
 	 * @return
 	 */
-	public Button getParentButton(Rank rank){
+	public Button getParentButton(Group rank){
 		List<String> lore = new ArrayList<String>();
 		/*if(rank.getParentId() != null){
 			lore.add("Current: " + group.getProtection().getRank(rank.getParentId()).getName());

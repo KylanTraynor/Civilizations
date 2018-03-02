@@ -5,13 +5,13 @@ import java.util.*;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.bukkit.Location;
 
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.protection.Permissions;
 import org.bukkit.OfflinePlayer;
+
+import javax.annotation.Nullable;
 
 public class ProtectionManager {
 /*
@@ -37,7 +37,7 @@ public class ProtectionManager {
      * @param entity The {@link EconomicEntity} to test permissions for, or Null to check for Server permissions.
      * @return true if the permission is granted, false otherwise.
      */
-	public static boolean hasPermissionAt(@NotNull PermissionType type, @NotNull Location location, @Nullable EconomicEntity entity, boolean recursive){
+	public static boolean hasPermissionAt(PermissionType type, Location location, @Nullable EconomicEntity entity, boolean recursive){
 	    if(location == null) throw new NullPointerException("Location can't be Null!");
 	    if(type == null) throw new NullPointerException("PermissionType can't be Null!");
         Group result;
@@ -54,7 +54,7 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(@NotNull PermissionType type, @Nullable Group group, @Nullable EconomicEntity entity, boolean recursive){
+    public static boolean hasPermission(PermissionType type, @Nullable Group group, @Nullable EconomicEntity entity, boolean recursive){
         return hasPermission(type, group, entity == null ? null : entity.getUniqueId(), recursive);
     }
 
@@ -66,7 +66,7 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(@NotNull PermissionType type, @Nullable Group group, @NotNull OfflinePlayer player, boolean recursive){
+    public static boolean hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
         CivilizationsAccount ca = CivilizationsAccount.get(player.getUniqueId());
         if(ca.getCurrentCharacterId() != null){
             return hasPermission(type, group, ca.getCurrentCharacterId(), recursive);
@@ -83,7 +83,7 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(@NotNull PermissionType type, @Nullable Group group, @Nullable UUID target, boolean recursive){
+    public static boolean hasPermission(PermissionType type, @Nullable Group group, @Nullable UUID target, boolean recursive){
 	    if(type == null) throw new NullPointerException("PermissionType can't be Null!");
 	    if(group == null)  return hasDefaultPermissionFor(type, null, target);
 	    @Nullable Boolean result = null;
@@ -151,7 +151,7 @@ public class ProtectionManager {
      * @param value The {@link Boolean} to set the permission to, or Null to unset it.
      * @return The previous value of the permission, or Null if it was not set.
      */
-    public static Boolean setPermission(@NotNull PermissionType type, @NotNull Group group, @Nullable EconomicEntity entity, Boolean value){
+    public static Boolean setPermission(PermissionType type, Group group, @Nullable EconomicEntity entity, Boolean value){
         return setPermission(type, group, (entity == null ? null : entity.getUniqueId()), value);
     }
 
@@ -163,7 +163,7 @@ public class ProtectionManager {
      * @param value The {@link Boolean} to set the permission to, or Null to unset it.
      * @return The previous value of the permission, or Null if it was not set.
      */
-    public static Boolean setPermission(@NotNull PermissionType type, @NotNull Group group, @Nullable UUID target, Boolean value){
+    public static Boolean setPermission(PermissionType type, Group group, @Nullable UUID target, Boolean value){
         if(type == null) throw new NullPointerException("PermissionType can't be Null!");
         if(group == null) throw new NullPointerException("Group can't be Null!");
         if(target != null){
@@ -181,7 +181,7 @@ public class ProtectionManager {
      * @param id as {@link UUID} or Null to check for Server permissions.
      * @return true if the permission is granted, false otherwise.
      */
-    private static boolean hasDefaultPermissionFor(@NotNull PermissionType type, @Nullable Group group, @Nullable UUID id){
+    private static boolean hasDefaultPermissionFor(PermissionType type, @Nullable Group group, @Nullable UUID id){
         if(type == null) throw new NullPointerException("PermissionType can't be Null!");
 	    if(id == null){
 	        // Server Permissions
