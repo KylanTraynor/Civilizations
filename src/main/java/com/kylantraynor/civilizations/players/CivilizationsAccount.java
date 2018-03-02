@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -247,6 +248,23 @@ public class CivilizationsAccount {
 			ca = new CivilizationsAccount(playerId);
 		}
 		return ca;
+	}
+
+	/**
+	 * Gets the current {@linkplain EconomicEntity} associated to the given player ID.
+	 * @param p {@link Player} to check.
+	 * @return Either the {@link EconomicEntity} representing the player's account, or the current {@link CivilizationsCharacter}.
+	 */
+	public static EconomicEntity getEconomicEntity(OfflinePlayer p){
+		CivilizationsAccount ca = accounts.get(p.getUniqueId().toString());
+		if(ca == null){
+			ca = new CivilizationsAccount(p.getUniqueId());
+		}
+		if(ca.getCurrentCharacterId() == null){
+			return EconomicEntity.get(ca.getPlayerId());
+		} else {
+			return ca.getCurrentCharacter();
+		}
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.listeners;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -92,15 +93,15 @@ public class ProtectionListener implements Listener{
 					canPlace = false;
 					reason = "this field dosen't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.PLACE, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+			} else if(!ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
 				//reason = "you don't have the PLACE permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
-				if(settlement instanceof TownyTown) return;
-				if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.PLACE, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+				//if(settlement instanceof TownyTown) return;
+				if(!ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 					canPlace = false;
 					//reason = "you don't have the PLACE permission in " + settlement.getName();
 				}
@@ -144,7 +145,7 @@ public class ProtectionListener implements Listener{
 	
 	@EventHandler
 	public void onBlockExplode(BlockExplodeEvent event){
-		if(!ProtectionManager.hasPermissionAt(event.getBlock().getLocation(), PermissionType.EXPLOSION, null)){
+		if(!ProtectionManager.hasPermissionAt(PermissionType.EXPLOSION, event.getBlock().getLocation(), null, true)){
 			event.setCancelled(true);
 		}
 	}
@@ -192,14 +193,14 @@ public class ProtectionListener implements Listener{
 					canBreak = false;
 					reason = "this field doen't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(plot.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
+			} else if(!ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;
 				//reason = "you don't have the BREAK permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
-				if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.BREAK, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+				if(!ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
 					//reason = "you don't have the BREAK permission in " + settlement.getName();
 				}
@@ -282,7 +283,7 @@ public class ProtectionListener implements Listener{
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){
 			case SLIME: case WITCH: case ZOMBIE_VILLAGER: case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case CAVE_SPIDER: case WITHER_SKELETON: case HUSK: case ENDERMAN: case STRAY:
-				if(!ProtectionManager.hasPermissionAt(event.getLocation(), PermissionType.MOBSPAWNING, null)){
+				if(!ProtectionManager.hasPermissionAt(PermissionType.MOBSPAWNING, event.getLocation(), null, true)){
 					event.setCancelled(true);
 				}
 				break;
@@ -297,7 +298,7 @@ public class ProtectionListener implements Listener{
 		if(event.getFrom().getBlock() != event.getTo().getBlock()){
 			Camp c = Camp.getCampAt(event.getTo());
 			if(c != null){
-				if(c.isMember(EconomicEntity.get(event.getPlayer().getUniqueId()))){
+				if(c.isMember(CivilizationsAccount.getEconomicEntity(event.getPlayer()).getUniqueId(), true)){
 					if(c.getExpireOn().isBefore(Instant.now().plus(Camp.campDuration - 2, ChronoUnit.HOURS))){
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
 					}

@@ -1,7 +1,10 @@
 package com.kylantraynor.civilizations.listeners;
 
 import java.util.List;
+import java.util.UUID;
 
+import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -34,23 +37,23 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onBlockIgnite(BlockIgniteEvent event){
-		Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
-		if(settlement == null) return;
-		if(settlement instanceof TownyTown) return;
+		Group g = Plot.getAt(event.getBlock().getLocation());
+		if(g == null) g = Settlement.getAt(event.getBlock().getLocation());
+		if(g == null) return;
 		switch(event.getCause()){
 		case SPREAD:
-			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRESPREAD, null, false)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRESPREAD, g, (UUID) null, true)){
 				event.setCancelled(true);
 			}
 			break;
 		case FLINT_AND_STEEL:
-			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRE, event.getPlayer(), false)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, event.getPlayer(), false)){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't start a fire here.");
 			}
 			break;
 		default:
-			if(!ProtectionManager.hasPermission(settlement.getProtection(), PermissionType.FIRE, null, false)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, (UUID) null, true)){
 				event.setCancelled(true);
 			}
 			break;
@@ -101,13 +104,14 @@ public class CivilizationsListener implements Listener{
 				Sign sign = (Sign) state;
 				if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
 					event.setCancelled(true);
-					Protection p = ProtectionManager.getProtectionAt(sign.getLocation());
-					if(p == null){
+					Group g = Plot.getAt(event.getClickedBlock().getLocation());
+					if(g==null) g = Settlement.getAt(event.getClickedBlock().getLocation());
+					if(g == null){
 						event.getPlayer().sendMessage(ChatColor.RED + "There is no protected area here.");
 						return;
 					}
 					Civilizations.DEBUG("Opening menu for " + event.getPlayer().getName() + ".");
-					p.getGroup().openMenu(event.getPlayer());
+					g.openMenu(event.getPlayer());
 				}
 			}
 		}
@@ -130,7 +134,7 @@ public class CivilizationsListener implements Listener{
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
-			if(event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
+			if(!isCivsGameMode(event.getPlayer().getGameMode())) return;
 			CivilizationsAccount.logout(event.getPlayer());
 		}
 	}

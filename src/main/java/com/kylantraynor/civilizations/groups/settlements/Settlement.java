@@ -11,12 +11,10 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.kylantraynor.civilizations.shapes.Hull;
 import mkremins.fanciful.civilizations.FancyMessage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,8 +31,6 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.managers.CacheManager;
-import com.kylantraynor.civilizations.protection.SettlementProtection;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
@@ -45,6 +41,8 @@ public class Settlement extends Group implements HasBuilder{
 	
 	private List<Plot> plots = new ArrayList<Plot>();
 	private Builder builder;
+	private Hull hull;
+	protected boolean hullNeedsUpdate = true;
 	
 	@Override
 	public String getType() {
@@ -96,11 +94,6 @@ public class Settlement extends Group implements HasBuilder{
 	}
 	
 	@Override
-	public void initProtection(){
-		super.protection = new SettlementProtection(this.getUniqueId());
-	}
-	
-	@Override
 	public void initSettings(){
 		setSettings(new SettlementSettings());
 	}
@@ -109,11 +102,7 @@ public class Settlement extends Group implements HasBuilder{
 	public SettlementSettings getSettings() {
 		return (SettlementSettings)super.getSettings();
 	}
-	
-	@Override
-	public SettlementProtection getProtection(){
-		return (SettlementProtection)super.getProtection();
-	}
+
 	/**
 	 * Gets the file where this camp is saved.
 	 * @return File
@@ -130,7 +119,36 @@ public class Settlement extends Group implements HasBuilder{
 		}
 		return f;
 	}
-	
+
+    public boolean isInside(Location location){
+        if(getHull().exists()){
+            return getHull().isInside(location);
+        }
+        return false;
+    }
+
+    public Hull getHull(){
+        if(hull == null) hull = new Hull(getLocation());
+        if(hullNeedsUpdate){
+            hull.clear();
+            for(Shape s : getShapes()){
+                hull.addPoints(s.getVertices());
+            }
+            for(Plot p : getPlots()){
+                for(Shape s : p.getShapes()){
+                    hull.addPoints(s.getVertices());
+                }
+            }
+            hull.updateHull();
+            hullNeedsUpdate = false;
+        }
+        return hull;
+    }
+
+    public List<Shape> getShapes(){
+	    return getSettings().getShapes();
+    }
+
 	/**
 	 * Gets an interactive info panel adapted to the given player.
 	 * @param player Context
@@ -171,10 +189,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	public void setPlots(List<Plot> plts) {
 		this.plots = plts;
-		for(Plot p : plots){
-			p.getProtection().setParentId(this.getUniqueId());
-		}
-		getProtection().hullNeedsUpdate();
+		hullNeedsUpdate = true;
 		setChanged(true);
 	}
 	/**
@@ -188,7 +203,7 @@ public class Settlement extends Group implements HasBuilder{
 			return false;
 		} else {
 			this.plots.add(p);
-			getProtection().hullNeedsUpdate();
+			hullNeedsUpdate = true;
 			setChanged(true);
 			return true;
 		}
@@ -202,7 +217,7 @@ public class Settlement extends Group implements HasBuilder{
 	public boolean removePlot(Plot p){
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
-			getProtection().hullNeedsUpdate();
+			hullNeedsUpdate = true;
 			setChanged(true);
 			return true;
 		} else {
@@ -237,10 +252,10 @@ public class Settlement extends Group implements HasBuilder{
 	public double distanceSquared(Location location){
 		if(protects(location)) return 0.0;
 		double distanceSquared = location.distanceSquared(getLocation());
-		if(this.getProtection().getHull().exists()){
-			distanceSquared = Math.min(this.getProtection().getHull().distance(location), distanceSquared);
+		if(getHull().exists()){
+			distanceSquared = Math.min(getHull().distance(location), distanceSquared);
 		} else {
-			for(Shape s : this.getProtection().getShapes()){
+			for(Shape s : getShapes()){
 				distanceSquared = Math.min(s.distanceSquared(location), distanceSquared);
 			}
 		}
@@ -252,6 +267,36 @@ public class Settlement extends Group implements HasBuilder{
 		
 		return distanceSquared;
 	}
+
+    public Location getCenter(){
+        World w = null;
+        Double minX = null;
+        Double minY = null;
+        Double minZ = null;
+        Double maxX = null;
+        Double maxY = null;
+        Double maxZ = null;
+        for(Shape s : getShapes()){
+            if(w == null){
+                w = s.getWorld();
+                minX = s.getMinX();
+                minY = s.getMinY();
+                minZ = s.getMinZ();
+                maxX = s.getMaxX();
+                maxY = s.getMaxY();
+                maxZ = s.getMaxZ();
+            } else {
+                minX = Math.min(minX, s.getMinX());
+                minY = Math.min(minY, s.getMinY());
+                minZ = Math.min(minZ, s.getMinZ());
+                maxX = Math.max(maxX, s.getMaxX());
+                maxY = Math.max(maxY, s.getMaxY());
+                maxZ = Math.max(maxZ, s.getMaxZ());
+            }
+        }
+        if(w == null) throw new NullPointerException("World can't be null.");
+        return new Location(w, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+    }
 	/**
 	 * Checks if this settlement is upgradable.
 	 * @return true if it can be upgraded, false otherwise.
@@ -282,9 +327,6 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public boolean remove(){
-		for(Player p : Bukkit.getServer().getOnlinePlayers()){
-			getProtection().hide(p);
-		}
 		for(Plot p : getPlots()){
 			p.remove();
 		}
@@ -295,9 +337,6 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return true if the settlement has been removed, false otherwise.
 	 */
 	public boolean softRemove(){
-		for(Player p : Bukkit.getServer().getOnlinePlayers()){
-			getProtection().hide(p);
-		}
 		return super.remove();
 	}
 	/**
@@ -319,7 +358,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public boolean protects(Location l){
-		if(getProtection().isInside(l)) return true;
+		if(isInside(l)) return true;
 		for(Plot p : getPlots()){
 			if(p.protects(l)) return true;
 		}
@@ -399,8 +438,8 @@ public class Settlement extends Group implements HasBuilder{
 	
 	public double distanceSquared(Shape s){
 		double distanceSquared = s.getLocation().distanceSquared(this.getLocation());
-		if(this.getProtection().getHull().exists()){
-			return distanceSquared = Math.min(this.getProtection().getHull().distanceSquared(s), distanceSquared);
+		if(this.getHull().exists()){
+			return distanceSquared = Math.min(this.getHull().distanceSquared(s), distanceSquared);
 		}
 		/*
 		for(Shape shape : this.getProtection().getShapes()){
@@ -408,7 +447,7 @@ public class Settlement extends Group implements HasBuilder{
 		}
 		*/
 		for(Plot p : getPlots()){
-			for(Shape shape : p.getProtection().getShapes()){
+			for(Shape shape : p.getShapes()){
 				distanceSquared = Math.min(shape.distanceSquared(s), distanceSquared);
 			}
 		}
@@ -625,16 +664,16 @@ public class Settlement extends Group implements HasBuilder{
 		case PerArea:
 			if(taxInfo.isPercent()){
 				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
-				return val * this.getProtection().getHull().getArea();
+				return val * this.getHull().getArea();
 			} else {
-				return taxInfo.getValue() * this.getProtection().getHull().getArea();
+				return taxInfo.getValue() * getHull().getArea();
 			}
 		case PerVolume:
 			if(taxInfo.isPercent()){
 				double val = this.getBalance() * (taxInfo.getValue() / 100.0);
-				return val * this.getProtection().getHull().getVolume();
+				return val * this.getHull().getVolume();
 			} else {
-				return taxInfo.getValue() * this.getProtection().getHull().getVolume();
+				return taxInfo.getValue() * getHull().getVolume();
 			}
 		default:
 			break;

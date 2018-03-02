@@ -4,19 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
+import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import mkremins.fanciful.civilizations.FancyMessage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -38,15 +33,9 @@ import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.managers.SettlementManager;
-import com.kylantraynor.civilizations.protection.GroupTarget;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Permissions;
-import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;
@@ -68,45 +57,44 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 */
 	public Plot(PlotSettings settings){
 		super(settings);
-		getProtection().setShapes(settings.getShapes());
-		if(settings.getSettlementId() != null){
-			getProtection().setParentId(settings.getSettlementId());
-		}
 	}
 	
 	public Plot(String name, Shape shape, Settlement settlement){
-		super();
+		this(shape, settlement);
 		this.setName(name);
-		this.getProtection().add(shape);
-		setSettlement(settlement);
 		setChanged(true);
 	}
 	
 	public Plot(String name, List<Shape> shapes, Settlement settlement){
-		super();
-		this.setName(name);
-		this.getProtection().setShapes(shapes);
-		setSettlement(settlement);
+		this(name, shapes);
+        if(settlement != null) {
+            getSettings().setSettlementId(settlement.getUniqueId());
+        } else {
+            getSettings().setSettlementId(null);
+        }
 		setChanged(true);
 	}
 	
 	public Plot(Shape shape, Settlement settlement){
-		super();
-		this.getProtection().add(shape);
-		setSettlement(settlement);
+		this(shape);
+		if(settlement != null) {
+		    getSettings().setSettlementId(settlement.getUniqueId());
+        } else {
+		    getSettings().setSettlementId(null);
+        }
 		setChanged(true);
 	}
 	
 	public Plot(String name, List<Shape> shapes){
 		super();
 		this.setName(name);
-		this.getProtection().setShapes(shapes);
+		getSettings().setShapes(shapes);
 		setChanged(true);
 	}
 	
 	public Plot(Shape shape){
 		super();
-		this.getProtection().add(shape);
+		getSettings().addShape(shape);
 		setChanged(true);
 	}
 	
@@ -182,34 +170,70 @@ public class Plot extends Group implements Rentable, HasInventory {
 		getSettings().setPlotType(type);
 		setDefaultPermissions();
 	}
+
+	/**
+	 * Gets the list of {@linkplain Shape} that defines the plot.
+	 * @return List of {@link Shape}
+	 */
+	public List<Shape> getShapes(){
+		return getSettings().getShapes();
+	}
+
+    public Group getOwnerGroup(){
+        UUID id = getSettings().getOwnerGroupId();
+        if(id == null){
+            Group g = GroupManager.createGroup("Owner", this);
+            getSettings().setOwnerGroupId(g.getUniqueId());
+            getSettings().setPermissionLevel(g.getUniqueId(), 0);
+            return g;
+        } else {
+            return Group.get(id);
+        }
+    }
+
+    public Group getRenterGroup(){
+        UUID id = getSettings().getRenterGroupId();
+        if(id == null){
+            Group g = GroupManager.createGroup("Renter", this);
+            getSettings().setRenterGroupId(g.getUniqueId());
+            getSettings().setPermissionLevel(g.getUniqueId(), 10);
+            return g;
+        } else {
+            return Group.get(id);
+        }
+    }
 	
 	private void setDefaultPermissions() {
-		//Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
-		//Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
-		
-		/*resPerm.put(PermissionType.MANAGE, true);
-		resPerm.put(PermissionType.MANAGE_RANKS, true);
-		resPerm.put(PermissionType.MANAGE_PLOTS, true);
-		resPerm.put(PermissionType.UPGRADE, true);
-		resPerm.put(PermissionType.BREAK, true);
-		resPerm.put(PermissionType.PLACE, true);
-		resPerm.put(PermissionType.FIRE, true);
-		resPerm.put(PermissionType.INVITE, true);*/
-		
-		/*outsiderPerm.put(PermissionType.BREAK, false);
-		outsiderPerm.put(PermissionType.PLACE, false);*/
-		
-		serverPerm.put(PermissionType.EXPLOSION, false);
-		serverPerm.put(PermissionType.ERODE, false);
-		serverPerm.put(PermissionType.FIRE, true);
-		serverPerm.put(PermissionType.FIRESPREAD, false);
-		serverPerm.put(PermissionType.DEGRADATION, false);
-		serverPerm.put(PermissionType.MOBSPAWNING, false);
-		
-		//p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
-		//p.setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
+	    UUID ownerId = getOwnerGroup().getUniqueId();
+	    UUID renterId = getRenterGroup().getUniqueId();
+
+	    getSettings().setPermission(ownerId, PermissionType.MANAGE.toString(), true);
+        getSettings().setPermission(ownerId, PermissionType.BREAK.toString(), true);
+        getSettings().setPermission(ownerId, PermissionType.PLACE.toString(), true);
+        getSettings().setPermission(ownerId, PermissionType.INVITE.toString(), true);
+        getSettings().setPermission(ownerId, PermissionType.KICK.toString(), true);
+
+        getSettings().setPermission(renterId, PermissionType.MANAGE.toString(), false);
+        getSettings().setPermission(renterId, PermissionType.BREAK.toString(), true);
+        getSettings().setPermission(renterId, PermissionType.PLACE.toString(), true);
+        getSettings().setPermission(renterId, PermissionType.INVITE.toString(), true);
+        getSettings().setPermission(renterId, PermissionType.KICK.toString(), true);
+
+        getSettings().setSelfPermission(PermissionType.MANAGE.toString(), false);
+        getSettings().setSelfPermission(PermissionType.INVITE.toString(), false);
+        getSettings().setSelfPermission(PermissionType.KICK.toString(), false);
+		getSettings().setSelfPermission(PermissionType.PLACE.toString(), true);
+		getSettings().setSelfPermission(PermissionType.BREAK.toString(), true);
+
+		getSettings().setOutsidersPermission(PermissionType.BREAK.toString(), false);
+		getSettings().setOutsidersPermission(PermissionType.PLACE.toString(), false);
+
+		getSettings().setServerPermission(PermissionType.EXPLOSION.toString(), false);
+        getSettings().setServerPermission(PermissionType.ERODE.toString(), false);
+        getSettings().setServerPermission(PermissionType.FIRE.toString(), true);
+        getSettings().setServerPermission(PermissionType.FIRESPREAD.toString(), false);
+        getSettings().setServerPermission(PermissionType.DEGRADATION.toString(), false);
+        getSettings().setServerPermission(PermissionType.MOBSPAWNING.toString(), false);
 	}
 	
 	@Override
@@ -226,8 +250,8 @@ public class Plot extends Group implements Rentable, HasInventory {
 			}
 		}
 		if(getSettlement() == null && getPlotType() != PlotType.CROPFIELD){
-			Settlement s = Settlement.getClosest(getProtection().getCenter());
-			if(s.canMergeWith(getProtection().getShapes().get(0))){
+			Settlement s = Settlement.getClosest(getCenter());
+			if(s.canMergeWith(getShapes().get(0))){
 				SettlementManager.addPlot(s, this);
 			}
 		}
@@ -235,17 +259,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 			DynmapHook.updateMap(this);
 		}
 		super.update();
-	}
-	/**
-	 * Destroys this plot.
-	 * @return true if the plot has been removed, false otherwise.
-	 */
-	@Override
-	public boolean remove(){
-		for(Player p : Bukkit.getServer().getOnlinePlayers()){
-			getProtection().hide(p);
-		}
-		return super.remove();
 	}
 	
 	/**
@@ -279,7 +292,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 */
 	public Settlement getSettlement() {
 		if(getPlotType() == PlotType.CROPFIELD){
-			Location center = this.getProtection().getCenter();
+			Location center = getCenter();
 			InfluenceMap map = Civilizations.getInfluenceMap(center.getWorld());
 			if(map == null) return null;
 			return (Settlement) map.getInfluentSiteAt(center);
@@ -287,6 +300,43 @@ public class Plot extends Group implements Rentable, HasInventory {
 			return (Settlement) Group.get(getSettings().getSettlementId());
 		}
 	}
+
+    public boolean intersect(Shape s){
+        for(Shape s1 : getShapes()){
+            if(s1.intersect(s)) return true;
+        }
+        return false;
+    }
+
+	public Location getCenter(){
+        World w = null;
+        Double minX = null;
+        Double minY = null;
+        Double minZ = null;
+        Double maxX = null;
+        Double maxY = null;
+        Double maxZ = null;
+        for(Shape s : getShapes()){
+            if(w == null){
+                w = s.getWorld();
+                minX = s.getMinX();
+                minY = s.getMinY();
+                minZ = s.getMinZ();
+                maxX = s.getMaxX();
+                maxY = s.getMaxY();
+                maxZ = s.getMaxZ();
+            } else {
+                minX = Math.min(minX, s.getMinX());
+                minY = Math.min(minY, s.getMinY());
+                minZ = Math.min(minZ, s.getMinZ());
+                maxX = Math.max(maxX, s.getMaxX());
+                maxY = Math.max(maxY, s.getMaxY());
+                maxZ = Math.max(maxZ, s.getMaxZ());
+            }
+        }
+        if(w == null) throw new NullPointerException("World can't be null.");
+        return new Location(w, (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+    }
 	/**
 	 * Sets the settlement this plot belongs to, but does not
 	 * update the settlement's plots list.
@@ -296,10 +346,8 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public void setSettlement(Settlement settlement) {
 		if(settlement != null){
 			getSettings().setSettlementId(settlement.getUniqueId());
-			getProtection().setParentId(settlement.getUniqueId());
 		} else {
 			getSettings().setSettlementId(null);
-			getProtection().setParentId(null);
 		}
 	}
 	/**
@@ -363,25 +411,25 @@ public class Plot extends Group implements Rentable, HasInventory {
 		
 		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename NEW NAME", this.hasPermission(PermissionType.MANAGE, null, player)));
 		if(this instanceof Rentable){
-			if(((Rentable)this).isOwner(player)){
+			if(this.isOwner(player)){
 				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getUniqueId().toString() + " toggleForRent", ((Rentable)this).isForRent()));
 				list.add(new GroupAction("Kick", "Kick the player renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " kick", ((Rentable)this).getRenter() != null));
-				list.add(new GroupAction("Rent Price", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setRent " + ((Rentable)this).getRent(), ((Rentable)this).isOwner(player)));
-			} else if(((Rentable)this).isRenter(player)) {
+				list.add(new GroupAction("Rent Price", "Set the rent of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setRent " + ((Rentable)this).getRent(), this.isOwner(player)));
+			} else if(this.isRenter(player)) {
 				list.add(new GroupAction("Leave", "Stop renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " leave", true));
 			} else {
 				list.add(new GroupAction("Rent", "Start renting this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " rent", ((Rentable)this).isForRent()));
 			}
 		}
 		if(this instanceof Purchasable){
-			if(((Purchasable)this).isOwner(player)){
+			if(this.isOwner(player)){
 				list.add(new GroupAction("For Sale", "Toggle the for sale state of this plot", ActionType.TOGGLE, "/group " + getUniqueId().toString() + " toggleForSale", ((Purchasable)this).isForSale()));
-				list.add(new GroupAction("Purchase Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setPrice " + ((Purchasable)this).getPrice(), ((Purchasable)this).isOwner(player)));
+				list.add(new GroupAction("Purchase Price", "Set the purchase price of this plot", ActionType.SUGGEST, "/group " + getUniqueId().toString() + " setPrice " + ((Purchasable)this).getPrice(), this.isOwner(player)));
 			} else {
 				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " buy", ((Purchasable)this).isForSale()));
 			}
 		}
-		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", ProtectionManager.hasPermission(this.getProtection(), PermissionType.MANAGE, player, false) || isOwner(player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getUniqueId().toString() + " remove", ProtectionManager.hasPermission(PermissionType.MANAGE, this, player, false) || isOwner(player)));
 		
 		return list;
 	}
@@ -392,9 +440,15 @@ public class Plot extends Group implements Rentable, HasInventory {
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public boolean protects(Location location) {
-		return getProtection().isInside(location);
+		return isInside(location);
 	}
-	
+
+    public boolean isInside(Location location){
+        for(Shape s : getShapes()){
+            if(s.isInside(location)) return true;
+        }
+        return false;
+    }
 	/**
 	 * Gets a list of all plots registered on the server.
 	 * @return {@link List} of {@link Plot Plots} extracted from {@link Group#getList()}.
@@ -434,7 +488,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 	
 	public boolean isChunkLoaded(){
-		for(Shape s : this.getProtection().getShapes()){
+		for(Shape s : this.getSettings().getShapes()){
 			if(!s.getLocation().getWorld().isChunkLoaded(s.getLocation().getBlockX() >> 4, s.getLocation().getBlockZ() >> 4)) return false;
 		}
 		return true;
@@ -569,7 +623,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		beds = 0;
 		workbenches = 0;
 		chests = new ArrayList<Chest>();
-		for(Shape s : getProtection().getShapes()){
+		for(Shape s : getShapes()){
 			for(Location l : s.getBlockLocations()){
 				switch(l.getBlock().getType()){
 				case BED_BLOCK:
@@ -610,28 +664,24 @@ public class Plot extends Group implements Rentable, HasInventory {
 
 	@Override
 	public EconomicEntity getOwner() {
-		EconomicEntity ee = getSettings().getOwner();
-		if(ee == null){
-			//getSettings().setOwner(getSettlement());
-			ee = getSettlement();
-		} else {
-			if(ee.getName() == null){
-				getSettings().setOwner(null);
-				ee = getSettlement();
-			}
-		}
-		return ee;
+		Group owners = getOwnerGroup();
+		if(owners.getMembers().isEmpty()){
+		    return getSettlement();
+        } else {
+		    return EconomicEntity.get(owners.getMembers().get(0));
+        }
 	}
 
+	public boolean isOwner(OfflinePlayer player){
+	    return getOwnerGroup().isMember(player, true) ||
+                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, player, true);
+    }
+
 	@Override
-	public boolean isOwner(OfflinePlayer player) {
-		if(getOwner().isPlayer()){
-			return getOwner().getUniqueId().equals(player.getUniqueId());
-		} else {
-			return ProtectionManager.hasPermission(((Group) getOwner()).getProtection(), PermissionType.MANAGE_PLOTS, player, false);
-			//return ((Group) getOwner()).isMember(player);
-		}
-	}
+	public boolean isOwner(EconomicEntity entity) {
+        return getOwnerGroup().isMember(entity.getUniqueId(), true) ||
+                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, entity, true);
+    }
 
 	@Override
 	public double getPrice() {
@@ -666,6 +716,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 			result.info = this.getChatHeader() + ChatColor.GREEN + "Successfully purchased " + this.getName() + "!";
 			Economy.playCashinSound(getOwner());
 			Economy.playPaySound(ecoEntity);
+			setOwner(ecoEntity);
 			return result;
 		} else {
 			result.success = false;
@@ -676,17 +727,20 @@ public class Plot extends Group implements Rentable, HasInventory {
 
 	@Override
 	public EconomicEntity getRenter() {
-		return getSettings().getRenter();
+	    Group renterGroup = getRenterGroup();
+	    if(renterGroup.getMembers().isEmpty()) return null;
+	    return EconomicEntity.getOrNull(renterGroup.getMembers().get(0));
 	}
 
+	public boolean isRenter(OfflinePlayer player){
+	    Group renterGroup = getRenterGroup();
+	    return renterGroup.isMember(player, true);
+    }
+
 	@Override
-	public boolean isRenter(OfflinePlayer player) {
-		if(getRenter() == null) return false;
-		if(getRenter().isPlayer()){
-			return getRenter().getUniqueId().equals(player.getUniqueId());
-		} else {
-			return ((Group) getRenter()).isMember(player);
-		}
+	public boolean isRenter(EconomicEntity entity) {
+	    Group renterGroup = getRenterGroup();
+		return renterGroup.isMember(entity.getUniqueId(), true);
 	}
 
 	@Override
@@ -712,6 +766,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	@Override
 	public TransactionResult rent(EconomicEntity ecoEntity) {
 		TransactionResult result = new TransactionResult();
+		Group renterGroup = getRenterGroup();
 		if(!isForRent()){
 			result.success = false;
 			result.info = this.getChatHeader() + ChatColor.RED + this.getName() + " isn't for rent.";
@@ -730,7 +785,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		} else {
 			result.success = false;
 			result.info = this.getChatHeader() + ChatColor.RED + "You can't afford to rent " + this.getName() + ".";
-			this.getSettings().setRenter(null);
+			renterGroup.clearMembers();
 			return result;
 		}
 	}
@@ -774,8 +829,8 @@ public class Plot extends Group implements Rentable, HasInventory {
 		try{
 			Civilizations.DEBUG("Trying to find wares in stall.");
 		Map<ItemStack, Double> wares = new HashMap<ItemStack, Double>();
-		Location current = this.getProtection().getCenter().clone();
-		for(Shape s : getProtection().getShapes()){
+		Location current = this.getCenter().clone();
+		for(Shape s : getShapes()){
 			for(int x = s.getMinBlockX(); x <= s.getMaxBlockX(); x++){
 				for(int y = s.getMinBlockY(); y <= s.getMaxBlockY(); y++){
 					for(int z = s.getMinBlockZ(); z <= s.getMaxBlockZ(); z++){
@@ -823,15 +878,24 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
 	@Override
-	public void setRenter(EconomicEntity entity) {
-		getSettings().setRenter(entity);
+	public void setRenter(EconomicEntity entity){
+        Group g = getRenterGroup();
+        g.clearMembers();
+        g.addMember(entity);
 	}
 
-	public void setOwner(OfflinePlayer player) {
-		setOwner(EconomicEntity.get(player.getUniqueId()));
+	public void setOwner(OfflinePlayer player){
+        CivilizationsAccount ca = CivilizationsAccount.get(player.getUniqueId());
+        if(ca.getCurrentCharacterId() != null){
+            setOwner(ca.getCurrentCharacter());
+        } else {
+            setOwner(EconomicEntity.get(ca.getPlayerId()));
+        }
 	}
 	
 	public void setOwner(EconomicEntity entity){
-		getSettings().setOwner(entity);
+	    Group g = getOwnerGroup();
+	    g.clearMembers();
+	    g.addMember(entity);
 	}
 }

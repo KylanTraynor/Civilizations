@@ -257,12 +257,11 @@ public class DynmapHook {
 	}
 
 	private static void updateSettlement(Settlement s) {
-		if(s.getProtection().getHull() == null) return;
-		if(!s.getProtection().getHull().exists()) return;
+		if(s.getHull() == null || !s.getHull().exists()) return;
 		String id = s.getUniqueId().toString() + "_area";
 		String icon_id = s.getUniqueId().toString() + "_icon";
 		String icon = s.getIcon();
-		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ(), false);
+		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getHull().getVerticesX(), s.getHull().getVerticesZ(), false);
 		MarkerIcon setIcon = null;
 	    if (icon != null)
 	    {
@@ -279,20 +278,20 @@ public class DynmapHook {
 				Civilizations.log("SEVERE", "Failed to create marker area.");
 				return;
 			}
-			m.setCornerLocations(s.getProtection().getHull().getVerticesX(), s.getProtection().getHull().getVerticesZ());
+			m.setCornerLocations(s.getHull().getVerticesX(), s.getHull().getVerticesZ());
 		}
 		if(setIcon != null){
 	    	Marker set = markerList.remove(icon_id);
 	    	if (set == null){
-	    		set = settlementsMarkerSet.createMarker(id, Util.prettifyText(s.getName()), s.getProtection().getCenter().getWorld().getName(),
-	    				s.getProtection().getCenter().getBlockX(),
-	    				s.getProtection().getCenter().getBlockY(),
-	    				s.getProtection().getCenter().getBlockZ(), setIcon, false);
+	    		set = settlementsMarkerSet.createMarker(id, Util.prettifyText(s.getName()), s.getCenter().getWorld().getName(),
+	    				s.getCenter().getBlockX(),
+	    				s.getCenter().getBlockY(),
+	    				s.getCenter().getBlockZ(), setIcon, false);
 	    	} else {
-	    		set.setLocation(s.getProtection().getCenter().getWorld().getName(),
-	    				s.getProtection().getCenter().getBlockX(),
-	    				s.getProtection().getCenter().getBlockY(),
-	    				s.getProtection().getCenter().getBlockZ());
+	    		set.setLocation(s.getCenter().getWorld().getName(),
+	    				s.getCenter().getBlockX(),
+	    				s.getCenter().getBlockY(),
+	    				s.getCenter().getBlockZ());
 	            set.setLabel(Util.prettifyText(s.getName()));
 	            set.setMarkerIcon(setIcon);
 	    	}
@@ -305,7 +304,7 @@ public class DynmapHook {
     			sb.append("\" target=\"_blank\">Wiki</a><br />");
     		}
     		sb.append("<br/>Bank: " + Economy.format(s.getBalance()));
-    		sb.append("<br/>Area: " + s.getProtection().getHull().getArea() + "m�");
+    		sb.append("<br/>Area: " + s.getHull().getArea() + "m�");
     		sb.append("<h2>Taxes: </h2><br />");
     		sb.append("Daily Server Land Tax: " + Economy.format(s.getNextTaxationAmount("Land")));
     		set.setDescription(sb.toString());
@@ -341,7 +340,7 @@ public class DynmapHook {
 	          fieldMarker = markerAPI.getMarkerIcon("sign");
 	        }
 	    }
-	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getProtection().getCenter().getWorld().getName(), p.getProtection().getShapes().get(0).getVerticesX(), p.getProtection().getShapes().get(0).getVerticesZ(), false);
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
 		if(m == null){
 			m = plotsMarkerSet.findAreaMarker(areaId);
 			if(m == null){
@@ -355,15 +354,15 @@ public class DynmapHook {
 	    if(fieldMarker != null){
 	    	Marker field = markerList.remove(id);
 	    	if (field == null){
-	    		field = plotsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
-	    				p.getProtection().getCenter().getBlockX(),
-	    				p.getProtection().getCenter().getBlockY(),
-	    				p.getProtection().getCenter().getBlockZ(), fieldMarker, false);
+	    		field = plotsMarkerSet.createMarker(id, p.getName(), p.getCenter().getWorld().getName(),
+	    				p.getCenter().getBlockX(),
+	    				p.getCenter().getBlockY(),
+	    				p.getCenter().getBlockZ(), fieldMarker, false);
 	    	} else {
-	    		field.setLocation(p.getProtection().getCenter().getWorld().getName(),
-	    				p.getProtection().getCenter().getBlockX(),
-	    				p.getProtection().getCenter().getBlockY(),
-	    				p.getProtection().getCenter().getBlockZ());
+	    		field.setLocation(p.getCenter().getWorld().getName(),
+	    				p.getCenter().getBlockX(),
+	    				p.getCenter().getBlockY(),
+	    				p.getCenter().getBlockZ());
 	            field.setLabel(p.getName());
 	            field.setMarkerIcon(fieldMarker);
 	    	}
@@ -431,7 +430,7 @@ public class DynmapHook {
 	          stallIcon = markerAPI.getMarkerIcon("scales");
 	        }
 	    }
-	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getProtection().getCenter().getWorld().getName(), p.getProtection().getShapes().get(0).getVerticesX(), p.getProtection().getShapes().get(0).getVerticesZ(), false);
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
 		if(m == null){
 			m = plotsMarkerSet.findAreaMarker(areaId);
 			if(m == null){
@@ -442,15 +441,15 @@ public class DynmapHook {
 	    if(stallIcon != null){
 	    	Marker stall = markerList.remove(id);
 	    	if (stall == null){
-	    		stall = plotsMarkerSet.createMarker(id, p.getName(), p.getProtection().getCenter().getWorld().getName(),
-	    				p.getProtection().getCenter().getBlockX(),
-	    				p.getProtection().getCenter().getBlockY(),
-	    				p.getProtection().getCenter().getBlockZ(), stallIcon, false);
+	    		stall = plotsMarkerSet.createMarker(id, p.getName(), p.getCenter().getWorld().getName(),
+	    				p.getCenter().getBlockX(),
+	    				p.getCenter().getBlockY(),
+	    				p.getCenter().getBlockZ(), stallIcon, false);
 	    	} else {
-	    		stall.setLocation(p.getProtection().getCenter().getWorld().getName(),
-	    				p.getProtection().getCenter().getBlockX(),
-	    				p.getProtection().getCenter().getBlockY(),
-	    				p.getProtection().getCenter().getBlockZ());
+	    		stall.setLocation(p.getCenter().getWorld().getName(),
+	    				p.getCenter().getBlockX(),
+	    				p.getCenter().getBlockY(),
+	    				p.getCenter().getBlockZ());
 	            stall.setLabel(p.getName());
 	            stall.setMarkerIcon(stallIcon);
 	    	}

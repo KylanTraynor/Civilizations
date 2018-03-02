@@ -7,12 +7,11 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.kylantraynor.civilizations.managers.GroupManager;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -20,11 +19,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.builder.HasBuilder;
@@ -33,12 +30,7 @@ import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
-import com.kylantraynor.civilizations.protection.GroupTarget;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Permissions;
-import com.kylantraynor.civilizations.protection.Rank;
-import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.shapes.Prism;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.territories.Influence;
@@ -86,14 +78,14 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 	
 	@Override
-	public void initProtection(){
-		super.protection = new TownyTownProtection(this.getUniqueId());
-	}
-	
-	@Override
 	public void initSettings(){
 		this.setSettings(new TownyTownSettings());
 	}
+
+	@Override
+	public TownyTownSettings getSettings(){
+	    return (TownyTownSettings) super.getSettings();
+    }
 	
 	public TownyTown(Town t) throws TownyException{
 		super(t.getSpawn());
@@ -119,12 +111,17 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				Civilizations.log("INFO", "Loading " + t.getName() + ": " + Math.round(((double)i/tl.size())*100) + "% (" + i + "/"+ tl.size()+ ")");
 			}
 		}
-		this.getProtection().hullNeedsUpdate();
+		hullNeedsUpdate = true;
 	}
 	public TownyTown(Town t, UUID uuid) throws TownyException {
 		this(t);
-		this.getSettings().setUniqueId(uuid);
-	}
+		try {
+		    this.getSettings().load(getFile());
+        } catch (InvalidConfigurationException | IOException e){
+		    e.printStackTrace();
+		    this.getSettings().setUniqueId(uuid);
+        }
+    }
 
 	/**
 	 * Checks if the given TownBlock is a plot or just part of the town's protection.
@@ -152,81 +149,93 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		return false;
 		
 	}
+
+	public Group getMayorGroup(){
+	    UUID id = getSettings().getMayorGroupId();
+	    if(id == null){
+	        Group g = GroupManager.createGroup("Mayor", this);
+	        getSettings().setMayorGroupId(g.getUniqueId());
+	        getSettings().setPermissionLevel(g.getUniqueId(), 0);
+	        return g;
+        } else {
+	        return Group.get(id);
+        }
+    }
+
+	public Group getAssistantGroup(){
+        UUID id = getSettings().getAssistantGroupId();
+        if(id == null){
+            Group g = GroupManager.createGroup("Assistant", this);
+            getSettings().setAssistantGroupId(g.getUniqueId());
+            getSettings().setPermissionLevel(g.getUniqueId(), 10);
+            return g;
+        } else {
+            return Group.get(id);
+        }
+    }
+
 	/**
 	 * Imports permissions from Towny.
 	 */
 	private void importTownPermissions() {
-		Map<PermissionType, Boolean> mayorPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> coMayorPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> assistantPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> allyPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
-		
-		
-		mayorPerm.put(PermissionType.PLACE, true);
-		mayorPerm.put(PermissionType.BREAK, true);
-		mayorPerm.put(PermissionType.INVITE, true);
-		mayorPerm.put(PermissionType.KICK, true);
-		mayorPerm.put(PermissionType.CLAIM, true);
-		mayorPerm.put(PermissionType.UNCLAIM, true);
-		mayorPerm.put(PermissionType.UPGRADE, true);
-		
-		mayorPerm.put(PermissionType.MANAGE, true);
-		mayorPerm.put(PermissionType.MANAGE_STALLS, true);
-		mayorPerm.put(PermissionType.MANAGE_PLOTS, true);
-		
-		mayorPerm.put(PermissionType.BUILD_BLUEPRINTS, true);
-		mayorPerm.put(PermissionType.BLUEPRINT_NOTIFICATIONS, true);
-		
-		assistantPerm.put(PermissionType.UPGRADE, false);
-		assistantPerm.put(PermissionType.KICK, false);
-		
-		resPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().residentBuild);
-		resPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().residentDestroy);
-		
-		allyPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().allyBuild);
-		allyPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().allyDestroy);
-		
-		outsiderPerm.put(PermissionType.PLACE, this.townyTown.getPermissions().outsiderBuild);
-		outsiderPerm.put(PermissionType.BREAK, this.townyTown.getPermissions().outsiderDestroy);
-		
-		serverPerm.put(PermissionType.EXPLOSION, false);
-		serverPerm.put(PermissionType.FIRE, true);
-		serverPerm.put(PermissionType.FIRESPREAD, false);
-		serverPerm.put(PermissionType.DEGRADATION, false);
-		serverPerm.put(PermissionType.MOBSPAWNING, false);
-		
-		Rank mayor = new Rank("Mayor", (Rank)null);
-		mayor.addPlayer(TownyHook.getPlayer(townyTown.getMayor()));
-		
-		Rank coMayor = new Rank("Co-Mayor", mayor);
+	    UUID mayorId = getMayorGroup().getUniqueId();
+	    UUID assistantId = getAssistantGroup().getUniqueId();
+
+	    getSettings().setPermission(mayorId, PermissionType.PLACE.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.BREAK.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.INVITE.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.KICK.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.CLAIM.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.UNCLAIM.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.UPGRADE.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.MANAGE.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.MANAGE_STALLS.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.MANAGE_PLOTS.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.BUILD_BLUEPRINTS.toString(), true);
+        getSettings().setPermission(mayorId, PermissionType.BLUEPRINT_NOTIFICATIONS.toString(), true);
+
+        getSettings().setPermission(assistantId, PermissionType.PLACE.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.BREAK.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.INVITE.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.KICK.toString(), false);
+        getSettings().setPermission(assistantId, PermissionType.CLAIM.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.UNCLAIM.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.UPGRADE.toString(), false);
+        getSettings().setPermission(assistantId, PermissionType.MANAGE.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.MANAGE_STALLS.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.MANAGE_PLOTS.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.BUILD_BLUEPRINTS.toString(), true);
+        getSettings().setPermission(assistantId, PermissionType.BLUEPRINT_NOTIFICATIONS.toString(), true);
+
+        getSettings().setSelfPermission(PermissionType.PLACE.toString(), this.townyTown.getPermissions().residentBuild);
+        getSettings().setSelfPermission(PermissionType.BREAK.toString(), this.townyTown.getPermissions().residentDestroy);
+
+        getSettings().setOutsidersPermission(PermissionType.PLACE.toString(), this.townyTown.getPermissions().outsiderBuild);
+        getSettings().setOutsidersPermission(PermissionType.BREAK.toString(), this.townyTown.getPermissions().outsiderDestroy);
+
+        getSettings().setServerPermission(PermissionType.EXPLOSION.toString(), false);
+        getSettings().setServerPermission(PermissionType.FIRE.toString(), true);
+        getSettings().setServerPermission(PermissionType.FIRESPREAD.toString(), false);
+        getSettings().setServerPermission(PermissionType.DEGRADATION.toString(), false);
+        getSettings().setServerPermission(PermissionType.MOBSPAWNING.toString(), false);
+
+		getMayorGroup().addMember(TownyHook.getPlayer(townyTown.getMayor()));
+
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
 				if(rank.equalsIgnoreCase("co-mayor")){
-					coMayor.addPlayer(TownyHook.getPlayer(r));
+					getMayorGroup().addMember(TownyHook.getPlayer(r));
 				}
 			}
 		}
-		
-		Rank assistant = new Rank("Assistant", mayor);
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
-				if(rank.equalsIgnoreCase(assistant.getName())){
-					assistant.addPlayer(TownyHook.getPlayer(r));
+				if(rank.equalsIgnoreCase("assistant")){
+					getAssistantGroup().addMember(TownyHook.getPlayer(r));
 				}
 			}
 		}
-		
-		getProtection().setPermissions(mayor, new Permissions(mayorPerm));
-		getProtection().setPermissions(coMayor, new Permissions(coMayorPerm));
-		getProtection().setPermissions(assistant, new Permissions(assistantPerm));
-		getProtection().setPermissions(new GroupTarget(this), new Permissions(resPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.ALLIES), new Permissions(allyPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
-		getProtection().setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
-		
+
 		this.payTaxes = townyTown.hasUpkeep();
 	}
 
@@ -261,7 +270,15 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	@Override
 	public File getFile(){
-		return new File(Civilizations.getTownyTownsDirectory(), this.getName() + ".yml");
+		File f = new File(Civilizations.getTownyTownsDirectory(), this.getName() + ".yml");
+		if(!f.exists()){
+		    try{
+		        f.createNewFile();
+            } catch (IOException e){
+		        e.printStackTrace();
+            }
+        }
+        return f;
 	}
 	
 	@Override
@@ -332,7 +349,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 
 	@Override
 	public Builder getBuilder() {
-		return ((TownyTownSettings) getSettings()).getBuilder();
+		return getSettings().getBuilder();
 	}
 	
 	/**
@@ -383,7 +400,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		lastNotification = message;
 	}
 
-	public List<Shape> getTownyPlots() {
+	@Override
+	public List<Shape> getShapes() {
 		return townyPlots;
 	}
 
@@ -425,7 +443,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}*/
 			townyPlots.add(s);
 		}
-		this.getProtection().hullNeedsUpdate();
+		hullNeedsUpdate = true;
 	}
 
 	public void removeTownyPlot(TownBlock tb) {
@@ -437,7 +455,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				break;
 			}
 		}
-		this.getProtection().hullNeedsUpdate();
+		hullNeedsUpdate = true;
 	}
 	
 	@Override

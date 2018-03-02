@@ -2,14 +2,14 @@ package com.kylantraynor.civilizations.menus;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-public abstract class MenuReturnFunction extends BukkitRunnable {
-	private int returnedValue = -1;
+public abstract class MenuReturnFunction<T> extends BukkitRunnable {
+	private T returnedValue = null;
 	
-	public int getReturnedValue(){
+	public T getReturnedValue(){
 		return returnedValue;
 	}
 	
-	public void setReturnedValue(int value){
+	public void setReturnedValue(T value){
 		returnedValue = value;
 	}
 }

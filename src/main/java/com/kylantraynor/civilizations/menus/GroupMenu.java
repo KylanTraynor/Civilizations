@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Stack;
+import java.util.UUID;
 
+import com.kylantraynor.civilizations.protection.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,7 +26,6 @@ import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.pages.GroupMainPage;
 import com.kylantraynor.civilizations.menus.pages.MenuPage;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Rank;
 
 public class GroupMenu extends Menu{
 	
@@ -173,8 +174,10 @@ public class GroupMenu extends Menu{
 		Button newRankButton = getNewRankButton();
 		bottom.setItem(pos(8,0), newRankButton);
 		List<Button> buttons = new ArrayList<Button>();
-		for(Rank r : group.getProtection().getRanks()){
-			Button rankButton = getRankButton(r);
+		for(Permissions p : group.getSettings().getPermissions()){
+		    Group g = Group.get(p.getTarget());
+		    if(g == null) continue;
+			Button rankButton = getRankButton(g);
 			buttons.add(rankButton);
 		}
 		int i = 9;
@@ -214,7 +217,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, getPlayer(), true));
 		return manageButton;
 	}
 	/**
@@ -230,7 +233,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
 		return manageButton;
 	}
 	/**
@@ -248,7 +251,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NEW", null);
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
 		return button;
 	}
 	/**
@@ -267,7 +270,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NAMING", rank.getName());
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
 		return nameButton;
 	}
 	/**
@@ -277,11 +280,11 @@ public class GroupMenu extends Menu{
 	 */
 	public Button getParentButton(Rank rank){
 		List<String> lore = new ArrayList<String>();
-		if(rank.getParentId() != null){
+		/*if(rank.getParentId() != null){
 			lore.add("Current: " + group.getProtection().getRank(rank.getParentId()).getName());
 		} else {
 			lore.add("None");
-		}
+		}*/
 		Button parentButton = new Button(getPlayer(), validButton, "Parent Rank", lore,
 				new BukkitRunnable(){
 
@@ -290,7 +293,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
 		return parentButton;
 	}
 	/**
@@ -307,13 +310,13 @@ public class GroupMenu extends Menu{
 	 * @param r
 	 * @return
 	 */
-	private Button getRankButton(final Rank r) {
+	private Button getRankButton(final Group r) {
 		List<String> lore = new ArrayList<String>();
-		String parentName = "None";
-		if(r.getParentId() != null){
+		//String parentName = "None";
+		/*if(r.getParentId() != null){
 			parentName = group.getProtection().getRank(r.getParentId()).getName();
 		}
-		lore.add("Parent: " + parentName);
+		lore.add("Parent: " + parentName);*/
 		Button rankButton = new Button(getPlayer(), Material.GOLD_BLOCK, r.getName(), lore,
 				new BukkitRunnable(){
 
@@ -322,7 +325,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).selectionReturned(r.getName());
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE_RANKS, getPlayer(), false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
 		return rankButton;
 	}
 	/**
@@ -337,7 +340,7 @@ public class GroupMenu extends Menu{
 			//changePage(Page.RANK);
 			break;
 		case "PARENT_RANK_SELECTION":
-			group.getProtection().getRank(currentSubPage).setParent(group.getProtection().getRank(name));
+			//group.getProtection().getRank(currentSubPage).setParent(group.getProtection().getRank(name));
 			currentGoal = null;
 			//changePage(Page.RANK);
 			break;
@@ -381,12 +384,12 @@ public class GroupMenu extends Menu{
 	public void textInputResult(String result, String reason, Object argument) {
 		switch(reason.toUpperCase()){
 		case "RANK_NAMING":
-			group.getProtection().getRank((String) argument).setName(result);
+			Group.get((UUID) argument).setName(result);
 			currentSubPage = result;
 			//changePage(Page.RANK);
 			break;
 		case "RANK_NEW":
-			group.getProtection().addRank(new Rank(result, (Rank)null));
+			//group.getProtection().addRank(new Rank(result, (Rank)null));
 			//changePage(Page.RANKS_SELECTION);
 			break;
 		}
@@ -410,4 +413,5 @@ public class GroupMenu extends Menu{
 	public Group getGroup() {
 		return group;
 	}
+
 }

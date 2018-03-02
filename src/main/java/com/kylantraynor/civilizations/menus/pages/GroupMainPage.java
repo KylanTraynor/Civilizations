@@ -32,8 +32,8 @@ public class GroupMainPage implements MenuPage {
 		this.group = group;
 		managePage = new GroupManagePage(player, group);
 		ranksPage = new GroupRanksPage(player, group);
-		if(group.getProtection().getParent() != null){
-			parentPage = new GroupMainPage(player, group.getProtection().getParent().getGroup());
+		if(group.getParentId() != null){
+			parentPage = new GroupMainPage(player, group.getParent());
 		}
 	}
 	

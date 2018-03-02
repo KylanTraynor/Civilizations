@@ -4,6 +4,10 @@ import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
+import com.sun.istack.internal.NotNull;
+import org.bukkit.Location;
+
+import javax.annotation.Nullable;
 
 public class SettlementManager {
 	/**
@@ -72,4 +76,24 @@ public class SettlementManager {
 		
 		return c;
 	}
+
+    /**
+     * Returns the {@linkplain Settlement} at the given {@linkplain Location} if one exists there.
+     * @param location as {@link Location}
+     * @return the {@link Settlement} or Null.
+     */
+	public static Settlement getSettlementAt(@NotNull Location location){
+	    if(location == null) throw new NullPointerException("Location can't be Null!");
+		return Settlement.getAt(location);
+	}
+
+    /**
+     * Returns the {@linkplain Plot} at the given {@linkplain Location} if one exists there.
+     * @param location as {@link Location}
+     * @return the {@link Plot} or Null.
+     */
+	public static Plot getPlotAt(@NotNull Location location){
+	    if(location == null) throw new NullPointerException("Location can't be Null!");
+	    return Plot.getAt(location);
+    }
 }

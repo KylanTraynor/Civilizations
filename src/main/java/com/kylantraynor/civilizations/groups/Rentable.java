@@ -19,11 +19,11 @@ public interface Rentable extends Purchasable{
 	 */
 	public void setRenter(EconomicEntity entity);
 	/**
-	 * Checks if the given {@link OfflinePlayer} is renting this {@link Group}.
-	 * @param player as {@link OfflinePlayer}
-	 * @return true if the player is renting this {@link Group}, false otherwise.
+	 * Checks if the given {@link EconomicEntity} is renting this {@link Group}.
+	 * @param player as {@link EconomicEntity}
+	 * @return true if the entity is renting this {@link Group}, false otherwise.
 	 */
-	public boolean isRenter(OfflinePlayer player);
+	public boolean isRenter(EconomicEntity player);
 	/**
 	 * Gets the daily rent of this {@link Group}.
 	 * @return double

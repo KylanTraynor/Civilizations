@@ -2,6 +2,10 @@ package com.kylantraynor.civilizations.commands;
 
 import java.util.*;
 
+import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.menus.GroupExplorer;
+import com.kylantraynor.civilizations.menus.MenuReturnFunction;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -27,13 +31,20 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.util.MaterialAndData;
 
 public class CommandGroup implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length == 0) args = new String[]{"Null", "MENU"};
+		if(args.length == 0 && sender instanceof Player){
+		    MenuManager.openMenu(new GroupExplorer(null, new MenuReturnFunction<UUID>(){
+		        @Override
+		        public void run(){
+		            return;
+                }
+            }), (Player) sender);
+		    return true;
+        }
 		UUID id = null;
 		Civilizations.log("INFO", "Group ID: " + args[0]);
 		try{
@@ -107,13 +118,13 @@ public class CommandGroup implements CommandExecutor {
 			case "REMOVE":
 				if(sender instanceof Player){
 					if(g instanceof Plot){
-						if(((Plot) g).isOwner((Player) sender) || ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player)sender, true)){
+						if(((Plot) g).isOwner((Player) sender) || ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player)sender, true)){
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + "Plot has been removed.");
 							return true;
 						}
 					} else {
-						if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player) sender, false)){
+						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, true)){
 							String name = g.getName();
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + name + " has been removed.");
@@ -139,7 +150,7 @@ public class CommandGroup implements CommandExecutor {
 							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
 						}
 					} else {
-						if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.MANAGE, (Player) sender, false)){
+						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, false)){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
 								sb.append(args[i]).append(" ");
@@ -164,7 +175,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
-						if(rentable.isOwner(p)){
+						if(rentable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
 							rentable.setForRent(!rentable.isForRent());
 							if(rentable.isForRent()){
 								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for rent.");
@@ -180,7 +191,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.isOwner(p)){
+						if(purchasable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
 							purchasable.setForSale(!purchasable.isForSale());
 							if(purchasable.isForSale()){
 								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for sale.");
@@ -194,7 +205,7 @@ public class CommandGroup implements CommandExecutor {
 			case "RENT":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
+					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
 						TransactionResult r = rentable.rent(ee);
@@ -210,7 +221,7 @@ public class CommandGroup implements CommandExecutor {
 			case "PURCHASE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
+					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
 						TransactionResult r = purchasable.purchase(ee);
@@ -228,7 +239,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
-						if(rentable.isOwner(p)){
+						if(rentable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
 							rentable.setRent(Double.parseDouble(args[2]));
 							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The rent for this plot is now " + Economy.format(rentable.getRent()) + ".");
 						}
@@ -240,7 +251,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.isOwner(p)){
+						if(purchasable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
 							purchasable.setPrice(Double.parseDouble(args[2]));
 							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The price for this plot is now " + Economy.format(purchasable.getPrice()) + ".");
 						}
@@ -249,7 +260,7 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "UPGRADE":
 				if(sender instanceof Player){
-					if(ProtectionManager.hasPermission(g.getProtection(), PermissionType.UPGRADE, ((Player)sender), false)){
+					if(ProtectionManager.hasPermission(PermissionType.UPGRADE, g, ((Player)sender), true)){
 						if(g.upgrade()){
 							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
 						} else {
@@ -277,7 +288,7 @@ public class CommandGroup implements CommandExecutor {
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
-						if(((Rentable)g).isOwner(p)){
+						if(((Rentable)g).isOwner(CivilizationsAccount.getEconomicEntity(p))){
 							((Rentable)g).setRenter(null);
 						}
 					}
@@ -286,7 +297,7 @@ public class CommandGroup implements CommandExecutor {
 			case "JOIN":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
+					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						if(((Rentable)g).getRenter() == null){
 							((Rentable)g).setRenter(ee);
@@ -298,7 +309,7 @@ public class CommandGroup implements CommandExecutor {
 			case "LEAVE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = EconomicEntity.get(p.getUniqueId());
+					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						if(((Rentable)g).getRenter() == ee){
 							((Rentable)g).setRenter(null);
@@ -326,18 +337,20 @@ public class CommandGroup implements CommandExecutor {
 				}
 				break;
 			case "PERMISSIONS":
-				if(sender instanceof Player){
+				/*if(sender instanceof Player){
 					g.getProtection().getPermissionSet().getFancyMessage().send(sender);
 				} else {
 					sender.sendMessage(g.getProtection().getPermissionSet().toString());
-				}
+				}*/
+				sender.sendMessage("Command Disabled");
+				break;
 			}
 		}
 		return true;
 	}
 	
 	protected void processRankCommand(Player p, Group g, String[] args) {
-		switch(args.length){
+		/*switch(args.length){
 		case 1:
 			Rank playerRank = g.getProtection().getRank(p);
 			if(playerRank != null){
@@ -376,7 +389,8 @@ public class CommandGroup implements CommandExecutor {
 				}
 				break;
 			}
-		}
+		}*/
+		p.sendMessage("Command Disabled.");
 	}
 
 }

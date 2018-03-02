@@ -18,7 +18,6 @@ import java.util.UUID;
 
 import mkremins.fanciful.civilizations.FancyMessage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -31,17 +30,12 @@ import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.economy.TaxBase;
 import com.kylantraynor.civilizations.economy.TaxInfo;
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.protection.Rank;
-import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.GroupSettings;
 
 /**
@@ -49,7 +43,7 @@ import com.kylantraynor.civilizations.settings.GroupSettings;
  * @author Baptiste
  *
  */
-public class Group extends EconomicEntity{
+public class Group extends EconomicEntity implements Comparable<Group>{
 	
 	private static Map<String, Group> all = new HashMap<String, Group>();
 	//private static ArrayList<Group> list = new ArrayList<Group>();
@@ -63,7 +57,6 @@ public class Group extends EconomicEntity{
 	
 	private int id;
 	private boolean hasChanged = true;
-	protected Protection protection;
 	private ChatColor chatColor;
 	private GroupSettings settings;
 	private UUID parent;
@@ -83,7 +76,7 @@ public class Group extends EconomicEntity{
 	
 	/**
 	 * Creates a Group using the data in the given {@linkplain GroupSettings} file.
-	 * @param settings
+	 * @param settings The {@link GroupSettings} to load from.
 	 */
 	public Group(GroupSettings settings){
 		this.settings = settings;
@@ -94,11 +87,6 @@ public class Group extends EconomicEntity{
 	
 	public void init(){
 		chatColor = ChatColor.WHITE;
-		initProtection();
-	}
-	
-	public void initProtection(){
-		protection = new Protection(getUniqueId());
 	}
 	
 	public UUID getUniqueId(){
@@ -118,36 +106,44 @@ public class Group extends EconomicEntity{
 	 * @return String
 	 */
 	public String getName(){ return getSettings().getName(); }
+
 	/**
 	 * Sets the group's name.
-	 * @param newName
+	 * @param newName The new name.
 	 */
-	public void setName(String newName){ getSettings().setName(newName); } 
+	public void setName(String newName){ getSettings().setName(newName); }
+
 	
 	/**
 	 * Gets the color of this group's chat.
 	 * @return ChatColor
 	 */
 	public ChatColor getChatColor(){return chatColor;}
+
 	/**
 	 * Sets the color of this group's chat.
-	 * @param newColor
+	 * @param newColor The new {@link ChatColor}.
 	 */
 	public void setChatColor(ChatColor newColor){chatColor = newColor;}
+
 	/**
 	 * Gets the ID of this group.
+     * @deprecated Groups now use {@link UUID}.
 	 * @return Integer
 	 */
 	public int getId() {return id;}
+
 	/**
 	 * Sets the ID of this group.
-	 * @param id
+     * @deprecated Groups now use {@link UUID}.
+	 * @param id The new id of this group.
 	 */
 	public void setId(int id) {this.id = id;}
+
 	/**
 	 * Gets the group with the given ID.
-	 * @deprecated Use get(UUID) instead.
-	 * @param id
+	 * @deprecated Use {@link Group#get(UUID)} instead.
+	 * @param id The id of the {@link Group} to get.
 	 * @return Group
 	 */
 	public static Group get(int id){
@@ -156,6 +152,7 @@ public class Group extends EconomicEntity{
 		}
 		return null;
 	}
+
 	/**
 	 * Gets the group with the given Unique ID.
 	 * @param uid as {@link UUID}
@@ -164,54 +161,51 @@ public class Group extends EconomicEntity{
 	public static Group get(UUID uid){
 		return all.get(uid.toString());
 	}
-	/**
-	 * Gets the protection of this group.
-	 * @return¨Protection
-	 */
-	public Protection getProtection() {return protection;}
-	/**
-	 * Sets the protection of this group.
-	 * @param protection
-	 */
-	public void setProtection(Protection protection) {
-		this.protection = protection;
-		setChanged(true);
-	}
+
 	/**
 	 * Gets the list of all the members of this group.
 	 * @return List<UUID> of the members
 	 */
 	public List<UUID> getMembers() {return this.getSettings().getMembers();}
+
 	/**
 	 * Sets the list of all the members of this group.
-	 * @param members
+	 * @param members The new list of members.
 	 */
 	public void setMembers(List<UUID> members) { this.getSettings().setMembers(members); }
+
+    /**
+     * Clears all the {@linkplain Group}'s members.
+     */
+	public void clearMembers(){
+	    this.getSettings().setMembers(new ArrayList<>());
+    }
+
 	/**
 	 * Adds the given {@linkplain OfflinePlayer} to the list of members of this {@linkplain Group}.
-	 * @param member
+	 * @param member The {@link OfflinePlayer} to add.
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
 	public boolean addMember(OfflinePlayer member){
 		CivilizationsAccount account = CivilizationsAccount.get(member.getUniqueId());
+		UUID id;
 		if(account.getCurrentCharacterId() != null){
-			if(getMembers().contains(account.getCurrentCharacterId())) return false;
+			id = account.getCurrentCharacterId();
 		} else {
-			if(getMembers().contains(account.getPlayerId())) return false;
+			id = account.getPlayerId();
 		}
 		List<UUID> members = getMembers();
-		if(account.getCurrentCharacterId() != null){
-			members.add(account.getCurrentCharacterId());
-		} else {
-			members.add(account.getPlayerId());
-		}
-		setMembers(members);
-		return true;
+		if(members.add(id)){
+		    setMembers(members);
+		    return true;
+        } else {
+		    return false;
+        }
 	}
 	
 	/**
 	 * Adds the given entity to the list of members of this group.
-	 * @param member
+	 * @param member The {@link EconomicEntity} to add.
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
 	public boolean addMember(EconomicEntity member){
@@ -221,9 +215,10 @@ public class Group extends EconomicEntity{
 		setMembers(members);
 		return true;
 	}
+
 	/**
 	 * Removes the given {@linkplain OfflinePlayer} from the list of members of this {@linkplain Group}.
-	 * @param member
+	 * @param member The {@link OfflinePlayer} to remove.
 	 * @return true if the player has been removed, false otherwise.
 	 */
 	public boolean removeMember(OfflinePlayer member){
@@ -242,7 +237,7 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Removes the given entity from the list of members of this group.
-	 * @param member
+	 * @param member The {@link EconomicEntity} to remove.
 	 * @return true if the player has been removed, false otherwise.
 	 */
 	public boolean removeMember(EconomicEntity member){
@@ -254,27 +249,69 @@ public class Group extends EconomicEntity{
 		}
 		return false;
 	}
+
 	/**
-	 * Checks if the given {@linkplain OfflinePlayer} is a member of this {@linkplain Group}.
-	 * @param player as {@link OfflinePlayer}
-	 * @return true if the player is a member, false otherwise.
-	 */
-	public boolean isMember(OfflinePlayer player){
-		CivilizationsAccount account = CivilizationsAccount.get(player.getUniqueId());
-		if(account.getCurrentCharacterId() != null){
-			return getMembers().contains(account.getCurrentCharacterId());
-		} else {
-			return getMembers().contains(account.getPlayerId());
-		}
-	}
+     * Checks if the given {@linkplain OfflinePlayer} is a shallow member of this {@linkplain Group}.
+     * @param player as {@link OfflinePlayer}
+     * @return true if the player is a member, false otherwise.
+     */
+    public boolean isMember(OfflinePlayer player){
+        return isMember(player, false);
+    }
+
+    /**
+     * Checks if the given {@linkplain OfflinePlayer} is a member of this {@linkplain Group}.
+     * @param player as {@link OfflinePlayer}
+     * @param recursive true for deep, false for shallow.
+     * @return true if the player is a member, false otherwise.
+     */
+    public boolean isMember(OfflinePlayer player, boolean recursive){
+        CivilizationsAccount account = CivilizationsAccount.get(player.getUniqueId());
+        if(account.getCurrentCharacterId() != null){
+            return isMember(account.getCurrentCharacterId(), recursive);
+        } else {
+            return isMember(account.getPlayerId(), recursive);
+        }
+    }
+
 	/**
 	 * Checks if the given entity is a member of this group.
-	 * @param entity
+	 * @param entity The {@link EconomicEntity} to check membership of.
 	 * @return true if the entity is a member, false otherwise.
 	 */
 	public boolean isMember(EconomicEntity entity){
-		return getMembers().contains(entity.getUniqueId());
+		return isMember(entity.getUniqueId());
 	}
+
+	/**
+	 * Checks if the given {@linkplain UUID} is a shallow member of this group.
+	 * @param id the {@link UUID} to check.
+	 * @return true if is a member, false otherwise.
+	 */
+	public boolean isMember(UUID id){
+		return isMember(id, false);
+	}
+
+	/**
+	 * Checks (potentially recursively) if the given {@linkplain UUID}
+	 * is a part of this {@linkplain Group}.
+	 * @param id the {@link UUID} to test.
+	 * @param recursive whether or not the test should check child groups.
+	 * @return true if the given {@link} belongs to his {@link Group} or any child {@link Group}.
+	 */
+	public boolean isMember(UUID id, boolean recursive){
+		boolean result = getMembers().contains(id);
+		if(recursive && !result){
+			for(Group g : getList()){
+				if(result) break;
+				if(g.getParentId() != null && g.getParent() == this){
+				    result = g.getUniqueId() == id || g.isMember(id, true);
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Checks if at least one players in this list of members of this group is online.
 	 * @return true if at least one player is online, false otehrwise.
@@ -290,17 +327,20 @@ public class Group extends EconomicEntity{
 		}
 		return false;
 	}
+
 	/**
 	 * Gets a list of all the online players of this group.
-	 * @return List<Player> of online members.
+	 * @return The list of online members.
 	 */
 	public List<Player> getOnlinePlayers(){
 		List<Player>  l = new ArrayList<Player>();
 		for(UUID i : getMembers()){
-			OfflinePlayer op = Bukkit.getServer().getOfflinePlayer(i);
-			if(op.isOnline()){
-				l.add(op.getPlayer());
-			}
+		    EconomicEntity en = EconomicEntity.get(i);
+		    if(en.isPlayer()){
+		        if(en.getOfflinePlayer().isOnline()){
+		            l.add(en.getOfflinePlayer().getPlayer());
+                }
+            }
 		}
 		return l;
 	}
@@ -322,7 +362,7 @@ public class Group extends EconomicEntity{
 	 * @return File
 	 */
 	public File getFile(){
-		File f = new File(Civilizations.getGroupDirectory(), "" + this.getId() + ".yml");
+		File f = new File(Civilizations.getGroupDirectory(), "" + this.getUniqueId() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -334,7 +374,7 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Gets the name of the given group.
-	 * @param g
+	 * @param g The {@link Group} to get the name of.
 	 * @return "None" if the given group is Null.
 	 */
 	public static String getNameOf(Group g){
@@ -347,8 +387,8 @@ public class Group extends EconomicEntity{
 	/**
 	 * Loads the data from the file into the given group.
 	 * @deprecated Use the constructor receiving a {@linkplain GroupSettings} instead.
-	 * @param file
-	 * @param group
+	 * @param file The {@link File} to extract data from.
+	 * @param group The {@link Group} to put data into.
 	 * @return
 	 */
 	public static <T extends Group> T load(File file, T group){
@@ -373,9 +413,9 @@ public class Group extends EconomicEntity{
 	 */
 	public boolean save(){
 		File f = getFile();
-		if(getProtection() != null){
+		/*if(getProtection() != null){
 			getSettings().saveProtection(getProtection());
-		}
+		}*/
 		if(Civilizations.currentInstance.isEnabled()){
 			getSettings().asyncSave(f);
 		} else {
@@ -393,14 +433,14 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Checks if the group has changed.
-	 * @return
+	 * @return true if the group has changed, false otherwise.
 	 */
 	public boolean isChanged() {
 		return hasChanged;
 	}
 	/**
 	 * Sets if the groups has changed or not.
-	 * @param hasChanged
+	 * @param hasChanged Value to set.
 	 */
 	public void setChanged(boolean hasChanged) {
 		this.hasChanged = hasChanged;
@@ -447,8 +487,8 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Gets all the commands available to this group.
-	 * @param player
-	 * @return
+	 * @param player {@link Player} who's checking for the actions.
+	 * @return The list of actions.
 	 */
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
@@ -464,27 +504,32 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Gets an interactive list of the members of this group.
-	 * @param page
+	 * @param page The displayed page.
 	 * @return FancyMessage
 	 */
 	public FancyMessage getInteractiveMembersList(int page){
 		if(page < 1) page = 1;
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle("MEMBERS", null));
 		for(int i = 8 * (page - 1); i < getMembers().size() && i < 8 * (page); i+=1){
-			OfflinePlayer p = Civilizations.currentInstance.getServer().getOfflinePlayer(getMembers().get(i));
-			fm.then("\n" + p.getName());
-			if(p.isOnline()){
-				fm.color(ChatColor.GREEN);
-			} else {
-				fm.color(ChatColor.GRAY);
-			}
-			fm.command("/p " + p.getName());
-			Rank pr = getProtection().getRank(p);
+		    EconomicEntity en = EconomicEntity.get(getMembers().get(i));
+			fm.then("\n" + en.getName());
+			if(en.isPlayer()){
+                if(en.getOfflinePlayer().isOnline()){
+                    fm.color(ChatColor.GREEN);
+                } else {
+                    fm.color(ChatColor.GRAY);
+                }
+                fm.command("/p " + en.getName());
+            } else {
+                fm.color(ChatColor.GOLD);
+                fm.command("/group " + getMembers().get(i).toString() + " INFO");
+            }
+			/*Rank pr = getProtection().getRank(p);
 			if(pr != null){
 				fm.then(" (" + pr.getName() + ")");
 				fm.color(ChatColor.GOLD);
 				fm.command("/group " + this.getUniqueId().toString() + " rank " + pr.getName() + " members");
-			}
+			}*/
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
@@ -506,9 +551,9 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Gets a fancy message showing the list of rank members for the given rank.
-	 * @param r
-	 * @param page
-	 * @return
+	 * @param r The {@link Rank} to display.
+	 * @param page The displayed page.
+	 * @return A {@link FancyMessage} to display.
 	 */
 	public FancyMessage getInteractiveRankMembers(Rank r, int page){
 		if(page < 1) page = 1;
@@ -543,40 +588,40 @@ public class Group extends EconomicEntity{
 	}
 	/**
 	 * Sends a message to the members of the group with the given permission.
-	 * @param message
-	 * @param permission
+	 * @param message The {@link FancyMessage} to send.
+	 * @param permission The {@link PermissionType} required to see it.
 	 */
 	public void sendMessage(FancyMessage message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-				if(!ProtectionManager.hasPermission(getProtection(), permission, p, false)) continue;
+                if(!ProtectionManager.hasPermission(permission, this, p, true)) continue;
 			}
 			message.send(p);
 		}
 	}
 	/**
 	 * Sends a message to the members of the group with the given permission.
-	 * @param message
-	 * @param permission
+	 * @param message The {@link String} to send.
+	 * @param permission The {@link PermissionType} required to see it.
 	 */
 	public void sendMessage(String message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-				if(!ProtectionManager.hasPermission(getProtection(), permission, p, false)) continue;
+				if(!ProtectionManager.hasPermission(permission, this, p, true)) continue;
 			}
 			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
 	}
 	/**
 	 * Checks if the given player has a certain permission.
+     * @deprecated Use {@link ProtectionManager#hasPermission(PermissionType, Group, OfflinePlayer, boolean)} instead.
 	 * @param perm
 	 * @param block
 	 * @param player
 	 * @return
 	 */
-	@Deprecated
 	public boolean hasPermission(PermissionType perm, Block block, Player player) {
-		return ProtectionManager.hasPermission(getProtection(), perm, player, false);
+		return ProtectionManager.hasPermission(perm, this, player, true);
 		/*
 		boolean result = false;
 		if(player != null){
@@ -586,15 +631,7 @@ public class Group extends EconomicEntity{
 		}
 		return result;*/
 	}
-	/**
-	 * Checks if the given player has a certain rank.
-	 * @param targetId of the rank.
-	 * @param player
-	 * @return
-	 */
-	public boolean hasRank(String targetId, Player player) {
-		return getProtection().getRank(targetId).includes(player);
-	}
+
 	/**
 	 * Gets the main info panel for the given rank.
 	 * @param playerRank
@@ -654,7 +691,7 @@ public class Group extends EconomicEntity{
 		return 0;
 	}
 	/**
-	 * Gets the tax informations of the given type.
+	 * Gets the tax information of the given type.
 	 * @param tax
 	 * @return
 	 */
@@ -760,5 +797,12 @@ public class Group extends EconomicEntity{
 	public void setSettings(GroupSettings settings) {
 		this.settings = settings;
 	}
-	
+
+    @Override
+    public int compareTo(Group o) {
+        int result = getType().compareTo(o.getType());
+        if(result == 0) result = getName().compareTo(o.getName());
+        if(result == 0) result = getUniqueId().compareTo(o.getUniqueId());
+        return result;
+    }
 }
