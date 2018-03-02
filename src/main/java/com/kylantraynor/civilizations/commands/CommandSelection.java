@@ -47,24 +47,26 @@ public class CommandSelection implements CommandExecutor{
 				return true;
 			case "INFO":
 				if(Civilizations.getSelectedProtections().containsKey(sender)){
-					Civilizations.getSelectedProtections().get(sender).getGroup().getInteractiveInfoPanel((Player) sender).send(sender);
+					Civilizations.getSelectedProtections().get(sender).getInteractiveInfoPanel((Player) sender).send(sender);
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
 				}
 				return true;
 			case "MEMBERS":
 				if(Civilizations.getSelectedProtections().containsKey(sender)){
-					Civilizations.getSelectedProtections().get(sender).getGroup().getInteractiveMembersList().send(sender);
+					Civilizations.getSelectedProtections().get(sender).getInteractiveMembersList().send(sender);
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
 				}
 				return true;
 			case "PERMISSIONS":
+				/*
 				if(Civilizations.getSelectedProtections().containsKey(sender)){
-					Civilizations.getSelectedProtections().get(sender).getGroup().getProtection().getPermissionSet().getFancyMessage().send(sender);
+					Civilizations.getSelectedProtections().get(sender).getProtection().getPermissionSet().getFancyMessage().send(sender);
 				} else {
 					sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You have no protection selected.");
-				}
+				}*/
+				sender.sendMessage("Command Disabled.");
 				return true;
 		}
 		return false;

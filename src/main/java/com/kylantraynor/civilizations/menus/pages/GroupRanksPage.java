@@ -1,12 +1,12 @@
 package com.kylantraynor.civilizations.menus.pages;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.kylantraynor.civilizations.protection.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +17,6 @@ import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
-import com.kylantraynor.civilizations.protection.Rank;
 
 public class GroupRanksPage implements MenuPage{
 
@@ -25,24 +24,26 @@ public class GroupRanksPage implements MenuPage{
 	private Group group;
 	
 	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
-	private Map<Rank, MenuPage> rankPages = new HashMap<Rank, MenuPage>();
-	TreeSet<Rank> ranks = new TreeSet<Rank>(getRankComparator());
+	private Map<Group, MenuPage> subPages = new HashMap<>();
+	TreeSet<Group> groups = new TreeSet<>();
 	
 	public GroupRanksPage(Player player, Group group){
 		this.player = player;
 		this.group = group;
-		for(Rank r : group.getProtection().getRanks()){
-			if(ranks.contains(r)) continue;
-			ranks.add(r);
+		for(Permissions p : group.getSettings().getPermissions()){
+			Group g = Group.get(p.getTarget());
+			if(g == null) continue;
+			if(groups.contains(g)) continue;
+			groups.add(g);
 		}
-		for(Rank r : ranks){
-			rankPages.put(r, new GroupRankPage(player, group, r));
+		for(Group g : groups){
+			subPages.put(g, new GroupRankPage(player, group, g));
 		}
 	}
 
 	@Override
 	public int getRows() {
-		return (int) (Math.ceil(group.getProtection().getRanks().size() / 9.0) + 1);
+		return (int) (Math.ceil(group.getSettings().getPermissions().length / 9.0) + 1);
 	}
 
 	@Override
@@ -53,16 +54,18 @@ public class GroupRanksPage implements MenuPage{
 		/*if(gMenu.getBottomInventory().getSize() / 9 <= getRows()){
 			return;
 		}*/
-		for(Rank r : group.getProtection().getRanks()){
-			if(ranks.contains(r)) continue;
-			ranks.add(r);
+		for(Permissions p : group.getSettings().getPermissions()){
+			Group g = Group.get(p.getTarget());
+			if(g == null) continue;
+			if(groups.contains(g)) continue;
+			groups.add(g);
 		}
 		int i = gMenu.pos(0, 0);
-		for(Rank r : ranks){
-			MenuPage rp = rankPages.get(r);
+		for(Group g : groups){
+			MenuPage rp = subPages.get(g);
 			if(rp == null){
-				rp = new GroupRankPage(player, group, r);
-				rankPages.put(r, rp);
+				rp = new GroupRankPage(player, group, g);
+				subPages.put(g, rp);
 			}
 			buttons.put(i, rp.getIconButton());
 			i++;
@@ -72,12 +75,12 @@ public class GroupRanksPage implements MenuPage{
 	@Override
 	public Button getIconButton() {
 		List<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.WHITE + "Ranks: ");
-		for(Rank r : ranks){
-			lore.add(ChatColor.GOLD + "    " + r.getName());
+		lore.add(ChatColor.WHITE + "Groups: ");
+		for(Group g : groups){
+			lore.add(ChatColor.GOLD + "    " + g.getName());
 		}
 		MenuPage page = this;
-		Button ranksButton = new Button(player, Material.EMERALD_BLOCK, "Manage " + group.getType() + " ranks", lore,
+		Button ranksButton = new Button(player, Material.EMERALD_BLOCK, "Manage " + group.getType() + " groups", lore,
 				new BukkitRunnable(){
 					@Override
 					public void run() {
@@ -95,15 +98,7 @@ public class GroupRanksPage implements MenuPage{
 
 	@Override
 	public String getTitle() {
-		return "" + ChatColor.BOLD + ChatColor.GOLD + "Manage " + group.getName() + " Ranks";
-	}
-	
-	public Comparator<Rank> getRankComparator(){
-		return (a, b) -> { // Rank from lowest to highest
-			if(a.getLevel() < b.getLevel()) return -1;
-			if(a.getLevel() > b.getLevel()) return 1;
-			return a.getName().compareTo(b.getName());
-		};
+		return "" + ChatColor.BOLD + ChatColor.GOLD + "Manage " + group.getName() + " Groups";
 	}
 
 }

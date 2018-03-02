@@ -34,6 +34,19 @@ public class Button extends ItemStack{
 		ButtonManager.registerButton(this);
 	}
 
+	public Button(Player p, ItemStack is, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){
+		super(is.getType());
+		this.setPlayer(p);
+		if(!isEnabled) this.setType(invalidButton);
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName(title);
+		im.setLore(description);
+		this.isEnabled = isEnabled;
+		this.runnable = runnable;
+		setItemMeta(im);
+		ButtonManager.registerButton(this);
+	}
+
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}

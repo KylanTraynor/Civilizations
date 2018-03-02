@@ -5,8 +5,6 @@ import com.kylantraynor.civilizations.groups.Nation;
 import com.kylantraynor.civilizations.groups.NationMember;
 import com.kylantraynor.voronoi.VCell;
 
-// TODO Add titles when moving from one region to another.
-
 public class Region {
 	
 	private InfluentSite site;

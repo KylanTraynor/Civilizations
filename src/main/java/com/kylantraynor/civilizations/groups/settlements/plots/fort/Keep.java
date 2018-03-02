@@ -73,13 +73,13 @@ public class Keep extends Plot implements FortComponent{
 		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
 			then("" + ((Fort)getSettlement()).getHouse().getName()).color(ChatColor.GOLD).
 			command(houseInfoCommand);
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
 		
 		fm.then("\nActions: ").color(ChatColor.GRAY);
 		if(this.isMember(EconomicEntity.get(player.getUniqueId()))){
-			if(ProtectionManager.hasPermission(getSettlement().getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
-				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getId() + " setname NEW NAME");
+			if(ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, getSettlement(), player, true)){
+				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getUniqueId().toString() + " setname NEW NAME");
 			} else {
 				fm.then("\nRename").color(ChatColor.GRAY).tooltip("You don't have the MANAGE PLOTS permission here.");
 			}
@@ -95,7 +95,7 @@ public class Keep extends Plot implements FortComponent{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getKeepDirectory(), "" + getId() + ".yml");
+		File f = new File(Civilizations.getKeepDirectory(), "" + getUniqueId().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -160,7 +160,7 @@ public class Keep extends Plot implements FortComponent{
 		} else {
 			fc.set("SettlementPath", null);
 		}
-		fc.set("Shape", Util.getShapesString(getProtection().getShapes()));
+		fc.set("Shape", Util.getShapesString(getShapes()));
 		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;

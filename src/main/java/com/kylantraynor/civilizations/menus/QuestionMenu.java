@@ -13,12 +13,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class QuestionMenu extends Menu {
 	
 	private Inventory top;
-	private String question;
-	private String[] answers;
+	final private String question;
+	final private String[] answers;
 	private Button[] buttons;
-	private MenuReturnFunction function;
+	final private MenuReturnFunction<Integer> function;
 
-	public QuestionMenu(String question, String[] answers, MenuReturnFunction function){
+	public QuestionMenu(String question, String[] answers, MenuReturnFunction<Integer> function){
 		this.question = question;
 		this.answers = answers;
 		this.function = function;

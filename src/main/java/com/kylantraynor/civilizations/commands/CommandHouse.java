@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.commands;
 
 import java.util.Set;
 
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
@@ -65,7 +66,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				// /House [Name] SetBanner
 				case "SETBANNER":
-					if(!house.hasPermission(PermissionType.MANAGE_BANNER, null, player)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, house, player, false)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this House.");
 					}
 					Block target = player.getTargetBlock(null, 15);
@@ -89,7 +90,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				// /House [Name] SetWords Some words with spaces
 				case "SETWORDS":
-					if(!house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, false)){
 						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					StringBuilder sb = new StringBuilder();
@@ -104,7 +105,7 @@ public class CommandHouse implements CommandExecutor{
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do this.");
 					}
-					if(house.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
+					if(ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, true)){
 						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					if(args.length > 2){
@@ -131,7 +132,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				}
 			} else {
-				((Player) sender).chat("/group " + house.getId());
+				((Player) sender).chat("/group " + house.getUniqueId().toString());
 				return true;
 			}
 			

@@ -13,10 +13,10 @@ public interface Purchasable {
 	public EconomicEntity getOwner();
 	/**
 	 * Checks if the given player is the owner of this group.
-	 * @param player as {@link OfflinePlayer}
+	 * @param player as {@link EconomicEntity}
 	 * @return true if the player owns the group, false otherwise.
 	 */
-	public boolean isOwner(OfflinePlayer player);
+	public boolean isOwner(EconomicEntity player);
 	/**
 	 * Gets the price this group can be bought against.
 	 * @return double

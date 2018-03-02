@@ -8,6 +8,9 @@ import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 
 public class TownyTownSettings extends SettlementSettings{
+
+	private final static String MAYOR = "Ranks.Mayor";
+	private final static String ASSISTANT = "Ranks.Assistant";
 	
 	private Builder builder;
 	
@@ -23,6 +26,30 @@ public class TownyTownSettings extends SettlementSettings{
 			return null;
 		}
 		
+	}
+
+	public UUID getMayorGroupId(){
+		if(this.contains(MAYOR)){
+			return UUID.fromString(this.getString(MAYOR));
+		} else {
+			return null;
+		}
+	}
+
+	public void setMayorGroupId(UUID id){
+		this.set(MAYOR, id.toString());
+	}
+
+	public UUID getAssistantGroupId(){
+		if(this.contains(ASSISTANT)){
+			return UUID.fromString(this.getString(ASSISTANT));
+		} else {
+			return null;
+		}
+	}
+
+	public void setAssistantGroupId(UUID id){
+		this.set(ASSISTANT, id.toString());
 	}
 	
 	public void setBuilder(Builder builder){

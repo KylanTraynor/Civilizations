@@ -3,13 +3,11 @@ package com.kylantraynor.civilizations.settings;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
+import com.kylantraynor.civilizations.protection.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,11 +16,6 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.TaxBase;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
-import com.kylantraynor.civilizations.protection.GroupTarget;
-import com.kylantraynor.civilizations.protection.PermissionSet;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
-import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.protection.Rank;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.util.Util;
 
@@ -33,7 +26,8 @@ public class GroupSettings extends YamlConfiguration{
 	private Instant creationDate;
 	private List<UUID> members;
 	private boolean changed = true;
-	
+
+	private static final String PARENT = "General.Parent";
 	private static final String PERMISSIONSROOT = "Permissions";
 	private static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
 	private static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
@@ -67,41 +61,40 @@ public class GroupSettings extends YamlConfiguration{
 		}
 		return uniqueId;
 	}
-	
-	/**
-	 * Sets the unique ID of the group. Null will set a new random Unique ID.
-	 * @param id
-	 */
-	public void setUniqueId(UUID id){
-		if(id == null) id = UUID.randomUUID();
-		this.set("General.UniqueId", id.toString());
-		uniqueId = id;
-	}
 
 	/**
-	 * Gets the {@linkplain UUID} of the {@linkplain com.kylantraynor.civilizations.groups.Group}.
-	 * @return Null if there is no parent.
-	 */
-	public UUID getParentId(){
-		if(parentId != null) return parentId;
-		if(this.contains("General.ParentId")){
-			parentId = UUID.fromString(this.getString("General.ParentId"));
-		}
-		return parentId;
-	}
-
-	/**
-	 * Sets the {@linkplain UUID} of the {@linkplain com.kylantraynor.civilizations.groups.Group}.
+	 * Sets the parent ID of the group.
 	 * @param id
 	 */
 	public void setParentId(UUID id){
-		if(id != null) {
-            this.set("General.ParentId", id.toString());
-        } else {
-		    this.set("General.ParentId", null);
-        }
+		if(id == null) id = UUID.randomUUID();
+		this.set(PARENT, id.toString());
 		parentId = id;
 	}
+
+    /**
+     * Gets the parent ID of the group.
+     * @return
+     */
+    public UUID getParentId(){
+        if(parentId != null) return parentId;
+        if(this.contains(PARENT)){
+            parentId = UUID.fromString(this.getString(PARENT));
+        } else {
+            setUniqueId(null);
+        }
+        return parentId;
+    }
+
+    /**
+     * Sets the unique ID of the group. Null will set a new random Unique ID.
+     * @param id
+     */
+    public void setUniqueId(UUID id){
+        if(id == null) id = UUID.randomUUID();
+        this.set("General.UniqueId", id.toString());
+        uniqueId = id;
+    }
 	
 	/**
 	 * Gets the group's balance.
@@ -249,16 +242,52 @@ public class GroupSettings extends YamlConfiguration{
 	/**
 	 * Gets the state of the given permission for the entity with the given
 	 * {@linkplain UUID}.
-	 * @param id as {@link UUID}
+	 * @param id The {@link UUID} of the target. Give the group's own UUID to
+     *              check self permissions, and Null to check outsiders permissions.
 	 * @param permission as {@link String}
 	 * @return {@link Boolean}, or Null if the permission was not set.
 	 */
 	public Boolean getPermission(UUID id, String permission){
+	    if(id == null) return getOutsidersPermission(permission);
+	    if(id == getUniqueId()) return getSelfPermission(permission);
 		String path = String.format(PERMISSIONS, id.toString(), permission);
 		if(!this.contains(path)) return null;
 		return this.getBoolean(path);
 	}
-	
+
+    /**
+     * Gets the state of the given permission for the SERVER.
+     * @param permission as {@link String}
+     * @return {@link Boolean}, or Null if the permission was not set.
+     */
+    public Boolean getServerPermission(String permission){
+        String path = String.format(PERMISSIONS, "SERVER", permission);
+        if(!this.contains(path)) return null;
+        return this.getBoolean(path);
+    }
+
+    /**
+     * Gets the state of the given permission for OUTSIDERS.
+     * @param permission as {@link String}
+     * @return {@link Boolean}, or Null if the permission was not set.
+     */
+    public Boolean getOutsidersPermission(String permission){
+        String path = String.format(PERMISSIONS, "OUTSIDERS", permission);
+        if(!this.contains(path)) return null;
+        return this.getBoolean(path);
+    }
+
+    /**
+     * Gets the state of the given permission for SELF.
+     * @param permission as {@link String}
+     * @return {@link Boolean}, or Null if the permission was not set.
+     */
+    public Boolean getSelfPermission(String permission){
+        String path = String.format(PERMISSIONS, "SELF", permission);
+        if(!this.contains(path)) return null;
+        return this.getBoolean(path);
+    }
+
 	/**
 	 * Gets the permission level of entity with the given {@linkplain UUID}.
 	 * @param id as {@link UUID}
@@ -272,18 +301,57 @@ public class GroupSettings extends YamlConfiguration{
 	}
 	
 	/**
-	 * Sets the given permission to the given value or the entity with the given {@linkplain UUID}.
-	 * @param id as {@link UUID}
+	 * Sets the given permission to the given value for the entity with the given {@linkplain UUID}.
+	 * @param id The {@link UUID} of the target. Use the Group's own UUID to set self permissions,
+     *           and Null to set Outsiders permissions.
 	 * @param permission as {@link String}
 	 * @param value as {@link Boolean}
 	 * @return {@link Boolean} of the previous value of the permission, or Null if it was not set.
 	 */
 	public Boolean setPermission(UUID id, String permission, Boolean value){
+	    if(id == null) return setOutsidersPermission(permission, value);
+	    if(id == getUniqueId()) return setSelfPermission(permission, value);
 		Boolean oldValue = getPermission(id, permission);
 		this.set(String.format(PERMISSIONS, id.toString(), permission), value);
 		return oldValue;
 	}
-	
+
+    /**
+     * Sets the given permission to the given value for the SERVER.
+     * @param permission as {@link String}
+     * @param value as {@link Boolean}
+     * @return {@link Boolean} of the previous value of the permission, or Null if it was not set.
+     */
+    public Boolean setServerPermission(String permission, Boolean value){
+        Boolean oldValue = getServerPermission(permission);
+        this.set(String.format(PERMISSIONS, "SERVER", permission), value);
+        return oldValue;
+    }
+
+    /**
+     * Sets the given permission to the given value for the OUTSIDERS.
+     * @param permission as {@link String}
+     * @param value as {@link Boolean}
+     * @return {@link Boolean} of the previous value of the permission, or Null if it was not set.
+     */
+    public Boolean setOutsidersPermission(String permission, Boolean value){
+        Boolean oldValue = getOutsidersPermission(permission);
+        this.set(String.format(PERMISSIONS, "OUTSIDERS", permission), value);
+        return oldValue;
+    }
+
+    /**
+     * Sets the given permission to the given value for SELF.
+     * @param permission as {@link String}
+     * @param value as {@link Boolean}
+     * @return {@link Boolean} of the previous value of the permission, or Null if it was not set.
+     */
+    public Boolean setSelfPermission(String permission, Boolean value){
+        Boolean oldValue = getSelfPermission(permission);
+        this.set(String.format(PERMISSIONS, "SELF", permission), value);
+        return oldValue;
+    }
+
 	/**
 	 * Sets the permission level for the entity with the given {@linkplain UUID}.
 	 * @param id as {@link UUID}
@@ -296,7 +364,31 @@ public class GroupSettings extends YamlConfiguration{
 		this.set(String.format(PERMISSIONSLEVEL, id.toString()), value);
 		return oldValue;
 	}
-	
+
+    /**
+     * Gets an array of unsorted {@linkplain Permissions}.
+     * @return Array of {@link Permissions}
+     */
+	public Permissions[] getPermissions(){
+	    List<Permissions> perms = new ArrayList<>();
+	    ConfigurationSection cs = this.getConfigurationSection(PERMISSIONSROOT);
+	    for(String s : cs.getKeys(false)){
+	        UUID target = UUID.fromString(s);
+	        int level = 0;
+            ConfigurationSection cs2 = cs.getConfigurationSection(s);
+            Map<String, Boolean> map = new HashMap<>();
+            for(String s2 : cs2.getKeys( false)){
+                if(s2.equalsIgnoreCase("Level")){
+                    level = cs2.getInt(s2);
+                } else {
+                    map.put(s2, cs2.getBoolean(s2));
+                }
+            }
+            perms.add(new Permissions(target, level, map));
+        }
+        return perms.toArray(new Permissions[perms.size()]);
+    }
+
 	@Override
 	public void save(File file){
 		if(file == null) return;
@@ -319,12 +411,8 @@ public class GroupSettings extends YamlConfiguration{
 		run.runTaskAsynchronously(Civilizations.currentInstance);
 		this.setChanged(false);
 	}
-	
-	/**
-	 * Saves the protection. Should be used each time the protection is changed, or
-	 * once before saving the settings.
-	 * @param prot
-	 */
+
+	/*
 	public void saveProtection(Protection prot){
 		if(!prot.getShapes().isEmpty()){
 			setShapes(prot.getShapes());
@@ -335,28 +423,10 @@ public class GroupSettings extends YamlConfiguration{
 		if(prot.getPermissionSet() != null){
 			setPermissionSet(prot.getPermissionSet());
 		}
-	}
+	}*/
 
-	public void setShapes(List<Shape> shapes) {
-		if(shapes != null){
-			try{
-				this.set("Protection.Shape", Util.getShapesString(shapes));
-			} catch(Exception e){
-				Civilizations.currentInstance.getLogger().warning("Couldn't save protection shapes for " + this.getName() + ".");
-				e.printStackTrace();
-			}
-		} else {
-			this.set("Protection.Shape", null);
-		}
-	}
-	
-	public List<Shape> getShapes(){
-		if(this.contains("Protection.Shape")){
-			return Util.parseShapes(this.getString("Protection.Shape"));
-		}
-		return new ArrayList<Shape>();
-	}
-	
+
+	/*
 	public void setRanks(List<Rank> ranks){
 		if(ranks != null){
 			for(Rank r : ranks){
@@ -383,11 +453,12 @@ public class GroupSettings extends YamlConfiguration{
 				this.set("Protection.Ranks." + r.getName() + ".Members", idList);
 			}
 		}
-	}
-	
+	}*/
+
+	/*
 	public List<Rank> getRanks(){
 		List<Rank> ranks = new ArrayList<Rank>();
-		
+
 		if(this.contains("Protection.Ranks")){
 			ConfigurationSection cs = this.getConfigurationSection("Protection.Ranks");
 			for(String s : cs.getKeys(false)){
@@ -406,10 +477,11 @@ public class GroupSettings extends YamlConfiguration{
 				ranks.add(r);
 			}
 		}
-		
+
 		return ranks;
-	}
-	
+	}*/
+
+	/*
 	public void setPermissionSet(PermissionSet permissionSet) {
 		for(PermissionTarget target : permissionSet.getTargets()){
 			if(target instanceof Rank){
@@ -420,7 +492,7 @@ public class GroupSettings extends YamlConfiguration{
 				this.set("Protection.Permissions." + target.getType().toString(), permissionSet.get(target).getTypesAsString());
 			}
 		}
-	}
+	}*/
 
 	public TaxInfo getTaxInfo(String tax) {
 		String root = "Economy.Taxes.";

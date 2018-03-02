@@ -39,9 +39,18 @@ import com.kylantraynor.civilizations.shapes.Shape;
 public class GroupManager {
 	
 	Map<String, Settlement> loadedSettlements = new HashMap<String, Settlement>();
-	
-	public static Group createGroup(){
-		return new Group();
+
+    /**
+     * Creates a {@linkplain Group} with the given name and parent.
+     * @param name The name of the new group.
+     * @param parent The parent {@link Group}.
+     * @return
+     */
+	public static Group createGroup(String name, Group parent){
+		Group g = new Group();
+		g.setName(name);
+		g.setParent(parent);
+		return g;
 	}
 	
 	public static void loadAll(){
@@ -127,21 +136,17 @@ public class GroupManager {
 	 * Loads the Groups from their files.
 	 */
 	private static void loadGroups() {
-		File groupDir = Civilizations.getCampDirectory();
+		File groupDir = Civilizations.getGroupDirectory();
 		if(groupDir.exists()){
 			for(File f : groupDir.listFiles()){
 				if(!f.getName().split("\\.")[1].equals("yml")) continue;
-				YamlConfiguration yaml = new YamlConfiguration();
-				try {
-					yaml.load(f);
-				} catch (FileNotFoundException e) {
-					Civilizations.log("WARNING", "Couldn't find file " + f.getName());
-				} catch (IOException e) {
-					Civilizations.log("WARNING", "File " + f.getName() + " is in use in another application.");
-				} catch (InvalidConfigurationException e) {
-					Civilizations.log("WARNING", "Invalid file configuration.");
-				}
-				//Group.load(yaml);
+				try{
+				    GroupSettings yaml = new GroupSettings();
+				    yaml.load(f);
+				    new Group(yaml);
+                } catch (Exception e){
+				    e.printStackTrace();
+                }
 			}
 		}
 	}

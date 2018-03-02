@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.commands;
 
 import java.util.Set;
 
+import com.kylantraynor.civilizations.managers.ProtectionManager;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
@@ -62,7 +63,7 @@ public class CommandNation implements CommandExecutor{
 				// /Nation [Name] SetBanner
 				case "SETBANNER":
 					Player p = (Player) sender;
-					if(!nation.hasPermission(PermissionType.MANAGE_BANNER, null, p)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, nation, p, false)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this Nation.");
 					}
 					Block target = p.getTargetBlock(null, 15);
@@ -86,7 +87,7 @@ public class CommandNation implements CommandExecutor{
 					return true;*/
 				// /Nation [Name] SetWords Some words with spaces
 				case "SETWORDS":
-					if(!nation.hasPermission(PermissionType.MANAGE_HOUSE, null, (Player) sender)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, nation, (Player) sender, false)){
 						sender.sendMessage(nation.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					StringBuilder sb = new StringBuilder();
@@ -130,7 +131,7 @@ public class CommandNation implements CommandExecutor{
 					return true;
 				}
 			} else {
-				((Player) sender).chat("/group " + nation.getId());
+				((Player) sender).chat("/group " + nation.getUniqueId().toString());
 				return true;
 			}
 			

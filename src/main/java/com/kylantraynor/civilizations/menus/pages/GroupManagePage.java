@@ -14,14 +14,12 @@ import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.TargetType;
 
 public class GroupManagePage implements MenuPage {
 
-	private Player player;
-	private Group group;
+	final private Player player;
+	final private Group group;
 	
 	private MenuPage outsiderPermissions;
 	
@@ -31,7 +29,7 @@ public class GroupManagePage implements MenuPage {
 		this.player = player;
 		this.group = group;
 		
-		outsiderPermissions = new GroupPermissionsPage(player, group, new PermissionTarget(TargetType.OUTSIDERS));
+		outsiderPermissions = new GroupPermissionsPage(player, group, null);
 	}
 	
 	@Override
@@ -54,7 +52,7 @@ public class GroupManagePage implements MenuPage {
 						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
-		}, ProtectionManager.hasPermission(group.getProtection(), PermissionType.MANAGE, player, false));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, player, true));
 		return manageButton;
 	}
 

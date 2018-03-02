@@ -125,9 +125,9 @@ public class CommandCamp extends CommandGroup{
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
 					if(args.length >= 2){
-						p.chat("/group " + c.getId() + " members " + args[1]);
+						p.chat("/group " + c.getUniqueId().toString() + " members " + args[1]);
 					} else {
-						p.chat("/group " + c.getId() + " members");
+						p.chat("/group " + c.getUniqueId().toString() + " members");
 					}
 				}
 			}
@@ -139,7 +139,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
-					p.chat("/group " + c.getId() + " permissions");
+					p.chat("/group " + c.getUniqueId().toString() + " permissions");
 				}
 			}
 			break;
@@ -150,7 +150,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
-					p.chat("/group " + c.getId() + " upgrade");
+					p.chat("/group " + c.getUniqueId().toString() + " upgrade");
 				}
 			}
 			break;

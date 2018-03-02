@@ -1,8 +1,13 @@
 package com.kylantraynor.civilizations.settings;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.shapes.Shape;
+import com.kylantraynor.civilizations.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -21,6 +26,7 @@ public class PlotSettings extends GroupSettings{
 	private Double rent;
 	private Double price;
 	private Instant nextPayment;
+	private List<Shape> shapes;
 
 	/**
 	 * Gets the settlement this plot belongs to.
@@ -51,7 +57,56 @@ public class PlotSettings extends GroupSettings{
 		setChanged(true);
 	}
 
-	/**
+    /**
+     * Gets the owner group id of this plot.
+     * @return {@link UUID}
+     */
+    public UUID getOwnerGroupId() {
+        if(this.contains("General.OwnerGroup")){
+            return UUID.fromString(this.getString("General.OwnerGroup"));
+        }
+        return null;
+    }
+
+    /**
+     * Sets the owner of this plot.
+     * @param id {@link UUID}
+     */
+    public void setOwnerGroupId(UUID id) {
+        if(id != null){
+            this.set("General.OwnerGroup", id.toString());
+        } else {
+            this.set("General.OwnerGroup", null);
+        }
+        this.setChanged(true);
+    }
+
+    /**
+     * Gets the renter group id of this plot.
+     * @return {@link UUID}
+     */
+    public UUID getRenterGroupId() {
+        if(this.contains("General.RenterGroup")){
+            return UUID.fromString(this.getString("General.RenterGroup"));
+        }
+        return null;
+    }
+
+    /**
+     * Sets the renter group of this plot.
+     * @param id {@link UUID}
+     */
+    public void setRenterGroupId(UUID id) {
+        if(id != null){
+            this.set("General.RenterGroup", id.toString());
+        } else {
+            this.set("General.RenterGroup", null);
+        }
+        this.setChanged(true);
+    }
+
+
+    /**
 	 * Gets the owner of this plot.
 	 * @return
 	 */
@@ -236,6 +291,35 @@ public class PlotSettings extends GroupSettings{
 		this.set("General.Type", type.toString());
 		this.setChanged(true);
 	}
-	
-	
+
+    public void setShapes(List<Shape> shapes) {
+        if(shapes != null){
+            try{
+                this.set("Protection.Shape", Util.getShapesString(shapes));
+                this.shapes = shapes;
+            } catch(Exception e){
+                Civilizations.currentInstance.getLogger().warning("Couldn't save protection shapes for " + this.getName() + ".");
+                e.printStackTrace();
+            }
+        } else {
+            this.set("Protection.Shape", null);
+            this.shapes = null;
+        }
+    }
+
+    public List<Shape> getShapes(){
+	    if(shapes != null) return shapes;
+        if(this.contains("Protection.Shape")){
+            shapes = Util.parseShapes(this.getString("Protection.Shape"));
+        } else {
+            shapes = new ArrayList<>();
+        }
+        return shapes;
+    }
+
+    public void addShape(Shape s){
+	    shapes = getShapes();
+	    shapes.add(s);
+	    setShapes(shapes);
+    }
 }

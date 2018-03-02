@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.kylantraynor.civilizations.shapes.Hull;
+import com.kylantraynor.civilizations.shapes.Shape;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
@@ -23,14 +23,8 @@ import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.GroupAction;
 import com.kylantraynor.civilizations.groups.settlements.forts.SmallOutpost;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.managers.GroupManager;
-import com.kylantraynor.civilizations.protection.GroupTarget;
-import com.kylantraynor.civilizations.protection.PermissionTarget;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.protection.Permissions;
-import com.kylantraynor.civilizations.protection.Protection;
-import com.kylantraynor.civilizations.protection.TargetType;
 import com.kylantraynor.civilizations.settings.CampSettings;
 import com.kylantraynor.civilizations.shapes.Sphere;
 import com.kylantraynor.civilizations.util.Util;
@@ -50,20 +44,16 @@ public class Camp extends Settlement{
 	
 	public Camp(CampSettings settings){
 		super(settings);
-		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
-		this.setDefaultPermissions();
 	}
 	
 	@Override
 	public void postLoad(){
-		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setDefaultPermissions();
 		super.postLoad();
 	}
 	
 	public Camp(Location l) {
 		super(l);
-		this.getProtection().add(new Sphere(getLocation(), Camp.getSize()), false);
 		this.setExpireOn(Instant.now().plus(campDuration, ChronoUnit.HOURS));
 		this.setDefaultPermissions();
 	}
@@ -90,6 +80,27 @@ public class Camp extends Settlement{
 		if(SmallOutpost.hasUpgradeRequirements(this)) return true;
 		return false;
 	}
+
+    public boolean isInside(Location location){
+	    if(!getLocation().getWorld().equals(location.getWorld())) return false;
+        return getLocation().distanceSquared(location) <= Camp.getSize() * Camp.getSize();
+    }
+
+    public double distanceSquared(Location location){
+        if(!getLocation().getWorld().equals(location.getWorld())) return Double.NaN;
+	    return Math.max(0, getLocation().distanceSquared(location) - (Camp.getSize()*Camp.getSize()));
+    }
+
+    @Override
+    public Hull getHull(){
+        return new Hull(getLocation());
+    }
+
+    public List<Shape> getShapes(){
+	    List<Shape> l = new ArrayList<>();
+	    l.add(new Sphere(this.getLocation(), Camp.getSize()));
+        return l;
+    }
 	
 	@Override
 	public boolean upgrade(){/*
@@ -168,32 +179,21 @@ public class Camp extends Settlement{
 	 * Sets the default Permissions for this camp.
 	 */
 	public void setDefaultPermissions() {
-		Protection p = this.getProtection();
-		Map<PermissionType, Boolean> resPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> serverPerm = new HashMap<PermissionType, Boolean>();
-		Map<PermissionType, Boolean> outsiderPerm = new HashMap<PermissionType, Boolean>();
-		
-		resPerm.put(PermissionType.MANAGE, true);
-		resPerm.put(PermissionType.MANAGE_RANKS, true);
-		resPerm.put(PermissionType.MANAGE_PLOTS, true);
-		resPerm.put(PermissionType.UPGRADE, true);
-		resPerm.put(PermissionType.BREAK, true);
-		resPerm.put(PermissionType.PLACE, true);
-		resPerm.put(PermissionType.FIRE, true);
-		resPerm.put(PermissionType.INVITE, true);
-		
-		outsiderPerm.put(PermissionType.BREAK, false);
-		outsiderPerm.put(PermissionType.PLACE, false);
-		
-		serverPerm.put(PermissionType.EXPLOSION, false);
-		serverPerm.put(PermissionType.FIRE, true);
-		serverPerm.put(PermissionType.FIRESPREAD, false);
-		serverPerm.put(PermissionType.DEGRADATION, false);
-		serverPerm.put(PermissionType.MOBSPAWNING, false);
-		
-		p.setPermissions(new GroupTarget(this), new Permissions(resPerm));
-		p.setPermissions(new PermissionTarget(TargetType.OUTSIDERS), new Permissions(outsiderPerm));
-		p.setPermissions(new PermissionTarget(TargetType.SERVER), new Permissions(serverPerm));
+		getSettings().setSelfPermission(PermissionType.MANAGE.toString(), true);
+        getSettings().setSelfPermission(PermissionType.MANAGE_PLOTS.toString(), true);
+        getSettings().setSelfPermission(PermissionType.BREAK.toString(), true);
+        getSettings().setSelfPermission(PermissionType.PLACE.toString(), true);
+        getSettings().setSelfPermission(PermissionType.FIRE.toString(), true);
+        getSettings().setSelfPermission(PermissionType.INVITE.toString(), true);
+
+        getSettings().setOutsidersPermission(PermissionType.BREAK.toString(), false);
+        getSettings().setOutsidersPermission(PermissionType.PLACE.toString(), false);
+
+        getSettings().setServerPermission(PermissionType.EXPLOSION.toString(), false);
+        getSettings().setServerPermission(PermissionType.FIRE.toString(), true);
+        getSettings().setServerPermission(PermissionType.FIRESPREAD.toString(), false);
+        getSettings().setServerPermission(PermissionType.DEGRADATION.toString(), false);
+        getSettings().setServerPermission(PermissionType.MOBSPAWNING.toString(), false);
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.

@@ -102,10 +102,10 @@ public class Civilizations extends JavaPlugin{
 	private boolean DEBUG = false;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	private Database database;
-	static private HashMap<Player, Protection> selectedProtections = new HashMap<Player, Protection>();
+	static private HashMap<Player, Group> selectedProtections = new HashMap<Player, Group>();
 	static private CivilizationsSettings settings;
 	
-	public static HashMap<Player, Protection> getSelectedProtections(){ return selectedProtections; }
+	public static HashMap<Player, Group> getSelectedProtections(){ return selectedProtections; }
 	
 	private static List<BukkitRunnable> processes = new ArrayList<BukkitRunnable>();
 	/*
@@ -443,10 +443,11 @@ public class Civilizations extends JavaPlugin{
 	/**
 	 * Updates the given protection's visibility for the given player.
 	 * @param player to display the change to.
-	 * @param protection to update.
+	 * @param group to update.
 	 */
-	protected static void updateProtectionVisibility(Player player, Protection protection) {
-		if(getPlayersInProtectionMode().contains(player)){
+	@Deprecated
+	protected static void updateProtectionVisibility(Player player, Group group) {
+		/*if(getPlayersInProtectionMode().contains(player)){
 			if(Civilizations.getSelectedProtections().get(player).equals(protection)){
 				protection.highlight(player);
 			} else {
@@ -454,7 +455,7 @@ public class Civilizations extends JavaPlugin{
 			}
 		} else {
 			protection.hide(player);
-		}
+		}*/
 	}
 
 	@Override
@@ -494,39 +495,37 @@ public class Civilizations extends JavaPlugin{
 		if(l != null){
 			//Try getting a plot
 			Plot plot = null;
-			Protection newProt = null;
+			Group group = null;
 			for(Group g : Group.getList()){
 				if(g instanceof Plot){
 					if(((Plot) g).protects(l)){
 						plot = (Plot) g;
-						newProt = plot.getProtection();
+						group = g;
 					}
 				}
 			}
 			Settlement s = null;
-			if(newProt == null){
+			if(group == null){
 				s = Settlement.getAt(l);
-				if(s != null){
-					newProt = s.getProtection();
-				}
+				group = s;
 			} else {
 				s = plot.getSettlement();
 			}
-			if(newProt == null) return;
-			Protection old = Civilizations.getSelectedProtections().get(player);
-			if(old != null && newProt.equals(old)){
+			if(group == null) return;
+			Group old = Civilizations.getSelectedProtections().get(player);
+			if(old != null && group.equals(old)){
 				player.sendMessage(messageHeader + ChatColor.RED + "Protection already selected.");
 				return;
 			}
-			Civilizations.getSelectedProtections().put(player, newProt);
+			Civilizations.getSelectedProtections().put(player, group);
 			String plotName = " Settlement";
 			if(plot != null) plotName = " " + plot.getName();
 			player.sendMessage(messageHeader + ChatColor.GREEN + "Protection selected: " + (s != null ? s.getName() : "") + plotName + ".");
 			if(old != null) updateProtectionVisibility(player, old);
-			updateProtectionVisibility(player, newProt);
+			updateProtectionVisibility(player, group);
 		} else {
 			if(Civilizations.getSelectedProtections().containsKey(player)){
-				Protection old = Civilizations.getSelectedProtections().get(player);
+				Group old = Civilizations.getSelectedProtections().get(player);
 				Civilizations.getSelectedProtections().remove(player);
 				updateProtectionVisibility(player, old);
 			}

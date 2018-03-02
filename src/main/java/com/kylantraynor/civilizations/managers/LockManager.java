@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -39,7 +40,7 @@ public class LockManager {
 	}
 	
 	private static void addLockpickRecipe() {
-		ShapedRecipe recipe = new ShapedRecipe(getLockpick(4));
+		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(Civilizations.currentInstance, "lockpick"), getLockpick(4));
 		recipe.shape("A", "A");
 		recipe.setIngredient('A', Material.IRON_INGOT);
 		Bukkit.getServer().addRecipe(recipe);

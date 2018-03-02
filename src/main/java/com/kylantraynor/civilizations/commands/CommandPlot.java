@@ -62,23 +62,23 @@ public class CommandPlot implements CommandExecutor {
 				
 				// Checks if the shape intersects with another plot.
 				int plotsIntersecting = 0;
-				Protection protection = null;
+				Plot p = null;
 				for(Plot plot : Plot.getAll()){
-					if(plot.getProtection().intersect(s)){
+					if(plot.intersect(s)){
 						plotsIntersecting++;
-						protection = plot.getProtection();
+						p = plot;
 					}
 				}
 				if(plotsIntersecting > 1){
 					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects too many plots.");
 					return true;
-				} else if(plotsIntersecting == 0 || protection == null) {
+				} else if(plotsIntersecting == 0 || p == null) {
 					player.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection doesn't intersect any plot.");
 					return true;
 				}
 				
-				protection.add(s);
-				player.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "The selection has been added to " + protection.getGroup().getName() + "!");
+				p.getSettings().addShape(s);
+				player.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "The selection has been added to " + p.getName() + "!");
 				return true;
 			/*
 			 * Creates a new plot from the selection 
@@ -97,7 +97,7 @@ public class CommandPlot implements CommandExecutor {
 				}
 				// Checks if the shape intersects with another plot.
 				for(Plot plot : Plot.getAll()){
-					if(plot.getProtection().intersect(s)){
+					if(plot.intersect(s)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "The selection intersects with another plot.");
 						return true;
 					}
@@ -112,7 +112,7 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				if(set != null){
-					if(!ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, (Player) sender, false)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, (Player) sender, true)){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
 						return true;
 					}
@@ -133,7 +133,7 @@ public class CommandPlot implements CommandExecutor {
 							p.setPersistent(true);
 							p.setPlotType(PlotType.HOUSE);
 							SelectionManager.clear(player);
-							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							Civilizations.getSelectedProtections().put((Player) sender, p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "House created in " + set.getName() + "!");
 						}
 						break;
@@ -146,7 +146,7 @@ public class CommandPlot implements CommandExecutor {
 							p.setPersistent(true);
 							p.setPlotType(PlotType.KEEP);
 							SelectionManager.clear(player);
-							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							Civilizations.getSelectedProtections().put((Player) sender, p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Keep created in " + set.getName() + "!");
 						}
 						break;
@@ -159,7 +159,7 @@ public class CommandPlot implements CommandExecutor {
 							p.setPersistent(true);
 							p.setPlotType(PlotType.WAREHOUSE);
 							SelectionManager.clear(player);
-							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							Civilizations.getSelectedProtections().put((Player) sender, p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Warehouse created in " + set.getName() + "!");
 						}
 						break;
@@ -172,7 +172,7 @@ public class CommandPlot implements CommandExecutor {
 							p.setPersistent(true);
 							p.setPlotType(PlotType.MARKETSTALL);
 							SelectionManager.clear(player);
-							Civilizations.getSelectedProtections().put((Player) sender, p.getProtection());
+							Civilizations.getSelectedProtections().put((Player) sender, p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Market stall created in " + set.getName() + "!");
 						}
 						break;
@@ -193,7 +193,7 @@ public class CommandPlot implements CommandExecutor {
 						if(map != null){
 							set = (Settlement) map.getInfluentSiteAt(s.getLocation());
 							if(set != null){
-								if(!ProtectionManager.hasPermission(set.getProtection(), PermissionType.MANAGE_PLOTS, player, false)){
+								if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, player, true)){
 									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to manage plots in " + ((InfluentSite) set).getRegion().getName()+ ".");
 									return true;
 								}
@@ -205,7 +205,7 @@ public class CommandPlot implements CommandExecutor {
 						p.setPlotType(PlotType.CROPFIELD);
 						p.setOwner(player);
 						SelectionManager.clear(player);
-						Civilizations.getSelectedProtections().put(player, p.getProtection());
+						Civilizations.getSelectedProtections().put(player, p);
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "Field created!");
 						break;
 					default:

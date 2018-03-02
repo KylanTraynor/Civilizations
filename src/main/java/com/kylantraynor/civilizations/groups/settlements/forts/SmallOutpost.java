@@ -57,7 +57,7 @@ public class SmallOutpost extends Fort{
 	static public boolean hasUpgradeRequirements(Settlement s){
 		for(Plot p : s.getPlots()){
 			if(p instanceof Keep){
-				for(Shape shape : p.getProtection().getShapes()){
+				for(Shape shape : p.getShapes()){
 					for(Location b : shape.getBlockLocations()){
 						if(b.getBlock().getType() == Material.BANNER || b.getBlock().getType() == Material.STANDING_BANNER){
 							return true;
