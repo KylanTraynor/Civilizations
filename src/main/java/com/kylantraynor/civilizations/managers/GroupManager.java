@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.exceptions.RecursiveParentException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -49,7 +50,11 @@ public class GroupManager {
 	public static Group createGroup(String name, Group parent){
 		Group g = new Group();
 		g.setName(name);
-		g.setParent(parent);
+		try {
+		    g.setParent(parent);
+        } catch (RecursiveParentException e){
+		    e.printStackTrace();
+        }
 		return g;
 	}
 	
