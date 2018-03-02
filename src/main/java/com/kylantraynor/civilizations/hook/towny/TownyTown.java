@@ -158,7 +158,13 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	        getSettings().setPermissionLevel(g.getUniqueId(), 0);
 	        return g;
         } else {
-	        return Group.get(id);
+	        Group g = Group.get(id);
+	        if(g == null){
+                g = GroupManager.createGroup("Mayor", this);
+                getSettings().setMayorGroupId(g.getUniqueId());
+                getSettings().setPermissionLevel(g.getUniqueId(), 0);
+            }
+            return g;
         }
     }
 
@@ -170,7 +176,13 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
             getSettings().setPermissionLevel(g.getUniqueId(), 10);
             return g;
         } else {
-            return Group.get(id);
+            Group g = Group.get(id);
+            if(g == null){
+                g = GroupManager.createGroup("Assistant", this);
+                getSettings().setAssistantGroupId(g.getUniqueId());
+                getSettings().setPermissionLevel(g.getUniqueId(), 10);
+            }
+            return g;
         }
     }
 
