@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.utils.Identifier;
 import mkremins.fanciful.civilizations.FancyMessage;
@@ -79,7 +80,7 @@ public class Keep extends Plot implements FortComponent{
 			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " members");
 		
 		fm.then("\nActions: ").color(ChatColor.GRAY);
-		if(this.isMember(CivilizationsAccount.getCurrentIdentifier(player))){
+		if(this.isMember(AccountManager.getCurrentIdentifier(player))){
 			if(ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, getSettlement(), player, true)){
 				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getIdentifier().toString() + " setname NEW NAME");
 			} else {
@@ -141,7 +142,7 @@ public class Keep extends Plot implements FortComponent{
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
-			g.getMembers().add(Utils.parseIdentifier(cf.getString("Members."+i)));
+			g.getMembers().add(UUID.fromString(cf.getString("Members."+i)));
 			i+=1;
 		}
 		
@@ -166,7 +167,7 @@ public class Keep extends Plot implements FortComponent{
 		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;
-		for(Identifier id : getMembers()){
+		for(UUID id : getMembers()){
 			fc.set("Members." + i, id.toString());
 			i += 1;
 		}

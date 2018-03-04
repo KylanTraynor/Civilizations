@@ -150,9 +150,9 @@ public abstract class Database {
 			conn = getSQLConnection();
 			ps = conn.prepareStatement("INSERT INTO " + Databases.BUDGET_ENTRIES + " (emiter_id, receiver_id, timestamp, amount, label) VALUES (?, ?, ?, ?, ?)" );
 			if(entry.getEmiter() != null)
-				ps.setBytes(1, Utils.asBytes(entry.getEmiter().get(0)));
+				ps.setBytes(1, Utils.asBytes(entry.getEmiter()));
 			if(entry.getReceiver() != null)
-				ps.setBytes(2, Utils.asBytes(entry.getReceiver().get(0)));
+				ps.setBytes(2, Utils.asBytes(entry.getReceiver()));
 			ps.setTimestamp(3, Timestamp.from(entry.getInstant()));
 			ps.setDouble(4, entry.getAmount());
 			ps.setString(5, entry.getLabel());
