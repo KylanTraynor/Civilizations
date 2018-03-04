@@ -161,7 +161,7 @@ public class SmallOutpost extends Fort{
 		fc.set("Influence", getInfluence());
 		
 		int i = 0;
-		for(Identifier id : getMembers()){
+		for(UUID id : getMembers()){
 			fc.set("Members." + i, id.toString());
 			i += 1;
 		}

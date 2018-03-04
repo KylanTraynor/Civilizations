@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public class RecursiveParentException extends Exception {
 
-    final Identifier child;
-    final Identifier parent;
+    final UUID child;
+    final UUID parent;
 
     public RecursiveParentException(Group child, Group parent){
         super("Attempted to set " + child.getIdentifier().toString() + " as a parent of " + parent.getIdentifier().toString() + " while the latter is already a parent of the former.");
@@ -16,11 +16,11 @@ public class RecursiveParentException extends Exception {
         this.parent = parent.getIdentifier();
     }
 
-    public Identifier getChild(){
+    public UUID getChild(){
         return child;
     }
 
-    public Identifier getParent(){
+    public UUID getParent(){
         return parent;
     }
 

@@ -11,7 +11,7 @@ public class QuickShopShop extends Shop{
 		this.setLocation(shop.getLocation());
 		this.setItem(shop.getItem());
 		this.setPrice(shop.getPrice());
-		this.setOwner(EconomicEntity.get(new SimpleIdentifier(shop.getOwner())));
+		this.setOwner(EconomicEntity.get(shop.getOwner()));
 		if(shop.isBuying()){
 			this.setType(ShopType.BUYING);
 		} else {

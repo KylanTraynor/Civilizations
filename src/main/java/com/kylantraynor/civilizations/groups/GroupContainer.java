@@ -16,11 +16,11 @@ public class GroupContainer<T extends Group> extends Group {
 	private Set<T> groups = new TreeSet<T>();
 	
 	@Override
-	public Set<Identifier> getMembers(){
-		Set<Identifier> list = new TreeSet<>();
+	public Set<UUID> getMembers(){
+		Set<UUID> list = new TreeSet<>();
 		for(T g : getGroups()){
 			if(g != null){
-				for(Identifier id : g.getMembers()){
+				for(UUID id : g.getMembers()){
 					list.add(id);
 				}
 			}
@@ -29,7 +29,7 @@ public class GroupContainer<T extends Group> extends Group {
 	}
 	
 	@Override
-	public void setMembers(Set<Identifier> list){
+	public void setMembers(Set<UUID> list){
 		return;
 	}
 
