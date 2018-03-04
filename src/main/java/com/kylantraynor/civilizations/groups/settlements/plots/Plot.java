@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.managers.*;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import mkremins.fanciful.civilizations.FancyMessage;
@@ -34,13 +34,10 @@ import com.kylantraynor.civilizations.groups.Purchasable;
 import com.kylantraynor.civilizations.groups.Rentable;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
-import com.kylantraynor.civilizations.managers.ProtectionManager;
-import com.kylantraynor.civilizations.managers.SettlementManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.shops.Shop;
-import com.kylantraynor.civilizations.managers.ShopManager;
 import com.kylantraynor.civilizations.shops.ShopType;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.utils.Utils;
@@ -181,7 +178,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
     public Group getOwnerGroup(){
-        SimpleIdentifier id = getSettings().getOwnerGroupId();
+        UUID id = getSettings().getOwnerGroupId();
         if(id == null){
             Group g = GroupManager.createGroup("Owner", this);
             getSettings().setOwnerGroupId(g.getIdentifier());
@@ -199,7 +196,7 @@ public class Plot extends Group implements Rentable, HasInventory {
     }
 
     public Group getRenterGroup(){
-        SimpleIdentifier id = getSettings().getRenterGroupId();
+        UUID id = getSettings().getRenterGroupId();
         if(id == null){
             Group g = GroupManager.createGroup("Renter", this);
             getSettings().setRenterGroupId(g.getIdentifier());
@@ -217,8 +214,8 @@ public class Plot extends Group implements Rentable, HasInventory {
     }
 	
 	private void setDefaultPermissions() {
-	    SimpleIdentifier ownerId = getOwnerGroup().getIdentifier();
-	    SimpleIdentifier renterId = getRenterGroup().getIdentifier();
+	    UUID ownerId = getOwnerGroup().getIdentifier();
+	    UUID renterId = getRenterGroup().getIdentifier();
 
 	    getSettings().setPermission(ownerId, PermissionType.MANAGE.toString(), true);
         getSettings().setPermission(ownerId, PermissionType.BREAK.toString(), true);
@@ -900,7 +897,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
 	public void setOwner(OfflinePlayer player){
-	    setOwner(CivilizationsAccount.getEconomicEntity(player));
+	    setOwner(AccountManager.getEconomicEntity(player));
 	}
 	
 	public void setOwner(EconomicEntity entity){
