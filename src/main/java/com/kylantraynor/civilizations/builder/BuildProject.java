@@ -7,8 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import com.kylantraynor.civilizations.util.MaterialAndData;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class BuildProject {
 	
@@ -52,14 +52,14 @@ public class BuildProject {
 			return false;
 		} else if(setAir && getNext().getMaterial() == Material.AIR){
 			l.getBlock().breakNaturally();
-			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(getNext().getMaterial()), 1, 1);
+			l.getWorld().playSound(l, Utils.getBreakSoundFromMaterial(getNext().getMaterial()), 1, 1);
 			increment();
 			return false;
 		} else if(getNext().getMaterial() != Material.AIR) {
 			l.getBlock().breakNaturally();
 			l.getBlock().setType(getNext().getMaterial());
 			l.getBlock().setData(getNext().getData());
-			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(getNext().getMaterial()), 1, 1);
+			l.getWorld().playSound(l, Utils.getPlaceSoundFromMaterial(getNext().getMaterial()), 1, 1);
 		}
 		
 		increment();
@@ -168,7 +168,7 @@ public class BuildProject {
 			increment();
 			return false;
 		} else if(setAir && replacement.getMaterial() == Material.AIR){
-			l.getWorld().playSound(l, Util.getBreakSoundFromMaterial(l.getBlock().getType()), 1, 1);
+			l.getWorld().playSound(l, Utils.getBreakSoundFromMaterial(l.getBlock().getType()), 1, 1);
 			l.getBlock().breakNaturally();
 			increment();
 			return false;
@@ -176,7 +176,7 @@ public class BuildProject {
 			l.getBlock().breakNaturally();
 			l.getBlock().setType(replacement.getMaterial());
 			l.getBlock().setData(replacement.getData());
-			l.getWorld().playSound(l, Util.getPlaceSoundFromMaterial(replacement.getMaterial()), 1, 1);
+			l.getWorld().playSound(l, Utils.getPlaceSoundFromMaterial(replacement.getMaterial()), 1, 1);
 		}
 		
 		increment();

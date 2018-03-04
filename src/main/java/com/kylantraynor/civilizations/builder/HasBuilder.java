@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.builder;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,5 +16,5 @@ public interface HasBuilder {
 	public boolean canBuild();
 	public ItemStack getSuppliesAndRemove(ItemStack is);
 	public void sendNotification(Level type, String message);
-	public UUID getUniqueId();
+	public UUID getIdentifier();
 }

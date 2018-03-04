@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.commands;
 
 import java.util.*;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
 import com.kylantraynor.civilizations.menus.GroupExplorer;
 import com.kylantraynor.civilizations.menus.MenuReturnFunction;
@@ -31,7 +32,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.util.MaterialAndData;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
 
 public class CommandGroup implements CommandExecutor {
 
@@ -90,7 +91,7 @@ public class CommandGroup implements CommandExecutor {
 							FancyMessage fm = new FancyMessage(ChatTools.formatTitle(g.getName() + " Build Projects", ChatColor.GOLD));
 							int i = 1;
 							for(BuildProject bp : builder.getProjects()){
-								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getUniqueId() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
+								fm.then("\n[Cancel] ").color(ChatColor.RED).command("/group " + g.getIdentifier() + " Builder RemoveAt " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 								fm.then("Project #" + i++ + "  at " + bp.getLocation().getBlockX() + " " + bp.getLocation().getBlockY() + " " + bp.getLocation().getBlockZ());
 							}
 							fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -175,7 +176,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
-						if(rentable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
+						if(rentable.isOwner(AccountManager.getEconomicEntity(p))){
 							rentable.setForRent(!rentable.isForRent());
 							if(rentable.isForRent()){
 								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for rent.");
@@ -191,7 +192,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
+						if(purchasable.isOwner(AccountManager.getEconomicEntity(p))){
 							purchasable.setForSale(!purchasable.isForSale());
 							if(purchasable.isForSale()){
 								sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The plot is now for sale.");
@@ -205,7 +206,7 @@ public class CommandGroup implements CommandExecutor {
 			case "RENT":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
+					EconomicEntity ee = AccountManager.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
 						TransactionResult r = rentable.rent(ee);
@@ -221,7 +222,7 @@ public class CommandGroup implements CommandExecutor {
 			case "PURCHASE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
+					EconomicEntity ee = AccountManager.getEconomicEntity(p);
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
 						TransactionResult r = purchasable.purchase(ee);
@@ -239,7 +240,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
 						Rentable rentable = (Rentable) g;
-						if(rentable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
+						if(rentable.isOwner(AccountManager.getEconomicEntity(p))){
 							rentable.setRent(Double.parseDouble(args[2]));
 							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The rent for this plot is now " + Economy.format(rentable.getRent()) + ".");
 						}
@@ -251,7 +252,7 @@ public class CommandGroup implements CommandExecutor {
 					Player p = (Player) sender;
 					if(g instanceof Purchasable){
 						Purchasable purchasable = (Purchasable) g;
-						if(purchasable.isOwner(CivilizationsAccount.getEconomicEntity(p))){
+						if(purchasable.isOwner(AccountManager.getEconomicEntity(p))){
 							purchasable.setPrice(Double.parseDouble(args[2]));
 							sender.sendMessage(g.getChatHeader() +ChatColor.GREEN+ "The price for this plot is now " + Economy.format(purchasable.getPrice()) + ".");
 						}
@@ -288,7 +289,7 @@ public class CommandGroup implements CommandExecutor {
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(g instanceof Rentable){
-						if(((Rentable)g).isOwner(CivilizationsAccount.getEconomicEntity(p))){
+						if(((Rentable)g).isOwner(AccountManager.getEconomicEntity(p))){
 							((Rentable)g).setRenter(null);
 						}
 					}
@@ -297,7 +298,7 @@ public class CommandGroup implements CommandExecutor {
 			case "JOIN":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
+					EconomicEntity ee = AccountManager.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						if(((Rentable)g).getRenter() == null){
 							((Rentable)g).setRenter(ee);
@@ -309,7 +310,7 @@ public class CommandGroup implements CommandExecutor {
 			case "LEAVE":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					EconomicEntity ee = CivilizationsAccount.getEconomicEntity(p);
+					EconomicEntity ee = AccountManager.getEconomicEntity(p);
 					if(g instanceof Rentable){
 						if(((Rentable)g).getRenter() == ee){
 							((Rentable)g).setRenter(null);

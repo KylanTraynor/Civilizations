@@ -1,8 +1,10 @@
-package com.kylantraynor.civilizations.shops;
+package com.kylantraynor.civilizations.managers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kylantraynor.civilizations.shops.Shop;
+import com.kylantraynor.civilizations.shops.ShopType;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

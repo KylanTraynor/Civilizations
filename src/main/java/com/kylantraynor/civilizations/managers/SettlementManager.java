@@ -66,14 +66,9 @@ public class SettlementManager {
 	}
 	
 	public static Settlement updateCampToSettlement(Camp c){
-		Settlement result = new Settlement(c.getLocation());
-		
-		result.setMembers(c.getMembers());
-		result.setName(c.getName());
-		result.setUniqueId(c.getUniqueId());
-		result.getSettings().setCreationDate(c.getSettings().getCreationDate());
-		
-		return c;
+		Settlement result = new Settlement(c.getSettings());
+		c.remove();
+		return result;
 	}
 
     /**

@@ -27,7 +27,7 @@ import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.CampSettings;
 import com.kylantraynor.civilizations.shapes.Sphere;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class Camp extends Settlement{
 	
@@ -156,16 +156,6 @@ public class Camp extends Settlement{
 	public void update(){
 		if(Instant.now().isAfter(getExpireOn())) remove();
 		super.update();
-		if(this.getHouses().size() >= 1){
-			for(Plot h : getHouses()){
-				if(h.isValid()){
-					if(GroupManager.convertToSettlement(this) != null){
-						this.softRemove();
-					}
-					return;
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -204,12 +194,12 @@ public class Camp extends Settlement{
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), ChatColor.GREEN))
 			.then("\nProtection expires in ").color(ChatColor.GRAY)
-			.then(Util.durationToString(Instant.now(), getSettings().getExpiryDate())).color(ChatColor.GOLD)
+			.then(Utils.durationToString(Instant.now(), getSettings().getExpiryDate())).color(ChatColor.GOLD)
 			.then(".").color(ChatColor.GRAY)
 			.then("\nMembers: ").color(ChatColor.GRAY)
-			.command("/group " + this.getUniqueId().toString() + " members")
+			.command("/group " + this.getIdentifier().toString() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
-			.command("/group " + this.getUniqueId().toString() + " members")
+			.command("/group " + this.getIdentifier().toString() + " members")
 			.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -230,9 +220,9 @@ public class Camp extends Settlement{
 				list.add(new GroupAction("Claim", "Claim this abandonned camp", ActionType.COMMAND, "/camp join", true));
 			}
 		}
-		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getUniqueId().toString() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Rename", "Rename this camp", ActionType.SUGGEST, "/group " + this.getIdentifier().toString() + " rename <NEW NAME>", this.hasPermission(PermissionType.MANAGE, null, player)));
 		list.add(new GroupAction("Renew", "Renew the camp for " + campDuration + " hours", ActionType.COMMAND, "/camp renew", this.hasPermission(PermissionType.MANAGE, null, player)));
-		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getUniqueId().toString() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
+		list.add(new GroupAction("Upgrade", "Upgrade the camp", ActionType.COMMAND, "/group " + this.getIdentifier().toString() + " upgrade", this.hasPermission(PermissionType.UPGRADE, null, player) && isUpgradable()));
 		return list;
 	}
 	/**
@@ -288,7 +278,7 @@ public class Camp extends Settlement{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getCampDirectory(), "" + this.getId() + ".yml");
+		File f = new File(Civilizations.getCampDirectory(), "" + this.getIdentifier().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();

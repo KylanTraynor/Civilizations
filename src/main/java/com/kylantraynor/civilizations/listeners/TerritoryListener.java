@@ -9,7 +9,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.hook.titlemanager.TitleManagerHook;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.PlayerMoveData;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class TerritoryListener implements Listener {
 	
@@ -27,12 +27,12 @@ public class TerritoryListener implements Listener {
 			if(data.getTo().getNation() == null){
 				TitleManagerHook.sendActionBar("Independant Territory", event.getPlayer(), false);
 			} else {
-				color = Util.getChatColor(data.getTo().getNation().getBanner().getBaseColor());
+				color = Utils.getChatColor(data.getTo().getNation().getBanner().getBaseColor());
 				TitleManagerHook.sendActionBar(color + data.getTo().getNation().getName() + " Nation", event.getPlayer(), false);
 				//data.getTo().getNation().getBanner().getBaseColor();
 			}
 			// Prettyfy text for towny names, to get rid of "_" .
-			TitleManagerHook.sendTitle("", "" + color + Util.prettifyText(data.getTo().getName()), 5, 30, 10, event.getPlayer());
+			TitleManagerHook.sendTitle("", "" + color + Utils.prettifyText(data.getTo().getName()), 5, 30, 10, event.getPlayer());
 		}
 		/*Fort f = InfluenceMap.getInfluentFortAt(event.getTo());
 		/Fort oldFort = null;

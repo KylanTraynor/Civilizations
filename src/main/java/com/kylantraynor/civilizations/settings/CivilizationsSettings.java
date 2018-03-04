@@ -17,6 +17,10 @@ public class CivilizationsSettings extends YamlConfiguration {
 	private Instant taxationDate;
 	private boolean hasChanged = true;
 	private String wikiUrl;
+
+	private static String DIAMONDVALUE = "Economy.Values.Diamond";
+	private static String GOLDNUGGETVALUE = "Economy.Values.GoldNugget";
+	private static String IRONNUGGETVALUE = "Economy.Values.IronNugget";
 	
 	public UUID getBlueprintId(String name){
 		if(this.contains("UUIDConversions.Blueprints." + name.toUpperCase())){
@@ -34,6 +38,18 @@ public class CivilizationsSettings extends YamlConfiguration {
 		this.set("UUIDConversions.Blueprints." + name, id.toString());
 		this.setChanged(true);
 	}
+
+	public int getDiamondValue(){
+	    return this.getInt(DIAMONDVALUE, 10000);
+    }
+
+	public int getGoldNuggetValue(){
+        return this.getInt(GOLDNUGGETVALUE, 100);
+    }
+
+    public int getIronNuggetValue(){
+	    return this.getInt(IRONNUGGETVALUE, 1);
+    }
 	
 	public Instant getTaxationDate(){
 		if(taxationDate != null) return taxationDate;

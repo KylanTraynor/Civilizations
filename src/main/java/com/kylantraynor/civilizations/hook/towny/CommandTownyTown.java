@@ -49,16 +49,16 @@ public class CommandTownyTown extends CommandGroup{
 				if(sender instanceof Player){
 					Player p = (Player) sender;
 					if(args.length >= 3){
-						p.chat("/group " + t.getId() + " members " + args[2]);
+						p.chat("/group " + t.getIdentifier().toString() + " members " + args[2]);
 					} else {
-						p.chat("/group " + t.getId() + " members");
+						p.chat("/group " + t.getIdentifier().toString() + " members");
 					}
 				}
 				break;
 			case "PERMISSIONS":
 				if(sender instanceof Player){
 					Player p = (Player) sender;
-					p.chat("/group " + t.getId() + " permissions");
+					p.chat("/group " + t.getIdentifier().toString() + " permissions");
 				}
 				break;
 			}

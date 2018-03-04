@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.plugin.Plugin;
@@ -26,7 +28,7 @@ import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.territories.InfluentSite;
 import com.kylantraynor.civilizations.territories.Region;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class DynmapHook {
 	private static Plugin plugin;
@@ -258,10 +260,10 @@ public class DynmapHook {
 
 	private static void updateSettlement(Settlement s) {
 		if(s.getHull() == null || !s.getHull().exists()) return;
-		String id = s.getUniqueId().toString() + "_area";
-		String icon_id = s.getUniqueId().toString() + "_icon";
+		String id = s.getIdentifier().toString() + "_area";
+		String icon_id = s.getIdentifier().toString() + "_icon";
 		String icon = s.getIcon();
-		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Util.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getHull().getVerticesX(), s.getHull().getVerticesZ(), false);
+		AreaMarker m = settlementsMarkerSet.createAreaMarker(id, Utils.prettifyText(s.getName()), false, s.getLocation().getWorld().getName(), s.getHull().getVerticesX(), s.getHull().getVerticesZ(), false);
 		MarkerIcon setIcon = null;
 	    if (icon != null)
 	    {
@@ -283,7 +285,7 @@ public class DynmapHook {
 		if(setIcon != null){
 	    	Marker set = markerList.remove(icon_id);
 	    	if (set == null){
-	    		set = settlementsMarkerSet.createMarker(id, Util.prettifyText(s.getName()), s.getCenter().getWorld().getName(),
+	    		set = settlementsMarkerSet.createMarker(id, Utils.prettifyText(s.getName()), s.getCenter().getWorld().getName(),
 	    				s.getCenter().getBlockX(),
 	    				s.getCenter().getBlockY(),
 	    				s.getCenter().getBlockZ(), setIcon, false);
@@ -292,7 +294,7 @@ public class DynmapHook {
 	    				s.getCenter().getBlockX(),
 	    				s.getCenter().getBlockY(),
 	    				s.getCenter().getBlockZ());
-	            set.setLabel(Util.prettifyText(s.getName()));
+	            set.setLabel(Utils.prettifyText(s.getName()));
 	            set.setMarkerIcon(setIcon);
 	    	}
 	    	StringBuilder sb = new StringBuilder();
@@ -310,7 +312,7 @@ public class DynmapHook {
     		set.setDescription(sb.toString());
     		markerList.put(icon_id, set);
 		}
-		m.setLabel(Util.prettifyText(s.getName()));
+		m.setLabel(Utils.prettifyText(s.getName()));
 		if(s instanceof NationMember){
 			if(((NationMember) s).getNation() != null){
 				if(((NationMember) s).getNation().getBanner() != null){
@@ -328,8 +330,8 @@ public class DynmapHook {
 	}
 
 	private static void updateField(Plot p){
-		String id = "" + p.getUniqueId().toString() + "_icon";
-		String areaId = "" + p.getUniqueId().toString() + "_area";
+		String id = "" + p.getIdentifier().toString() + "_icon";
+		String areaId = "" + p.getIdentifier().toString() + "_area";
 		String icon = p.getIcon();
 		MarkerIcon fieldMarker = null;
 	    if (icon != null){
@@ -340,7 +342,7 @@ public class DynmapHook {
 	          fieldMarker = markerAPI.getMarkerIcon("sign");
 	        }
 	    }
-	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Utils.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
 		if(m == null){
 			m = plotsMarkerSet.findAreaMarker(areaId);
 			if(m == null){
@@ -417,8 +419,8 @@ public class DynmapHook {
 	 * @param p
 	 */
 	private static void updateStall(Plot p) {
-		String id = "" + p.getUniqueId().toString() + "_icon";
-		String areaId = "" + p.getUniqueId().toString() + "_area";
+		String id = "" + p.getIdentifier().toString() + "_icon";
+		String areaId = "" + p.getIdentifier().toString() + "_area";
 		String stallMarker = p.getIcon();
 		MarkerIcon stallIcon = null;
 	    if (stallMarker != null)
@@ -430,7 +432,7 @@ public class DynmapHook {
 	          stallIcon = markerAPI.getMarkerIcon("scales");
 	        }
 	    }
-	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Util.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
+	    AreaMarker m = plotsMarkerSet.createAreaMarker(areaId, Utils.prettifyText(p.getName()), false, p.getCenter().getWorld().getName(), p.getShapes().get(0).getVerticesX(), p.getShapes().get(0).getVerticesZ(), false);
 		if(m == null){
 			m = plotsMarkerSet.findAreaMarker(areaId);
 			if(m == null){
@@ -532,7 +534,7 @@ public class DynmapHook {
 	    	}
 	    	StringBuilder sb = new StringBuilder();
 	    	for(UUID uid : c.getMembers()){
-	    		sb.append("<br />" + Bukkit.getServer().getOfflinePlayer(uid).getName());
+	    		sb.append("<br />" + EconomicEntity.get(uid).getName());
 	    	}
 	    	camp.setDescription("Expire in " + ChronoUnit.HOURS.between(Instant.now(), c.getExpireOn()) + " hours."
 	    			+ "<br />Members: " + sb.toString());
@@ -548,7 +550,7 @@ public class DynmapHook {
 	public static void updateRegion(InfluenceMap influenceMap, Region region){
 		String polyID = "region_";
 		polyID = polyID + region.getSite().getX() + "_" + region.getSite().getZ();
-		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, Util.prettifyText(region.getName()), false, influenceMap.getWorld().getName(), region.getCell(influenceMap).getVerticesX(), region.getCell(influenceMap).getVerticesZ(), false);
+		AreaMarker m = regionsMarkerSet.createAreaMarker(polyID, Utils.prettifyText(region.getName()), false, influenceMap.getWorld().getName(), region.getCell(influenceMap).getVerticesX(), region.getCell(influenceMap).getVerticesZ(), false);
 		if(m == null){
 			m = regionsMarkerSet.findAreaMarker(polyID);
 			if(m == null){
@@ -556,7 +558,7 @@ public class DynmapHook {
 				return;
 			}
 		}
-		m.setLabel(Util.prettifyText(region.getName()));
+		m.setLabel(Utils.prettifyText(region.getName()));
 		if(region.getNation() != null){
 			if(region.getNation().getBanner() != null){
 				m.setFillStyle(0.1, region.getNation().getBanner().getBaseColor().getColor().asRGB());

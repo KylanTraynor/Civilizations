@@ -15,7 +15,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import com.kylantraynor.civilizations.managers.CacheManager;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.banners.Banner;
 import com.kylantraynor.civilizations.banners.BannerOwner;
@@ -24,7 +23,6 @@ import com.kylantraynor.civilizations.settings.HouseSettings;
 import com.kylantraynor.civilizations.territories.HonorificTitle;
 import com.kylantraynor.civilizations.territories.Influence;
 import com.kylantraynor.civilizations.territories.InfluentEntity;
-import com.kylantraynor.civilizations.util.Util;
 
 /**
  * Family House, with all the members of the family.
@@ -51,7 +49,7 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		for(int i = houses.size() - 1; i >= 0; i--){
 			fm.then("\n");
 			fm.then(ChatColor.GOLD + houses.get(i).getName() + " (Lord " + houses.get(i).getLordName() + ") Influence: " + houses.get(i).getInfluence().getTotalInfluence())
-			.command("/group " + houses.get(i).getUniqueId().toString() + " info");
+			.command("/group " + houses.get(i).getIdentifier().toString() + " info");
 		}
 		fm.then("\n");
 		fm.then(ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -180,8 +178,8 @@ public class House extends Group implements BannerOwner, InfluentEntity{
 		for(HonorificTitle t : getTitles()){
 			fm.then("\n\t" + t.getName()).color(ChatColor.GOLD);
 		}
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getIdentifier().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " members");
 		fm.then("\nVassals: ").color(ChatColor.GRAY).command("/house " + this.getName() + " Vassals").
 			then("" + getVassals().size()).color(ChatColor.GOLD).command("/house " + this.getName() + " Vassals");
 		fm.then("\nActions: \n").color(ChatColor.GRAY);

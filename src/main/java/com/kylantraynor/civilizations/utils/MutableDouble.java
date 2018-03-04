@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations.util;
+package com.kylantraynor.civilizations.utils;
 
 public class MutableDouble {
 	

@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.groups;
 
 import java.util.*;
 
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.OfflinePlayer;
 
 /**
@@ -15,11 +16,11 @@ public class GroupContainer<T extends Group> extends Group {
 	private Set<T> groups = new TreeSet<T>();
 	
 	@Override
-	public Set<UUID> getMembers(){
-		Set<UUID> list = new TreeSet<UUID>();
+	public Set<Identifier> getMembers(){
+		Set<Identifier> list = new TreeSet<>();
 		for(T g : getGroups()){
 			if(g != null){
-				for(UUID id : g.getMembers()){
+				for(Identifier id : g.getMembers()){
 					list.add(id);
 				}
 			}
@@ -28,7 +29,7 @@ public class GroupContainer<T extends Group> extends Group {
 	}
 	
 	@Override
-	public void setMembers(Set<UUID> list){
+	public void setMembers(Set<Identifier> list){
 		return;
 	}
 

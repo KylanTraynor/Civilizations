@@ -11,14 +11,12 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.MaterialAndData;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
 
 public class Blueprint{
 	

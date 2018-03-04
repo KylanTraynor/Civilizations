@@ -18,7 +18,7 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.BudgetEntry;
 import com.kylantraynor.civilizations.protection.Lock;
 import com.kylantraynor.civilizations.protection.LockKey;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public abstract class Database {
 	Civilizations plugin;
@@ -150,9 +150,9 @@ public abstract class Database {
 			conn = getSQLConnection();
 			ps = conn.prepareStatement("INSERT INTO " + Databases.BUDGET_ENTRIES + " (emiter_id, receiver_id, timestamp, amount, label) VALUES (?, ?, ?, ?, ?)" );
 			if(entry.getEmiter() != null)
-				ps.setBytes(1, Util.asBytes(entry.getEmiter()));
+				ps.setBytes(1, Utils.asBytes(entry.getEmiter().get(0)));
 			if(entry.getReceiver() != null)
-				ps.setBytes(2, Util.asBytes(entry.getReceiver()));
+				ps.setBytes(2, Utils.asBytes(entry.getReceiver().get(0)));
 			ps.setTimestamp(3, Timestamp.from(entry.getInstant()));
 			ps.setDouble(4, entry.getAmount());
 			ps.setString(5, entry.getLabel());
@@ -186,8 +186,8 @@ public abstract class Database {
 		try{
 			conn = getSQLConnection();
 			ps = conn.prepareStatement("SELECT * FROM " + Databases.BUDGET_ENTRIES + " WHERE (emiter_id = ? OR receiver_id = ?) AND (timestamp BETWEEN ? AND ?);");
-			ps.setBytes(1, Util.asBytes(involving));
-			ps.setBytes(2, Util.asBytes(involving));
+			ps.setBytes(1, Utils.asBytes(involving));
+			ps.setBytes(2, Utils.asBytes(involving));
 			ps.setTimestamp(3, Timestamp.from(from));
 			ps.setTimestamp(4, Timestamp.from(to));
 			rs = ps.executeQuery();
@@ -200,7 +200,7 @@ public abstract class Database {
 				double amount = rs.getDouble("amount");
 				String label = rs.getString("label");
 				try{
-					result.add(new BudgetEntry(Util.asUuid(emiter), Util.asUuid(receiver), label, amount, ts.toInstant()));
+					result.add(new BudgetEntry(Utils.asUuid(emiter), Utils.asUuid(receiver), label, amount, ts.toInstant()));
 				} catch (Exception e){
 					e.printStackTrace();
 				}

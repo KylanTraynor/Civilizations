@@ -1,39 +1,27 @@
 package com.kylantraynor.civilizations.settings;
 
-import java.time.Instant;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.kylantraynor.civilizations.players.CivilizationsAccount;
-import com.kylantraynor.civilizations.players.CivilizationsCharacter;
-import com.kylantraynor.civilizations.players.CivilizationsCharacter.Gender;
-import com.kylantraynor.civilizations.territories.Influence;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class AccountSettings extends YamlConfiguration{
-	
 	private static final String PLAYERID = "PlayerId";
 	private static final String CURRENTID = "CurrentId";
 	private static final String BASELOCATION = "Base.Location";
 	private static final String BASEINVENTORY = "Base.Inventory";
 	private static final String BASEARMOR = "Base.Armor";
 	private static final String BASEENDERCHEST = "Base.EnderChest";
-	private static final String CHARACTERFIRSTNAME = "Characters.%s.FirstName";
-	private static final String CHARACTERLASTNAME = "Characters.%s.LastName";
-	private static final String CHARACTERGENDER = "Characters.%s.Gender";
-	private static final String CHARACTERBIRTHDATE = "Characters.%s.BirthDate";
-	private static final String CHARACTERLOCATION = "Characters.%s.Location";
-	private static final String CHARACTERINVENTORY = "Characters.%s.Inventory";
-	private static final String CHARACTERARMOR = "Characters.%s.Armor";
-	private static final String CHARACTERENDERCHEST = "Characters.%s.EnderChest";
-	private static final String CHARACTERINFLUENCE = "Characters.%s.Influence";
 	
 	public UUID playerId;
 	public UUID currentCharacter;
@@ -41,11 +29,7 @@ public class AccountSettings extends YamlConfiguration{
 	
 	public UUID getPlayerId(){
 		if(playerId != null) return playerId;
-		try{
-			playerId = UUID.fromString(this.getString(PLAYERID));
-		} catch (Exception e){
-			
-		}
+		playerId = UUID.fromString(this.getString(PLAYERID));
 		return playerId;
 	}
 	
@@ -56,11 +40,7 @@ public class AccountSettings extends YamlConfiguration{
 	
 	public UUID getCurrentId(){
 		if(currentCharacter != null) return currentCharacter;
-		try{
-			currentCharacter = UUID.fromString(this.getString(CURRENTID));
-		} catch (Exception e){
-			
-		}
+		currentCharacter = UUID.fromString(this.getString(CURRENTID));
 		return currentCharacter;
 		
 	}
@@ -74,7 +54,7 @@ public class AccountSettings extends YamlConfiguration{
 		String s = this.getString(BASELOCATION);
 		if(s == null) return null;
 		try{
-			return Util.parseLocation(s);
+			return Utils.parseLocation(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -82,7 +62,7 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public void setBaseLocation(Location l){
-		this.set(BASELOCATION, Util.locationToString(l));
+		this.set(BASELOCATION, Utils.locationToString(l));
 	}
 	
 	public ItemStack[] getBaseInventory(){
@@ -114,42 +94,6 @@ public class AccountSettings extends YamlConfiguration{
 	public void setBaseEnderChest(ItemStack[] contents){
 		this.set(BASEENDERCHEST, contents);
 	}
-	
-	public void setCharacter(CivilizationsCharacter cc){
-		if(cc == null) throw new NullPointerException();
-		set(String.format(CHARACTERFIRSTNAME, cc.getUniqueId().toString()), cc.getName());
-		set(String.format(CHARACTERLASTNAME, cc.getUniqueId().toString()), cc.getFamilyName());
-		set(String.format(CHARACTERGENDER, cc.getUniqueId().toString()), cc.getGender().toString());
-		set(String.format(CHARACTERBIRTHDATE, cc.getUniqueId().toString()), cc.getBirthDate().toString());
-		set(String.format(CHARACTERLOCATION, cc.getUniqueId().toString()), Util.locationToString(cc.getLocation()));
-		set(String.format(CHARACTERINVENTORY, cc.getUniqueId().toString()), cc.getInventory().getContents());
-		set(String.format(CHARACTERARMOR, cc.getUniqueId().toString()), cc.getInventory().getArmorContents());
-		set(String.format(CHARACTERENDERCHEST, cc.getUniqueId().toString()), cc.getEnderChest().getContents());
-		set(String.format(CHARACTERINFLUENCE, cc.getUniqueId().toString()), cc.getInfluence().toString());
-	}
-	
-	@SuppressWarnings("unchecked")
-	public CivilizationsCharacter getCharacter(UUID id){
-		if(id == null) throw new NullPointerException();
-		CivilizationsCharacter cc = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(id);
-		if(cc == null){
-			cc = new CivilizationsCharacter(CivilizationsAccount.get(playerId));
-			cc.setUniqueId(id);
-		}
-		cc.setName(this.getString(String.format(CHARACTERFIRSTNAME, id.toString())));
-		cc.setFamilyName(this.getString(String.format(CHARACTERLASTNAME, id.toString())));
-		cc.setGender(Gender.valueOf(this.getString(String.format(CHARACTERGENDER, id.toString()))));
-		cc.setBirthDate(Instant.parse(this.getString(String.format(CHARACTERBIRTHDATE, id.toString()))));
-		cc.setLocation(Util.parseLocation(this.getString(String.format(CHARACTERLOCATION, id.toString()))));
-		ItemStack[] contents = ((List<ItemStack>) this.get(String.format(CHARACTERINVENTORY, id.toString()))).toArray(new ItemStack[0]);
-		ItemStack[] armor = ((List<ItemStack>) this.get(String.format(CHARACTERARMOR, id.toString()))).toArray(new ItemStack[0]);
-		ItemStack[] enderChest = ((List<ItemStack>) this.get(String.format(CHARACTERENDERCHEST, id.toString()))).toArray(new ItemStack[0]);
-		cc.getInventory().setContents(contents);
-		cc.getInventory().setArmorContents(armor);
-		cc.getEnderChest().setContents(enderChest);
-		cc.setInfluence(Influence.parse(this.getString(String.format(CHARACTERINFLUENCE, id.toString()))));
-		return cc;
-	}
 
 	public boolean removeCharacter(UUID id) {
 		if(id == null) throw new NullPointerException();
@@ -164,13 +108,37 @@ public class AccountSettings extends YamlConfiguration{
 	}
 	
 	public UUID[] getCharacterIds(){
-		List<UUID> result = new ArrayList<UUID>();
+		List<UUID> result = new ArrayList<>();
 		ConfigurationSection s = this.getConfigurationSection("Characters");
 		if(s == null) return new UUID[0];
 		Set<String> keys = s.getKeys(false);
 		for(String key : keys){
 			result.add(UUID.fromString(key));
 		}
-		return result.toArray(new UUID[0]);
+		return result.toArray(new UUID[result.size()]);
 	}
+
+    public File getFile(){
+        File f = AccountManager.getAccountsDirectory();
+        if(!f.exists()) f.mkdirs();
+        return new File(f, getPlayerId().toString() + ".yml");
+    }
+
+    public void reload(){
+        File f = getFile();
+        if(f.exists()){
+            try { this.load(f); } catch (Exception e) { e.printStackTrace(); }
+        }
+    }
+
+    public void save(){
+        File f = getFile();
+        if(!f.exists()) {
+            try { f.createNewFile(); } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        try { this.save(f); } catch (IOException e) { e.printStackTrace(); }
+    }
 }

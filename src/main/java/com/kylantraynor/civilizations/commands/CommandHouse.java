@@ -132,7 +132,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				}
 			} else {
-				((Player) sender).chat("/group " + house.getUniqueId().toString());
+				((Player) sender).chat("/group " + house.getIdentifier().toString());
 				return true;
 			}
 			

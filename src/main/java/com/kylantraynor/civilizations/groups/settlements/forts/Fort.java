@@ -70,7 +70,7 @@ public class Fort extends Settlement implements BannerOwner{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getFortDirectory(), "" + getId() + ".yml");
+		File f = new File(Civilizations.getFortDirectory(), "" + getIdentifier().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();

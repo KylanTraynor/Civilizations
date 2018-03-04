@@ -2,6 +2,7 @@ name: Civilizations
 main: com.kylantraynor.civilizations.Civilizations
 version: ${project.version}-Build ${build.number}
 softdepend: [dynmap, TitleManager, Towny, Vault, LWC, Quickshop, DraggyRPG]
+
 commands:
   civilizationsanswer:
     description: Used to answer questions.
@@ -47,3 +48,5 @@ commands:
     description: Access the account commands.
     permission: civilizations.account
     aliases: [civaccount,civacc]
+
+permissions:

@@ -7,13 +7,10 @@ import java.util.UUID;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
+import com.kylantraynor.civilizations.utils.Utils;
 
 import com.kylantraynor.civilizations.economy.EconomicEntity;
-import com.kylantraynor.civilizations.groups.Group;
-import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 
 public class PlotSettings extends GroupSettings{
@@ -104,59 +101,6 @@ public class PlotSettings extends GroupSettings{
         }
         this.setChanged(true);
     }
-
-
-    /**
-	 * Gets the owner of this plot.
-	 * @return
-	 */
-	public EconomicEntity getOwner() {
-		if(owner != null) return owner;
-		if(this.contains("Economy.Owner")){
-			owner = EconomicEntity.get(UUID.fromString(this.getString("Economy.Owner")));
-		}
-		return owner;
-	}
-
-	/**
-	 * Sets the owner of this plot.
-	 * @param owner
-	 */
-	public void setOwner(EconomicEntity owner) {
-		this.owner = owner;
-		if(owner != null){
-			this.set("Economy.Owner", owner.getUniqueId().toString());
-		} else {
-			this.set("Economy.Owner", null);
-		}
-		this.setChanged(true);
-	}
-
-	/**
-	 * Gets the renter of this plot.
-	 * @return
-	 */
-	public EconomicEntity getRenter() {
-		if(renter != null) return renter;
-		if(this.contains("Economy.Renter")){
-			renter = EconomicEntity.get(UUID.fromString(this.getString("Economy.Renter")));
-		}
-		return renter;
-	}
-
-	/**
-	 * Sets the renter of this plot.
-	 * @param renter
-	 */
-	public void setRenter(EconomicEntity renter) {
-		this.renter = renter;
-		if(renter != null){
-			this.set("Economy.Renter", renter.getUniqueId().toString());
-		} else {
-			this.set("Economy.Renter", null);
-		}
-		this.setChanged(true);
-	}
 
 	/**
 	 * Gets the rent of this plot.
@@ -295,7 +239,7 @@ public class PlotSettings extends GroupSettings{
     public void setShapes(List<Shape> shapes) {
         if(shapes != null){
             try{
-                this.set("Protection.Shape", Util.getShapesString(shapes));
+                this.set("Protection.Shape", Utils.getShapesString(shapes));
                 this.shapes = shapes;
             } catch(Exception e){
                 Civilizations.currentInstance.getLogger().warning("Couldn't save protection shapes for " + this.getName() + ".");
@@ -310,7 +254,7 @@ public class PlotSettings extends GroupSettings{
     public List<Shape> getShapes(){
 	    if(shapes != null) return shapes;
         if(this.contains("Protection.Shape")){
-            shapes = Util.parseShapes(this.getString("Protection.Shape"));
+            shapes = Utils.parseShapes(this.getString("Protection.Shape"));
         } else {
             shapes = new ArrayList<>();
         }

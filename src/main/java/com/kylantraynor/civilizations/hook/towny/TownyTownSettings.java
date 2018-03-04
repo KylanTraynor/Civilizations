@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.builder.Builder;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 
 public class TownyTownSettings extends SettlementSettings{
 

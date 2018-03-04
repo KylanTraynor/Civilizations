@@ -3,7 +3,6 @@ package com.kylantraynor.civilizations.shops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.economy.EconomicEntity;
@@ -12,7 +11,7 @@ import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.groups.settlements.plots.PlotType;
 import com.kylantraynor.civilizations.settings.ShopSettings;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class Shop {
 	
@@ -117,7 +116,7 @@ public class Shop {
 					}
 				}
 			}
-			return Util.getMaterialName(getItem());
+			return Utils.getMaterialName(getItem());
 		}
 		return "";
 	}

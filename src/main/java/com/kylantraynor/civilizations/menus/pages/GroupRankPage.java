@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.menus.pages;
 import java.util.*;
 
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

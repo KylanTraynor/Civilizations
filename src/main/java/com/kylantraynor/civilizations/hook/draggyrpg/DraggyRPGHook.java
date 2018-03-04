@@ -68,7 +68,7 @@ public class DraggyRPGHook {
 		for(Settlement s : Settlement.getAll()){
 			int number = s.getMembers().size();
 			if(number > 0){
-				createTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
+				createTaggedLevelCenter(s.getIdentifier().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
 				Civilizations.log("INFO", "Loaded LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 			}
 		}
@@ -76,19 +76,19 @@ public class DraggyRPGHook {
 	
 	public void updateLevelCenters(){
 		for(Settlement s : Settlement.getAll()){
-			if(levelCenters.containsKey(s.getUniqueId().toString())){
+			if(levelCenters.containsKey(s.getIdentifier().toString())){
 				int number = s.getMembers().size();
 				if(number > 0){
-					if(updateTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0)){
+					if(updateTaggedLevelCenter(s.getIdentifier().toString(), s.getLocation(), 1, 0, 0.01 / number, 0)){
 						Civilizations.DEBUG("Updated LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 					}
 				} else {
-					removeTaggedLevelCenter(s.getUniqueId().toString());
+					removeTaggedLevelCenter(s.getIdentifier().toString());
 				}
 			} else {
 				int number = s.getMembers().size();
 				if(number > 0){
-					createTaggedLevelCenter(s.getUniqueId().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
+					createTaggedLevelCenter(s.getIdentifier().toString(), s.getLocation(), 1, 0, 0.01 / number, 0, false);
 					Civilizations.log("INFO", "Created LevelCenter in " + s.getLocation().getWorld().getName() + " for " + s.getName() + ".");
 				}
 			}

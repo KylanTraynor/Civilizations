@@ -2,6 +2,7 @@ package com.kylantraynor.civilizations.settings;
 
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -51,7 +52,7 @@ public class ShopSettings extends YamlConfiguration{
 	
 	public void setOwner(EconomicEntity newOwner) {
 		if(newOwner != null){
-			this.set("owner", newOwner.getUniqueId().toString());
+			this.set("owner", newOwner.getIdentifier().toString());
 		} else {
 			this.set("owner", null);
 		}

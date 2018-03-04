@@ -1,10 +1,9 @@
-package com.kylantraynor.civilizations.util;
+package com.kylantraynor.civilizations.utils;
 
 import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,14 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.shapes.Shape;
 
-public class Util {
+public class Utils {
 
 	public static Location parseLocation(String s){
 		String[] ss = s.split(",");
@@ -49,6 +46,15 @@ public class Util {
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public static Identifier parseIdentifier(String s){
+		String[] ar = s.split(":");
+		switch(ar.length){
+			case 1: return SimpleIdentifier.parse(s);
+			case 2: return DoubleIdentifier.parse(ar[0],ar[1]);
+			default: throw new IllegalArgumentException();
 		}
 	}
 	

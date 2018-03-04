@@ -3,7 +3,14 @@ package com.kylantraynor.civilizations.economy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.utils.DoubleIdentifier;
+import com.kylantraynor.civilizations.utils.Identifiable;
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -17,7 +24,7 @@ import com.kylantraynor.civilizations.players.CivilizationsCharacter;
  */
 public class EconomicEntity {
 	
-	private static Map<String, EconomicEntity> entities = new HashMap<String, EconomicEntity>();
+	private static Map<UUID, EconomicEntity> entities = new HashMap<>();
 	
 	private Budget budget;
 	private double balance = 0;
@@ -29,32 +36,23 @@ public class EconomicEntity {
 	 */
 	public EconomicEntity(UUID id){
 		this.id = id;
-		this.entities.put(id.toString(), this);
+		entities.put(id, this);
 	}
 	
 	/**
-	 * Creates a new EconomicEntity with a random {@link UUID}.
+	 * Creates a new EconomicEntity with a random {@link SimpleIdentifier}.
 	 */
 	public EconomicEntity(){
 		this.id = UUID.randomUUID();
-		this.entities.put(id.toString(), this);
+		entities.put(id, this);
 	}
 	
 	/**
 	 * Gets the {@link UUID} of this entity.
 	 * @return {@link UUID}
 	 */
-	public UUID getUniqueId(){
+	public UUID getIdentifier(){
 		return id;
-	}
-	
-	/**
-	 * Sets the {@link UUID} of this entity. This will break the continuity with the persistent
-	 * actions of this entity. Do not use unless you definitely know what you are doing.
-	 * @param id as {@link UUID}
-	 */
-	public void setUniqueId(UUID id){
-		this.id = id;
 	}
 	
 	@Deprecated
@@ -73,7 +71,7 @@ public class EconomicEntity {
 	 * @return double
 	 */
 	public double getBalance(){
-		if(Civilizations.useVault && isPlayer()){
+		if(Civilizations.economyType == EconomyType.VAULT && isPlayer()){
 			try{
 				return Economy.getVault().getBalance(getOfflinePlayer());
 			} catch (RuntimeException e){
@@ -81,7 +79,11 @@ public class EconomicEntity {
 				e.printStackTrace();
 			}
 		}
-		return balance;
+		if(Civilizations.economyType == EconomyType.PHYSICAL && this instanceof PhysicalMoneyHolder){
+		    return Economy.getCurrencyValueOf(((PhysicalMoneyHolder) this).getPhysicalMoney());
+        } else {
+		    return balance;
+        }
 	}
 	
 	/**
@@ -89,15 +91,19 @@ public class EconomicEntity {
 	 * @param newBalance as double
 	 */
 	public void setBalance(double newBalance){
-		if(Civilizations.useVault && isPlayer()){
+		if(Civilizations.economyType == EconomyType.VAULT && isPlayer()){
 			double diff = newBalance - getBalance();
 			if(diff > 0){
 				Economy.getVault().depositPlayer(getOfflinePlayer(), diff);
 			} else {
 				Economy.getVault().withdrawPlayer(getOfflinePlayer(), -diff);
 			}
-		}
-		balance = newBalance;
+			balance = newBalance;
+		} else if(Civilizations.economyType == EconomyType.PHYSICAL && this instanceof PhysicalMoneyHolder){
+		    balance = newBalance;
+        } else {
+		    balance = newBalance;
+        }
 	}
 	
 	/**
@@ -105,13 +111,13 @@ public class EconomicEntity {
 	 * @param amount as double
 	 */
 	public void giveFunds(double amount){
-		if(Civilizations.useVault && isPlayer()) {
+		if(Civilizations.economyType == EconomyType.VAULT && isPlayer()) {
 			Civilizations.currentInstance.getLogger().info("Giving " + Economy.format(amount) + " to " + getName() + ".");
 			Economy.getVault().depositPlayer(getOfflinePlayer(), amount);
-			balance = getBalance() + amount;
-			return;
-		}
-		setBalance(getBalance() + amount);
+		} else if(Civilizations.economyType == EconomyType.PHYSICAL && this instanceof PhysicalMoneyHolder){
+            ((PhysicalMoneyHolder)this).givePhysicalMoney((long) (amount * 100));
+        }
+		balance += amount;
 	}
 	
 	/**
@@ -120,12 +126,12 @@ public class EconomicEntity {
 	 * @param amount
 	 */
 	public void takeFunds(double amount){
-		if(Civilizations.useVault && isPlayer()) {
+		if(Civilizations.economyType == EconomyType.VAULT && isPlayer()) {
 			Economy.getVault().withdrawPlayer(getOfflinePlayer(), amount);
-			balance = getBalance() - amount;
-			return;
-		}
-		setBalance(getBalance() - amount);
+		} else if(Civilizations.economyType == EconomyType.PHYSICAL && this instanceof PhysicalMoneyHolder){
+            ((PhysicalMoneyHolder)this).takePhysicalMoney((long) (amount * 100));
+        }
+		balance -= amount;
 	}
 	
 	// ===========================
@@ -140,13 +146,14 @@ public class EconomicEntity {
 	}
 	
 	/**
-	 * Gets the {@link OfflinePlayer} this entity represents. Before calling this method,
-	 * you should make sure this entity indeed represents a player by checking {@code isPlayer()}
-	 * as this method will still return an object if this entity does not represent one.
-	 * @return {@link OfflinePlayer}
+	 * Gets the {@linkplain OfflinePlayer} this entity represents.
+	 * @return {@link OfflinePlayer} or {@code null} if no player with this {@link UUID} was found.
 	 */
 	public OfflinePlayer getOfflinePlayer(){
-		return Bukkit.getOfflinePlayer(this.getUniqueId());
+	    for(OfflinePlayer op : Bukkit.getOfflinePlayers()){
+	        if(op.getUniqueId().equals(this.getIdentifier())) return op;
+        }
+        return null;
 	}
 	
 	/**
@@ -155,22 +162,23 @@ public class EconomicEntity {
 	 */
 	public String getName(){
 		if(isPlayer()){
-			return getOfflinePlayer().getName();
+		    OfflinePlayer op = getOfflinePlayer();
+			if(op != null) return op.getName();
 		}
-		return "Entity";
+		return "Unknown";
 	}
 
     /**
      * Checks if this {@linkplain EconomicEntity} belongs to the
-     * {@linkplain EconomicEntity} with the given {@linkplain UUID}.
-     * @param id as {@link UUID}
-     * @return true if the given {@linkplain UUID} is the same as the
-     * {@linkplain UUID} of this {@linkplain EconomicEntity}, or if this
+     * {@linkplain EconomicEntity} with the given {@linkplain Identifier}.
+     * @param id as {@link Identifier}
+     * @return true if the given {@linkplain Identifier} is the same as the
+     * {@linkplain Identifier} of this {@linkplain EconomicEntity}, or if this
      * entity belongs to the {@linkplain Group} with the given id, and
      * false otherwise.
      */
 	public boolean isMemberOf(UUID id) {
-        if (id == this.getUniqueId()) return true;
+        if (id.equals(this.getIdentifier())) return true;
         EconomicEntity ee = getOrNull(id);
         return ee != null &&
                 !ee.isPlayer() &&
@@ -189,19 +197,22 @@ public class EconomicEntity {
 	 * @return {@link EconomicEntity}
 	 */
 	public static EconomicEntity get(UUID id){
-		EconomicEntity e = entities.get(id.toString());
+		EconomicEntity e = entities.get(id);
 		if(e == null){
+		    if(AccountManager.isCharacterRegistered(id)){
+		        try{ return AccountManager.getCharacter(id); } catch (ExecutionException ex) {ex.printStackTrace();}
+            }
 			e = new EconomicEntity(id);
-		}
+        }
 		return e;
 	}
 	/**
-	 * Gets the {@link EconomicEntity} associated to the given {@link UUID}.
-	 * If none is found, returns Null.
+	 * Gets the {@link EconomicEntity} associated to the given {@link Identifier}.
+	 * If none is found, returns {@code null}.
 	 * @param id as {@link UUID}
 	 * @return {@link EconomicEntity}
 	 */
 	public static EconomicEntity getOrNull(UUID id) {
-		return entities.get(id.toString());
+		return entities.get(id);
 	}
 }

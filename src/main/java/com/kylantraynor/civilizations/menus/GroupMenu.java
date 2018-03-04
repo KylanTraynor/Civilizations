@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.UUID;
 
 import com.kylantraynor.civilizations.protection.Permissions;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

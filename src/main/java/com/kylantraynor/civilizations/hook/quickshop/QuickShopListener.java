@@ -1,12 +1,14 @@
 package com.kylantraynor.civilizations.hook.quickshop;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.maxgamer.quickshop.Shop.ShopPurchaseEvent;
 
 import com.kylantraynor.civilizations.economy.EconomicEntity;
-import com.kylantraynor.civilizations.shops.ShopManager;
+import com.kylantraynor.civilizations.managers.ShopManager;
 
 public class QuickShopListener implements Listener{
 
@@ -19,7 +21,7 @@ public class QuickShopListener implements Listener{
 		// Has enough space in inventory (selling)
 		// Has enough items in inventory (buying)
 		QuickShopShop shop = new QuickShopShop(event.getShop());
-		ShopManager.startPurchase(shop, EconomicEntity.get(event.getPlayer().getUniqueId()), event.getAmount(), true);
+		ShopManager.startPurchase(shop, AccountManager.getEconomicEntity(event.getPlayer()), event.getAmount(), true);
 		//What will be checked after:
 		//Buyer has enough money.
 	}

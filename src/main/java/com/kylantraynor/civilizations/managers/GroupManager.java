@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.kylantraynor.civilizations.exceptions.RecursiveParentException;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -293,7 +295,7 @@ public class GroupManager {
 		Bukkit.getPluginManager().callEvent(event);
 		if(!event.isCancelled()){
 			Camp camp = new Camp(l);
-			camp.addMember(EconomicEntity.get(p.getUniqueId()));
+			camp.addMember(p);
 			return camp;
 		}
 		return null;
@@ -346,13 +348,6 @@ public class GroupManager {
 				((HasBuilder) g).getBuilder().clearProjects();
 			}
 		}
-	}
-	
-	public static Settlement convertToSettlement(Camp camp){
-		Settlement s = new Settlement(camp.getSettings());
-		s.setPlots(camp.getPlots());
-		Civilizations.currentInstance.getLogger().info("Converted Camp " + camp.getId() + " into a Settlement (id: " + s.getId() + ")");;
-		return s;
 	}
 	
 	public static void updateForEconomy() {

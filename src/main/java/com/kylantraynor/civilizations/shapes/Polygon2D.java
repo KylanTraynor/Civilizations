@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
 
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 import com.kylantraynor.voronoi.VectorXZ;
 
 public class Polygon2D extends Shape {
@@ -48,7 +47,7 @@ public class Polygon2D extends Shape {
 		if(getVertices().size() >= 3){
 			for(int i = 0; i < getVertices().size(); i++){
 				int j = (i == getVertices().size() - 1 ? 0 : i + 1);
-				area += Util.det(xVertices[i], zVertices[i], xVertices[j], zVertices[j]);
+				area += Utils.det(xVertices[i], zVertices[i], xVertices[j], zVertices[j]);
 			}
 			area = (long) Math.abs(area / 2l);
 		}

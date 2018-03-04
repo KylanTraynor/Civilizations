@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.settings.HonorificTitleSettings;
+import com.kylantraynor.civilizations.utils.Identifier;
 
 public class HonorificTitle extends Group {
 	public String getName() {
@@ -23,9 +24,9 @@ public class HonorificTitle extends Group {
 		getSettings().setName(name);
 	}
 
-	public static HonorificTitle get(UUID id) {
+	public static HonorificTitle get(Identifier id) {
 		for(Group g : Group.getList()){
-			if(g instanceof HonorificTitle && g.getUniqueId().equals(id)){
+			if(g instanceof HonorificTitle && g.getIdentifier().equals(id)){
 				return (HonorificTitle) g;
 			}
 		}

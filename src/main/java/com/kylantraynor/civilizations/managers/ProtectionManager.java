@@ -5,6 +5,7 @@ import java.util.*;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Location;
 
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -14,21 +15,6 @@ import org.bukkit.OfflinePlayer;
 import javax.annotation.Nullable;
 
 public class ProtectionManager {
-/*
-    @Deprecated
-	public static Protection getProtectionAt(Location location){
-		Protection result = null;
-		Plot p = Plot.getAt(location);
-		if(p == null){
-			Settlement s = Settlement.getAt(location);
-			if(s != null){
-				result = s.getProtection();
-			}
-		} else {
-			result = p.getProtection();
-		}
-		return result;
-	}*/
 
     /**
      * Checks if the given {@linkplain EconomicEntity} has the given {@linkplain PermissionType} at the given {@linkplain Location}.
@@ -55,7 +41,7 @@ public class ProtectionManager {
      * @return true if the permission was granted, false otherwise.
      */
     public static boolean hasPermission(PermissionType type, @Nullable Group group, @Nullable EconomicEntity entity, boolean recursive){
-        return hasPermission(type, group, entity == null ? null : entity.getUniqueId(), recursive);
+        return hasPermission(type, group, entity == null ? null : entity.getIdentifier(), recursive);
     }
 
     /**
@@ -67,12 +53,7 @@ public class ProtectionManager {
      * @return true if the permission was granted, false otherwise.
      */
     public static boolean hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
-        CivilizationsAccount ca = CivilizationsAccount.get(player.getUniqueId());
-        if(ca.getCurrentCharacterId() != null){
-            return hasPermission(type, group, ca.getCurrentCharacterId(), recursive);
-        } else {
-            return hasPermission(type, group, ca.getPlayerId(), recursive);
-        }
+        return hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
     }
 
     /**
@@ -106,11 +87,11 @@ public class ProtectionManager {
                         // Check if the target exists
                         if(ee != null){
                             if(ee instanceof Group &&
-                                    (ee.getUniqueId() == target ||
+                                    (ee.getIdentifier().equals(target) ||
                                     ((Group) ee).isMember(target, true))){
                                 // If the given entity is a deep member of the group
                                 return perm;
-                            } else if (ee.getUniqueId() == target) {
+                            } else if (ee.getIdentifier().equals(target)) {
                                 // if the given entity's id is the same as the target's id
                                 return perm;
                             }
@@ -119,7 +100,7 @@ public class ProtectionManager {
                 }
 
                 // Check self permission
-                if(target == current.getUniqueId() || current.isMember(target, true)){
+                if(target.equals(current.getIdentifier()) || current.isMember(target, true)){
                     result = current.getSettings().getSelfPermission(type.toString());
                     if(result != null) return result;
                 }
@@ -153,7 +134,7 @@ public class ProtectionManager {
      * @return The previous value of the permission, or Null if it was not set.
      */
     public static Boolean setPermission(PermissionType type, Group group, @Nullable EconomicEntity entity, Boolean value){
-        return setPermission(type, group, (entity == null ? null : entity.getUniqueId()), value);
+        return setPermission(type, group, (entity == null ? null : entity.getIdentifier()), value);
     }
 
     /**

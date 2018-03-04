@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.listeners;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -298,7 +299,7 @@ public class ProtectionListener implements Listener{
 		if(event.getFrom().getBlock() != event.getTo().getBlock()){
 			Camp c = Camp.getCampAt(event.getTo());
 			if(c != null){
-				if(c.isMember(CivilizationsAccount.getEconomicEntity(event.getPlayer()).getUniqueId(), true)){
+				if(c.isMember(AccountManager.getCurrentIdentifier(event.getPlayer()), true)){
 					if(c.getExpireOn().isBefore(Instant.now().plus(Camp.campDuration - 2, ChronoUnit.HOURS))){
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
 					}

@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
-import javax.annotation.Nullable;
-
 import com.kylantraynor.civilizations.protection.*;
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
+import com.kylantraynor.civilizations.utils.Utils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,8 +17,6 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.TaxBase;
 import com.kylantraynor.civilizations.economy.TaxInfo;
 import com.kylantraynor.civilizations.economy.TaxType;
-import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
 
 public class GroupSettings extends YamlConfiguration{
 	
@@ -167,7 +166,7 @@ public class GroupSettings extends YamlConfiguration{
 	
 	/**
 	 * Gets the list of members of this group.
-	 * @return List<UUID>
+	 * @return List of {@link UUID}
 	 */
 	public Set<UUID> getMembers(){
 		if(this.members == null) {
@@ -176,7 +175,7 @@ public class GroupSettings extends YamlConfiguration{
 				List<?> l = this.getList("Members");
 				for(Object o : l){
 					if(o instanceof String){
-						this.members.add(UUID.fromString((String) o));
+						this.members.add(UUID.fromString((String)o));
 					}
 				}
 			}
@@ -253,7 +252,7 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public Boolean getPermission(UUID id, String permission){
 	    if(id == null) return getOutsidersPermission(permission);
-	    if(id == getUniqueId()) return getSelfPermission(permission);
+	    if(id.equals(getUniqueId())) return getSelfPermission(permission);
 		String path = String.format(PERMISSIONS, id.toString(), permission);
 		if(!this.contains(path)) return null;
 		return this.getBoolean(path);
@@ -294,7 +293,7 @@ public class GroupSettings extends YamlConfiguration{
 
 	/**
 	 * Gets the permission level of entity with the given {@linkplain UUID}.
-	 * @param id as {@link UUID}
+	 * @param id as {@link Identifier}
 	 * @return {@link Integer} containing the value, or Null if the
 	 * permission was not set.
 	 */
@@ -305,8 +304,8 @@ public class GroupSettings extends YamlConfiguration{
 	}
 	
 	/**
-	 * Sets the given permission to the given value for the entity with the given {@linkplain UUID}.
-	 * @param id The {@link UUID} of the target. Use the Group's own UUID to set self permissions,
+	 * Sets the given permission to the given value for the entity with the given {@linkplain Identifier}.
+	 * @param id The {@link Identifier} of the target. Use the Group's own UUID to set self permissions,
      *           and Null to set Outsiders permissions.
 	 * @param permission as {@link String}
 	 * @param value as {@link Boolean}
@@ -314,7 +313,7 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public Boolean setPermission(UUID id, String permission, Boolean value){
 	    if(id == null) return setOutsidersPermission(permission, value);
-	    if(id == getUniqueId()) return setSelfPermission(permission, value);
+	    if(id.equals(getUniqueId())) return setSelfPermission(permission, value);
 		Boolean oldValue = getPermission(id, permission);
 		this.set(String.format(PERMISSIONS, id.toString(), permission), value);
 		setChanged(true);
@@ -383,7 +382,7 @@ public class GroupSettings extends YamlConfiguration{
 	    ConfigurationSection cs = this.getConfigurationSection(PERMISSIONSROOT);
 	    for(String s : cs.getKeys(false)){
 	        if(s.equalsIgnoreCase("SELF") || s.equalsIgnoreCase("OUTSIDERS") || s.equalsIgnoreCase("SeRVER")) continue;
-	        UUID target = UUID.fromString(s);
+	        Identifier target = Utils.parseIdentifier(s);
 	        int level = 0;
             ConfigurationSection cs2 = cs.getConfigurationSection(s);
             Map<String, Boolean> map = new HashMap<>();

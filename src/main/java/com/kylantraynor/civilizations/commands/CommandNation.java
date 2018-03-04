@@ -131,7 +131,7 @@ public class CommandNation implements CommandExecutor{
 					return true;
 				}
 			} else {
-				((Player) sender).chat("/group " + nation.getUniqueId().toString());
+				((Player) sender).chat("/group " + nation.getIdentifier().toString());
 				return true;
 			}
 			

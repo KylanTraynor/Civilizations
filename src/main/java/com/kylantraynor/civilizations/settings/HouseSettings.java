@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
+import com.kylantraynor.civilizations.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -101,10 +104,10 @@ public class HouseSettings extends GroupSettings {
 		if(this.vassals != null) return vassals;
 		if(this.contains("Vassals")){
 			List<?> list = this.getList("Vassals");
-			vassals = new ArrayList<House>();
+			vassals = new ArrayList<>();
 			for(Object o : list){
 				if(o instanceof String){
-					UUID id = UUID.fromString((String) o);
+					UUID id = UUID.fromString((String)o);
 					Group g = Group.get(id);
 					if(g instanceof House){
 						vassals.add((House) g);
@@ -147,7 +150,7 @@ public class HouseSettings extends GroupSettings {
 			titles = new ArrayList<HonorificTitle>();
 			for(Object o : list){
 				if(o instanceof String){
-					UUID id = UUID.fromString((String) o);
+					Identifier id = SimpleIdentifier.parse((String)o);
 					HonorificTitle g = HonorificTitle.get(id);
 					if(g instanceof HonorificTitle){
 						titles.add((HonorificTitle) g);

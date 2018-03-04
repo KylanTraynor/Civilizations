@@ -1,6 +1,8 @@
 package com.kylantraynor.civilizations.economy;
 
+import java.math.BigInteger;
 import java.time.Instant;
+import java.util.*;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -8,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -16,7 +19,6 @@ import org.bukkit.potion.PotionEffectType;
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class Economy {
 	
@@ -204,4 +206,36 @@ public class Economy {
 		if(Civilizations.useDatabase)
 			Civilizations.currentInstance.getDatabase().insertBudgetEntry(budgetEntry);
 	}
+
+	public static int getCurrencyValueOf(List<PhysicalMoney> is){
+	    int result = 0;
+	    for(PhysicalMoney i : is){
+	        result += i.getTotalValue();
+        }
+        return result;
+    }
+
+    public static List<PhysicalMoney> getPhysicalValueOf(Currency currency, long cents){
+	    long remaining = cents;
+	    long total = 0;
+	    List<PhysicalMoney> result = new ArrayList<>();
+        List<Currency.Denomination> denoms = currency.getDenominations();
+        denoms.sort(Comparator.reverseOrder());
+        for(Currency.Denomination d : denoms){
+            long stackValue = d.getValue() * d.getMaterial().getMaxStackSize();
+            while(remaining >= stackValue){
+                result.add(new PhysicalMoney(currency, d.getMaterial(), d.getMaterial().getMaxStackSize()));
+                remaining -= stackValue;
+            }
+            int amount = 0;
+            while(remaining >= d.getValue()){
+                amount++;
+                remaining -= d.getValue();
+            }
+            if(amount > 0){
+                result.add(new PhysicalMoney(currency, d.getMaterial(), amount));
+            }
+        }
+        return result;
+    }
 }

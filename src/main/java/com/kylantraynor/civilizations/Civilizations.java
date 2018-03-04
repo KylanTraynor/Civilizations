@@ -7,6 +7,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.logging.Level;
 
+import com.kylantraynor.civilizations.economy.EconomyType;
+import com.kylantraynor.civilizations.managers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -62,16 +64,11 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
-import com.kylantraynor.civilizations.managers.CacheManager;
-import com.kylantraynor.civilizations.managers.GroupManager;
-import com.kylantraynor.civilizations.managers.LockManager;
-import com.kylantraynor.civilizations.managers.SelectionManager;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
-import com.kylantraynor.civilizations.protection.Protection;
 import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
-import com.kylantraynor.civilizations.util.MaterialAndData;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
+import com.kylantraynor.civilizations.utils.Utils;
 import com.kylantraynor.draggydata.AdvancementAPI;
 import com.kylantraynor.draggydata.AdvancementAPI.FrameType;
 import com.kylantraynor.draggydata.AdvancementAPI.TriggerType;
@@ -141,7 +138,7 @@ public class Civilizations extends JavaPlugin{
 	private static Server webServer;
 	public static boolean useChat = false;
 	public static boolean useDatabase = false;
-	public static boolean useVault = true;
+	public static EconomyType economyType = EconomyType.VAULT;
 	
 	public static Server getWebServer(){
 		return webServer;
@@ -464,7 +461,7 @@ public class Civilizations extends JavaPlugin{
 			GroupManager.cancelAllBuilds();
 		
 		GroupManager.updateAllGroups();
-		CivilizationsAccount.logoutAllPlayers();
+		AccountManager.logoutAllPlayers();
 		if(DynmapHook.isEnabled()){
 			DynmapHook.disable();
 		}
@@ -563,7 +560,7 @@ public class Civilizations extends JavaPlugin{
                         TitleManagerHook.sendActionBar("Protected Area", player, false);
                     }
 				} else if(to instanceof TownyTown){
-					TitleManagerHook.sendTitle("", ChatColor.GRAY + Util.prettifyText(to.getName()), 10, 40, 10, player);
+					TitleManagerHook.sendTitle("", ChatColor.GRAY + Utils.prettifyText(to.getName()), 10, 40, 10, player);
 					if(!to.isMember(player)){
 						TitleManagerHook.sendActionBar("Protected Area", player, false);
 					}

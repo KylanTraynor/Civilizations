@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import com.kylantraynor.civilizations.shapes.Hull;
+import com.kylantraynor.civilizations.utils.Identifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.*;
@@ -30,8 +31,8 @@ import com.kylantraynor.civilizations.hook.dynmap.DynmapHook;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.settings.SettlementSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.MutableInteger;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.MutableInteger;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class Settlement extends Group implements HasBuilder{
 	
@@ -105,7 +106,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getSettlementDirectory(), "" + this.getUniqueId().toString() + ".yml");
+		File f = new File(Civilizations.getSettlementDirectory(), "" + this.getIdentifier().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -155,7 +156,7 @@ public class Settlement extends Group implements HasBuilder{
 	public FancyMessage getInteractiveInfoPanel(Player player) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(getName().toUpperCase(), this.getChatColor()))
 			.then("\n" + getType() +" created ").color(ChatColor.GRAY)
-			.then(Util.durationToString(getSettings().getCreationDate(), Instant.now())).color(ChatColor.GOLD)
+			.then(Utils.durationToString(getSettings().getCreationDate(), Instant.now())).color(ChatColor.GOLD)
 			.then(" ago.").color(ChatColor.GRAY)
 			.then("\nHouses: ").color(ChatColor.GRAY)
 			.then("" + getHouses().size()).color(ChatColor.GOLD)
@@ -166,9 +167,9 @@ public class Settlement extends Group implements HasBuilder{
 			.then("\nStalls: ").color(ChatColor.GRAY)
 			.then("" + getMarketStalls().size()).color(ChatColor.GOLD)
 			.then("\nMembers: ").color(ChatColor.GRAY)
-			.command("/group " + this.getUniqueId().toString() + " members")
+			.command("/group " + this.getIdentifier().toString() + " members")
 			.then("" + getMembers().size()).color(ChatColor.GOLD)
-			.command("/group " + this.getUniqueId().toString() + " members")
+			.command("/group " + this.getIdentifier().toString() + " members")
 			.then("\nActions: \n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -414,7 +415,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public Set<UUID> getMembers(){
-		Set<UUID> list = new TreeSet<UUID>();
+		Set<UUID> list = new TreeSet<>();
 		for(Plot p : getPlots()){
 			for(UUID id : p.getMembers()){
 				if(!list.contains(id)){

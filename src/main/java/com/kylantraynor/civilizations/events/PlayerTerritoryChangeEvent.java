@@ -1,5 +1,6 @@
 package com.kylantraynor.civilizations.events;
 
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -8,18 +9,20 @@ import org.bukkit.event.HandlerList;
 
 import com.kylantraynor.civilizations.groups.settlements.forts.Fort;
 
+import java.util.UUID;
+
 public class PlayerTerritoryChangeEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancelled = false;
 	
 	private String playerName;
-	private int oldFortId;
-	private int newFortId;
+	private UUID oldFortId;
+	private UUID newFortId;
 
 	public PlayerTerritoryChangeEvent(Player player, Fort from, Fort to){
 		this.playerName = player.getName();
-		this.oldFortId = from != null ? from.getId() : -1;
-		this.newFortId = to != null ? to.getId() : -1;
+		this.oldFortId = from != null ? from.getIdentifier() : null;
+		this.newFortId = to != null ? to.getIdentifier() : null;
 	}
 	
 	/**
@@ -59,7 +62,7 @@ public class PlayerTerritoryChangeEvent extends Event implements Cancellable {
 	 * @return
 	 */
 	public boolean hasOldFort(){
-		return oldFortId >= 0;
+		return oldFortId != null;
 	}
 	
 	/**
@@ -67,7 +70,7 @@ public class PlayerTerritoryChangeEvent extends Event implements Cancellable {
 	 * @return
 	 */
 	public boolean hasNewFort(){
-		return newFortId >= 0;
+		return newFortId != null;
 	}
 	
 	@Override

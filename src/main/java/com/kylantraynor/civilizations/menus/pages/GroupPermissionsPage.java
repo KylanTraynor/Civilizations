@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.menus.pages;
 import java.util.*;
 
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.GroupMenu;
 import com.kylantraynor.civilizations.menus.Menu;
 import com.kylantraynor.civilizations.protection.PermissionType;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class GroupPermissionsPage implements MenuPage {
 	
@@ -60,7 +61,7 @@ public class GroupPermissionsPage implements MenuPage {
 		
 		final boolean set = value != null;
 		final boolean val = value;
-		Button permissionButton = new Button(player,mat, ChatColor.WHITE + Util.prettifyText(pt.toString()), lore, 
+		Button permissionButton = new Button(player,mat, ChatColor.WHITE + Utils.prettifyText(pt.toString()), lore,
 			new BukkitRunnable(){
 				@Override
 				public void run() {

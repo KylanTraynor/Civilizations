@@ -2,9 +2,12 @@ package com.kylantraynor.civilizations.listeners;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -121,12 +124,16 @@ public class CivilizationsListener implements Listener{
 	public void onPlayerJoin(PlayerJoinEvent event){
 		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
 			if(event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
-			CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), false);
-			CivilizationsCharacter cc = ca.getCurrentCharacter();
-			if(cc != null){
-				event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
-			} else {
-				event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+			try {
+                CivilizationsAccount ca = AccountManager.login(event.getPlayer(), false);
+				CivilizationsCharacter cc = ca.getCurrentCharacter();
+				if(cc != null){
+					event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+				} else {
+					event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+				}
+			} catch (ExecutionException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -135,7 +142,8 @@ public class CivilizationsListener implements Listener{
 	public void onPlayerQuit(PlayerQuitEvent event){
 		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
 			if(!isCivsGameMode(event.getPlayer().getGameMode())) return;
-			CivilizationsAccount.logout(event.getPlayer());
+			CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
+			if(ca != null) ca.logout();
 		}
 	}
 	
@@ -150,24 +158,31 @@ public class CivilizationsListener implements Listener{
 		List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
 		if(civsWorld.contains(event.getPlayer().getLocation().getWorld().getName())){
 			if(isCivsGameMode(event.getPlayer().getGameMode()) && !isCivsGameMode(event.getNewGameMode())){
-				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
-				if(ca == null) return;
-				if(ca.getCurrentCharacterId() != null){
-					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your character.");
-				} else {
-					event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " account.");
-				}
+				CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
+				if(ca != null){
+                    if(ca.getCurrentCharacterId() != null){
+                        ca.logout();
+                        event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your character.");
+                    } else {
+                        ca.logout();
+                        event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " account.");
+                    }
+                }
 			} else if(!isCivsGameMode(event.getPlayer().getGameMode()) && isCivsGameMode(event.getNewGameMode())){
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
-						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), true);
-						CivilizationsCharacter cc = ca.getCurrentCharacter();
-						if(cc != null){
-							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
-						} else {
-							event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
-						}
+					    try {
+                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), true);
+                            CivilizationsCharacter cc = ca.getCurrentCharacter();
+                            if(cc != null){
+                                event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+                            } else {
+                                event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+                            }
+                        } catch (ExecutionException e) {
+					        e.printStackTrace();
+                        }
 					}
 				};
 				bk.runTaskLater(Civilizations.currentInstance, 10);
@@ -187,24 +202,31 @@ public class CivilizationsListener implements Listener{
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
-						CivilizationsAccount ca = CivilizationsAccount.login(event.getPlayer(), true);
-						CivilizationsCharacter cc = ca.getCurrentCharacter();
-						if(cc != null){
-							event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
-						} else {
-							event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
-						}
+					    try{
+                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), true);
+                            CivilizationsCharacter cc = ca.getCurrentCharacter();
+                            if(cc != null){
+                                event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
+                            } else {
+                                event.getPlayer().sendMessage("You're not logged in as any character. Use " + ChatColor.GOLD + "/account"+ ChatColor.WHITE+" to select one.");
+                            }
+                        } catch (ExecutionException e) {
+					        e.printStackTrace();
+                        }
 					}
 				};
 				bk.runTaskLater(Civilizations.currentInstance, 10);
 			} else if(isCivsFrom){
-				CivilizationsAccount ca = CivilizationsAccount.logout(event.getPlayer());
-				if(ca == null) return;
-				if(ca.getCurrentCharacterId() != null){
-					event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world. You have been logged out of your character.");
-				} else {
-					event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world.");
-				}
+				CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
+				if(ca != null){
+                    if(ca.getCurrentCharacterId() != null){
+                        ca.logout();
+                        event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world. You have been logged out of your character.");
+                    } else {
+                        ca.logout();
+                        event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world.");
+                    }
+                }
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import com.kylantraynor.civilizations.chat.ChatTools;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.economy.Economy;
 import com.kylantraynor.civilizations.managers.GroupManager;
-import com.kylantraynor.civilizations.util.MaterialAndData;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
 
 public class CommandCivilizations implements CommandExecutor{
 

@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.protection;
 
+import com.kylantraynor.civilizations.utils.Identifier;
+
 import java.util.Map;
 import java.util.UUID;
 

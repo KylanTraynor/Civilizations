@@ -1,8 +1,13 @@
 package com.kylantraynor.civilizations.economy;
 
+import java.net.IDN;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.Civilizations;
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.OfflinePlayer;
 
 public class BudgetEntry {
@@ -22,9 +27,9 @@ public class BudgetEntry {
 	
 	public BudgetEntry(EconomicEntity emiter, EconomicEntity receiver, String label, double amount, Instant instant){
 		if(emiter != null)
-			this.setEmiter(emiter.getUniqueId());
+			this.setEmiter(emiter.getIdentifier());
 		if(receiver != null)
-			this.setReceiver(receiver.getUniqueId());
+			this.setReceiver(receiver.getIdentifier());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
@@ -32,9 +37,9 @@ public class BudgetEntry {
 	
 	public BudgetEntry(OfflinePlayer emiter, OfflinePlayer receiver, String label, double amount, Instant instant){
 		if(emiter != null)
-			this.setEmiter(emiter.getUniqueId());
+			this.setEmiter(AccountManager.getCurrentIdentifier(emiter));
 		if(receiver != null)
-			this.setReceiver(receiver.getUniqueId());
+			this.setReceiver(AccountManager.getCurrentIdentifier(receiver));
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
@@ -42,9 +47,9 @@ public class BudgetEntry {
 	
 	public BudgetEntry(EconomicEntity emiter, OfflinePlayer receiver, String label, double amount, Instant instant){
 		if(emiter != null)
-			this.setEmiter(emiter.getUniqueId());
+			this.setEmiter(emiter.getIdentifier());
 		if(receiver != null)
-			this.setReceiver(receiver.getUniqueId());
+			this.setReceiver(AccountManager.getCurrentIdentifier(receiver));
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);
@@ -52,9 +57,9 @@ public class BudgetEntry {
 	
 	public BudgetEntry(OfflinePlayer emiter, EconomicEntity receiver, String label, double amount, Instant instant){
 		if(emiter != null)
-			this.setEmiter(emiter.getUniqueId());
+			this.setEmiter(AccountManager.getCurrentIdentifier(emiter));
 		if(receiver != null)
-			this.setReceiver(receiver.getUniqueId());
+			this.setReceiver(receiver.getIdentifier());
 		this.setLabel(label);
 		this.setAmount(amount);
 		this.setInstant(instant);

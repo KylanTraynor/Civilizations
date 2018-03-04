@@ -1,4 +1,4 @@
-package com.kylantraynor.civilizations.util;
+package com.kylantraynor.civilizations.utils;
 
 import java.util.HashMap;
 import java.util.Map;

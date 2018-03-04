@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.utils.Identifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -85,8 +86,8 @@ public class SmallOutpost extends Fort{
 		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
 			then("" + this.getHouse().getName()).color(ChatColor.GOLD).
 			command(houseInfoCommand);
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getId() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getId() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getIdentifier().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " members");
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
 		return fm;
 	}
@@ -97,7 +98,7 @@ public class SmallOutpost extends Fort{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getSmallOutpostDirectory(), "" + getId() + ".yml");
+		File f = new File(Civilizations.getSmallOutpostDirectory(), "" + getIdentifier().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -160,7 +161,7 @@ public class SmallOutpost extends Fort{
 		fc.set("Influence", getInfluence());
 		
 		int i = 0;
-		for(UUID id : getMembers()){
+		for(Identifier id : getMembers()){
 			fc.set("Members." + i, id.toString());
 			i += 1;
 		}

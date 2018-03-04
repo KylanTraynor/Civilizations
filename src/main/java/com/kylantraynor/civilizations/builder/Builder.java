@@ -9,7 +9,6 @@ import java.util.logging.Level;
 
 import mkremins.fanciful.civilizations.FancyMessage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -18,9 +17,8 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.BuilderSettings;
-import com.kylantraynor.civilizations.settings.GroupSettings;
-import com.kylantraynor.civilizations.util.MaterialAndData;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.MaterialAndData;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class Builder {
 	private static List<Builder> builders = new ArrayList<Builder>();
@@ -149,11 +147,11 @@ public class Builder {
 		if(getOwner() != null && lastWarning.isBefore(Instant.now().minusSeconds(60))){
 			FancyMessage notification = new FancyMessage(((Group)getOwner()).getChatHeader());
 			notification.then("Warehouses lack of ")
-			.then(Util.prettifyText(Util.getMaterialName(supply.getDefault())))
-			.tooltip("Actual block : " + Util.getMaterialName(supply))
+			.then(Utils.prettifyText(Utils.getMaterialName(supply.getDefault())))
+			.tooltip("Actual block : " + Utils.getMaterialName(supply))
 			.color(ChatColor.GOLD)
 			.then("! Click ")
-			.then("HERE").command("/group " + ((Group)getOwner()).getUniqueId().toString() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
+			.then("HERE").command("/group " + ((Group)getOwner()).getIdentifier().toString() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
 			.color(ChatColor.GOLD)
 			.then(" to skip this type of block.");
 			((Group)getOwner()).sendMessage(notification, PermissionType.BLUEPRINT_NOTIFICATIONS);

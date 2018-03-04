@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kylantraynor.civilizations.util.MutableDouble;
-
 // TODO Add this to influent sites instead of a simple float number.
 
 public class Influence {

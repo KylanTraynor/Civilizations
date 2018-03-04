@@ -2,7 +2,7 @@ package com.kylantraynor.civilizations.settings;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -50,7 +50,7 @@ public class SettlementSettings extends GroupSettings{
 	public void setShapes(List<Shape> shapes) {
 		if(shapes != null){
 			try{
-				this.set("Protection.Shape", Util.getShapesString(shapes));
+				this.set("Protection.Shape", Utils.getShapesString(shapes));
 				this.shapes = shapes;
 			} catch(Exception e){
 				Civilizations.currentInstance.getLogger().warning("Couldn't save protection shapes for " + this.getName() + ".");
@@ -65,7 +65,7 @@ public class SettlementSettings extends GroupSettings{
 	public List<Shape> getShapes(){
 	    if(shapes != null) return shapes;
 		if(this.contains("Protection.Shape")){
-			return shapes = Util.parseShapes(this.getString("Protection.Shape"));
+			return shapes = Utils.parseShapes(this.getString("Protection.Shape"));
 		}
 		return shapes = new ArrayList<Shape>();
 	}

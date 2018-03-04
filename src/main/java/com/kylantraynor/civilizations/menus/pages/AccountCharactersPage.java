@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -78,9 +81,8 @@ public class AccountCharactersPage implements MenuPage {
 
 			@Override
 			public void run() {
-				CivilizationsCharacter c = account.createNewCharacter();
-				account.setCurrentCharacter(c);
-				((AccountMenu)MenuManager.getMenus().get(player)).close();
+				//TODO Add new character handling.
+				MenuManager.getMenus().get(player).close();
 			}
 			
 		}, true);
@@ -88,25 +90,30 @@ public class AccountCharactersPage implements MenuPage {
 	}
 	
 	public Button getCharacterButton(UUID id){
-		CivilizationsCharacter cc = account.getCharacter(id);
-		if(cc == null) return null;
-		List<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.WHITE + "Name: " + ChatColor.GOLD + cc.getName());
-		lore.add(ChatColor.WHITE + "Family: " + ChatColor.GOLD + cc.getFamilyName());
-		lore.add(ChatColor.WHITE + "Gender: " + ChatColor.GOLD + cc.getGender().toString());
-		lore.add(ChatColor.GOLD + "Clicking will save the inventory and location of your");
-		lore.add(ChatColor.GOLD + "current character, then send you to where this");
-		lore.add(ChatColor.GOLD + "character was, and restore its own inventory.");
-		Button button = new Button(player, Material.EMERALD_BLOCK, "Change Character", lore, new BukkitRunnable(){
+	    if(id == null) return null;
+		try{
+		    final CivilizationsCharacter cc = AccountManager.getCharacter(id);
+            List<String> lore = new ArrayList<String>();
+            lore.add(ChatColor.WHITE + "Name: " + ChatColor.GOLD + cc.getName());
+            lore.add(ChatColor.WHITE + "Family: " + ChatColor.GOLD + cc.getFamilyName());
+            lore.add(ChatColor.WHITE + "Gender: " + ChatColor.GOLD + cc.getGender().toString());
+            lore.add(ChatColor.GOLD + "Clicking will save the inventory and location of your");
+            lore.add(ChatColor.GOLD + "current character, then send you to where this");
+            lore.add(ChatColor.GOLD + "character was, and restore its own inventory.");
+            Button button = new Button(player, Material.EMERALD_BLOCK, "Change Character", lore, new BukkitRunnable(){
 
-			@Override
-			public void run() {
-				account.setCurrentCharacter(cc);
-				((AccountMenu)MenuManager.getMenus().get(player)).close();
-			}
-			
-		}, true);
-		return button;
+                @Override
+                public void run() {
+                    account.setCurrentCharacter(cc);
+                    MenuManager.getMenus().get(player).close();
+                }
+
+            }, true);
+            return button;
+		} catch (ExecutionException ex) {
+		    ex.printStackTrace();
+		    return null;
+		}
 	}
 
 	@Override

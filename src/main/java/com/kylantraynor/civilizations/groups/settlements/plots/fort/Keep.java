@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.players.CivilizationsAccount;
+import com.kylantraynor.civilizations.utils.Identifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
@@ -29,7 +31,7 @@ import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
 import com.kylantraynor.civilizations.settings.PlotSettings;
 import com.kylantraynor.civilizations.shapes.Shape;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class Keep extends Plot implements FortComponent{
 
@@ -73,13 +75,13 @@ public class Keep extends Plot implements FortComponent{
 		fm.then("\nOccupied by: ").color(ChatColor.GRAY).command(houseInfoCommand).
 			then("" + ((Fort)getSettlement()).getHouse().getName()).color(ChatColor.GOLD).
 			command(houseInfoCommand);
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getIdentifier().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " members");
 		
 		fm.then("\nActions: ").color(ChatColor.GRAY);
-		if(this.isMember(EconomicEntity.get(player.getUniqueId()))){
+		if(this.isMember(CivilizationsAccount.getCurrentIdentifier(player))){
 			if(ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, getSettlement(), player, true)){
-				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getUniqueId().toString() + " setname NEW NAME");
+				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getIdentifier().toString() + " setname NEW NAME");
 			} else {
 				fm.then("\nRename").color(ChatColor.GRAY).tooltip("You don't have the MANAGE PLOTS permission here.");
 			}
@@ -95,7 +97,7 @@ public class Keep extends Plot implements FortComponent{
 	 */
 	@Override
 	public File getFile(){
-		File f = new File(Civilizations.getKeepDirectory(), "" + getUniqueId().toString() + ".yml");
+		File f = new File(Civilizations.getKeepDirectory(), "" + getIdentifier().toString() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -134,12 +136,12 @@ public class Keep extends Plot implements FortComponent{
 			}
 			
 		}
-		Keep g = new Keep(name, Util.parseShapes(shapes), settlement);
+		Keep g = new Keep(name, Utils.parseShapes(shapes), settlement);
 		g.getSettings().setCreationDate(creation);
 		
 		int i = 0;
 		while(cf.contains("Members." + i)){
-			g.getMembers().add(UUID.fromString((cf.getString("Members."+i))));
+			g.getMembers().add(Utils.parseIdentifier(cf.getString("Members."+i)));
 			i+=1;
 		}
 		
@@ -160,11 +162,11 @@ public class Keep extends Plot implements FortComponent{
 		} else {
 			fc.set("SettlementPath", null);
 		}
-		fc.set("Shape", Util.getShapesString(getShapes()));
+		fc.set("Shape", Utils.getShapesString(getShapes()));
 		fc.set("Creation", getSettings().getCreationDate().toString());
 		
 		int i = 0;
-		for(UUID id : getMembers()){
+		for(Identifier id : getMembers()){
 			fc.set("Members." + i, id.toString());
 			i += 1;
 		}

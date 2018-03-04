@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -29,7 +30,7 @@ public class BuilderSettings extends YamlConfiguration{
 		if(owner == null){
 			this.set("Owner", null);
 		} else {
-			this.set("Owner", owner.getUniqueId().toString());
+			this.set("Owner", owner.getIdentifier().toString());
 		}
 		this.owner = owner;
 		setChanged(true);
@@ -40,10 +41,10 @@ public class BuilderSettings extends YamlConfiguration{
 		try {
 			String ids = this.getString("Owner");
 			if(ids == null) return null;
-			UUID id = UUID.fromString(ids);
+			SimpleIdentifier id = SimpleIdentifier.parse(ids);
 			for(Group g : Group.getList()){
 				if(g instanceof HasBuilder){
-					if(g.getUniqueId().equals(id)){
+					if(g.getIdentifier().equals(id)){
 						owner = (HasBuilder) g;
 						return (HasBuilder)g;
 					}

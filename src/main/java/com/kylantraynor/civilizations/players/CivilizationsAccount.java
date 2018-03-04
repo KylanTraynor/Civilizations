@@ -3,13 +3,21 @@ package com.kylantraynor.civilizations.players;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.settings.CivilizationsSettings;
+import com.kylantraynor.civilizations.utils.DoubleIdentifier;
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -31,34 +39,24 @@ import com.kylantraynor.civilizations.settings.AccountSettings;
  *
  */
 public class CivilizationsAccount {
-	private static Map<String, CivilizationsAccount> accounts = new HashMap<String, CivilizationsAccount>();
-	private static final File Directory = new File(Civilizations.currentInstance.getDataFolder(), "Accounts");
 	
 	private UUID currentCharacter;
-	private UUID playerId;
-	private AccountSettings settings = new AccountSettings();
-	
-	public CivilizationsAccount(Player p){
-		this(p.getUniqueId());
-	}
-	
-	public CivilizationsAccount(UUID playerId){
-		this.playerId = playerId;
-		try {
-			settings.load(getFile());
-		} catch (IOException | InvalidConfigurationException e) {
-			e.printStackTrace();
-		}
-		settings.setPlayerId(playerId);
-		accounts.put(playerId.toString(), this);
-	}
+	private final AccountSettings settings;
 
-	/**
+	public CivilizationsAccount(AccountSettings settings){
+	    this.settings = settings;
+    }
+
+    public AccountSettings getSettings() {
+        return settings;
+    }
+
+    /**
 	 * Gets the player id of this account.
 	 * @return
 	 */
 	public UUID getPlayerId() {
-		return playerId;
+		return settings.getPlayerId();
 	}
 	
 	/**
@@ -66,11 +64,11 @@ public class CivilizationsAccount {
 	 * @return
 	 */
 	public OfflinePlayer getOfflinePlayer(){
-		return Bukkit.getOfflinePlayer(playerId);
+		return Bukkit.getOfflinePlayer(settings.getPlayerId());
 	}
 	
 	/**
-	 * Gets all the {@linkplain UUID}s of the {@linkplain CivilizationsCharacter}
+	 * Gets all the {@linkplain DoubleIdentifier}s of the {@linkplain CivilizationsCharacter}
 	 * attached to this account.
 	 * @return
 	 */
@@ -85,36 +83,18 @@ public class CivilizationsAccount {
 	public UUID getCurrentCharacterId() {
 		return currentCharacter;
 	}
-	/**
-	 * Gets the {@linkplain CivilizationsCharacter} with the given {@linkplain UUID}.
-	 * @param id as {@link UUID}
-	 * @return {@link CivilizationsCharacter} or Null
-	 */
-	public CivilizationsCharacter getCharacter(UUID id) {
-		if(id == null) return null;
-		CivilizationsCharacter cc = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(id);
-		if(cc == null){
-			cc = settings.getCharacter(id);
-		}
-		return cc;
-	}
 	
 	/**
 	 * Gets the current {@linkplain CivilizationsCharacter} attached to this account.
 	 * @return {@link CivilizationsCharacter} or Null
 	 */
 	public CivilizationsCharacter getCurrentCharacter(){
-		return getCharacter(currentCharacter);
-	}
-	
-	/**
-	 * Creates a new character with a random UniqueID, and attaches it to the account.
-	 * @return
-	 */
-	public CivilizationsCharacter createNewCharacter(){
-		CivilizationsCharacter result = new CivilizationsCharacter(this);
-		settings.setCharacter(result);
-		return result;
+		try{
+		    return AccountManager.getCharacter(currentCharacter);
+		} catch (ExecutionException ex) {
+		    ex.printStackTrace();
+		    return null;
+		}
 	}
 	
 	/**
@@ -135,72 +115,31 @@ public class CivilizationsAccount {
 	 * or if the given character was not from this account.
 	 */
 	public CivilizationsCharacter setCurrentCharacter(CivilizationsCharacter c) {
-		if(c.getAccountId() != playerId) return null;
+		if(c.getAccountId().equals(settings.getPlayerId())) return null;
 		OfflinePlayer op = c.getOfflinePlayer();
 		CivilizationsCharacter old = null;
-		if(currentCharacter != null){
-			old = (CivilizationsCharacter) CivilizationsCharacter.getOrNull(currentCharacter);
+		if(settings.getCurrentId() != null){
+			try{ old = AccountManager.getCharacter(settings.getCurrentId()); } catch (ExecutionException ex) {
+                ex.printStackTrace();
+            }
 		}
-		this.currentCharacter = c.getUniqueId();
+		settings.setCurrentId(c.getIdentifier());
 		if(op.isOnline()){
 			Player p = op.getPlayer();
 			if(old != null){
-				old.getInventory().setContents(p.getInventory().getContents());
-				old.getInventory().setArmorContents(p.getInventory().getArmorContents());
-				old.getEnderChest().setContents(p.getEnderChest().getContents());
+				old.setInventory(p.getInventory().getContents());
+				old.setArmor(p.getInventory().getArmorContents());
+				old.setEnderChest(p.getEnderChest().getContents());
 				old.setLocation(p.getLocation());
+				old.getSettings().save();
 			}
-			p.getInventory().setContents(c.getInventory().getContents());
-			p.getInventory().setArmorContents(c.getInventory().getArmorContents());
-			p.getEnderChest().setContents(c.getEnderChest().getContents());
+			p.getInventory().setContents(c.getInventory());
+			p.getInventory().setArmorContents(c.getArmor());
+			p.getEnderChest().setContents(c.getEnderChest());
 			p.teleport(c.getLocation(), TeleportCause.PLUGIN);
-			this.saveCharacter(old);
+			;
 		}
 		return old;
-	}
-
-	/**
-	 * Saves all the data relative to the given {@linkplain CivilizationsCharacter}.
-	 * The character must belong to the account. Saving will fail otherwise.
-	 * @param character as {@link CivilizationsCharacter}
-	 */
-	private void saveCharacter(CivilizationsCharacter character) {
-		if(character.getAccountId() != playerId) return;
-		settings.setCharacter(character);
-		save();
-	}
-	
-	/**
-	 * Saves all the data relative to this account.
-	 * @return
-	 */
-	private boolean save(){
-		try {
-			settings.save(getFile());
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	/**
-	 * Gets the {@linkplain File} where the data relative to his account is saved.
-	 * @return {@link File}
-	 */
-	private File getFile(){
-		if(!Directory.exists()){
-			Directory.mkdirs();
-		}
-		File f = new File(Directory, this.playerId.toString() + ".yml");
-		if(!f.exists()){
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return f;
 	}
 	
 	/**
@@ -221,7 +160,7 @@ public class CivilizationsAccount {
 		if(this.currentCharacter != null){
 			CivilizationsCharacter c = this.getCurrentCharacter();
 			c.update();
-			this.settings.setCharacter(c);
+			c.getSettings().save();
 		} else {
 			OfflinePlayer op = Bukkit.getOfflinePlayer(getPlayerId());
 			if(op.isOnline()){
@@ -232,93 +171,11 @@ public class CivilizationsAccount {
 				settings.setBaseLocation(p.getLocation());
 			}
 		}
-		this.save();
-		accounts.remove(playerId.toString());
-	}
-	
-	/**
-	 * Gets the {@linkplain CivilizationsAccount} associated to the given player ID,
-	 * or creates one if none exists.
-	 * @param playerId as {@link UUID}
-	 * @return {@link CivilizationsAccount}
-	 */
-	public static CivilizationsAccount get(UUID playerId) {
-		CivilizationsAccount ca = accounts.get(playerId.toString());
-		if(ca == null){
-			ca = new CivilizationsAccount(playerId);
-		}
-		return ca;
+		this.settings.save();
+		AccountManager.deactivateAccount(this.getPlayerId());
 	}
 
-	/**
-	 * Gets the current {@linkplain EconomicEntity} associated to the given player ID.
-	 * @param p {@link Player} to check.
-	 * @return Either the {@link EconomicEntity} representing the player's account, or the current {@link CivilizationsCharacter}.
-	 */
-	public static EconomicEntity getEconomicEntity(OfflinePlayer p){
-		CivilizationsAccount ca = accounts.get(p.getUniqueId().toString());
-		if(ca == null){
-			ca = new CivilizationsAccount(p.getUniqueId());
-		}
-		if(ca.getCurrentCharacterId() == null){
-			return EconomicEntity.get(ca.getPlayerId());
-		} else {
-			return ca.getCurrentCharacter();
-		}
-	}
-	
-	/**
-	 * Saves the data of the current {@linkplain CivilizationsCharacter}
-	 * and of the {@linkplain CivilizationsAccount} of this player, and removes
-	 * it from the list of active accounts. 
-	 * @param p as {@link Player}
-	 */
-	public static CivilizationsAccount logout(Player p){
-		CivilizationsAccount ca = accounts.get(p.getUniqueId().toString());
-		if(ca != null){
-			ca.logout();
-		}
-		return ca;
-	}
-	
-	/**
-	 * Reloads the data of the account attached to the given {@linkplain Player}
-	 * then adds the resulting {@linkplain CivilizationsAccount} to the list of active accounts.
-	 * @param p as {@link Player}
-	 * @param loadCharacter 
-	 * @return {@link CivilizationsAccount}
-	 */
-	public static CivilizationsAccount login(Player p, boolean loadCharacter){
-		CivilizationsAccount ac = get(p.getUniqueId());
-		if(loadCharacter){
-			if(ac.getCurrentCharacterId() == null){
-				Location loc = ac.settings.getBaseLocation();
-				ItemStack[] inventory = ac.settings.getBaseInventory();
-				ItemStack[] armor = ac.settings.getBaseArmor();
-				ItemStack[] ec = ac.settings.getBaseEnderChest();
-				if(loc != null && inventory != null && armor != null && ec != null){
-					p.teleport(loc, TeleportCause.PLUGIN);
-					p.getInventory().setContents(inventory);
-					p.getInventory().setArmorContents(armor);
-					p.getEnderChest().setContents(ec);
-				}
-			} else {
-				CivilizationsCharacter current = ac.getCurrentCharacter();
-				current.restore();
-			}
-		}
-		return ac;
-	}
-	
-	/**
-	 * Saves the data of {@linkplain CivilizationsAccount} and current
-	 * {@linkplain CivilizationsCharacter} for all the active accounts.
-	 */
-	public static void logoutAllPlayers(){
-		for(CivilizationsAccount ca : accounts.values().toArray(new CivilizationsAccount[0])){
-			if(ca != null){
-				ca.logout();
-			}
-		}
-	}
+    public CivilizationsCharacterFactory getCharacterFactory(){
+	    return new CivilizationsCharacterFactory(getPlayerId());
+    }
 }

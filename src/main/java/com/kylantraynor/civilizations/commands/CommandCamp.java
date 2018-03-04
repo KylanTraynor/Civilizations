@@ -14,7 +14,7 @@ import com.kylantraynor.civilizations.managers.GroupManager;
 import com.kylantraynor.civilizations.questions.ClearQuestion;
 import com.kylantraynor.civilizations.questions.JoinQuestion;
 import com.kylantraynor.civilizations.questions.LeaveQuestion;
-import com.kylantraynor.civilizations.util.Util;
+import com.kylantraynor.civilizations.utils.Utils;
 
 public class CommandCamp extends CommandGroup{
 
@@ -49,7 +49,7 @@ public class CommandCamp extends CommandGroup{
 					} else {
 						c.setExpireOn(Instant.now().plus(Camp.campDuration, ChronoUnit.HOURS));
 						c.getInteractiveInfoPanel(p).send(p);
-						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for " + Util.durationToString(Instant.now(), c.getExpireOn())+ "!");
+						p.sendMessage(Camp.messageHeader + ChatColor.GREEN + "Camp renewed for " + Utils.durationToString(Instant.now(), c.getExpireOn())+ "!");
 					}
 				}
 			}
@@ -125,9 +125,9 @@ public class CommandCamp extends CommandGroup{
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
 					if(args.length >= 2){
-						p.chat("/group " + c.getUniqueId().toString() + " members " + args[1]);
+						p.chat("/group " + c.getIdentifier().toString() + " members " + args[1]);
 					} else {
-						p.chat("/group " + c.getUniqueId().toString() + " members");
+						p.chat("/group " + c.getIdentifier().toString() + " members");
 					}
 				}
 			}
@@ -139,7 +139,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
-					p.chat("/group " + c.getUniqueId().toString() + " permissions");
+					p.chat("/group " + c.getIdentifier().toString() + " permissions");
 				}
 			}
 			break;
@@ -150,7 +150,7 @@ public class CommandCamp extends CommandGroup{
 				if(c == null){
 					p.sendMessage(Camp.messageHeader + ChatColor.RED + "There is no camp here.");
 				} else {
-					p.chat("/group " + c.getUniqueId().toString() + " upgrade");
+					p.chat("/group " + c.getIdentifier().toString() + " upgrade");
 				}
 			}
 			break;

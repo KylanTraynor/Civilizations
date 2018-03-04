@@ -25,6 +25,6 @@ public class QuestionsHandler {
 	}
 	public static Question getQuestion(Object s)
 	{
-		return (Question)questions.get(s);
+		return questions.get(s);
 	}
 }

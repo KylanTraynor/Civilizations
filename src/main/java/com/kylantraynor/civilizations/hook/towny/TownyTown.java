@@ -9,6 +9,8 @@ import java.util.*;
 import java.util.logging.Level;
 
 import com.kylantraynor.civilizations.managers.GroupManager;
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -151,15 +153,15 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	    UUID id = getSettings().getMayorGroupId();
 	    if(id == null){
 	        Group g = GroupManager.createGroup("Mayor", this);
-	        getSettings().setMayorGroupId(g.getUniqueId());
-	        getSettings().setPermissionLevel(g.getUniqueId(), 0);
+	        getSettings().setMayorGroupId(g.getIdentifier());
+	        getSettings().setPermissionLevel(g.getIdentifier(), 0);
 	        return g;
         } else {
 	        Group g = Group.get(id);
 	        if(g == null){
                 g = GroupManager.createGroup("Mayor", this);
-                getSettings().setMayorGroupId(g.getUniqueId());
-                getSettings().setPermissionLevel(g.getUniqueId(), 0);
+                getSettings().setMayorGroupId(g.getIdentifier());
+                getSettings().setPermissionLevel(g.getIdentifier(), 0);
             }
             return g;
         }
@@ -169,15 +171,15 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
         UUID id = getSettings().getAssistantGroupId();
         if(id == null){
             Group g = GroupManager.createGroup("Assistant", this);
-            getSettings().setAssistantGroupId(g.getUniqueId());
-            getSettings().setPermissionLevel(g.getUniqueId(), 10);
+            getSettings().setAssistantGroupId(g.getIdentifier());
+            getSettings().setPermissionLevel(g.getIdentifier(), 10);
             return g;
         } else {
             Group g = Group.get(id);
             if(g == null){
                 g = GroupManager.createGroup("Assistant", this);
-                getSettings().setAssistantGroupId(g.getUniqueId());
-                getSettings().setPermissionLevel(g.getUniqueId(), 10);
+                getSettings().setAssistantGroupId(g.getIdentifier());
+                getSettings().setPermissionLevel(g.getIdentifier(), 10);
             }
             return g;
         }
@@ -187,8 +189,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	 * Imports permissions from Towny.
 	 */
 	private void importTownPermissions() {
-	    UUID mayorId = getMayorGroup().getUniqueId();
-	    UUID assistantId = getAssistantGroup().getUniqueId();
+	    UUID mayorId = getMayorGroup().getIdentifier();
+	    UUID assistantId = getAssistantGroup().getIdentifier();
 
 	    getSettings().setPermission(mayorId, PermissionType.PLACE.toString(), true);
         getSettings().setPermission(mayorId, PermissionType.BREAK.toString(), true);
@@ -294,12 +296,12 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	}
 	
 	@Override
-	public Set<UUID> getMembers(){
-		Set<UUID> list = new TreeSet<UUID>();
+	public Set<Identifier> getMembers(){
+		Set<Identifier> list = new TreeSet<>();
 		for(Resident r : this.townyTown.getResidents()){
 			OfflinePlayer p = TownyHook.getPlayer(r);
 			if(p != null){
-				list.add(p.getUniqueId());
+				list.add(new SimpleIdentifier(p.getUniqueId()));
 			}
 		}
 		return list;
@@ -382,19 +384,19 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			fm.then("" + getTotalUsedWarehousesSpace() + "/" + getTotalWarehousesSpace()).color(ChatColor.GOLD);
 			fm.then("\nBuild Projects: ").color(ChatColor.GRAY)
 			.tooltip("Click here to see the list of projects.")
-			.command("/group " + this.getUniqueId().toString() + " Builder List");;
+			.command("/group " + this.getIdentifier().toString() + " Builder List");;
 		fm.then("" + getBuilder().getProjects().size()).color(ChatColor.GOLD)
 			.tooltip("Click here to see the list of projects.")
-			.command("/group " + this.getUniqueId().toString() + " Builder List");
+			.command("/group " + this.getIdentifier().toString() + " Builder List");
 		} else {
 			fm.then("No Warehouses");
 		}
 		fm.then("\nMembers: ").color(ChatColor.GRAY)
 			.tooltip("Click here to see the list of all members.")
-			.command("/group " + this.getUniqueId().toString() + " members");
+			.command("/group " + this.getIdentifier().toString() + " members");
 		fm.then("" + getMembers().size()).color(ChatColor.GOLD)
 			.tooltip("Click here to see the list of all members.")
-			.command("/group " + this.getUniqueId().toString() + " members");
+			.command("/group " + this.getIdentifier().toString() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);

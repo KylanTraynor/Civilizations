@@ -4,6 +4,7 @@ import com.kylantraynor.civilizations.banners.BannerOwner;
 import com.kylantraynor.civilizations.groups.Group;
 import com.kylantraynor.civilizations.managers.ButtonManager;
 import com.kylantraynor.civilizations.managers.MenuManager;
+import com.kylantraynor.civilizations.utils.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -80,7 +81,7 @@ public class GroupExplorer extends Menu {
         return new Button(getPlayer(), Material.EMERALD_BLOCK, "Select " + g.getName(), null, new BukkitRunnable(){
             @Override
             public void run(){
-                function.setReturnedValue(g.getUniqueId());
+                function.setReturnedValue(g.getIdentifier());
                 function.run();
             }
         }, true);
@@ -108,7 +109,7 @@ public class GroupExplorer extends Menu {
         List<Group> result = new ArrayList<>();
         for(Group g : Group.getList()){
             if(root != null){
-                if(root.getUniqueId() == g.getParentId()){
+                if(root.getIdentifier().equals(g.getParentId())){
                     result.add(g);
                 }
             } else {

@@ -13,14 +13,14 @@ public class JoinQuestion extends GroupQuestion{
 	private Player asking;
 
 	public JoinQuestion(Group group, Player player) {
-		super(new FancyMessage(player.getName() + " would like to join " + group.getName() + ".?\n").color(group.getChatColor()).then("YES").color(ChatColor.GOLD).command("/civilizationsanswer " + group.getUniqueId().toString()+ " YES").
-				then(" - ").color(ChatColor.GRAY).then("NO").color(ChatColor.GOLD).command("/civilizationsanswer " + group.getUniqueId().toString() + " NO"), group, PermissionType.INVITE);
+		super(new FancyMessage(player.getName() + " would like to join " + group.getName() + ".?\n").color(group.getChatColor()).then("YES").color(ChatColor.GOLD).command("/civilizationsanswer " + group.getIdentifier().toString()+ " YES").
+				then(" - ").color(ChatColor.GRAY).then("NO").color(ChatColor.GOLD).command("/civilizationsanswer " + group.getIdentifier().toString() + " NO"), group, PermissionType.INVITE);
 		this.asking = player;
 	}
 	
 	@Override
 	public void answer(Player p, String answer){
-		if(answer.equalsIgnoreCase("" + getGroup().getUniqueId().toString() + " YES")){
+		if(answer.equalsIgnoreCase("" + getGroup().getIdentifier().toString() + " YES")){
 			getGroup().addMember(asking);
 			asking.sendMessage(getGroup().getChatColor() + p.getName() + " added you to " + getGroup().getName() + ".");
 			getGroup().sendMessage(p.getName() + " has added " + asking.getName() + " to " + getGroup().getName() + ".", null);
@@ -32,8 +32,8 @@ public class JoinQuestion extends GroupQuestion{
 	
 	@Override
 	public boolean validate(String answer){
-		if(answer.equalsIgnoreCase("" + getGroup().getUniqueId().toString() + " YES") ||
-				answer.equalsIgnoreCase("" + getGroup().getUniqueId().toString() + " NO")) return true;
+		if(answer.equalsIgnoreCase("" + getGroup().getIdentifier().toString() + " YES") ||
+				answer.equalsIgnoreCase("" + getGroup().getIdentifier().toString() + " NO")) return true;
 		return false;
 	}
 	

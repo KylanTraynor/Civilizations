@@ -6,8 +6,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import com.kylantraynor.civilizations.exceptions.RecursiveParentException;
+import com.kylantraynor.civilizations.managers.AccountManager;
+import com.kylantraynor.civilizations.utils.DoubleIdentifier;
+import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
@@ -43,8 +48,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public static void clearAll(){
 		all.clear();
 	}
-	
-	private int id;
+
 	private boolean hasChanged = true;
 	private ChatColor chatColor;
 	private GroupSettings settings;
@@ -58,7 +62,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		initSettings();
 		init();
 		getSettings().setCreationDate(Instant.now());
-		all.put(getUniqueId().toString(), this);
+		all.put(getIdentifier().toString(), this);
 		setChanged(true);
 	}
 	
@@ -69,15 +73,16 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public Group(GroupSettings settings){
 		this.settings = settings;
 		init();
-		all.put(getUniqueId().toString(), this);
+		all.put(getIdentifier().toString(), this);
 		setChanged(true);
 	}
 	
 	public void init(){
 		chatColor = ChatColor.WHITE;
 	}
-	
-	public UUID getUniqueId(){
+
+	@Override
+	public UUID getIdentifier(){
 		return getSettings().getUniqueId();
 	}
 	
@@ -115,44 +120,17 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public void setChatColor(ChatColor newColor){chatColor = newColor;}
 
 	/**
-	 * Gets the ID of this group.
-     * @deprecated Groups now use {@link UUID}.
-	 * @return Integer
-	 */
-	public int getId() {return id;}
-
-	/**
-	 * Sets the ID of this group.
-     * @deprecated Groups now use {@link UUID}.
-	 * @param id The new id of this group.
-	 */
-	public void setId(int id) {this.id = id;}
-
-	/**
-	 * Gets the group with the given ID.
-	 * @deprecated Use {@link Group#get(UUID)} instead.
-	 * @param id The id of the {@link Group} to get.
-	 * @return Group
-	 */
-	public static Group get(int id){
-		for(Group g : all.values()){
-			if(g.getId() == id) return g;
-		}
-		return null;
-	}
-
-	/**
 	 * Gets the group with the given Unique ID.
-	 * @param uid as {@link UUID}
+	 * @param id as {@link Identifier}
 	 * @return Group
 	 */
-	public static Group get(UUID uid){
-		return all.get(uid.toString());
+	public static Group get(UUID id){
+		return all.get(id.toString());
 	}
 
 	/**
 	 * Gets the list of all the members of this group.
-	 * @return Set<UUID> of the members
+	 * @return Set of {@link UUID} of the members
 	 */
 	public Set<UUID> getMembers() {return this.getSettings().getMembers();}
 
@@ -183,19 +161,13 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
 	public boolean addMember(OfflinePlayer member){
-		CivilizationsAccount account = CivilizationsAccount.get(member.getUniqueId());
-		UUID id;
-		if(account.getCurrentCharacterId() != null){
-			id = account.getCurrentCharacterId();
-		} else {
-			id = account.getPlayerId();
-		}
-		Set<UUID> members = getMembers();
-		if(members.add(id)){
-		    setMembers(members);
-		    return true;
+	    UUID id = AccountManager.getCurrentIdentifier(member);
+        Set<UUID> members = getMembers();
+        if(members.add(id)){
+            setMembers(members);
+            return true;
         } else {
-		    return false;
+            return false;
         }
 	}
 	
@@ -205,9 +177,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the player wasn't already in the list, false otherwise.
 	 */
 	public boolean addMember(EconomicEntity member){
-		if(getMembers().contains(member.getUniqueId())) return false;
 		Set<UUID> members = getMembers();
-		if(members.add(member.getUniqueId())){
+		if(members.add(member.getIdentifier())){
             setMembers(members);
 		    return true;
         }
@@ -220,11 +191,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the player has been removed, false otherwise.
 	 */
 	public boolean removeMember(OfflinePlayer member){
-		CivilizationsAccount account = CivilizationsAccount.get(member.getUniqueId());
-		UUID id = account.getPlayerId();
-		if(account.getCurrentCharacterId() != null){
-			id = account.getCurrentCharacterId();
-		}
+		UUID id = AccountManager.getCurrentIdentifier(member);
         Set<UUID> members = getMembers();
 		if(members.remove(id)){
 			setMembers(members);
@@ -239,7 +206,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 */
 	public boolean removeMember(EconomicEntity member){
         Set<UUID> members = getMembers();
-		if(members.remove(member.getUniqueId())){
+		if(members.remove(member.getIdentifier())){
 			setMembers(members);
 			return true;
 		}
@@ -262,12 +229,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
      * @return true if the player is a member, false otherwise.
      */
     public boolean isMember(OfflinePlayer player, boolean recursive){
-        CivilizationsAccount account = CivilizationsAccount.get(player.getUniqueId());
-        if(account.getCurrentCharacterId() != null){
-            return isMember(account.getCurrentCharacterId(), recursive);
-        } else {
-            return isMember(account.getPlayerId(), recursive);
-        }
+        UUID id = AccountManager.getCurrentIdentifier(player);
+        return isMember(id, recursive);
     }
 
 	/**
@@ -276,7 +239,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the entity is a member, false otherwise.
 	 */
 	public boolean isMember(EconomicEntity entity){
-		return isMember(entity.getUniqueId());
+		return isMember(entity.getIdentifier());
 	}
 
 	/**
@@ -301,7 +264,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 			for(Group g : getList()){
 				if(result) break;
 				if(g.getParentId() != null && g.getParent() == this){
-				    result = g.getUniqueId() == id || g.isMember(id, true);
+				    result = g.getIdentifier().equals(id) || g.isMember(id, true);
 				}
 			}
 		}
@@ -350,7 +313,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		if(f != null){
 			if(f.exists()) f.delete();
 		}
-		boolean result = all.remove(getUniqueId().toString()) != null;
+		boolean result = all.remove(getIdentifier().toString()) != null;
 		return result;
 	}
 	/**
@@ -358,7 +321,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return File
 	 */
 	public File getFile(){
-		File f = new File(Civilizations.getGroupDirectory(), "" + this.getUniqueId() + ".yml");
+		File f = new File(Civilizations.getGroupDirectory(), "" + this.getIdentifier() + ".yml");
 		if(!f.exists()){
 			try {
 				f.createNewFile();
@@ -453,8 +416,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 			fm.then("\nCreation Date: ").color(ChatColor.GRAY).
 				then(format.format(Date.from(getSettings().getCreationDate()))).color(ChatColor.GOLD);
 		}
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getIdentifier().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " members");
 		fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -530,7 +493,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
-			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page - 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getIdentifier().toString() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -539,7 +502,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		fm.then(" - ").color(ChatColor.GRAY);
 		fm.then("Next ->");
 		if(page < getMembers().size() / 8){
-			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page + 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getIdentifier().toString() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -572,7 +535,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		}
 		fm.then("\n<- Previous");
 		if(page > 1){
-			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page - 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getIdentifier().toString() + " members " + (page - 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -581,7 +544,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		fm.then(" - ").color(ChatColor.GRAY);
 		fm.then("Next ->");
 		if(page < getMembers().size() / 8){
-			fm.color(ChatColor.BLUE).command("/group " + this.getUniqueId().toString() + " members " + (page + 1));
+			fm.color(ChatColor.BLUE).command("/group " + this.getIdentifier().toString() + " members " + (page + 1));
 		} else {
 			fm.color(ChatColor.GRAY);
 		}
@@ -641,8 +604,8 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 */
 	public FancyMessage getInteractiveRankPanel(Group playerRank) {
 		FancyMessage fm = new FancyMessage(ChatTools.formatTitle(playerRank.getName().toUpperCase(), null));
-		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getUniqueId().toString() + " members").
-			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getUniqueId().toString() + " rank " + playerRank.getName() + " members");
+		fm.then("\nMembers: ").color(ChatColor.GRAY).command("/group " + this.getIdentifier().toString() + " members").
+			then("" + getMembers().size()).color(ChatColor.GOLD).command("/group " + this.getIdentifier().toString() + " rank " + playerRank.getName() + " members");
 		//fm.then("\nActions: (You can click on the action you want to do)\n").color(ChatColor.GRAY);
 		//fm = addCommandsTo(fm, getGroupActionsFor(player));
 		fm.then("\n" + ChatTools.getDelimiter()).color(ChatColor.GRAY);
@@ -761,7 +724,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
             if (group.hasRecursiveParent(this)) {
                 throw new RecursiveParentException(group, this);
             }
-        setParentId(group.getUniqueId());
+        setParentId(group.getIdentifier());
         } else setParentId(null);
 	}
 
@@ -772,13 +735,13 @@ public class Group extends EconomicEntity implements Comparable<Group>{
      * @return true if the given {@link Group} is a parent, false otherwise.
      */
 	public boolean hasRecursiveParent(Group potentialParent) {
-        return getParentId() == potentialParent.getUniqueId() ||
+        return getParentId().equals(potentialParent.getIdentifier()) ||
                 getParentId() != null && getParent().hasRecursiveParent(potentialParent);
     }
 
 	/**
 	 * Gets the parent's id, if it exists.
-	 * @return UUID
+	 * @return {@link UUID}
 	 */
 	public UUID getParentId(){
 		return getSettings().getParentId();
@@ -819,7 +782,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
     public int compareTo(Group o) {
         int result = getType().compareTo(o.getType());
         if(result == 0) result = getName().compareTo(o.getName());
-        if(result == 0) result = getUniqueId().compareTo(o.getUniqueId());
+        if(result == 0) result = getIdentifier().compareTo(o.getIdentifier());
         return result;
     }
 }
