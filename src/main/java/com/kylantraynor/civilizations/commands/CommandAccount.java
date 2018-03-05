@@ -19,13 +19,37 @@ public class CommandAccount implements CommandExecutor {
 			String label, String[] args) {
 		if(sender instanceof Player){
 			Player player = (Player) sender;
-			try{
-				CivilizationsAccount account = AccountManager.getAccount(player.getUniqueId());
-				account.openMenu(player);
-			} catch (ExecutionException ex){
-				ex.printStackTrace();
-				sender.sendMessage(ChatColor.RED + "Failed to get Account.");
-			}
+			if(args.length == 0){
+                try{
+                    CivilizationsAccount account = AccountManager.getAccount(player.getUniqueId());
+                    account.openMenu(player);
+                } catch (ExecutionException ex){
+                    ex.printStackTrace();
+                    sender.sendMessage(ChatColor.RED + "Failed to get Account.");
+                }
+            } else if(args.length == 1){
+			    switch(args[0].toUpperCase()){
+			        case "LOGIN":
+                        if(AccountManager.isActive(player.getUniqueId())){
+                            sender.sendMessage(ChatColor.RED + "You are already logged in.");
+                        } else {
+
+                            try{
+                                CivilizationsAccount ca = AccountManager.login(player, true);
+                                sender.sendMessage(ChatColor.GREEN + "Successfully logged in to your account.");
+                            } catch (ExecutionException ex) { sender.sendMessage(ChatColor.RED + "Error while loading account."); }
+                        }
+                        break;
+                    case "LOGOUT":
+                        CivilizationsAccount ca = AccountManager.logout(player);
+                        if(ca != null){
+                            sender.sendMessage(ChatColor.GREEN + "Successfully logged out of your account.");
+                        } else sender.sendMessage(ChatColor.RED + "You are already not logged in.");
+                        break;
+                    default:
+                        sender.sendMessage(ChatColor.RED + "Unknown command.");
+                }
+            }
 			return true;
 		} else {
 			sender.sendMessage(ChatColor.RED + "There are currently no console commands for /account.");

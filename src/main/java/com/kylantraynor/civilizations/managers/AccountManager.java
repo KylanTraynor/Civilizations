@@ -154,6 +154,16 @@ public class AccountManager {
     }
 
     /**
+     * Checks if the {@linkplain CivilizationsAccount} associated to the given player ID
+     * is active (has been logged in).
+     * @param playerId The {@link UUID} of the player.
+     * @return {@code true} if the account is logged in.
+     */
+    public static boolean isActive(UUID playerId){
+        return activeAccounts.containsKey(playerId);
+    }
+
+    /**
      * Deactivates the {@linkplain CivilizationsAccount} with the given {@linkplain UUID}.
      * @param accountId
      * @return
@@ -233,6 +243,19 @@ public class AccountManager {
         }
         activeAccounts.put(ac.getPlayerId(), ac);
         return ac;
+    }
+
+    /**
+     * Saves all the data of the account and removes it from the list of active accounts.
+     * @param p {@link Player} to log out.
+     * @return {@link CivilizationsAccount} of that player, or {@code null} if it was not active.
+     */
+    public static CivilizationsAccount logout(Player p){
+        CivilizationsAccount ca = getActive(p.getUniqueId());
+        if(ca != null){
+            ca.logout();
+            return ca;
+        } else return null;
     }
 
     /**
