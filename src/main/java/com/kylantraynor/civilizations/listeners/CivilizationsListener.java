@@ -140,11 +140,7 @@ public class CivilizationsListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
-		if(Civilizations.getSettings().getColonizableWorlds().contains(event.getPlayer().getLocation().getWorld().getName())){
-			if(!isCivsGameMode(event.getPlayer().getGameMode())) return;
-			CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
-			if(ca != null) ca.logout();
-		}
+		AccountManager.logout(event.getPlayer());
 	}
 	
 	public boolean isCivsGameMode(GameMode mode){
@@ -158,17 +154,16 @@ public class CivilizationsListener implements Listener{
 		List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
 		if(civsWorld.contains(event.getPlayer().getLocation().getWorld().getName())){
 			if(isCivsGameMode(event.getPlayer().getGameMode()) && !isCivsGameMode(event.getNewGameMode())){
-				CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
+				CivilizationsAccount ca = AccountManager.logout(event.getPlayer());
 				if(ca != null){
                     if(ca.getCurrentCharacterId() != null){
-                        ca.logout();
                         event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your character.");
                     } else {
-                        ca.logout();
                         event.getPlayer().sendMessage("You're no longer in survival. You have been logged out of your " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " account.");
                     }
                 }
 			} else if(!isCivsGameMode(event.getPlayer().getGameMode()) && isCivsGameMode(event.getNewGameMode())){
+			    if(AccountManager.isActive(event.getPlayer().getUniqueId())) return;
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
@@ -196,9 +191,10 @@ public class CivilizationsListener implements Listener{
 			List<String> civsWorld = Civilizations.getSettings().getColonizableWorlds();
 			boolean isCivsFrom = civsWorld.contains(event.getFrom().getWorld().getName());
 			boolean isCivsTo = civsWorld.contains(event.getTo().getWorld().getName());
-			if(isCivsTo && isCivsFrom){
+			if((isCivsTo && isCivsFrom) || (!isCivsTo && !isCivsFrom)){
 				
 			} else if(isCivsTo){
+                if(AccountManager.isActive(event.getPlayer().getUniqueId())) return;
 				BukkitRunnable bk = new BukkitRunnable(){
 					@Override
 					public void run() {
@@ -217,13 +213,11 @@ public class CivilizationsListener implements Listener{
 				};
 				bk.runTaskLater(Civilizations.currentInstance, 10);
 			} else if(isCivsFrom){
-				CivilizationsAccount ca = AccountManager.getActive(event.getPlayer().getUniqueId());
+				CivilizationsAccount ca = AccountManager.logout(event.getPlayer());
 				if(ca != null){
                     if(ca.getCurrentCharacterId() != null){
-                        ca.logout();
                         event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world. You have been logged out of your character.");
                     } else {
-                        ca.logout();
                         event.getPlayer().sendMessage("You're no longer in a " + ChatColor.GOLD + "Civilizations" + ChatColor.WHITE + " world.");
                     }
                 }
