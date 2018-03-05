@@ -170,6 +170,8 @@ public class GroupManager {
 	private static void loadPlotDirectory(PlotType type, File directory){
 		if(directory.exists()){
 			Civilizations.log("INFO", "Loading " + type.toString() + "...");
+			int success = 0;
+			int fail = 0;
 			for(File f : directory.listFiles()){
 				try{
 					if(!f.getName().split("\\.")[1].equalsIgnoreCase("yml")) continue;
@@ -181,10 +183,13 @@ public class GroupManager {
 					p.setPersistent(true);
 					p.setPlotType(type);
 					//f.delete();
+					success++;
 				} catch (Exception e){
 					e.printStackTrace();
+					fail++;
 				}
 			}
+			Civilizations.log("INFO", "Successfully loaded " + success + ". " + (fail > 0? ChatColor.RED + "Failed to load " + fail : ""));
 		}
 	}
 
