@@ -86,9 +86,10 @@ public class CivilizationsAccount {
 	
 	/**
 	 * Gets the current {@linkplain CivilizationsCharacter} attached to this account.
-	 * @return {@link CivilizationsCharacter} or Null
+	 * @return {@link CivilizationsCharacter} or {@code null}.
 	 */
 	public CivilizationsCharacter getCurrentCharacter(){
+	    if(currentCharacter == null) return null;
 		try{
 		    return AccountManager.getCharacter(currentCharacter);
 		} catch (ExecutionException ex) {
