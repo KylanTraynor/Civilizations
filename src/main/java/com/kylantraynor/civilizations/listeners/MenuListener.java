@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.listeners;
 
+import com.kylantraynor.civilizations.menus.Menu;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,17 +22,18 @@ public class MenuListener implements Listener{
 	public void onInventoryClick(InventoryClickEvent event){
 		ItemStack item = event.getCurrentItem();
 		Button btn = ButtonManager.getButton(item, event.getWhoClicked());
+		Player p = (Player) event.getWhoClicked();
 		if(btn != null){
-			Civilizations.DEBUG("Clicked on button \"" + btn.getName() + "\" by player " + event.getWhoClicked().getName() + ".");
+			Civilizations.DEBUG("Clicked on button \"" + btn.getName() + "\" by player " + p.getName() + ".");
 			event.setCancelled(true);
 			ButtonManager.run(btn);
-		} else if (MenuManager.getMenus().containsKey(event.getWhoClicked())){
+		} else if (MenuManager.getMenus().containsKey(p)){
 			if(event.getCurrentItem() != null){
 				String name = event.getCurrentItem().getType().toString();
 				if(event.getCurrentItem().getItemMeta() != null){
 					name = event.getCurrentItem().getItemMeta().getDisplayName();
 				}
-				Civilizations.DEBUG("Couldn't find a button for \"" + name + "\" by player " + event.getWhoClicked().getName() + ".");
+				Civilizations.DEBUG("Couldn't find a button for \"" + name + "\" by player " + p.getName() + ".");
 			}
 			event.setCancelled(true);
 		}
@@ -38,7 +41,7 @@ public class MenuListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
-		if(event.getView() instanceof GroupMenu || event.getView() instanceof LockpickMenu){
+		if(event.getView() instanceof Menu){
 			MenuManager.clearMenu(event.getPlayer());
 			ButtonManager.clearButtons(event.getPlayer());
 			if(event.getView() instanceof LockpickMenu){
