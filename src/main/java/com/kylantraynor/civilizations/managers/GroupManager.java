@@ -173,7 +173,7 @@ public class GroupManager {
 			for(File f : directory.listFiles()){
 				try{
 					if(!f.getName().split("\\.")[1].equalsIgnoreCase("yml")) continue;
-					Civilizations.log("INFO", "Loading " + type.toString() + " from file: " + f.getPath());
+					//Civilizations.log("INFO", "Loading " + type.toString() + " from file: " + f.getPath());
 					PlotSettings settings = new PlotSettings();
 					settings.load(f);
 					Plot p = new Plot(settings);
