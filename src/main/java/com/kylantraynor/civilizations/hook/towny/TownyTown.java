@@ -230,9 +230,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
         getSettings().setServerPermission(PermissionType.DEGRADATION.toString(), false);
         getSettings().setServerPermission(PermissionType.MOBSPAWNING.toString(), false);
 
-		getMayorGroup().addMember(TownyHook.getPlayer(townyTown.getMayor()));
-
 		getMayorGroup().clearMembers();
+		getMayorGroup().addMember(TownyHook.getPlayer(townyTown.getMayor()));
 		for(Resident r : townyTown.getResidents()){
 			for(String rank : r.getTownRanks()){
 				if(rank.equalsIgnoreCase("co-mayor")){
