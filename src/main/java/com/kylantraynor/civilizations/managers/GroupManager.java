@@ -44,7 +44,7 @@ public class GroupManager {
 	Map<String, Settlement> loadedSettlements = new HashMap<String, Settlement>();
 
     /**
-     * Creates a {@linkplain Group} with the given name and parent.
+     * Creates a {@linkplain Group} with the given name and parent, then registers it to the map of {@linkplain EconomicEntity EconomicEntities}.
      * @param name The name of the new group.
      * @param parent The parent {@link Group}.
      * @return
@@ -57,6 +57,7 @@ public class GroupManager {
         } catch (RecursiveParentException e){
 		    e.printStackTrace();
         }
+        EconomicEntity.register(g);
 		return g;
 	}
 	
@@ -82,7 +83,7 @@ public class GroupManager {
 					}
 					SettlementSettings ss = new SettlementSettings();
 					ss.load(f);
-					new Settlement(ss);
+					EconomicEntity.register(new Settlement(ss));
 				} catch (IOException | InvalidConfigurationException e) {
 					e.printStackTrace();
 				}
@@ -150,7 +151,7 @@ public class GroupManager {
 				try{
 				    GroupSettings yaml = new GroupSettings();
 				    yaml.load(f);
-				    new Group(yaml);
+				    EconomicEntity.register(new Group(yaml));
                 } catch (Exception e){
 				    e.printStackTrace();
                 }
@@ -184,6 +185,7 @@ public class GroupManager {
 					p.setPlotType(type);
 					//f.delete();
 					success++;
+					EconomicEntity.register(p);
 				} catch (Exception e){
 					e.printStackTrace();
 					fail++;
@@ -217,6 +219,7 @@ public class GroupManager {
 				}
 				g = load(f, g);
 				f.delete();
+				EconomicEntity.register(g);
 				return (Settlement)g;
 			}
 		}
@@ -239,7 +242,7 @@ public class GroupManager {
 					}
 					CampSettings cs = new CampSettings();
 					cs.load(f);
-					new Camp(cs);
+					EconomicEntity.register(new Camp(cs));
 				} catch (IOException | InvalidConfigurationException e) {
 					e.printStackTrace();
 				}
@@ -260,7 +263,7 @@ public class GroupManager {
 					}
 					HouseSettings settings = new HouseSettings();
 					settings.load(f);
-					new House(settings);
+					EconomicEntity.register(new House(settings));
 				} catch (IOException | InvalidConfigurationException e) {
 					e.printStackTrace();
 				}
@@ -301,6 +304,7 @@ public class GroupManager {
 		if(!event.isCancelled()){
 			Camp camp = new Camp(l);
 			camp.addMember(p);
+			EconomicEntity.register(camp);
 			return camp;
 		}
 		return null;
@@ -328,6 +332,7 @@ public class GroupManager {
 		Plot p = new Plot("Stall", (Shape)s, set);
 		p.setPersistent(true);
 		p.setPlotType(PlotType.MARKETSTALL);
+		EconomicEntity.register(p);
 		return p;
 	}
 

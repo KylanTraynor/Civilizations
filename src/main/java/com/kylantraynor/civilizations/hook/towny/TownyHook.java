@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.economy.EconomicEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -67,6 +68,7 @@ public class TownyHook {
 								Plot p = (Plot) g;
 							}
 						}
+						EconomicEntity.register(town);
 					}
 				} catch (Exception e) {
 					Civilizations.log("WARNING", t.getName() + " couldn't be loaded.");
