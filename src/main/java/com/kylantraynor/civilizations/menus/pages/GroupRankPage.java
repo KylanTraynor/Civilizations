@@ -30,7 +30,7 @@ public class GroupRankPage implements MenuPage{
 		this.player = player;
 		this.group = group;
 		this.rank = sub;
-		//permsPage = new GroupPermissionsPage(player, group, r);
+		permsPage = new GroupPermissionsPage(player, group, sub.getIdentifier());
 	}
 
 	@Override
