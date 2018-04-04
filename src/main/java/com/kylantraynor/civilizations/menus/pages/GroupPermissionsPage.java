@@ -60,7 +60,7 @@ public class GroupPermissionsPage implements MenuPage {
 		}
 		
 		final boolean set = value != null;
-		final boolean val = value;
+		final Boolean val = value;
 		Button permissionButton = new Button(player,mat, ChatColor.WHITE + Utils.prettifyText(pt.toString()), lore,
 			new BukkitRunnable(){
 				@Override
