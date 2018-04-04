@@ -168,7 +168,7 @@ public class CivilizationsListener implements Listener{
 					@Override
 					public void run() {
 					    try {
-                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), true);
+                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), false);
                             CivilizationsCharacter cc = ca.getCurrentCharacter();
                             if(cc != null){
                                 event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
@@ -199,7 +199,7 @@ public class CivilizationsListener implements Listener{
 					@Override
 					public void run() {
 					    try{
-                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), true);
+                            CivilizationsAccount ca = AccountManager.login(event.getPlayer(), false);
                             CivilizationsCharacter cc = ca.getCurrentCharacter();
                             if(cc != null){
                                 event.getPlayer().sendMessage("Logged in as " + cc.getName() + " " + cc.getFamilyName() + ".");
