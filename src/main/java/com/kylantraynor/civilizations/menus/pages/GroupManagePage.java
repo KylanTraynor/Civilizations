@@ -20,15 +20,17 @@ public class GroupManagePage implements MenuPage {
 
 	final private Player player;
 	final private Group group;
-	
+
+	private MenuPage membersPermissions;
 	private MenuPage outsiderPermissions;
 	
-	private Map<Integer, Button> buttons = new HashMap<Integer, Button>();
+	private Map<Integer, Button> buttons = new HashMap<>();
 
 	public GroupManagePage(Player player, Group group){
 		this.player = player;
 		this.group = group;
-		
+
+		membersPermissions = new GroupPermissionsPage(player, group, group.getIdentifier());
 		outsiderPermissions = new GroupPermissionsPage(player, group, null);
 	}
 	
@@ -39,7 +41,8 @@ public class GroupManagePage implements MenuPage {
 
 	@Override
 	public void refresh(Menu menu) {
-		buttons.put(4, outsiderPermissions.getIconButton());
+		buttons.put(4, membersPermissions.getIconButton());
+	    buttons.put(4+9, outsiderPermissions.getIconButton());
 	}
 
 	@Override

@@ -20,9 +20,9 @@ public class Button extends ItemStack{
 	private boolean isEnabled;
 	private Player player;
 	private BukkitRunnable runnable;
-	
-	public Button(Player p, Material mat, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){
-		super(mat);
+
+	public Button(Player p, Material mat, String title, int amount, List<String> description, BukkitRunnable runnable, boolean isEnabled){
+		super(mat, amount);
 		this.setPlayer(p);
 		if(!isEnabled) this.setType(invalidButton);
 		ItemMeta im = getItemMeta();
@@ -32,6 +32,10 @@ public class Button extends ItemStack{
 		this.runnable = runnable;
 		setItemMeta(im);
 		ButtonManager.registerButton(this);
+	}
+
+	public Button(Player p, Material mat, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){
+	    this(p, mat, title, 1, description, runnable, isEnabled);
 	}
 
 	public Button(Player p, ItemStack is, String title, List<String> description, BukkitRunnable runnable, boolean isEnabled){

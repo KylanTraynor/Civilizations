@@ -84,7 +84,15 @@ public class GroupPermissionsPage implements MenuPage {
 	@Override
 	public Button getIconButton() {
 		MenuPage page = this;
-		Button permissionsButton = new Button(player, Material.PAPER, ChatColor.WHITE + EconomicEntity.get(target).getName() + " permissions for " + group.getName(), null,
+		String title;
+		if(group.getIdentifier().equals(target)){
+			title = "Members permissions for " + group.getName();
+		} else if(target != null){
+			title = EconomicEntity.get(target).getName() + " permissions for " + group.getName();
+		} else {
+			title = "Outsiders permissions for " + group.getName();
+		}
+		Button permissionsButton = new Button(player, Material.PAPER, ChatColor.WHITE + title, null,
 				new BukkitRunnable(){
 					@Override
 					public void run() {
@@ -97,8 +105,15 @@ public class GroupPermissionsPage implements MenuPage {
 
 	@Override
 	public String getTitle() {
-		
-		return "" + ChatColor.BOLD + ChatColor.GOLD + EconomicEntity.get(target).getName() + " Permissions";
+		String title;
+		if(group.getIdentifier().equals(target)){
+			title = "Members permissions";
+		} else if(target != null){
+			title = EconomicEntity.get(target).getName() + " permissions";
+		} else {
+			title = "Outsiders permissions";
+		}
+		return "" + ChatColor.BOLD + ChatColor.GOLD + title;
 	}
 
 	@Override
