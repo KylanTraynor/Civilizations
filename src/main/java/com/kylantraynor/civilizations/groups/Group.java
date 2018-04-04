@@ -64,6 +64,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		getSettings().setCreationDate(Instant.now());
 		all.put(getIdentifier().toString(), this);
 		setChanged(true);
+		register();
 	}
 	
 	/**
@@ -75,6 +76,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		init();
 		all.put(getIdentifier().toString(), this);
 		setChanged(true);
+		register();
 	}
 	
 	public void init(){

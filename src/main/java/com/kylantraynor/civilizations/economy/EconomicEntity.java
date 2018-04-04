@@ -36,7 +36,7 @@ public class EconomicEntity {
 	 */
 	public EconomicEntity(UUID id){
 		this.id = id;
-		entities.put(id, this);
+		register();
 	}
 	
 	/**
@@ -44,7 +44,14 @@ public class EconomicEntity {
 	 */
 	public EconomicEntity(){
 		this.id = UUID.randomUUID();
-		entities.put(id, this);
+		register();
+	}
+
+    /**
+     * Adds the entity to the map of {@link EconomicEntity EconomicEntities}.
+     */
+	protected void register(){
+		entities.put(getIdentifier(), this);
 	}
 	
 	/**
