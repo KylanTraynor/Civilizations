@@ -92,11 +92,11 @@ public class ProtectionListener implements Listener{
 					reason = "although you're renting this field, only its owner can modify it";
 				} else {
 					canPlace = false;
-					reason = "this field dosen't belong to you";
+					reason = "this field doesn't belong to you";
 				}
 			} else if(!ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
-				//reason = "you don't have the PLACE permission in " + plot.getName();
+				reason = "you don't have the PLACE permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
@@ -104,7 +104,7 @@ public class ProtectionListener implements Listener{
 				//if(settlement instanceof TownyTown) return;
 				if(!ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 					canPlace = false;
-					//reason = "you don't have the PLACE permission in " + settlement.getName();
+					reason = "you don't have the PLACE permission in " + settlement.getName();
 				}
 			}
 		}
@@ -192,18 +192,18 @@ public class ProtectionListener implements Listener{
 					}
 				} else {
 					canBreak = false;
-					reason = "this field doen't belong to you";
+					reason = "this field doesn't belong to you";
 				}
 			} else if(!ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;
-				//reason = "you don't have the BREAK permission in " + plot.getName();
+				reason = "you don't have the BREAK permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
 				if(!ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
-					//reason = "you don't have the BREAK permission in " + settlement.getName();
+					reason = "you don't have the BREAK permission in " + settlement.getName();
 				}
 			}
 		}
