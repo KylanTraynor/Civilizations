@@ -140,7 +140,7 @@ public class EconomicEntity {
 	 * @return true if the entity represents a player, false otherwise
 	 */
 	public boolean isPlayer(){
-		return true;
+		return getOfflinePlayer() != null;
 	}
 	
 	/**
