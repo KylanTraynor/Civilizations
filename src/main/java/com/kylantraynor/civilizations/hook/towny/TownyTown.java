@@ -98,6 +98,8 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 			}
 		if(getBuilder() == null){
 			((TownyTownSettings) getSettings()).setBuilder(new Builder(this));
+		} else {
+			getBuilder().setOwner(this);
 		}
 		
 		List<TownBlock> tl = t.getTownBlocks();
@@ -112,6 +114,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		}
 		hullNeedsUpdate = true;
 	}
+
 	public TownyTown(Town t, UUID uuid) throws TownyException {
 		this(t);
 		try {

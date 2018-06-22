@@ -63,6 +63,7 @@ public class Builder {
 		
 		Civilizations.DEBUG("Trying to build project.");
 		while(true) {
+			// Get the next plan.
 			MaterialAndData plan = currentProject.getNext();
 			// If there is no plan, then the build is likely one or was remove.
 			if (plan == null) {
@@ -71,11 +72,13 @@ public class Builder {
 			}
 			// Checks if the next plan requires supply to be built.
 			if (!currentProject.nextRequiresSupply()) {
+			    // If it doesn't, just build.
 				currentProject.buildNext();
 				this.getSettings().setChanged(true);
 				Civilizations.DEBUG("Did not require supplies. Built.");
+				continue;
 			} else {
-				Civilizations.DEBUG("Trying to get the supplies.");
+				Civilizations.DEBUG("Trying to get the supplies for " + plan.toString());
 				ItemStack supply = getSupplies(plan.toItemStack());
 				if (supply == null) {
 					Civilizations.DEBUG("Getting Default supplies.");
@@ -86,8 +89,8 @@ public class Builder {
 						if (plan.changeForPaste().getMaterial() == Material.AIR) {
 							currentProject.buildInstead(plan.changeForPaste());
 							this.getSettings().setChanged(true);
-							Civilizations.DEBUG("Plan : " + plan.getMaterial().toString());
-							Civilizations.DEBUG("PlanChange: " + plan.changeForPaste().getMaterial().toString());
+							Civilizations.DEBUG("Plan : " + plan.toString());
+							Civilizations.DEBUG("PlanChange: " + plan.changeForPaste().toString());
 							break;
 						}
 						warnLackOfSupplies(plan);
