@@ -65,21 +65,13 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	public Plot(String name, List<Shape> shapes, Settlement settlement){
 		this(name, shapes);
-        if(settlement != null) {
-            getSettings().setSettlementId(settlement.getIdentifier());
-        } else {
-            getSettings().setSettlementId(null);
-        }
+        SettlementManager.addPlotAndUpdate(settlement, this);
 		setChanged(true);
 	}
 	
 	public Plot(Shape shape, Settlement settlement){
 		this(shape);
-		if(settlement != null) {
-		    getSettings().setSettlementId(settlement.getIdentifier());
-        } else {
-		    getSettings().setSettlementId(null);
-        }
+		SettlementManager.addPlotAndUpdate(settlement, this);
 		setChanged(true);
 	}
 	
@@ -420,7 +412,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public List<GroupAction> getGroupActionsFor(Player player){
 		List<GroupAction> list = new ArrayList<GroupAction>();
 		
-		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getIdentifier().toString() + " rename NEW NAME", this.hasPermission(PermissionType.MANAGE, null, player)));
+		list.add(new GroupAction("Rename", "Rename this plot", ActionType.SUGGEST, "/group " + this.getIdentifier().toString() + " rename NEW NAME", ProtectionManager.hasPermission(PermissionType.MANAGE, this, player, false).getResult() || isOwner(player)));
 		if(this instanceof Rentable){
 			if(this.isOwner(player)){
 				list.add(new GroupAction("For Rent", "Toggle the rentable state of this plot", ActionType.TOGGLE, "/group " + getIdentifier().toString() + " toggleForRent", ((Rentable)this).isForRent()));
@@ -904,5 +896,17 @@ public class Plot extends Group implements Rentable, HasInventory {
 	    Group g = getOwnerGroup();
 	    g.clearMembers();
 	    g.addMember(entity);
+	}
+
+	/**
+	 * Gets the parent group of this plot, if it has none, returns the settlement it belongs to.
+	 * @return Null if this group has no parent or settlement.
+	 */
+	public Group getParent() {
+		if(getParentId() != null){
+			return GroupManager.get(getParentId());
+		} else {
+			return getSettlement();
+		}
 	}
 }
