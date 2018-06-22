@@ -81,7 +81,7 @@ public class Keep extends Plot implements FortComponent{
 		
 		fm.then("\nActions: ").color(ChatColor.GRAY);
 		if(this.isMember(AccountManager.getCurrentIdentifier(player))){
-			if(ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, getSettlement(), player, true)){
+			if(ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, getSettlement(), player, true).getResult()){
 				fm.then("\nRename").color(ChatColor.GOLD).tooltip("Rename this Keep.").suggest("/group " + getIdentifier().toString() + " setname NEW NAME");
 			} else {
 				fm.then("\nRename").color(ChatColor.GRAY).tooltip("You don't have the MANAGE PLOTS permission here.");
