@@ -51,7 +51,7 @@ public class GroupPermissionsPage implements MenuPage {
 		lore.add(ChatColor.GRAY + pt.getDescription());
 
 		Boolean value = group.getSettings().getPermission(target, pt.toString());
-		Boolean inheritedValue = ProtectionManager.hasPermission(pt, group, group, true);
+		Boolean inheritedValue = ProtectionManager.hasPermission(pt, group, group, true).getResult();
 		Material mat = value != null ? (value ? Material.EMERALD_BLOCK : Material.REDSTONE_BLOCK) : Material.IRON_BLOCK;
 		if(value != null){
 			lore.add(ChatColor.WHITE + "Value: " + ChatColor.GOLD + value);
@@ -99,7 +99,7 @@ public class GroupPermissionsPage implements MenuPage {
 						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, player, true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, player, true).getResult());
 		return permissionsButton;
 	}
 

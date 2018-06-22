@@ -7,16 +7,16 @@ public interface HasInventory {
 	 * Gets the shared inventory of that group.
 	 * @return
 	 */
-	public GroupInventory getInventory();
+	GroupInventory getInventory();
 	/**
 	 * Sets the shared inventory of that group.
 	 */
-	public void addItem(ItemStack... items);
+	void addItem(ItemStack... items);
 	/**
 	 * Removes the given item from the shared inventory;
 	 * @param items
 	 */
-	public void removeItem(ItemStack... items);
+	void removeItem(ItemStack... items);
 	/**
 	 * Checks if the inventory contains at least the given amount of the given item.
 	 * @param item

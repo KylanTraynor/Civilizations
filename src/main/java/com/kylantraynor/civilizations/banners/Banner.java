@@ -16,7 +16,7 @@ public class Banner {
 	
 	static private List<Banner> all = new ArrayList<Banner>();
 	
-	List<Pattern> patterns = new ArrayList<Pattern>();
+	List<Pattern> patterns;
 	private org.bukkit.block.Banner banner;
 	private DyeColor baseColor;
 	

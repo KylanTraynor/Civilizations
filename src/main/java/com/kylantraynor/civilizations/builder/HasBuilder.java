@@ -10,11 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import com.kylantraynor.civilizations.selection.Selection;
 
 public interface HasBuilder {
-	public Builder getBuilder();
-	public ItemStack getSupplies(Material material, short data);
-	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir);
-	public boolean canBuild();
-	public ItemStack getSuppliesAndRemove(ItemStack is);
-	public void sendNotification(Level type, String message);
-	public UUID getIdentifier();
+	Builder getBuilder();
+	ItemStack getSupplies(Material material, short data);
+	boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir);
+	boolean canBuild();
+	ItemStack getSuppliesAndRemove(ItemStack is);
+	void sendNotification(Level type, String message);
+	UUID getIdentifier();
 }

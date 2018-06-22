@@ -218,7 +218,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).changePage(Page.MANAGE);
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE, group, getPlayer(), true).getResult());
 		return manageButton;
 	}
 	/**
@@ -234,7 +234,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "RANK_SELECTION");
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true).getResult());
 		return manageButton;
 	}
 	/**
@@ -252,7 +252,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NEW", null);
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true).getResult());
 		return button;
 	}
 	/**
@@ -271,7 +271,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).initTextInput("RANK_NAMING", rank.getName());
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true).getResult());
 		return nameButton;
 	}
 	/**
@@ -294,7 +294,7 @@ public class GroupMenu extends Menu{
 						//((GroupMenu)MenuManager.getMenus().get(player)).startSelection(Page.RANKS_SELECTION, "PARENT_RANK_SELECTION");
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true).getResult());
 		return parentButton;
 	}
 	/**
@@ -326,7 +326,7 @@ public class GroupMenu extends Menu{
 						((GroupMenu)MenuManager.getMenus().get(getPlayer())).selectionReturned(r.getName());
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, getPlayer(), true).getResult());
 		return rankButton;
 	}
 	/**

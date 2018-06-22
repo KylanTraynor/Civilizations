@@ -559,7 +559,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public void sendMessage(FancyMessage message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-                if(!ProtectionManager.hasPermission(permission, this, p, true)) continue;
+                if(!ProtectionManager.hasPermission(permission, this, p, true).getResult()) continue;
 			}
 			message.send(p);
 		}
@@ -572,7 +572,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	public void sendMessage(String message, PermissionType permission) {
 		for(Player p : getOnlinePlayers()){
 			if(permission != null){
-				if(!ProtectionManager.hasPermission(permission, this, p, true)) continue;
+				if(!ProtectionManager.hasPermission(permission, this, p, true).getResult()) continue;
 			}
 			p.sendMessage(getChatHeader() + getChatColor() + message);
 		}
@@ -586,7 +586,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return
 	 */
 	public boolean hasPermission(PermissionType perm, Block block, Player player) {
-		return ProtectionManager.hasPermission(perm, this, player, true);
+		return ProtectionManager.hasPermission(perm, this, player, true).getResult();
 		/*
 		boolean result = false;
 		if(player != null){
@@ -733,8 +733,11 @@ public class Group extends EconomicEntity implements Comparable<Group>{
      * of this {@linkplain Group}
      * @param potentialParent as {@link Group}
      * @return true if the given {@link Group} is a parent, false otherwise.
+	 * @throws NullPointerException potentialParent is null.
      */
 	public boolean hasRecursiveParent(Group potentialParent) {
+		if(potentialParent == null) throw new NullPointerException("potentialParent can't be null.");
+		if(getParentId() == null) return false;
         return getParentId().equals(potentialParent.getIdentifier()) ||
                 getParentId() != null && getParent().hasRecursiveParent(potentialParent);
     }

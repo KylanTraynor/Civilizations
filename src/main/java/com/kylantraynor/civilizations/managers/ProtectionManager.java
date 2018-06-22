@@ -16,6 +16,40 @@ import javax.annotation.Nullable;
 
 public class ProtectionManager {
 
+    public static class PermissionCheckResult{
+        private Boolean result;
+        private List<String> info;
+
+        public PermissionCheckResult(Boolean result, List<String> info){
+            this.result = result;
+            this.info = info;
+        }
+
+        public PermissionCheckResult(Boolean result, @Nullable String info){
+            this.result = result;
+            this.info = new ArrayList<>();
+            if(info != null){
+                this.info.add(info);
+            }
+        }
+
+        public boolean hasResult(){
+            return result != null;
+        }
+
+        public boolean getResult(){
+            if(hasResult()){
+                return result;
+            } else {
+                return false;
+            }
+        }
+
+        public List<String> getInfo(){
+            return info;
+        }
+    }
+
     /**
      * Checks if the given {@linkplain EconomicEntity} has the given {@linkplain PermissionType} at the given {@linkplain Location}.
      * @param location The {@link Location} where to test permissions for.
@@ -23,7 +57,7 @@ public class ProtectionManager {
      * @param entity The {@link EconomicEntity} to test permissions for, or Null to check for Server permissions.
      * @return true if the permission is granted, false otherwise.
      */
-	public static boolean hasPermissionAt(PermissionType type, Location location, @Nullable EconomicEntity entity, boolean recursive){
+	public static PermissionCheckResult hasPermissionAt(PermissionType type, Location location, @Nullable EconomicEntity entity, boolean recursive){
 	    if(location == null) throw new NullPointerException("Location can't be Null!");
 	    if(type == null) throw new NullPointerException("PermissionType can't be Null!");
         Group result;
@@ -40,7 +74,7 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(PermissionType type, @Nullable Group group, @Nullable EconomicEntity entity, boolean recursive){
+    public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, @Nullable EconomicEntity entity, boolean recursive){
         return hasPermission(type, group, entity == null ? null : entity.getIdentifier(), recursive);
     }
 
@@ -52,7 +86,7 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
+    public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
         return hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
     }
 
@@ -64,18 +98,22 @@ public class ProtectionManager {
      * @param recursive Whether the permission check should be deep (true) or shallow (false)
      * @return true if the permission was granted, false otherwise.
      */
-    public static boolean hasPermission(PermissionType type, @Nullable Group group, @Nullable UUID target, boolean recursive){
+    public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, @Nullable UUID target, boolean recursive){
 	    if(type == null) throw new NullPointerException("PermissionType can't be Null!");
 	    if(group == null)  return hasDefaultPermissionFor(type, null, target);
-	    @Nullable Boolean result = null;
+	    PermissionCheckResult result = new PermissionCheckResult(null, (String)null);
 
 	    Group current = group;
-	    while(result == null && current != null){
+	    while(result.result == null && current != null){
 	        if(target == null){
 	            // Check Server Permissions
-                result = current.getSettings().getServerPermission(type.toString());
+                result.result = current.getSettings().getServerPermission(type.toString());
             } else {
-	            if(isOp(target)) return true;
+	            if(isOp(target)){
+	                result.getInfo().add("OP");
+	                result.result = true;
+	                return result;
+                }
                 Permissions[] perms = current.getSettings().getPermissions();
                 // Check low levels first (higher priority)
                 Arrays.sort(perms);
@@ -90,10 +128,14 @@ public class ProtectionManager {
                                     (ee.getIdentifier().equals(target) ||
                                     ((Group) ee).isMember(target, true))){
                                 // If the given entity is a deep member of the group
-                                return perm;
+                                result.getInfo().add("Deep Member");
+                                result.result = perm;
+                                return result;
                             } else if (ee.getIdentifier().equals(target)) {
                                 // if the given entity's id is the same as the target's id
-                                return perm;
+                                result.getInfo().add("Same ID");
+                                result.result = perm;
+                                return result;
                             }
                         }
                     }
@@ -101,13 +143,19 @@ public class ProtectionManager {
 
                 // Check self permission
                 if(target.equals(current.getIdentifier()) || current.isMember(target, true)){
-                    result = current.getSettings().getSelfPermission(type.toString());
-                    if(result != null) return result;
+                    result.result = current.getSettings().getSelfPermission(type.toString());
+                    if(result.result != null){
+                        result.info.add("Self permission");
+                        return result;
+                    }
                 }
 
                 // Check outsider permission
-                result = current.getSettings().getOutsidersPermission(type.toString());
-                if(result != null) return result;
+                result.result = current.getSettings().getOutsidersPermission(type.toString());
+                if(result != null){
+                    result.info.add("Outsiders permission");
+                    return result;
+                }
             }
             // Move to parent
             if(current.getParentId() != null && recursive){
@@ -118,7 +166,7 @@ public class ProtectionManager {
         }
 
         // If nothing was set, return default. Otherwise return the result
-	    if(result == null){
+	    if(result.result == null){
 	        return hasDefaultPermissionFor(type, group, target);
         } else {
 	        return result;
@@ -163,16 +211,16 @@ public class ProtectionManager {
      * @param id as {@link UUID} or Null to check for Server permissions.
      * @return true if the permission is granted, false otherwise.
      */
-    private static boolean hasDefaultPermissionFor(PermissionType type, @Nullable Group group, @Nullable UUID id){
+    private static PermissionCheckResult hasDefaultPermissionFor(PermissionType type, @Nullable Group group, @Nullable UUID id){
         if(type == null) throw new NullPointerException("PermissionType can't be Null!");
 	    if(id == null){
 	        // Server Permissions
-            return true;
+            return new PermissionCheckResult(true, "Server");
         } else if(group != null){
-	        return false;
+	        return new PermissionCheckResult(false, "Group");
         } else {
 	        // Wilderness Permissions
-	        return true;
+	        return new PermissionCheckResult(true, "Wilderness");
         }
     }
 

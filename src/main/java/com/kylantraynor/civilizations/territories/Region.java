@@ -25,6 +25,10 @@ public class Region {
 		if(name != null) return name;
 		return "Domain of " + site.getName();
 	}
+
+	public void setName(String newName){
+		name = newName;
+	}
 	
 	public Nation getNation(){
 		if(site instanceof NationMember){

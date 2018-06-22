@@ -63,7 +63,7 @@ public class CommandNation implements CommandExecutor{
 				// /Nation [Name] SetBanner
 				case "SETBANNER":
 					Player p = (Player) sender;
-					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, nation, p, false)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, nation, p, false).getResult()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this Nation.");
 					}
 					Block target = p.getTargetBlock(null, 15);
@@ -87,7 +87,7 @@ public class CommandNation implements CommandExecutor{
 					return true;*/
 				// /Nation [Name] SetWords Some words with spaces
 				case "SETWORDS":
-					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, nation, (Player) sender, false)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, nation, (Player) sender, false).getResult()){
 						sender.sendMessage(nation.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					StringBuilder sb = new StringBuilder();

@@ -94,7 +94,7 @@ public class ProtectionListener implements Listener{
 					canPlace = false;
 					reason = "this field doesn't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+			} else if(!ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true).getResult()){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
 				reason = "you don't have the PLACE permission in " + plot.getName();
 			}
@@ -102,7 +102,7 @@ public class ProtectionListener implements Listener{
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
 				//if(settlement instanceof TownyTown) return;
-				if(!ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+				if(!ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true).getResult()){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 					canPlace = false;
 					reason = "you don't have the PLACE permission in " + settlement.getName();
 				}
@@ -146,7 +146,7 @@ public class ProtectionListener implements Listener{
 	
 	@EventHandler
 	public void onBlockExplode(BlockExplodeEvent event){
-		if(!ProtectionManager.hasPermissionAt(PermissionType.EXPLOSION, event.getBlock().getLocation(), null, true)){
+		if(!ProtectionManager.hasPermissionAt(PermissionType.EXPLOSION, event.getBlock().getLocation(), null, true).getResult()){
 			event.setCancelled(true);
 		}
 	}
@@ -194,14 +194,14 @@ public class ProtectionListener implements Listener{
 					canBreak = false;
 					reason = "this field doesn't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true)){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
+			} else if(!ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true).getResult()){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;
 				reason = "you don't have the BREAK permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
-				if(!ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true)){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+				if(!ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true).getResult()){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
 					reason = "you don't have the BREAK permission in " + settlement.getName();
 				}
@@ -284,7 +284,7 @@ public class ProtectionListener implements Listener{
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			switch(entity.getType()){
 			case SLIME: case WITCH: case ZOMBIE_VILLAGER: case ZOMBIE: case SKELETON: case CREEPER: case SPIDER: case CAVE_SPIDER: case WITHER_SKELETON: case HUSK: case ENDERMAN: case STRAY:
-				if(!ProtectionManager.hasPermissionAt(PermissionType.MOBSPAWNING, event.getLocation(), null, true)){
+				if(!ProtectionManager.hasPermissionAt(PermissionType.MOBSPAWNING, event.getLocation(), null, true).getResult()){
 					event.setCancelled(true);
 				}
 				break;

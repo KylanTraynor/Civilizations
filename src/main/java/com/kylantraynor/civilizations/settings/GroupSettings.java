@@ -528,6 +528,8 @@ public class GroupSettings extends YamlConfiguration{
 
 	public Set<String> getTaxes() {
 		String root = "Economy.Taxes";
-		return this.getConfigurationSection(root).getKeys(false);
+		ConfigurationSection rs = this.getConfigurationSection(root);
+		if(rs == null) return new HashSet<>();
+		return rs.getKeys(false);
 	}
 }

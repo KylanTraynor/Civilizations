@@ -119,13 +119,13 @@ public class CommandGroup implements CommandExecutor {
 			case "REMOVE":
 				if(sender instanceof Player){
 					if(g instanceof Plot){
-						if(((Plot) g).isOwner((Player) sender) || ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player)sender, true)){
+						if(((Plot) g).isOwner((Player) sender) || ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player)sender, true).getResult()){
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + "Plot has been removed.");
 							return true;
 						}
 					} else {
-						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, true)){
+						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, true).getResult()){
 							String name = g.getName();
 							g.remove();
 							sender.sendMessage(ChatColor.GREEN + name + " has been removed.");
@@ -151,7 +151,7 @@ public class CommandGroup implements CommandExecutor {
 							sender.sendMessage(g.getChatHeader() + ChatColor.RED + "You don't have the permission to do that.");
 						}
 					} else {
-						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, false)){
+						if(ProtectionManager.hasPermission(PermissionType.MANAGE, g, (Player) sender, false).getResult()){
 							StringBuilder sb = new StringBuilder();
 							for(int i = 2; i < args.length; i++){
 								sb.append(args[i]).append(" ");
@@ -261,7 +261,7 @@ public class CommandGroup implements CommandExecutor {
 				break;
 			case "UPGRADE":
 				if(sender instanceof Player){
-					if(ProtectionManager.hasPermission(PermissionType.UPGRADE, g, ((Player)sender), true)){
+					if(ProtectionManager.hasPermission(PermissionType.UPGRADE, g, ((Player)sender), true).getResult()){
 						if(g.upgrade()){
 							sender.sendMessage(g.getChatHeader() + ChatColor.GREEN + "Upgrade successful!");
 						} else {

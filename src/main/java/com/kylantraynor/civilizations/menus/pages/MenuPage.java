@@ -6,10 +6,10 @@ import com.kylantraynor.civilizations.menus.Button;
 import com.kylantraynor.civilizations.menus.Menu;
 
 public interface MenuPage {
-	public int getRows();
-	public void refresh(Menu menu);
-	public Button getIconButton();
-	public Map<Integer, Button> getButtons();
-	public String getTitle();
+	int getRows();
+	void refresh(Menu menu);
+	Button getIconButton();
+	Map<Integer, Button> getButtons();
+	String getTitle();
 	
 }

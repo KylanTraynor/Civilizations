@@ -13,7 +13,7 @@ public class LivelyWorldListener implements Listener{
 	@EventHandler
 	public void onBlockDeteriorate(BlockDeteriorateEvent event){
 		if(event.getCause() == DeteriorationCause.Erosion){
-			if(ProtectionManager.hasPermissionAt(PermissionType.ERODE, event.getBlock().getLocation(), null, true)){
+			if(ProtectionManager.hasPermissionAt(PermissionType.ERODE, event.getBlock().getLocation(), null, true).getResult()){
 				
 			} else {
 				event.setCancelled(true);

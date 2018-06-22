@@ -66,7 +66,7 @@ public class GroupRankPage implements MenuPage{
 						((GroupMenu)MenuManager.getMenus().get(player)).changePage(page);
 					}
 			
-		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, player, true));
+		}, ProtectionManager.hasPermission(PermissionType.MANAGE_RANKS, group, player, true).getResult());
 		rankButton.setAmount(count);
 		return rankButton;
 	}

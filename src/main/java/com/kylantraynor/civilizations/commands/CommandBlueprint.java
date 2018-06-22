@@ -170,7 +170,7 @@ public class CommandBlueprint implements CommandExecutor{
 				return true;
 			}
 			
-			if(!ProtectionManager.hasPermission(PermissionType.BUILD_BLUEPRINTS, (Group) settlement, player, true)){
+			if(!ProtectionManager.hasPermission(PermissionType.BUILD_BLUEPRINTS, (Group) settlement, player, true).getResult()){
 				player.sendMessage(messageHeader + ChatColor.RED + "You don't have the permission to use blueprints in " + ((Group)settlement).getName() + ".");
 				return true;
 			}

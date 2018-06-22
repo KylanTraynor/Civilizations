@@ -66,7 +66,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				// /House [Name] SetBanner
 				case "SETBANNER":
-					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, house, player, false)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_BANNER, house, player, false).getResult()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You are not allowed to change the banner of this House.");
 					}
 					Block target = player.getTargetBlock(null, 15);
@@ -90,7 +90,7 @@ public class CommandHouse implements CommandExecutor{
 					return true;
 				// /House [Name] SetWords Some words with spaces
 				case "SETWORDS":
-					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, false)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, false).getResult()){
 						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					StringBuilder sb = new StringBuilder();
@@ -105,7 +105,7 @@ public class CommandHouse implements CommandExecutor{
 					if(!sender.hasPermission("civilizations.house.adopt") && !sender.isOp()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do this.");
 					}
-					if(ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, true)){
+					if(ProtectionManager.hasPermission(PermissionType.MANAGE_HOUSE, house, (Player) sender, true).getResult()){
 						sender.sendMessage(house.getChatHeader() + ChatColor.RED + "You do not have the permission to do this.");
 					}
 					if(args.length > 2){

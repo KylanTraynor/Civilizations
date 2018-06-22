@@ -440,7 +440,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 				list.add(new GroupAction("Purchase", "Buy this plot", ActionType.COMMAND, "/group " + getIdentifier().toString() + " buy", ((Purchasable)this).isForSale()));
 			}
 		}
-		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getIdentifier().toString() + " remove", ProtectionManager.hasPermission(PermissionType.MANAGE, this, player, false) || isOwner(player)));
+		list.add(new GroupAction("Remove", "Remove this plot", ActionType.COMMAND, "/group " + getIdentifier().toString() + " remove", ProtectionManager.hasPermission(PermissionType.MANAGE, this, player, false).getResult() || isOwner(player)));
 		
 		return list;
 	}
@@ -686,13 +686,13 @@ public class Plot extends Group implements Rentable, HasInventory {
 
 	public boolean isOwner(OfflinePlayer player){
 	    return getOwnerGroup().isMember(player, true) ||
-                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, player, true);
+                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, player, true).getResult();
     }
 
 	@Override
 	public boolean isOwner(EconomicEntity entity) {
         return getOwnerGroup().isMember(entity.getIdentifier(), true) ||
-                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, entity, true);
+                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, entity, true).getResult();
     }
 
 	@Override

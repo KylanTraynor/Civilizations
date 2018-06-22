@@ -111,7 +111,7 @@ public class CommandPlot implements CommandExecutor {
 					}
 				}
 				if(set != null){
-					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, (Player) sender, true)){
+					if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, (Player) sender, true).getResult()){
 						sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to do that here.");
 						return true;
 					}
@@ -192,7 +192,7 @@ public class CommandPlot implements CommandExecutor {
 						if(map != null){
 							set = (Settlement) map.getInfluentSiteAt(s.getLocation());
 							if(set != null){
-								if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, player, true)){
+								if(!ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, set, player, true).getResult()){
 									sender.sendMessage(Civilizations.messageHeader + ChatColor.RED + "You do not have the permission to manage plots in " + ((InfluentSite) set).getRegion().getName()+ ".");
 									return true;
 								}

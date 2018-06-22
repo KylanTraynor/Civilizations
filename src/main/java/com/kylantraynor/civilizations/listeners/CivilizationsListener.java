@@ -45,18 +45,18 @@ public class CivilizationsListener implements Listener{
 		if(g == null) return;
 		switch(event.getCause()){
 		case SPREAD:
-			if(!ProtectionManager.hasPermission(PermissionType.FIRESPREAD, g, (UUID) null, true)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRESPREAD, g, (UUID) null, true).getResult()){
 				event.setCancelled(true);
 			}
 			break;
 		case FLINT_AND_STEEL:
-			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, event.getPlayer(), false)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, event.getPlayer(), false).getResult()){
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "You can't start a fire here.");
 			}
 			break;
 		default:
-			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, (UUID) null, true)){
+			if(!ProtectionManager.hasPermission(PermissionType.FIRE, g, (UUID) null, true).getResult()){
 				event.setCancelled(true);
 			}
 			break;
