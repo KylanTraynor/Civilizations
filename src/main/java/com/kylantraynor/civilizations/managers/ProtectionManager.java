@@ -158,7 +158,7 @@ public class ProtectionManager {
                 }
             }
             // Move to parent
-            if(current.getParentId() != null && recursive){
+            if(current.getParent() != null && recursive){
 	            current = current.getParent();
             } else {
 	            current = null;
