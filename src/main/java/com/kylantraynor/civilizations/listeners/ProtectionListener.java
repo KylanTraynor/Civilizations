@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 import com.kylantraynor.civilizations.managers.AccountManager;
-import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -27,7 +26,6 @@ import org.bukkit.material.Crops;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
 import com.kylantraynor.civilizations.Civilizations;
-import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.settlements.Camp;
 import com.kylantraynor.civilizations.groups.settlements.Settlement;
 import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
@@ -36,6 +34,8 @@ import com.kylantraynor.civilizations.hook.HookManager;
 import com.kylantraynor.civilizations.hook.towny.TownyTown;
 import com.kylantraynor.civilizations.managers.LockManager;
 import com.kylantraynor.civilizations.protection.PermissionType;
+
+import mkremins.fanciful.civilizations.FancyMessage;
 
 public class ProtectionListener implements Listener{
 	
@@ -58,6 +58,7 @@ public class ProtectionListener implements Listener{
 		Player player = event.getPlayer();
 		boolean canPlace = true;
 		String reason = "";
+        ProtectionManager.PermissionCheckResult result = null;
 		Plot plot = Plot.getAt(event.getBlock().getLocation());
 		if(plot != null){
 			if(plot.getPlotType() == PlotType.MARKETSTALL){
@@ -94,7 +95,7 @@ public class ProtectionListener implements Listener{
 					canPlace = false;
 					reason = "this field doesn't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true).getResult()){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+			} else if(!((result = ProtectionManager.hasPermission(PermissionType.PLACE, plot, event.getPlayer(), true)).getResult())){//plot.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 				canPlace = false;
 				reason = "you don't have the PLACE permission in " + plot.getName();
 			}
@@ -102,7 +103,7 @@ public class ProtectionListener implements Listener{
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
 				//if(settlement instanceof TownyTown) return;
-				if(!ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true).getResult()){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
+				if(!((result = ProtectionManager.hasPermission(PermissionType.PLACE, settlement, event.getPlayer(), true)).getResult())){//settlement.hasPermission(PermissionType.PLACE, event.getBlock(), event.getPlayer())){
 					canPlace = false;
 					reason = "you don't have the PLACE permission in " + settlement.getName();
 				}
@@ -111,8 +112,14 @@ public class ProtectionListener implements Listener{
 		
 		if(!canPlace){
 			event.setCancelled(true);
-			if(!reason.equalsIgnoreCase(""))
-				player.sendMessage(ChatColor.RED + "You can't place blocks here because " + reason + ".");
+			if(!reason.equalsIgnoreCase("")){
+				FancyMessage fm = new FancyMessage("You can't place blocks here because " + reason + ".");
+				fm.color(ChatColor.RED);
+				if(result != null){
+				    fm.tooltip(result.getInfo());
+                }
+			    fm.send(player);
+            }
 		}
 		/*
 		if(Settlement.isProtected(event.getBlock().getLocation())){
@@ -156,6 +163,7 @@ public class ProtectionListener implements Listener{
 		if(event.getPlayer() == null) return;
 		boolean canBreak = true;
 		String reason = "";
+        ProtectionManager.PermissionCheckResult result = null;
 		Player player = event.getPlayer();
 		Plot plot = Plot.getAt(event.getBlock().getLocation());
 		if(plot != null){
@@ -194,25 +202,31 @@ public class ProtectionListener implements Listener{
 					canBreak = false;
 					reason = "this field doesn't belong to you";
 				}
-			} else if(!ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true).getResult()){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
+			} else if(!((result = ProtectionManager.hasPermission(PermissionType.BREAK, plot, event.getPlayer(), true)).getResult())){//plot.hasPermission(PermissionType.BREAK, event.getBlock(), player)){
 				canBreak = false;
 				reason = "you don't have the BREAK permission in " + plot.getName();
 			}
 		} else {
 			Settlement settlement = Settlement.getAt(event.getBlock().getLocation());
 			if(settlement != null){
-				if(!ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true).getResult()){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
+				if(!((result = ProtectionManager.hasPermission(PermissionType.BREAK, settlement, event.getPlayer(), true)).getResult())){//settlement.hasPermission(PermissionType.BREAK, event.getBlock(), event.getPlayer())){
 					canBreak = false;
 					reason = "you don't have the BREAK permission in " + settlement.getName();
 				}
 			}
 		}
-		
-		if(!canBreak){
-			event.setCancelled(true);
-			if(!reason.equalsIgnoreCase(""))
-				player.sendMessage(ChatColor.RED + "You can't break blocks here because " + reason + ".");
-		}
+
+        if(!canBreak){
+            event.setCancelled(true);
+            if(!reason.equalsIgnoreCase("")){
+                FancyMessage fm = new FancyMessage("You can't break blocks here because " + reason + ".");
+                fm.color(ChatColor.RED);
+                if(result != null){
+                    fm.tooltip(result.getInfo());
+                }
+                fm.send(player);
+            }
+        }
 		/*
 		if(Settlement.isProtected(event.getBlock().getLocation())){
 			
