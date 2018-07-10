@@ -26,10 +26,10 @@ public class GroupSettings extends YamlConfiguration{
 	private Set<UUID> members;
 	private boolean changed = true;
 
-	private static final String PARENT = "General.Parent";
-	private static final String PERMISSIONSROOT = "Permissions";
-	private static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
-	private static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
+	protected static final String PARENT = "General.Parent";
+	protected static final String PERMISSIONSROOT = "Permissions";
+	protected static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
+	protected static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
 
 	/**
 	 * Checks if the settings need to be saved.

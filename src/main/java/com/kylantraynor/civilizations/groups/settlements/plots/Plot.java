@@ -44,11 +44,20 @@ import com.kylantraynor.civilizations.utils.Utils;
 
 public class Plot extends Group implements Rentable, HasInventory {
 	private boolean persistent = false;
+	private boolean ownedBySettlement = false;
 	private int beds;
 	private int workbenches;
 	private List<Chest> chests;
 	private List<String> waresStrings;
-	
+
+	public boolean isOwnedBySettlement(){
+	    if(getOwnerGroup().getMembers().isEmpty()){
+	        return true;
+        } else {
+	        return ownedBySettlement;
+        }
+    }
+
 	/**
 	 * Reloads the plot from the given {@linkplain PlotSettings}.
 	 * @param settings
@@ -240,6 +249,9 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	@Override
 	public void update(){
+	    if(isOwnedBySettlement()){
+	        setOwner(getSettlement());
+        }
 		if(getRenter() != null){
 			if(Instant.now().isAfter(getSettings().getNextPayment())){
 				TransactionResult r = payRent();
@@ -351,7 +363,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 			getSettings().setSettlementId(settlement.getIdentifier());
 		} else {
 			getSettings().setSettlementId(null);
-		}
+        }
 	}
 	/**
 	 * Gets an interactive info panel adapted to the given player.
