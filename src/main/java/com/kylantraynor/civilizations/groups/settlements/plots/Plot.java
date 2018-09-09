@@ -311,7 +311,9 @@ public class Plot extends Group implements Rentable, HasInventory {
 			if(map == null) return null;
 			return (Settlement) map.getInfluentSiteAt(center);
 		} else {
-			return (Settlement) Group.get(getSettings().getSettlementId());
+			UUID setId = getSettings().getSettlementId();
+			if(setId == null) return null;
+			return (Settlement) Group.get(setId);
 		}
 	}
 

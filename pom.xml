@@ -143,12 +143,12 @@
         <version>0.91.0.0</version>
 		<scope>provided</scope>
 	</dependency>
-	<dependency>
-		<groupId>com.wimbli</groupId>
-		<artifactId>WorldBorder</artifactId>
+    <dependency>
+        <groupId>com.wimbli</groupId>
+        <artifactId>WorldBorder</artifactId>
         <version>1.8.7</version>
-		<scope>provided</scope>
-	</dependency>
+        <scope>provided</scope>
+    </dependency>
 	<dependency>
 		<groupId>net.milkbowl.vault</groupId>
 		<artifactId>VaultAPI</artifactId>

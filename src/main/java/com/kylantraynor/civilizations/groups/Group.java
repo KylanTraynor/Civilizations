@@ -125,6 +125,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return Group
 	 */
 	public static Group get(UUID id){
+		if(id == null) throw new NullPointerException("ID can't be null!");
 		return all.get(id.toString());
 	}
 
