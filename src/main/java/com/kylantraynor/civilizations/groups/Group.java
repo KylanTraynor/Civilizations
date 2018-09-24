@@ -160,8 +160,10 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * Adds the given {@linkplain OfflinePlayer} to the list of members of this {@linkplain Group}.
 	 * @param member The {@link OfflinePlayer} to add.
 	 * @return true if the player wasn't already in the list, false otherwise.
+     * @throws NullPointerException if Member is null.
 	 */
 	public boolean addMember(OfflinePlayer member){
+		if(member == null) throw new NullPointerException("Member can't be null.");
 	    UUID id = AccountManager.getCurrentIdentifier(member);
         Set<UUID> members = getMembers();
         if(members.add(id)){
