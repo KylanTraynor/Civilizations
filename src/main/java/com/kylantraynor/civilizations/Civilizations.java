@@ -511,7 +511,7 @@ public class Civilizations extends JavaPlugin{
 			}
 			if(group == null) return;
 			Group old = Civilizations.getSelectedProtections().get(player);
-			if(old != null && group.equals(old)){
+			if(group.equals(old)){
 				player.sendMessage(messageHeader + ChatColor.RED + "Protection already selected.");
 				return;
 			}
@@ -552,7 +552,7 @@ public class Civilizations extends JavaPlugin{
 						if(to.getMembers().size() > 0){
 							TitleManagerHook.sendActionBar("Protected Area", player, false);
 						} else {
-							TitleManagerHook.sendActionBar("Abandonned Camp, do " + ChatColor.GOLD + "/camp claim" + ChatColor.RESET + " to claim it for yourself!", player, false);
+							TitleManagerHook.sendActionBar("Abandoned Camp, do " + ChatColor.GOLD + "/camp claim" + ChatColor.RESET + " to claim it for yourself!", player, false);
 						}
 					}
 				} else if(to instanceof SmallOutpost){
