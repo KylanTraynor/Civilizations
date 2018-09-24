@@ -96,7 +96,7 @@ public class Civilizations extends JavaPlugin{
 	private boolean clearBuildProjectsOnRestart = true;
 	
 	private boolean clearing = false;
-	private boolean DEBUG = false;
+	private boolean DEBUG = true;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	private Database database;
 	static private HashMap<Player, Group> selectedProtections = new HashMap<Player, Group>();
