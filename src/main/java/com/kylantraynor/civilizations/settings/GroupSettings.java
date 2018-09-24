@@ -67,7 +67,10 @@ public class GroupSettings extends YamlConfiguration{
      * @param id
      */
     public void setUniqueId(UUID id){
-        if(id == null) id = UUID.randomUUID();
+        if(id == null){
+            id = UUID.randomUUID();
+            Civilizations.DEBUG("Creating new UUID for " + this.getName() + ". New UUID: " + id.toString());
+        }
         this.set("General.UniqueId", id.toString());
         uniqueId = id;
         setChanged(true);
