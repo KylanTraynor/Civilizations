@@ -86,24 +86,24 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	    return (TownyTownSettings) super.getSettings();
     }
 	
-	public TownyTown(Town t) throws TownyException{
+	public TownyTown(Town t, TownyTownSettings tts) throws TownyException{
+		super(tts);
+		reloadTown(t);
+	}
+
+	public TownyTown(Town t) throws TownyException {
 		super(t.getSpawn());
+		reloadTown(t);
+    }
+
+    private void reloadTown(Town t) throws TownyException {
 		this.region = new Region(this);
 		this.townyTown = t;
-		if(getFile().exists()){
-			try {
-				getSettings().load(getFile());
-				Civilizations.DEBUG("Loaded settings for " + t.getName() + " (" + getIdentifier().toString() + ")");
-			} catch (IOException | InvalidConfigurationException e) {
-				e.printStackTrace();
-			}
-		}
 		if(getBuilder() == null){
 			getSettings().setBuilder(new Builder(this));
 		} else {
 			getBuilder().setOwner(this);
 		}
-		
 		List<TownBlock> tl = t.getTownBlocks();
 		importTownPermissions();
 		int i = 0;
@@ -116,16 +116,6 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		}
 		hullNeedsUpdate = true;
 	}
-
-	public TownyTown(Town t, UUID uuid) throws TownyException {
-		this(t);
-		try {
-		    this.getSettings().load(getFile());
-        } catch (InvalidConfigurationException | IOException e){
-		    e.printStackTrace();
-		    this.getSettings().setUniqueId(uuid);
-        }
-    }
 
 	/**
 	 * Checks if the given TownBlock is a plot or just part of the town's protection.
