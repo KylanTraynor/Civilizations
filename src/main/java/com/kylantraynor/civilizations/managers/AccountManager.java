@@ -102,6 +102,7 @@ public class AccountManager {
      * @return {@link CivilizationsAccount}
      */
     public static CivilizationsAccount getAccount(UUID playerId) throws ExecutionException {
+        if(playerId == null) throw new NullPointerException("ID can't be null.");
         return accounts.get(playerId);
     }
 
