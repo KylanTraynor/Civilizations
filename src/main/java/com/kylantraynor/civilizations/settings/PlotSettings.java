@@ -30,11 +30,12 @@ public class PlotSettings extends GroupSettings{
 	 * @return
 	 */
 	public UUID getSettlementId() {
-		if(settlement != null) return settlement;
-		if(this.contains("General.Settlement")){
-			UUID id = UUID.fromString(this.getString("General.Settlement"));
-			if(id != null){
-				settlement = id;
+		if(settlement == null){
+			if(this.contains("General.Settlement")){
+				UUID id = UUID.fromString(this.getString("General.Settlement"));
+				if(id != null){
+					settlement = id;
+				}
 			}
 		}
 		return settlement;

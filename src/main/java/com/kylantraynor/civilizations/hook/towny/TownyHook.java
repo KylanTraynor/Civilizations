@@ -78,7 +78,7 @@ public class TownyHook {
 		}
 	}
 	
-	public static void saveUniqueIds(){
+	public void saveUniqueIds(){
 		Iterator<String> it = uniqueIds.keySet().iterator();
 		while(it.hasNext()){
 			String key = it.next();
@@ -86,7 +86,7 @@ public class TownyHook {
 		}
 	}
 	
-	public static void loadUniqueIds(){
+	public void loadUniqueIds(){
 		uniqueIds.clear();
 		ConfigurationSection cs = Civilizations.currentInstance.getConfig().getConfigurationSection("IDConversions.Towny");
 		if(cs == null) return;

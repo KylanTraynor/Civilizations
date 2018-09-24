@@ -168,6 +168,7 @@ public class Civilizations extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		currentInstance = this;
+
 		newCharacterSpawn = Bukkit.getWorld("world").getSpawnLocation();
 		saveDefaultConfig();
 		

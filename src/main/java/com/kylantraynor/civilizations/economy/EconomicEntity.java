@@ -163,7 +163,7 @@ public class EconomicEntity {
 		    OfflinePlayer op = getOfflinePlayer();
 			if(op != null) return op.getName();
 		}
-		return "Unknown";
+		return "Unknown (DEBUG: " + this.getIdentifier().toString() + ")";
 	}
 
     /**

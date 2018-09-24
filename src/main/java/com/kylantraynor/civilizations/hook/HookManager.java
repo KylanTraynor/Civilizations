@@ -75,6 +75,7 @@ public class HookManager {
 		
 		if(dynmap != null) dynmap.activateDynmap();
 		if(towny != null){
+			towny.loadUniqueIds();
 			towny.loadTownyTowns();
 			pm.registerEvents(towny.getTownyListener(), Civilizations.currentInstance);
 		}
@@ -95,6 +96,12 @@ public class HookManager {
 			pm.registerEvents(new QuickShopListener(), Civilizations.currentInstance);
 		} else { log.info("Quickshop: NO");}
 	}
+
+	public static void unloadHooks(){
+	    if(towny != null){
+	        towny.saveUniqueIds();
+        }
+    }
 	
 	public static CitizensHook getCitizens() {
 		return citizens;

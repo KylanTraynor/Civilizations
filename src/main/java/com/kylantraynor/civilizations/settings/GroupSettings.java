@@ -52,11 +52,12 @@ public class GroupSettings extends YamlConfiguration{
 	 * @return
 	 */
 	public UUID getUniqueId(){
-		if(uniqueId != null) return uniqueId;
-		if(this.contains("General.UniqueId")){
-			uniqueId = UUID.fromString(this.getString("General.UniqueId"));
-		} else {
-			setUniqueId(null);
+		if(uniqueId == null){
+			if(this.contains("General.UniqueId")){
+				uniqueId = UUID.fromString(this.getString("General.UniqueId"));
+			} else {
+				setUniqueId(null);
+			}
 		}
 		return uniqueId;
 	}
@@ -77,9 +78,10 @@ public class GroupSettings extends YamlConfiguration{
      * @return
      */
     public UUID getParentId(){
-        if(parentId != null) return parentId;
-        if(this.contains(PARENT)){
-            parentId = UUID.fromString(this.getString(PARENT));
+        if(parentId == null){
+            if(this.contains(PARENT)){
+                parentId = UUID.fromString(this.getString(PARENT));
+            }
         }
         return parentId;
     }
@@ -123,13 +125,14 @@ public class GroupSettings extends YamlConfiguration{
 	 * @return Instant
 	 */
 	public Instant getCreationDate() {
-		if(creationDate != null) return creationDate;
-		creationDate = Instant.now();
-		if(this.contains("General.CreationDate")){
-			try{
-				creationDate = Instant.parse(this.getString("General.CreationDate"));
-			} catch (Exception e){}
-		}
+		if(creationDate == null){
+            creationDate = Instant.now();
+            if(this.contains("General.CreationDate")){
+                try{
+                    creationDate = Instant.parse(this.getString("General.CreationDate"));
+                } catch (Exception e){}
+            }
+        }
 		return creationDate;
 	}
 	
@@ -159,7 +162,7 @@ public class GroupSettings extends YamlConfiguration{
 	 * @param newName
 	 */
 	public void setName(String newName){
-		if(newName == null) return;
+		if(newName == null) throw new NullPointerException("New Name cannot be null.");
 		this.set("General.Name", newName);
 		this.setChanged(true);
 	}
@@ -400,7 +403,7 @@ public class GroupSettings extends YamlConfiguration{
 
 	@Override
 	public void save(File file){
-		if(file == null) return;
+		if(file == null) throw new NullPointerException("File cannot be null.");
 		try{
 			super.save(file);
 			this.setChanged(false);

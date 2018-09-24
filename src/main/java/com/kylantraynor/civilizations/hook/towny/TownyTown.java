@@ -97,7 +97,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 				e.printStackTrace();
 			}
 		if(getBuilder() == null){
-			((TownyTownSettings) getSettings()).setBuilder(new Builder(this));
+			getSettings().setBuilder(new Builder(this));
 		} else {
 			getBuilder().setOwner(this);
 		}
