@@ -1,5 +1,7 @@
 package com.kylantraynor.civilizations.hook.towny;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,8 +60,12 @@ public class TownyHook {
 				try {
 					if(!isTownLoaded(t.getName())){
 						TownyTown town = null;
-						if(uniqueIds.containsKey(t.getName())){
-							town = new TownyTown(t, uniqueIds.get(t.getName()));
+                        File f = new File(Civilizations.getTownyTownsDirectory(), t.getName() + ".yml");
+                        if(f.exists()){
+                            TownyTownSettings tts = new TownyTownSettings();
+                            tts.load(f);
+                            Civilizations.DEBUG("Loaded settings for " + t.getName() + " (" + tts.getUniqueId().toString() + ")");
+                            town = new TownyTown(t, tts);
 						} else {
 							town = new TownyTown(t);
 						}
