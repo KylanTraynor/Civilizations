@@ -90,12 +90,14 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 		super(t.getSpawn());
 		this.region = new Region(this);
 		this.townyTown = t;
-		if(getFile().exists())
+		if(getFile().exists()){
 			try {
 				getSettings().load(getFile());
+				Civilizations.DEBUG("Loaded settings for " + t.getName() + " (" + getIdentifier().toString() + ")");
 			} catch (IOException | InvalidConfigurationException e) {
 				e.printStackTrace();
 			}
+		}
 		if(getBuilder() == null){
 			getSettings().setBuilder(new Builder(this));
 		} else {
