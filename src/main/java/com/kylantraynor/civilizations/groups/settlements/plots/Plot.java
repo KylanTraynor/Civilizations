@@ -915,11 +915,26 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
 	/**
+	 * Gets the parent's id, if it exists. Otherwise returns the settlement's id.
+	 * @return {@link UUID}
+	 */
+	@Override
+	public UUID getParentId(){
+		UUID id = getSettings().getParentId();
+		if(id == null){
+			return getSettlement().getIdentifier();
+		} else {
+			return id;
+		}
+	}
+
+	/**
 	 * Gets the parent group of this plot, if it has none, returns the settlement it belongs to.
 	 * @return Null if this group has no parent or settlement.
 	 */
+	@Override
 	public Group getParent() {
-		if(getParentId() != null){
+		if(getSettings().getParentId() != null){
 			return GroupManager.get(getParentId());
 		} else {
 			return getSettlement();
