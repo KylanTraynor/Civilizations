@@ -135,15 +135,13 @@ public class ProtectionManager {
                 // Check low levels first (higher priority)
                 Arrays.sort(perms);
                 for(Permissions p : perms){
-                    for(int i = 0; i < perms.length; i++){
-                        Civilizations.DEBUG(String.format("Perms: %s", perms[i].toString()));
-                    }
+                    Civilizations.DEBUG(String.format("Perms: %s", p.toString()));
                     Boolean perm = p.getPermission(type.toString());
                     // Check if the permission was set
                     if(perm != null){
                         Civilizations.DEBUG(String.format("Perm %s was set to %s.", type.toString(), perm));
                         EconomicEntity ee = EconomicEntity.getOrNull(p.getTarget());
-                        Civilizations.DEBUG(String.format("Its target was %s (%s).", ee, ee.getIdentifier().toString()));
+                        Civilizations.DEBUG(String.format("Its target was %s (%s).", ee == null? "null" : ee.getName(), p.getTarget()));
                         // Check if the target exists
                         if(ee != null){
                             if(ee instanceof Group &&
@@ -160,11 +158,14 @@ public class ProtectionManager {
                                 result.getInfo().add("Same ID");
                                 result.result = perm;
                                 return result;
+                            } else {
+                                Civilizations.DEBUG("Checked target was not part of that target.");
                             }
                         }
                     }
                 }
 
+                Civilizations.DEBUG("Checking self permissions.");
                 // Check self permission
                 if(target.equals(current.getIdentifier()) || current.isMember(target, true)){
                     Civilizations.DEBUG("Checked target was in or the current checked group.");
@@ -177,8 +178,10 @@ public class ProtectionManager {
 
                 // If current is a plot, do plot specific perms
                 if(current instanceof Plot){
+                    Civilizations.DEBUG("Checking plot permissions.");
                     Plot plot = (Plot) current;
                     // Rent
+                    Civilizations.DEBUG("Checking renter permissions.");
                     if(plot.isRenter(target)){
                         Civilizations.DEBUG("Checking renter perms.");
                         result.result = plot.getRenterGroup().getSettings().getSelfPermission(type.toString());
@@ -186,18 +189,24 @@ public class ProtectionManager {
                             result.info.add("Renter permission");
                             return result;
                         }
+                    } else {
+                        Civilizations.DEBUG("Checked target was not a renter.");
                     }
                     // Own
+                    Civilizations.DEBUG("Checking owner permissions.");
                     if(plot.isOwner(target)){
                         Civilizations.DEBUG("Checking owner perms.");
-                        result = hasPermission(type, plot.getEffectiveOwnerGroup(), target, recursive);
+                        result.result = plot.getEffectiveOwnerGroup().getSettings().getSelfPermission(type.toString());
                         if(result.result != null){
                             result.info.add("Owner permission");
                             return result;
                         }
+                    } else {
+                        Civilizations.DEBUG("Checked target was not an owner.");
                     }
                 }
 
+                Civilizations.DEBUG("Checking outsider permissions.");
                 // Check outsider permission
                 result.result = current.getSettings().getOutsidersPermission(type.toString());
                 if(result != null){
