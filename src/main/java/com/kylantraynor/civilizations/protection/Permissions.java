@@ -38,4 +38,13 @@ public class Permissions implements Comparable<Permissions>{
     public int compareTo(Permissions o) {
 	    return Integer.compareUnsigned(this.level, o.level);
     }
+
+    @Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder("Perms for " + target.toString() + " (" + level + ")\n");
+		for(Map.Entry<String, Boolean> e : perms.entrySet()){
+			sb.append(e.getKey() + ": " + e.getValue() + "\n");
+		}
+		return sb.toString();
+	}
 }
