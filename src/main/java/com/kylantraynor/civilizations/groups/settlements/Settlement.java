@@ -11,6 +11,7 @@ import com.kylantraynor.civilizations.shapes.Hull;
 import com.kylantraynor.civilizations.utils.Identifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -180,12 +181,18 @@ public class Settlement extends Group implements HasBuilder{
 	 * Gets the list of plots of this settlement.
 	 * @return List<Plot> of Plots.
 	 */
-	public List<Plot> getPlots() {return plots;}
+	public List<Plot> getPlots() {
+		if(plots == null){
+			plots = new ArrayList<>();
+		}
+		return plots;
+	}
 	/**
 	 * Sets the list of plots of this settlement.
-	 * @param plts
+	 * @param plts the new list of plots.
 	 */
 	public void setPlots(List<Plot> plts) {
+	    Validate.notNull(plts, "New list of plots cannot be %s.", null);
 		this.plots = plts;
 		hullNeedsUpdate = true;
 		setChanged(true);
@@ -197,6 +204,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Deprecated
 	public boolean addPlot(Plot p){
+	    Validate.notNull(p, "The added plot cannot be %s.", null);
 		if(this.plots.contains(p)){
 			return false;
 		} else {
@@ -213,6 +221,7 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Deprecated
 	public boolean removePlot(Plot p){
+	    Validate.notNull(p, "The removed plot cannot be %s.", null);
 		if(this.plots.contains(p)){
 			this.plots.remove(p);
 			hullNeedsUpdate = true;
@@ -240,6 +249,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return
 	 */
 	public double distance(Location location){
+        Validate.notNull(location, "Given location should not be %s.", null);
 		return Math.sqrt(distanceSquared(location));
 	}
 	/**
@@ -248,6 +258,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return
 	 */
 	public double distanceSquared(Location location){
+	    Validate.notNull(location, "Given location should not be %s.", null);
         if(!getLocation().getWorld().equals(location.getWorld())) return Double.NaN;
 		if(protects(location)) return 0.0;
 		double distanceSquared = location.distanceSquared(getLocation());
@@ -357,6 +368,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public boolean protects(Location l){
+        Validate.notNull(l, "Given location should not be %s.", null);
 		if(isInside(l)) return true;
 		for(Plot p : getPlots()){
 			if(p.protects(l)) return true;
@@ -369,6 +381,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return Settlement or null if no settlement could be found.
 	 */
 	public static Settlement getAt(Location location) {
+        Validate.notNull(location, "Given location should not be %s.", null);
 		for(Settlement s : getAll()){
 			if(s.protects(location)) return s;
 		}
@@ -380,6 +393,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return true if the location is protected, false otherwise.
 	 */
 	public static boolean isProtected(Location l){
+        Validate.notNull(l, "Given location should not be %s.", null);
 		for(Settlement s : getAll()){
 			if(s.protects(l)){
 				return true;
@@ -393,6 +407,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return Settlement or null if no settlement could be found.
 	 */
 	public static Settlement getClosest(Location l){
+        Validate.notNull(l, "Given location should not be %s.", null);
 		Double distanceSquared = null;
 		Settlement closest = null;
 		for(Settlement s : getAll()){
@@ -432,10 +447,12 @@ public class Settlement extends Group implements HasBuilder{
 	}
 	
 	public double distance(Shape s){
+        Validate.notNull(s, "Given shape should not be %s.", null);
 		return Math.sqrt(distanceSquared(s));
 	}
 	
 	public double distanceSquared(Shape s){
+        Validate.notNull(s, "Given shape should not be %s.", null);
         if(!getLocation().getWorld().equals(s.getWorld())) return Double.NaN;
 		double distanceSquared = s.getLocation().distanceSquared(this.getLocation());
 		if(this.getHull().exists()){
@@ -460,6 +477,7 @@ public class Settlement extends Group implements HasBuilder{
 	 * @return
 	 */
 	public boolean canMergeWith(Shape s) {
+        Validate.notNull(s, "Given shape should not be %s.", null);
 		return distanceSquared(s) <= Civilizations.getSettings().getSettlementMergeDistanceSquared();
 	}
 	
@@ -585,6 +603,9 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public boolean addBuildProject(Selection selection, Blueprint cbp, boolean setAir) {
+        Validate.notNull(selection, "Given selection should not be %s.", null);
+        Validate.notNull(cbp, "Given blueprint should not be %s.", null);
+
 		if(!canBuild()) return false;
 		BuildProject bp = new BuildProject(selection.getLocation(), cbp, true);
 		return getBuilder().addProject(bp);
@@ -608,6 +629,8 @@ public class Settlement extends Group implements HasBuilder{
 	 */
 	@Override
 	public ItemStack getSuppliesAndRemove(ItemStack supply) {
+        Validate.notNull(supply, "Given supply should not be %s.", null);
+
 		if(!canBuild()) return null;
 		Civilizations.DEBUG("Checking if warehouse contains " + supply.getData().getItemType().toString() + ":" + supply.getData().getData());
 		for(Plot p : getPlots()){
