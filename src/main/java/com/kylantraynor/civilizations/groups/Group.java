@@ -168,7 +168,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
                 }
             }
         }
-        Civilizations.DEBUG("Removed " + count + " ghost members from " + getName() + " (" + getIdentifier().toString()+ ")!");
+        if(count > 0) Civilizations.DEBUG("Removed " + count + " ghost members from " + getName() + " (" + getIdentifier().toString()+ ")!");
         return count;
     }
 	/**

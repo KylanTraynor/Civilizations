@@ -291,6 +291,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 	
 	@Override
 	public Set<UUID> getMembers(){
+	    if(townyTown == null) return new TreeSet<>();
 		Set<UUID> list = new TreeSet<>();
 		for(Resident r : this.townyTown.getResidents()){
 			OfflinePlayer p = TownyHook.getPlayer(r);
