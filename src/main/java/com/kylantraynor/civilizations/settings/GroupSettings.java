@@ -26,7 +26,8 @@ public class GroupSettings extends YamlConfiguration{
 	private Set<UUID> members;
 	private boolean changed = true;
 
-	protected static final String PARENT = "General.Parent";
+	private static final String PARENT = "General.Parent";
+	private static final String UNIQUEID = "General.UniqueId";
 	protected static final String PERMISSIONSROOT = "Permissions";
 	protected static final String PERMISSIONSLEVEL = PERMISSIONSROOT + ".%s.Level";
 	protected static final String PERMISSIONS = PERMISSIONSROOT + ".%s.%s";
@@ -53,10 +54,10 @@ public class GroupSettings extends YamlConfiguration{
 	 */
 	public UUID getUniqueId(){
 		if(uniqueId == null){
-			if(this.contains("General.UniqueId")){
-				uniqueId = UUID.fromString(this.getString("General.UniqueId"));
+			if(this.contains(UNIQUEID)){
+				uniqueId = UUID.fromString(this.getString(UNIQUEID));
 			} else {
-				setUniqueId(null);
+				generateUniqueId();
 			}
 		}
 		return uniqueId;
@@ -64,14 +65,13 @@ public class GroupSettings extends YamlConfiguration{
 
     /**
      * Sets the unique ID of the group. Null will set a new random Unique ID.
-     * @param id
      */
-    public void setUniqueId(UUID id){
-        if(id == null){
-            id = UUID.randomUUID();
-            Civilizations.DEBUG("Creating new UUID for " + this.getName() + ". New UUID: " + id.toString());
-        }
-        this.set("General.UniqueId", id.toString());
+    private void generateUniqueId(){
+        //if(id == null){
+        UUID id = UUID.randomUUID();
+        Civilizations.DEBUG("Creating new UUID for " + this.getName() + ". New UUID: " + id.toString());
+        //}
+        this.set(UNIQUEID, id.toString());
         uniqueId = id;
         setChanged(true);
     }

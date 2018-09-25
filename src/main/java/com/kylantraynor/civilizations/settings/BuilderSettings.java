@@ -109,7 +109,7 @@ public class BuilderSettings extends YamlConfiguration{
 		ConfigurationSection cs = null;
 		projects = new ArrayList<BuildProject>();
 		int i = 0;
-		while((cs = this.getConfigurationSection("Projects." + i)) != null){
+		while((cs = this.getConfigurationSection("Projects." + i++)) != null){
 			World w = Bukkit.getServer().getWorld(cs.getString("world"));
 			if(w == null) continue;
 			int x = cs.getInt("x");

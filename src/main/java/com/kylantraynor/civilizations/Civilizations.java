@@ -93,10 +93,7 @@ public class Civilizations extends JavaPlugin{
 	 */
 	public static String messageHeader = ChatColor.GOLD + "[" + ChatColor.GOLD + ChatColor.BOLD + "Civilizations" + ChatColor.GOLD + "] ";
 
-	private boolean clearBuildProjectsOnRestart = true;
-	
 	private boolean clearing = false;
-	private boolean DEBUG = true;
 	private ArrayList<Player> playersInProtectionMode = new ArrayList<Player>();
 	private Database database;
 	static private HashMap<Player, Group> selectedProtections = new HashMap<Player, Group>();
@@ -458,7 +455,7 @@ public class Civilizations extends JavaPlugin{
 
 	@Override
 	public void onDisable(){
-		if(clearBuildProjectsOnRestart)
+		if(getSettings().getClearBuildProjectsOnRestart())
 			GroupManager.cancelAllBuilds();
 		
 		GroupManager.updateAllGroups();
@@ -873,15 +870,15 @@ public class Civilizations extends JavaPlugin{
 	}
 
 	public boolean isDEBUG() {
-		return DEBUG;
+		return getSettings().getDebug();
 	}
 
-	public void setDEBUG(boolean dEBUG) {
-		DEBUG = dEBUG;
+	public void setDEBUG(boolean debug) {
+		getSettings().setDebug(debug);
 	}
 	
 	public static void DEBUG(String message){
-		if(!currentInstance.DEBUG) return;
+		if(!getSettings().getDebug()) return;
 		log("INFO", message);
 	}
 

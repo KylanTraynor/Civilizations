@@ -21,6 +21,31 @@ public class CivilizationsSettings extends YamlConfiguration {
 	private static String DIAMONDVALUE = "Economy.Values.Diamond";
 	private static String GOLDNUGGETVALUE = "Economy.Values.GoldNugget";
 	private static String IRONNUGGETVALUE = "Economy.Values.IronNugget";
+
+	private static String DEBUGCONSOLEINFO = "Debugging.ConsoleInfo";
+	private static String DEBUGCLEARBUILDPROJECTS = "Debugging.ClearBuildProjectsOnRestart";
+
+	public boolean getDebug(){
+		if(this.contains(DEBUGCONSOLEINFO)){
+		    return this.getBoolean(DEBUGCONSOLEINFO);
+        } else {
+		    setDebug(false);
+		    return false;
+        }
+	}
+
+	public void setDebug(boolean debug){
+	    this.set(DEBUGCONSOLEINFO, debug);
+    }
+
+    public boolean getClearBuildProjectsOnRestart(){
+        if(this.contains(DEBUGCLEARBUILDPROJECTS)){
+            return this.getBoolean(DEBUGCLEARBUILDPROJECTS);
+        } else {
+            this.set(DEBUGCLEARBUILDPROJECTS, false);
+            return false;
+        }
+    }
 	
 	public UUID getBlueprintId(String name){
 		if(this.contains("UUIDConversions.Blueprints." + name.toUpperCase())){
