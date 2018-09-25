@@ -2,10 +2,13 @@ package com.kylantraynor.civilizations.managers;
 
 import java.util.*;
 
+import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.economy.EconomicEntity;
 import com.kylantraynor.civilizations.groups.Group;
+import com.kylantraynor.civilizations.groups.settlements.plots.Plot;
 import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.utils.Identifier;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 
 import com.kylantraynor.civilizations.protection.PermissionType;
@@ -87,7 +90,16 @@ public class ProtectionManager {
      * @return true if the permission was granted, false otherwise.
      */
     public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
-        return hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
+        PermissionCheckResult cresult = hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
+        PermissionCheckResult presult = hasPermission(type, group, player.getUniqueId(), recursive);
+        if(cresult.result){
+            cresult.info.add("Character");
+            return cresult;
+        } else if(presult.result) {
+            presult.info.add("Player");
+            return presult;
+        }
+        return cresult;
     }
 
     /**
@@ -99,11 +111,15 @@ public class ProtectionManager {
      * @return true if the permission was granted, false otherwise.
      */
     public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, @Nullable UUID target, boolean recursive){
-	    if(type == null) throw new NullPointerException("PermissionType can't be Null!");
+	    Validate.notNull(type, "PermissionType can't be %s.", null);
+
 	    if(group == null)  return hasDefaultPermissionFor(type, null, target);
 	    PermissionCheckResult result = new PermissionCheckResult(null, (String)null);
 
 	    Group current = group;
+	    if(target!=null){
+            Civilizations.DEBUG(String.format("Checking permission %s in group %s for target %s.", type.toString(), group.getName(), target.toString()));
+        }
 	    while(result.result == null && current != null){
 	        if(target == null){
 	            // Check Server Permissions
@@ -114,25 +130,33 @@ public class ProtectionManager {
 	                result.result = true;
 	                return result;
                 }
+                Civilizations.DEBUG(String.format("Checking permission in group %s (%s).", current.getName(), current.getIdentifier().toString()));
                 Permissions[] perms = current.getSettings().getPermissions();
                 // Check low levels first (higher priority)
                 Arrays.sort(perms);
                 for(Permissions p : perms){
+                    for(int i = 0; i < perms.length; i++){
+                        Civilizations.DEBUG(String.format("Perms: %s", perms[i].toString()));
+                    }
                     Boolean perm = p.getPermission(type.toString());
                     // Check if the permission was set
                     if(perm != null){
+                        Civilizations.DEBUG(String.format("Perm %s was set to %s.", type.toString(), perm));
                         EconomicEntity ee = EconomicEntity.getOrNull(p.getTarget());
+                        Civilizations.DEBUG(String.format("Its target was %s (%s).", ee, ee.getIdentifier().toString()));
                         // Check if the target exists
                         if(ee != null){
                             if(ee instanceof Group &&
                                     (ee.getIdentifier().equals(target) ||
                                     ((Group) ee).isMember(target, true))){
                                 // If the given entity is a deep member of the group
+                                Civilizations.DEBUG("Checked target was in that group.");
                                 result.getInfo().add("Deep Member");
                                 result.result = perm;
                                 return result;
                             } else if (ee.getIdentifier().equals(target)) {
                                 // if the given entity's id is the same as the target's id
+                                Civilizations.DEBUG("Checked target was that target.");
                                 result.getInfo().add("Same ID");
                                 result.result = perm;
                                 return result;
@@ -143,10 +167,34 @@ public class ProtectionManager {
 
                 // Check self permission
                 if(target.equals(current.getIdentifier()) || current.isMember(target, true)){
+                    Civilizations.DEBUG("Checked target was in or the current checked group.");
                     result.result = current.getSettings().getSelfPermission(type.toString());
                     if(result.result != null){
                         result.info.add("Self permission");
                         return result;
+                    }
+                }
+
+                // If current is a plot, do plot specific perms
+                if(current instanceof Plot){
+                    Plot plot = (Plot) current;
+                    // Rent
+                    if(plot.isRenter(target)){
+                        Civilizations.DEBUG("Checking renter perms.");
+                        result.result = plot.getRenterGroup().getSettings().getSelfPermission(type.toString());
+                        if(result.result != null){
+                            result.info.add("Renter permission");
+                            return result;
+                        }
+                    }
+                    // Own
+                    if(plot.isOwner(target)){
+                        Civilizations.DEBUG("Checking owner perms.");
+                        result = hasPermission(type, plot.getEffectiveOwnerGroup(), target, recursive);
+                        if(result.result != null){
+                            result.info.add("Owner permission");
+                            return result;
+                        }
                     }
                 }
 

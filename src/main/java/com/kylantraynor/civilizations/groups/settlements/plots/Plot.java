@@ -178,7 +178,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 		return getSettings().getShapes();
 	}
 
-    public Group getOwnerGroup(){
+    private Group getOwnerGroup(){
         UUID id = getSettings().getOwnerGroupId();
         if(id == null){
             Group g = GroupManager.createGroup("Owner", this);
@@ -193,6 +193,20 @@ public class Plot extends Group implements Rentable, HasInventory {
                 getSettings().setPermissionLevel(g.getIdentifier(), 0);
             }
             return g;
+        }
+    }
+
+    /**
+     * Gets the group effectively owning the plot. It can be either a specific owning group, or
+     * this plot's parent group, or the settlement.
+     * @return
+     */
+    public Group getEffectiveOwnerGroup(){
+	    Group og = getOwnerGroup();
+	    if(og.getMembers().isEmpty()){
+	        return getParent();
+        } else {
+	        return og;
         }
     }
 
@@ -691,14 +705,19 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
 	public boolean isOwner(OfflinePlayer player){
-	    return getOwnerGroup().isMember(player, true) ||
+	    return getEffectiveOwnerGroup().isMember(player, true) ||
                 ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, player, true).getResult();
     }
 
 	@Override
 	public boolean isOwner(EconomicEntity entity) {
-        return getOwnerGroup().isMember(entity.getIdentifier(), true) ||
+        return getEffectiveOwnerGroup().isMember(entity.getIdentifier(), true) ||
                 ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, entity, true).getResult();
+    }
+
+    public boolean isOwner(UUID id){
+        return getEffectiveOwnerGroup().isMember(id, true) ||
+                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, id, true).getResult();
     }
 
 	@Override
@@ -760,6 +779,11 @@ public class Plot extends Group implements Rentable, HasInventory {
 	    Group renterGroup = getRenterGroup();
 		return renterGroup.isMember(entity.getIdentifier(), true);
 	}
+
+	public boolean isRenter(UUID id){
+	    Group renterGroup = getRenterGroup();
+	    return renterGroup.isMember(id, true);
+    }
 
 	@Override
 	public double getRent() {
@@ -911,7 +935,6 @@ public class Plot extends Group implements Rentable, HasInventory {
 	    g.clearMembers();
         if(entity == null) return;
 	    g.addMember(entity);
-        ownedBySettlement = entity.equals(getSettlement());
 	}
 
 	/**
