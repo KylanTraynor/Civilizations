@@ -236,6 +236,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
      * @param player as {@link OfflinePlayer}
      * @return true if the player is a member, false otherwise.
      */
+	@Deprecated
     public boolean isMember(OfflinePlayer player){
         return isMember(player, false);
     }
@@ -256,6 +257,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @param entity The {@link EconomicEntity} to check membership of.
 	 * @return true if the entity is a member, false otherwise.
 	 */
+	@Deprecated
 	public boolean isMember(EconomicEntity entity){
 		return isMember(entity.getIdentifier());
 	}
@@ -265,6 +267,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @param id the {@link UUID} to check.
 	 * @return true if is a member, false otherwise.
 	 */
+	@Deprecated
 	public boolean isMember(UUID id){
 		return isMember(id, false);
 	}
@@ -278,6 +281,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 */
 	public boolean isMember(UUID id, boolean recursive){
 		boolean result = getMembers().contains(id);
+		Civilizations.DEBUG(String.format("ID %s belongs to %s? %s", id.toString(), this.getName(), result));
 		if(recursive && !result){
 			for(Group g : getList()){
 				if(result) break;
@@ -285,6 +289,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 				    result = g.getIdentifier().equals(id) || g.isMember(id, true);
 				}
 			}
+            Civilizations.DEBUG(String.format("ID %s belongs recursively to %s? %s", id.toString(), this.getName(), result));
 		}
 		return result;
 	}

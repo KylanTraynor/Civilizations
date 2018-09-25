@@ -90,16 +90,7 @@ public class ProtectionManager {
      * @return true if the permission was granted, false otherwise.
      */
     public static PermissionCheckResult hasPermission(PermissionType type, @Nullable Group group, OfflinePlayer player, boolean recursive){
-        PermissionCheckResult cresult = hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
-        PermissionCheckResult presult = hasPermission(type, group, player.getUniqueId(), recursive);
-        if(cresult.result){
-            cresult.info.add("Character");
-            return cresult;
-        } else if(presult.result) {
-            presult.info.add("Player");
-            return presult;
-        }
-        return cresult;
+        return hasPermission(type, group, AccountManager.getCurrentIdentifier(player), recursive);
     }
 
     /**
@@ -209,7 +200,7 @@ public class ProtectionManager {
                 Civilizations.DEBUG("Checking outsider permissions.");
                 // Check outsider permission
                 result.result = current.getSettings().getOutsidersPermission(type.toString());
-                if(result != null){
+                if(result.result != null){
                     result.info.add("Outsiders permission");
                     return result;
                 }
