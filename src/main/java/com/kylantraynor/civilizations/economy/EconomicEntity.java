@@ -167,6 +167,17 @@ public class EconomicEntity {
 	}
 
     /**
+     * Checks if the current entity is the ghost of a missing player or group.
+     * @return {@code true} if the current entity is a ghost.
+     */
+	public boolean isGhost(){
+	    if(!isPlayer() && getName().startsWith("Unknown")){
+	        return true;
+        }
+        return false;
+    }
+
+    /**
      * Checks if this {@linkplain EconomicEntity} belongs to the
      * {@linkplain EconomicEntity} with the given {@linkplain Identifier}.
      * @param id as {@link Identifier}
@@ -201,6 +212,7 @@ public class EconomicEntity {
 		        try{ return AccountManager.getCharacter(id); } catch (ExecutionException ex) {ex.printStackTrace();}
             }
 			e = new EconomicEntity(id);
+		    register(e);
         }
 		return e;
 	}

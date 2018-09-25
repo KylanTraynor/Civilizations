@@ -74,6 +74,7 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 		this.settings = settings;
 		init();
 		all.put(getIdentifier().toString(), this);
+		clearGhostMembers();
 		setChanged(true);
 	}
 	
@@ -156,6 +157,20 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	    this.getSettings().setMembers(new TreeSet<>());
     }
 
+    public int clearGhostMembers(){
+	    UUID[] members = getMembersArray();
+	    int count = 0;
+	    for(UUID id : members){
+	        EconomicEntity e = EconomicEntity.get(id);
+	        if(e.isGhost()){
+	            if(this.removeMember(e)){
+	                count++;
+                }
+            }
+        }
+        Civilizations.DEBUG("Removed " + count + " ghost members from " + getName() + " (" + getIdentifier().toString()+ ")!");
+        return count;
+    }
 	/**
 	 * Adds the given {@linkplain OfflinePlayer} to the list of members of this {@linkplain Group}.
 	 * @param member The {@link OfflinePlayer} to add.
