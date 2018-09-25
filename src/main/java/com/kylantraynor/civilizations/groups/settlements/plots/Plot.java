@@ -705,19 +705,16 @@ public class Plot extends Group implements Rentable, HasInventory {
 	}
 
 	public boolean isOwner(OfflinePlayer player){
-	    return getEffectiveOwnerGroup().isMember(player, true) ||
-                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, player, true).getResult();
+	    return getEffectiveOwnerGroup().isMember(player, true);
     }
 
 	@Override
 	public boolean isOwner(EconomicEntity entity) {
-        return getEffectiveOwnerGroup().isMember(entity.getIdentifier(), true) ||
-                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, entity, true).getResult();
+        return getEffectiveOwnerGroup().isMember(entity.getIdentifier(), true);
     }
 
     public boolean isOwner(UUID id){
-        return getEffectiveOwnerGroup().isMember(id, true) ||
-                ProtectionManager.hasPermission(PermissionType.MANAGE_PLOTS, this, id, true).getResult();
+        return getEffectiveOwnerGroup().isMember(id, true);
     }
 
 	@Override
