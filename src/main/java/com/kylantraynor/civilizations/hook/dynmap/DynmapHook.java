@@ -316,8 +316,8 @@ public class DynmapHook {
 		if(s instanceof NationMember){
 			if(((NationMember) s).getNation() != null){
 				if(((NationMember) s).getNation().getBanner() != null){
-					m.setFillStyle(0.1, ((NationMember) s).getNation().getBanner().getBaseColor().getColor().asRGB());
-					m.setLineStyle(2,  1, ((NationMember) s).getNation().getBanner().getBaseColor().getColor().asRGB());
+					m.setFillStyle(0.1, Utils.getColor(((NationMember) s).getNation().getBanner().getBase()).getColor().asRGB());
+					m.setLineStyle(2,  1, Utils.getColor(((NationMember) s).getNation().getBanner().getBase()).getColor().asRGB());
 				}
 			} else {
 				m.setFillStyle(0.1, 0x999999);
@@ -561,8 +561,8 @@ public class DynmapHook {
 		m.setLabel(Utils.prettifyText(region.getName()));
 		if(region.getNation() != null){
 			if(region.getNation().getBanner() != null){
-				m.setFillStyle(0.1, region.getNation().getBanner().getBaseColor().getColor().asRGB());
-				m.setLineStyle(2,  1, region.getNation().getBanner().getBaseColor().getColor().asRGB());
+				m.setFillStyle(0.1, Utils.getColor(region.getNation().getBanner().getBase()).getColor().asRGB());
+				m.setLineStyle(2,  1, Utils.getColor(region.getNation().getBanner().getBase()).getColor().asRGB());
 			}
 		} else {
 			m.setFillStyle(0.1, 0x999999);
