@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.commands;
 import java.util.Set;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
+import com.kylantraynor.civilizations.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
@@ -71,7 +72,7 @@ public class CommandHouse implements CommandExecutor{
 					}
 					Block target = player.getTargetBlock(null, 15);
 					if(target != null){
-						if(target.getType() == Material.BANNER || target.getType() == Material.STANDING_BANNER){
+						if(Utils.isBanner(target.getType()) || Utils.isWallBanner(target.getType())){
 							BlockState state = target.getState();
 							org.bukkit.block.Banner b = (org.bukkit.block.Banner)state;
 							house.setBanner(Banner.get(b));
@@ -152,17 +153,17 @@ public class CommandHouse implements CommandExecutor{
 					}
 					
 					ItemStack is = p.getInventory().getItemInMainHand();
-					if(is.getType() == Material.BANNER || is.getType() == Material.STANDING_BANNER){
+					if(Utils.isBanner(is.getType()) || Utils.isWallBanner(is.getType())){
 						BannerMeta bm = (BannerMeta) is.getItemMeta();
-						if(Banner.exist(bm)){
-							House h = House.get(Banner.get(bm));
+						if(Banner.exist(is.getType(), bm)){
+							House h = House.get(Banner.get(is.getType(), bm));
 							if(h != null) {
 								sender.sendMessage(Civilizations.messageHeader + ChatColor.RED +
 										"This banner is already used by House " + h.getName() + ".");
 								return true;
 							}
 						}
-						House h = new House(args[0], Banner.get(bm));
+						House h = new House(args[0], Banner.get(is.getType(), bm));
 						if(!p.isOp()){
 							h.addMember(p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established House " + h.getName() + "!");

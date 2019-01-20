@@ -102,7 +102,7 @@ public class CivilizationsListener implements Listener{
 		if(event.getPlayer() != null && event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			Block b = event.getClickedBlock();
 			if(b == null) return;
-			if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST){
+			if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN){
 				BlockState state = b.getState();
 				Sign sign = (Sign) state;
 				if(sign.getLine(0).equalsIgnoreCase("~BOARD~")){
@@ -145,6 +145,7 @@ public class CivilizationsListener implements Listener{
 	
 	public boolean isCivsGameMode(GameMode mode){
 		if(mode == GameMode.SURVIVAL) return true;
+		if(mode == GameMode.ADVENTURE) return true;
 		if(mode == GameMode.SPECTATOR) return true;
 		return false;
 	}

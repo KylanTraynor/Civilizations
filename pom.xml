@@ -27,7 +27,7 @@
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.5.1</version>
+              <version>3.6.1</version>
               <configuration>
                   <source>1.8</source>
                   <target>1.8</target>
@@ -54,8 +54,12 @@
 		</repository>
 		<repository>
          	<id>localrepository</id>
-         	<url>file:C:/Users/Baptiste/.m2/repository/</url>
+         	<url>file:C:/Users/Kylan/.m2/repository/</url>
       	</repository>
+	   <repository>
+		   <id>localrepository2</id>
+		   <url>file:C:/Users/Baptiste/.m2/repository/</url>
+	   </repository>
       	<repository>
       		<id>sk89q-repo</id>
       		<url>http://maven.sk89q.com/artifactory/repo/</url>
@@ -74,7 +78,7 @@
 	<dependency>
 		<groupId>org.spigotmc</groupId>
 		<artifactId>spigot</artifactId>
-		<version>1.12.2-R0.1-SNAPSHOT</version>
+		<version>1.13.2-R0.1-SNAPSHOT</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
@@ -92,7 +96,7 @@
 	<dependency>
 		<groupId>com.kylantraynor</groupId>
 		<artifactId>DraggyRPG</artifactId>
-        <version>0.0.21</version>
+        <version>1.0.22-SNAPSHOT</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
@@ -120,15 +124,15 @@
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
-		<groupId>com.griefcraft</groupId>
-		<artifactId>LWC</artifactId>
-        <version>4.4.0</version>
+		<groupId>com.griefcraft.lwc</groupId>
+		<artifactId>Modern-LWC</artifactId>
+        <version>2.1.2</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.maxgamer</groupId>
 		<artifactId>QuickShop</artifactId>
-        <version>0.9.34</version>
+        <version>0.9.38</version>
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
@@ -140,13 +144,13 @@
 	<dependency>
 		<groupId>com.palmergames</groupId>
 		<artifactId>Towny</artifactId>
-        <version>0.91.0.0</version>
+        <version>0.93.0.0</version>
 		<scope>provided</scope>
 	</dependency>
     <dependency>
         <groupId>com.wimbli</groupId>
         <artifactId>WorldBorder</artifactId>
-        <version>1.8.7</version>
+        <version>1.9.0</version>
         <scope>provided</scope>
     </dependency>
 	<dependency>
@@ -161,11 +165,11 @@
 			</exclusion>
 		</exclusions>
 	</dependency>
-	<dependency>
+	<!--dependency>
 		<groupId>fr.rhaz</groupId>
 		<artifactId>webservers</artifactId>
         <version>1.4.9</version>
         <scope>compile</scope>
-	</dependency>
+	</dependency-->
 	</dependencies>
 </project>

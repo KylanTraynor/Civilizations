@@ -280,13 +280,30 @@ public class Group extends EconomicEntity implements Comparable<Group>{
 	 * @return true if the given {@link} belongs to his {@link Group} or any child {@link Group}.
 	 */
 	public boolean isMember(UUID id, boolean recursive){
+		return isMember(id, recursive, new ArrayList<Group>());
+	}
+
+    /**
+     * Checks (potentially recursively) if the given {@linkplain UUID}
+     * is a part of this {@linkplain Group} while making sure to prevent infinite loops.
+     * @param id {@link UUID} to test
+     * @param recursive Whether or not the test should check child groups
+     * @param checkedGroups The list of {@link Group Groups} already checked
+     *                      <br/>Should initially be an empty group
+     * @return {@code true} if the given {@link UUID} belongs to this {@link Group} or any child {@link Group}
+     * and {@code false} otherwise
+     */
+	private boolean isMember(UUID id, boolean recursive, List<Group> checkedGroups){
+	    if(checkedGroups.contains(this)) return false; // To prevent infinite loops;
+
 		boolean result = getMembers().contains(id);
 		Civilizations.DEBUG(String.format("ID %s belongs to %s? %s", id.toString(), this.getName(), result));
 		if(recursive && !result){
+		    checkedGroups.add(this);
 			for(Group g : getList()){
 				if(result) break;
 				if(g.getParentId() != null && g.getParent() == this){
-				    result = g.getIdentifier().equals(id) || g.isMember(id, true);
+				    result = g.getIdentifier().equals(id) || g.isMember(id, true, checkedGroups);
 				}
 			}
             Civilizations.DEBUG(String.format("ID %s belongs recursively to %s? %s", id.toString(), this.getName(), result));

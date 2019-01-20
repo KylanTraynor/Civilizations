@@ -129,16 +129,6 @@ public class GroupInventory implements Inventory {
 	}
 
 	@Override
-	@Deprecated
-	public boolean contains(int materialId) {
-		for(ItemStack s : contents){
-			if(s == null) continue;
-			if(s.getTypeId() == materialId) return true;
-		}
-		return false;
-	}
-
-	@Override
 	public boolean contains(Material material) throws IllegalArgumentException {
 		for(ItemStack s : contents){
 			if(s == null) continue;
@@ -151,16 +141,6 @@ public class GroupInventory implements Inventory {
 	public boolean contains(ItemStack item) {
 		for(ItemStack s : contents){
 			if(s == item) return true;
-		}
-		return false;
-	}
-
-	@Override
-	@Deprecated
-	public boolean contains(int materialId, int amount) {
-		for(ItemStack s : contents){
-			if(s == null) continue;
-			if(s.getTypeId() == materialId && s.getAmount() == amount) return true;
 		}
 		return false;
 	}
@@ -189,24 +169,10 @@ public class GroupInventory implements Inventory {
 		int count = 0;
 		for(ItemStack s : contents){
 			if(s == null) continue;
-			if(Utils.isSameBlock(item, s) && count + s.getAmount() >= amount) return true;
-			else if(Utils.isSameBlock(item, s)) count += s.getAmount();
+			if(s.isSimilar(item) && count + s.getAmount() >= amount) return true;
+			else if(s.isSimilar(item)) count += s.getAmount();
 		}
 		return false;
-	}
-
-	@Override
-	@Deprecated
-	public HashMap<Integer, ? extends ItemStack> all(int materialId) {
-		HashMap<Integer, ItemStack> result = new HashMap<Integer, ItemStack>();
-		for(int i = 0; i < getSize(); i++){
-			if(contents[i] != null){
-				if(contents[i].getTypeId() == materialId){
-					result.put(i, contents[i]);
-				}
-			}
-		}
-		return result;
 	}
 
 	@Override
@@ -234,19 +200,6 @@ public class GroupInventory implements Inventory {
 			}
 		}
 		return result;
-	}
-
-	@Override
-	@Deprecated
-	public int first(int materialId) {
-		for(int i = 0; i < getSize(); i++){
-			if(contents[i] != null){
-				if(contents[i].getTypeId() == materialId){
-					return i;
-				}
-			}
-		}
-		return -1;
 	}
 
 	@Override
@@ -285,17 +238,6 @@ public class GroupInventory implements Inventory {
 			}
 		}
 		return -1;
-	}
-
-	@Override
-	@Deprecated
-	public void remove(int materialId) {
-		for(int i = 0; i < getSize(); i++){
-			if(contents[i].getTypeId() == materialId){
-				contents[i] = null;
-				break;
-			}
-		}
 	}
 
 	@Override

@@ -97,7 +97,7 @@ public class GroupMenu extends Menu{
 		}
 		// Draw Navigation Bar Border
 		for(int i = 9 ; i < 18; i++){
-			this.top.setItem(i, new ItemStack(Material.THIN_GLASS));
+			this.top.setItem(i, new ItemStack(Material.GLASS_PANE));
 		}
 		// Draw Navigation Bar
 		if(pageStack.size() > 0){

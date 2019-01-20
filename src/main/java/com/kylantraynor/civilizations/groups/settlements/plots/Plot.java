@@ -8,17 +8,15 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.kylantraynor.civilizations.managers.*;
-import com.kylantraynor.civilizations.players.CivilizationsAccount;
-import com.kylantraynor.civilizations.utils.SimpleIdentifier;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Bed;
 
 import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.chat.ChatTools;
@@ -45,7 +43,7 @@ import com.kylantraynor.civilizations.utils.Utils;
 public class Plot extends Group implements Rentable, HasInventory {
 	private boolean persistent = false;
 	private int beds;
-	private int workbenches;
+	private int craftingTables;
 	private List<Chest> chests;
 	private List<String> waresStrings;
 
@@ -595,7 +593,7 @@ public class Plot extends Group implements Rentable, HasInventory {
 				for(ItemStack item : items){
 					if(item == null) continue;
 					if(item.getAmount() == 0) continue;
-					if(Utils.isSameBlock(item, is)){
+					if(item.isSimilar(is)){
 						ItemStack temp = is.clone();
 						temp.setAmount(item.getAmount());
 						item.setAmount(Math.max(item.getAmount() - is.getAmount(), 0));
@@ -624,10 +622,10 @@ public class Plot extends Group implements Rentable, HasInventory {
 		return beds;
 	}
 	
-	public int getWorkbenchesCount(){
-		if(workbenches >= 0) return workbenches;
+	public int getCraftingTablesCount(){
+		if(craftingTables >= 0) return craftingTables;
 		updateSpecialBlocks();
-		return workbenches;
+		return craftingTables;
 	}
 	
 	public int getChestsCount(){
@@ -641,31 +639,31 @@ public class Plot extends Group implements Rentable, HasInventory {
 	
 	public void updateSpecialBlocks(){
 		beds = 0;
-		workbenches = 0;
+		craftingTables = 0;
 		chests = new ArrayList<Chest>();
 		for(Shape s : getShapes()){
 			for(Location l : s.getBlockLocations()){
+				if(Utils.isBed(l.getBlock().getType())){
+					Bed bed = (Bed) l.getBlock().getBlockData();
+					if(bed.getPart() == Bed.Part.HEAD && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
+					    beds++;
+                    }
+                    break;
+				}
 				switch(l.getBlock().getType()){
-				case BED_BLOCK:
-					BlockState state = l.getBlock().getState();
-					Bed bed = (Bed) state.getData();
-					if(bed.isHeadOfBed() && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
-						beds++;
-					}
-					break;
-				case WORKBENCH:
-					if(l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
-						workbenches++;
-					}
-					break;
-				case CHEST: case TRAPPED_CHEST:
-					BlockState chestState = l.getBlock().getState();
-					if(chestState instanceof Chest && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
-						chests.add((Chest)chestState);
-					}
-					break;
-				default:
-					break;
+                    case CRAFTING_TABLE:
+                        if(l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
+                            craftingTables++;
+                        }
+                        break;
+                    case CHEST: case TRAPPED_CHEST:
+                        BlockState chestState = l.getBlock().getState();
+                        if(chestState instanceof Chest && l.getBlock().getRelative(BlockFace.UP).getLightFromSky() < 14){
+                            chests.add((Chest)chestState);
+                        }
+                        break;
+                    default:
+                        break;
 				}
 			}
 		}
@@ -674,9 +672,9 @@ public class Plot extends Group implements Rentable, HasInventory {
 	public boolean isValid(){
 		switch(getPlotType()){
 		case HOUSE:
-			return getBedCount() > 0 && getChestsCount() > 0 && getWorkbenchesCount() > 0;
+			return getBedCount() > 0 && getChestsCount() > 0 && getCraftingTablesCount() > 0;
 		case WAREHOUSE:
-			return getChestsCount() > 0 && getWorkbenchesCount() > 0;
+			return getChestsCount() > 0 && getCraftingTablesCount() > 0;
 		default:
 			return true;
 		}

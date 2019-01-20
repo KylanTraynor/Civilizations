@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kylantraynor.civilizations.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -171,20 +172,12 @@ public class LockManager {
 	public static int getLockLevel(Block block) {
 		if(block.getType() == Material.CHEST) return 4;
 		if(block.getType() == Material.TRAPPED_CHEST) return 5;
-		if(block.getType() == Material.WOOD_DOOR) return 5;
-		if(block.getType() == Material.WOODEN_DOOR) return 5;
-		if(block.getType() == Material.ACACIA_DOOR) return 5;
-		if(block.getType() == Material.DARK_OAK_DOOR) return 5;
-		if(block.getType() == Material.BIRCH_DOOR) return 5;
-		if(block.getType() == Material.SPRUCE_DOOR) return 5;
-		if(block.getType() == Material.JUNGLE_DOOR) return 5;
 		if(block.getType() == Material.IRON_DOOR) return 10;
-		if(block.getType() == Material.IRON_DOOR_BLOCK) return 10;
+		if(Utils.isDoor(block.getType())) return 5;
 		if(block.getType() == Material.FURNACE) return 1;
-		if(block.getType() == Material.BURNING_FURNACE) return 1;
-		if(block.getType() == Material.TRAP_DOOR) return 4;
-		if(block.getType() == Material.IRON_TRAPDOOR) return 8;
-		if(block.getType() == Material.FENCE_GATE) return 4;
+        if(block.getType() == Material.IRON_TRAPDOOR) return 8;
+		if(Utils.isTrapdoor(block.getType())) return 4;
+		if(block.getType() == Material.OAK_FENCE_GATE) return 4;
 		if(block.getType() == Material.SPRUCE_FENCE_GATE) return 4;
 		if(block.getType() == Material.DARK_OAK_FENCE_GATE) return 4;
 		if(block.getType() == Material.BIRCH_FENCE_GATE) return 4;

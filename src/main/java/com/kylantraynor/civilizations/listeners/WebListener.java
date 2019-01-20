@@ -1,28 +1,11 @@
 package com.kylantraynor.civilizations.listeners;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.eclipse.jetty.server.Request;
-
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import com.kylantraynor.civilizations.Civilizations;
-
-import fr.rhaz.webservers.Bukkit.BukkitWebEvent;
-import fr.rhaz.webservers.WebServers.API.WebEvent;
-import fr.rhaz.webservers.WebServers.API.WebServer;
 
 public class WebListener implements Listener{
 	
@@ -44,7 +27,7 @@ public class WebListener implements Listener{
 	public static String getResourceBase(){
 		return Civilizations.currentInstance.getClass().getClassLoader().getResource("WebContent").toExternalForm();
 	}
-	
+	/*
 	@EventHandler
 	public void onWebEvent(BukkitWebEvent e){
 	    WebServer server = e.getHandler().getServer();
@@ -79,6 +62,6 @@ public class WebListener implements Listener{
 	    		}
 	    	}
 	    }
-	}
+	}*/
 	
 }

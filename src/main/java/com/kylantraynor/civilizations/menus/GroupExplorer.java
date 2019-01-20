@@ -42,7 +42,7 @@ public class GroupExplorer extends Menu {
         top.clear();
         Group[] groups = getGroupsIn(current);
         Arrays.sort(groups);
-        top.setItem(8, new Button(getPlayer(), Material.GOLD_SPADE, "Scroll Up", offset,null, new BukkitRunnable(){
+        top.setItem(8, new Button(getPlayer(), Material.GOLDEN_SHOVEL, "Scroll Up", offset,null, new BukkitRunnable(){
             @Override
             public void run(){
                 final GroupExplorer menu = (GroupExplorer) MenuManager.getMenus().get(getPlayer());
@@ -50,7 +50,7 @@ public class GroupExplorer extends Menu {
                 menu.update();
             }
         }, offset > 0));
-        top.setItem(8 + 9*5, new Button(getPlayer(), Material.GOLD_SPADE, "Scroll Down", getMaxOffset(groups) - offset, null, new BukkitRunnable(){
+        top.setItem(8 + 9*5, new Button(getPlayer(), Material.GOLDEN_SHOVEL, "Scroll Down", getMaxOffset(groups) - offset, null, new BukkitRunnable(){
             @Override
             public void run(){
                 final GroupExplorer menu = (GroupExplorer) MenuManager.getMenus().get(getPlayer());

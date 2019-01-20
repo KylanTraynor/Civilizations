@@ -3,6 +3,7 @@ package com.kylantraynor.civilizations.commands;
 import java.util.Set;
 
 import com.kylantraynor.civilizations.managers.ProtectionManager;
+import com.kylantraynor.civilizations.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
@@ -68,7 +69,7 @@ public class CommandNation implements CommandExecutor{
 					}
 					Block target = p.getTargetBlock(null, 15);
 					if(target != null){
-						if(target.getType() == Material.BANNER || target.getType() == Material.STANDING_BANNER){
+						if(Utils.isBanner(target.getType()) || Utils.isWallBanner(target.getType())){
 							BlockState state = target.getState();
 							org.bukkit.block.Banner b = (org.bukkit.block.Banner)state;
 							nation.setBanner(Banner.get(b));
@@ -151,18 +152,18 @@ public class CommandNation implements CommandExecutor{
 					}
 					
 					ItemStack is = p.getInventory().getItemInMainHand();
-					if(is.getType() == Material.BANNER || is.getType() == Material.STANDING_BANNER){
+					if(Utils.isBanner(is.getType()) || Utils.isWallBanner(is.getType())){
 						BannerMeta bm = (BannerMeta) is.getItemMeta();
-						if(Banner.exist(bm)){
+						if(Banner.exist(is.getType(), bm)){
 							//TODO check if the banner is owned by a house or by a nation.
-							Nation n = Nation.get(Banner.get(bm));
+							Nation n = Nation.get(Banner.get(is.getType(), bm));
 							if(n != null) {
 								sender.sendMessage(Civilizations.messageHeader + ChatColor.RED +
 										"This banner is already used by Nation " + n.getName() + ".");
 							}
 							return true;
 						}
-						Nation n = new Nation(args[0], Banner.get(bm));
+						Nation n = new Nation(args[0], Banner.get(is.getType(), bm));
 						if(!p.isOp()){
 							n.addMember(p);
 							sender.sendMessage(Civilizations.messageHeader + ChatColor.GREEN + "You've established Nation " + n.getName() + "!");

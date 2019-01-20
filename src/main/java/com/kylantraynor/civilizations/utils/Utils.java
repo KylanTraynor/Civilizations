@@ -17,6 +17,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -24,11 +26,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
-import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.shapes.Shape;
 
 public class Utils {
 
+    /**
+     * Parse a string such as "world,12,22,32,0.5,0.5" to a location.
+     * @param s {@link String} to convert
+     * @return Resulting {@link Location}, or {@code null} if couldn't parse properly.
+     */
 	public static Location parseLocation(String s){
 		String[] ss = s.split(",");
 		try {
@@ -57,7 +63,12 @@ public class Utils {
 			default: throw new IllegalArgumentException();
 		}
 	}
-	
+
+    /**
+     * Turn a {@link Location} into a {@link String} that can be parsed with {@link #parseLocation(String)}.
+     * @param loc {@link Location} to convert
+     * @return Resulting {@link String}
+     */
 	public static String locationToString(Location loc){
 		//String format = "%s,%d,%d,%d,%f,%f";
 		return loc.getWorld().getUID().toString() +","+ loc.getX() +","+ loc.getY() +","+ loc.getZ() +","+ loc.getYaw() +","+ loc.getPitch();
@@ -191,7 +202,7 @@ public class Utils {
 
 	/**
 	 * Converts a name like IRON_INGOT into Iron Ingot to improve readability
-	 * @param ugly The string such as IRON_INGOT
+	 * @param ugly A string such as IRON_INGOT
 	 * @return A nicer version, such as Iron Ingot
 	 * 
 	 * Credits to mikenon on GitHub!
@@ -226,130 +237,6 @@ public class Utils {
 	 */
 	private static String getDataName(Material mat, short data, ItemMeta meta){
 		switch(mat){
-		case WOOL: 
-			switch((int) data){
-				case 0: return "WHITE_WOOL";
-				case 1: return "ORANGE_WOOL";
-				case 2: return "MAGENTA_WOOL";
-				case 3: return "LIGHT_BLUE_WOOL";
-				case 4: return "YELLOW_WOOL";
-				case 5: return "LIME_WOOL";
-				case 6: return "PINK_WOOL";
-				case 7: return "GRAY_WOOL";
-				case 8: return "LIGHT_GRAY_WOOL";
-				case 9: return "CYAN_WOOL";
-				case 10: return "PURPLE_WOOL";
-				case 11: return "BLUE_WOOL";
-				case 12: return "BROWN_WOOL";
-				case 13: return "GREEN_WOOL";
-				case 14: return "RED_WOOL";
-				case 15: return "BLACK_WOOL";
-			}
-			return mat.toString();
-		case STONE:
-			switch((int) data){
-			case 0: return "STONE";
-			case 1: return "ANDESITE";
-			case 2: return "POLISHED_ANDESITE";
-			case 3: return "DIORITE";
-			case 4: return "POLISHED_DIORITE";
-			case 5: return "GRANITE";
-			case 6: return "POLISHED_GRANITE";
-			}
-		case DIRT:
-			switch((int) data){
-			case 0: return "DIRT";
-			case 1: return "COARSE_DIRT";
-			case 2: return "PODZOL";
-			}
-		case STAINED_CLAY:
-			switch((int) data){
-			case 0: return "WHITE_CLAY";
-			case 1: return "ORANGE_CLAY";
-			case 2: return "MAGENTA_CLAY";
-			case 3: return "LIGHT_BLUE_CLAY";
-			case 4: return "YELLOW_CLAY";
-			case 5: return "LIME_CLAY";
-			case 6: return "PINK_CLAY";
-			case 7: return "GRAY_CLAY";
-			case 8: return "LIGHT_GRAY_CLAY";
-			case 9: return "CYAN_CLAY";
-			case 10: return "PURPLE_CLAY";
-			case 11: return "BLUE_CLAY";
-			case 12: return "BROWN_CLAY";
-			case 13: return "GREEN_CLAY";
-			case 14: return "RED_CLAY";
-			case 15: return "BLACK_CLAY";
-			default: return mat.toString();
-			}
-		case STAINED_GLASS:
-			switch((int) data){
-			case 0: return "WHITE_GLASS";
-			case 1: return "ORANGE_GLASS";
-			case 2: return "MAGENTA_GLASS";
-			case 3: return "LIGHT_BLUE_GLASS";
-			case 4: return "YELLOW_GLASS";
-			case 5: return "LIME_GLASS";
-			case 6: return "PINK_GLASS";
-			case 7: return "GRAY_GLASS";
-			case 8: return "LIGHT_GRAY_GLASS";
-			case 9: return "CYAN_GLASS";
-			case 10: return "PURPLE_GLASS";
-			case 11: return "BLUE_GLASS";
-			case 12: return "BROWN_GLASS";
-			case 13: return "GREEN_GLASS";
-			case 14: return "RED_GLASS";
-			case 15: return "BLACK_GLASS";
-			default: return mat.toString();
-			}
-		case STAINED_GLASS_PANE:
-			switch((int) data){
-			case 0: return "WHITE_GLASS_PANE";
-			case 1: return "ORANGE_GLASS_PANE";
-			case 2: return "MAGENTA_GLASS_PANE";
-			case 3: return "LIGHT_BLUE_GLASS_PANE";
-			case 4: return "YELLOW_GLASS_PANE";
-			case 5: return "LIME_GLASS_PANE";
-			case 6: return "PINK_GLASS_PANE";
-			case 7: return "GRAY_GLASS_PANE";
-			case 8: return "LIGHT_GRAY_GLASS_PANE";
-			case 9: return "CYAN_GLASS_PANE";
-			case 10: return "PURPLE_GLASS_PANE";
-			case 11: return "BLUE_GLASS_PANE";
-			case 12: return "BROWN_GLASS_PANE";
-			case 13: return "GREEN_GLASS_PANE";
-			case 14: return "RED_GLASS_PANE";
-			case 15: return "BLACK_GLASS_PANE";
-			default: return mat.toString();
-			}
-		case INK_SACK:
-			switch((int) data){
-				case 0: return "INK_SACK";
-				case 1: return "ROSE_RED";
-				case 2: return "CACTUS_GREEN";
-				case 3: return "COCOA_BEANS";
-				case 4: return "LAPIS_LAZULI";
-				case 5: return "PURPLE_DYE";
-				case 6: return "CYAN_DYE";
-				case 7: return "LIGHT_GRAY_DYE";
-				case 8: return "GRAY_DYE";
-				case 9: return "PINK_DYE";
-				case 10: return "LIME_DYE";
-				case 11: return "DANDELION_YELLOW";
-				case 12: return "LIGHT_BLUE_DYE";
-				case 13: return "MAGENTA_DYE";
-				case 14: return "ORANGE_DYE";
-				case 15: return "BONE_MEAL";
-			}
-			return mat.toString();
-		case SMOOTH_BRICK:
-			switch((int) data){
-				case 0: return "STONE_BRICKS";
-				case 1: return "MOSSY_STONE_BRICKS";
-				case 2: return "CRACKED_STONE_BRICKS";
-				case 3: return "CHISELED_STONE_BRICKS";
-			}
-			return mat.toString();
 		case POTION:
 			PotionMeta pot;
 			try{
@@ -365,164 +252,6 @@ public class Utils {
 					return "POTION_OF_" + pot.getBasePotionData().getType();
 				}
 			}
-		case PRISMARINE:
-			switch((int) data){
-			case 0: return "PRISMARINE";
-			case 1: return "PRISMARINE_BRICKS";
-			case 2: return "DARK_PRISMARINE";
-			}
-		case SAPLING:
-			switch((int) data){
-				case 0: return "OAK_SAPLING";
-				case 1: return "SPRUCE_SAPLING";
-				case 2: return "BIRCH_SAPLING";
-				case 3: return "JUNGLE_SAPLING";
-				case 4: return "ACACIA_SAPLING";
-				case 5: return "DARK_OAK_SAPLING";
-			}
-			return mat.toString();
-		
-		case WOOD:
-			switch((int) data){
-				case 0: return "OAK_PLANKS";
-				case 1: return "SPRUCE_PLANKS";
-				case 2: return "BIRCH_PLANKS";
-				case 3: return "JUNGLE_PLANKS";
-				case 4: return "ACACIA_PLANKS";
-				case 5: return "DARK_OAK_PLANKS";
-			}
-			break;
-		case LOG:
-			switch(data % 4){
-				case 0: return "OAK_LOG";
-				case 1: return "SPRUCE_LOG";
-				case 2: return "BIRCH_LOG";
-				case 3: return "JUNGLE_LOG";
-			}
-			break;
-		case LOG_2:
-			switch(data % 4){
-				case 0: return "ACACIA_LOG";
-				case 1: return "DARK_OAK_LOG";
-			}
-			break;
-		case LEAVES:
-			data = (short) (data%4);
-			switch(data){
-				case 0: return "OAK_LEAVES";
-				case 1: return "SPRUCE_LEAVES";
-				case 2: return "BIRCH_LEAVES";
-				case 3: return "JUNGLE_LEAVES";
-			}
-			break;
-		case LEAVES_2:
-			switch(data){
-				case 0: return "ACACIA_LEAVES";
-				case 1: return "DARK_OAK_LEAVES";
-			}
-			break;
-		case COAL:
-			switch(data){
-				case 0: return "COAL";
-				case 1: return "CHARCOAL";
-			}
-			break;
-		case SANDSTONE:
-			switch((int) data){
-				case 0: return "SANDSTONE";
-				case 1: return "CHISELED_SANDSTONE";
-				case 2: return "SMOOTH_SANDSTONE";
-			}
-			break;
-		case LONG_GRASS:
-			switch((int) data){
-				case 0: return "DEAD_SHRUB";
-				case 1: return "TALL_GRASS";
-				case 2: return "FERN";
-			}
-			break;
-		case STEP:
-			switch((int) data){
-				case 0: return "STONE_SLAB";
-				case 1: return "SANDSTONE_SLAB";
-				case 2: return "WOODEN_SLAB";
-				case 3: return "COBBLESTONE_SLAB";
-				case 4: return "BRICK_SLAB";
-				case 5: return "STONE_BRICK_SLAB";
-			}
-			break;
-		case RAW_FISH:
-			switch((int) data){
-				case 0: return "RAW_FISH";
-				case 1: return "RAW_SALMON";
-				case 2: return "RAW_PUFFER_FISH";
-				default: return mat.toString() + ":" + data;
-			}
-		case MONSTER_EGG:
-			switch((int) data){
-				case 50: return "CREEPER_EGG";
-				case 51: return "SKELETON_EGG";
-				case 52: return "SPIDER_EGG";
-				case 53: return "GIANT_EGG";
-				case 54: return "ZOMBIE_EGG";
-				case 55: return "SLIME_EGG";
-				case 56: return "GHAST_EGG";
-				case 57: return "ZOMBIE_PIGMAN_EGG";
-				case 58: return "ENDERMAN_EGG";
-				case 59: return "CAVE_SPIDER_EGG";
-				case 60: return "SILVERFISH_EGG";
-				case 61: return "BLAZE_EGG";
-				case 62: return "MAGMA_CUBE_EGG";
-				case 63: return "ENDER_DRAGON_EGG";
-				case 90: return "PIG_EGG";
-				case 91: return "SHEEP_EGG";
-				case 92: return "COW_EGG";
-				case 93: return "CHICKEN_EGG";
-				case 94: return "SQUID_EGG";
-				case 95: return "WOLF_EGG";
-				case 96: return "MOOSHROOM_EGG";
-				case 97: return "SNOW_GOLEM_EGG";
-				case 98: return "OCELOT_EGG";
-				case 99: return "IRON_GOLEM_EGG";
-				case 120: return "VILLAGER_EGG";
-				case 200: return "ENDER_CRYSTAL_EGG";
-				case 14: return "PRIMED_TNT_EGG";
-				case 66: return "WITCH_EGG";
-				case 65: return "BAT_EGG";
-			}
-			break;
-		case SKULL: case SKULL_ITEM:
-			switch((int) data){
-				case 0: return "SKELETON_SKULL";
-				case 1: return "WITHER_SKULL";
-				case 2: return "ZOMBIE_HEAD";
-				case 3: return "PLAYER_HEAD";
-				case 4: return "CREEPER_HEAD";
-			}
-			break;
-		case REDSTONE_TORCH_ON: case REDSTONE_TORCH_OFF:
-			return "REDSTONE_TORCH";
-		case IRON_FENCE:
-			return "IRON_BARS";
-		case REDSTONE_LAMP_OFF: case REDSTONE_LAMP_ON:
-			return "REDSTONE_LAMP";
-		case GOLDEN_APPLE:
-			switch((int) data){
-				case 0: return "GOLDEN_APPLE";
-				case 1: return "ENCHANTED_GOLDEN_APPLE";
-			}
-			break;
-		case NETHER_STALK:
-			return "NETHER_WART";
-		case ANVIL:
-			switch((int) data){
-				case 0: return "ANVIL";
-				case 1: return "SLIGHTLY_DAMAGED_ANVIL";
-				case 2: return "VERY_DAMAGED_ANVIL";
-			}
-			break;
-		case EXP_BOTTLE:
-			return "BOTTLE_O'_ENCHANTING";
 		case ENCHANTED_BOOK:
 			EnchantmentStorageMeta book;
 			try{
@@ -548,466 +277,404 @@ public class Utils {
 			break;
 		}
 		
-		if(data == 0) return mat.toString();
-		return mat.toString()+ ":" + data;
+		return mat.toString();
 	}
 	
 	/**
-	 * Get the text color that is as close as possible to the dye color.
-	 * @param c
-	 * @return
+	 * Get the {@link ChatColor} that is as close as possible to the given {@link DyeColor}.
+	 * @param color {@link DyeColor} to convert
+	 * @return The converted {@link ChatColor}
 	 */
-	public static ChatColor getChatColor(DyeColor c){
-		switch(c){
-		case BLACK: return ChatColor.BLACK;
-		case BLUE: return ChatColor.DARK_BLUE;
-		case BROWN: return ChatColor.GOLD;
-		case CYAN: return ChatColor.AQUA;
-		case GRAY: return ChatColor.DARK_GRAY;
-		case GREEN: return ChatColor.DARK_GREEN;
-		case LIGHT_BLUE: return ChatColor.BLUE;
-		case LIME: return ChatColor.GREEN;
-		case MAGENTA: return ChatColor.LIGHT_PURPLE;
-		case ORANGE: return ChatColor.GOLD;
-		case PINK: return ChatColor.LIGHT_PURPLE;
-		case PURPLE: return ChatColor.DARK_PURPLE;
-		case RED: return ChatColor.DARK_RED;
-		case SILVER: return ChatColor.GRAY;
-		case WHITE: return ChatColor.WHITE;
-		case YELLOW: return ChatColor.YELLOW;
-		default:
-			return null;
-		}
-	}
-	
-	public static ItemStack getItemFromBlock(ItemStack block){
-		if(block == null) return null;
-		if(block.getType() == Material.AIR) return null;
-		if((block.getType() == Material.SPRUCE_DOOR ||
-				block.getType() == Material.BIRCH_DOOR ||
-				block.getType() == Material.JUNGLE_DOOR ||
-				block.getType() == Material.ACACIA_DOOR ||
-				block.getType() == Material.DARK_OAK_DOOR ||
-				block.getType() == Material.WOODEN_DOOR ||
-				block.getType() == Material.WOOD_DOOR ||
-				block.getType() == Material.IRON_DOOR_BLOCK) && block.getData().getData() >= 8){
-			return null;
-		}
-		return block;
-	}
-	
-	public static boolean isSameBlock(ItemStack block, ItemStack item){
-		Civilizations.DEBUG("Looking for " + getMaterialName(block) + ", found " + getMaterialName(item) + ".");
-		if(block.getType() != item.getType()){
-			if(block.getType() == Material.GRASS_PATH && (item.getType() == Material.GRASS || item.getType() == Material.DIRT)) return true;
-			if(block.getType() == Material.DAYLIGHT_DETECTOR_INVERTED && item.getType() == Material.DAYLIGHT_DETECTOR) return true;
-			if(block.getType() == Material.REDSTONE_WIRE && item.getType() == Material.REDSTONE) return true;
-			if(block.getType() == Material.TRIPWIRE && item.getType() == Material.STRING) return true;
-			if(block.getType() == Material.SUGAR_CANE_BLOCK && item.getType() == Material.SUGAR_CANE) return true;
-			if((block.getType() == Material.REDSTONE_TORCH_OFF || block.getType() == Material.REDSTONE_TORCH_ON) && (item.getType() == Material.REDSTONE_TORCH_OFF || item.getType() == Material.REDSTONE_TORCH_ON)) return true;
-			if((block.getType() == Material.REDSTONE_LAMP_OFF || block.getType() == Material.REDSTONE_LAMP_ON) && (item.getType() == Material.REDSTONE_LAMP_OFF || item.getType() == Material.REDSTONE_LAMP_ON)) return true;
-			if((block.getType() == Material.REDSTONE_COMPARATOR_OFF || block.getType() == Material.REDSTONE_COMPARATOR_ON) && item.getType() == Material.REDSTONE_COMPARATOR) return true;
-			if(block.getType() == Material.BURNING_FURNACE && item.getType() == Material.FURNACE) return true;
-			if((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) && item.getType() == Material.SIGN) return true;
-			if(block.getType() == Material.SKULL && item.getType() == Material.SKULL_ITEM) return true;
-			if(block.getType() == Material.PUMPKIN_STEM && item.getType() == Material.PUMPKIN_SEEDS) return true;
-			if(block.getType() == Material.MELON_STEM && item.getType() == Material.MELON_SEEDS) return true;
-			if(block.getType() == Material.CAKE_BLOCK && item.getType() == Material.CAKE) return true;
-			if(block.getType() == Material.FLOWER_POT && item.getType() == Material.FLOWER_POT_ITEM) return true;
-			if(block.getType() == Material.BREWING_STAND && item.getType() == Material.BREWING_STAND_ITEM) return true;
-			if(block.getType() == Material.CROPS && item.getType() == Material.SEEDS) return true;
-			if(block.getType() == Material.IRON_DOOR_BLOCK && item.getType() == Material.IRON_DOOR && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.BIRCH_DOOR && item.getType() == Material.BIRCH_DOOR_ITEM && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.WOODEN_DOOR && item.getType() == Material.WOOD_DOOR && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.WOOD_DOOR && item.getType() == Material.WOODEN_DOOR && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.ACACIA_DOOR && item.getType() == Material.ACACIA_DOOR_ITEM && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.SPRUCE_DOOR && item.getType() == Material.SPRUCE_DOOR_ITEM && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.JUNGLE_DOOR && item.getType() == Material.JUNGLE_DOOR_ITEM && block.getData().getData() < 8) return true;
-			if(block.getType() == Material.DARK_OAK_DOOR && item.getType() == Material.DARK_OAK_DOOR_ITEM && block.getData().getData() < 8) return true;
-			if((block.getType() == Material.DIODE_BLOCK_ON || block.getType() == Material.DIODE_BLOCK_OFF) && item.getType() == Material.DIODE) return true;
-			if(block.getType() == Material.CAULDRON && item.getType() == Material.CAULDRON_ITEM) return true;
-			if(block.getType() == Material.DOUBLE_STEP){
-				switch(block.getData().getData()){
-				case 0: if(item.getType() == Material.STONE && item.getData().getData() == 0) return true;
-					break;
-				case 1: if(item.getType() == Material.SANDSTONE) return true;
-					break;
-				case 2:
-					break;
-				case 3: if(item.getType() == Material.COBBLESTONE) return true;
-					break;
-				case 4: if(item.getType() == Material.BRICK) return true;
-					break;
-				case 5: if(item.getType() == Material.SMOOTH_BRICK) return true;
-					break;
-				case 6: if(item.getType() == Material.NETHER_BRICK) return true;
-					break;
-				case 7: if(item.getType() == Material.QUARTZ_BLOCK) return true;
-					break;
-				case 8: if(item.getType() == Material.STONE && item.getData().getData() == 0) return true;
-					break;
-				case 9: if(item.getType() == Material.SANDSTONE) return true;
-					break;
-				case 15: if(item.getType() == Material.QUARTZ_BLOCK) return true;
-					break;
-				}
-			} else if(block.getType() == Material.DOUBLE_STONE_SLAB2){
-				if(item.getType() == Material.RED_SANDSTONE) return true;
-			} else if(block.getType() == Material.WOOD_DOUBLE_STEP){
-				if(item.getType() == Material.WOOD && item.getData().getData() == block.getData().getData()) return true;
-			} else if(block.getType() == Material.PURPUR_DOUBLE_SLAB){
-				if(item.getType() == Material.PURPUR_BLOCK) return true;
-			}
-			return false;
-		}
-		switch(block.getType()){
-		case ACACIA_FENCE:
-		case ACACIA_FENCE_GATE:
-		case ACACIA_STAIRS:
-		case ACTIVATOR_RAIL:
-		case AIR:
-		case ANVIL:
-		case ARMOR_STAND:
-			return true;
-		case BANNER:
-			break;
-		case BARRIER:
-		case BEACON:
-			return true;
-		case BED:
-			break;
-		case BEDROCK:
-			break;
-		case BED_BLOCK:
-			break;
-		case BEETROOT:
-			break;
-		case BEETROOT_BLOCK:
-			break;
-		case BEETROOT_SEEDS:
-			break;
-		case BEETROOT_SOUP:
-			break;
-		case BIRCH_FENCE:
-		case BIRCH_FENCE_GATE:
-		case BIRCH_WOOD_STAIRS:
-		case BOOKSHELF:
-		case BRICK:
-		case BRICK_STAIRS:
-			return true;
-		case BROWN_MUSHROOM:
-			break;
-		case CACTUS:
-			break;
-		case CARPET:
-			if(block.getData().getData() == item.getData().getData()) return true;
-			return false;
-		case CARROT:
-			break;
-		case CARROT_ITEM:
-			break;
-		case CHEST:
-			return true;
-		case CHORUS_FLOWER:
-			return true;
-		case CHORUS_FRUIT:
-			break;
-		case CHORUS_FRUIT_POPPED:
-			break;
-		case CHORUS_PLANT:
-			break;
-		case CLAY:
-		case COAL_BLOCK:
-		case COAL_ORE:
-		case COBBLESTONE:
-		case COBBLESTONE_STAIRS:
-		case COBBLE_WALL:
-			return true;
-		case COCOA:
-			break;
-		case COMMAND:
-			break;
-		case COMMAND_CHAIN:
-			break;
-		case COMMAND_MINECART:
-			break;
-		case COMMAND_REPEATING:
-			break;
-		case DARK_OAK_FENCE:
-		case DARK_OAK_FENCE_GATE:
-		case DARK_OAK_STAIRS:
-		case DAYLIGHT_DETECTOR:
-		case DEAD_BUSH:
-		case DETECTOR_RAIL:
-			return true;
-		case DIAMOND_BARDING:
-			break;
-		case DIAMOND_BLOCK:
-		case DIAMOND_ORE:
-			return true;
-		case DIRT:
-			return block.getData().getData() == item.getData().getData();
-		case DISPENSER:
-			return true;
-		case DOUBLE_PLANT:
-			break;
-		case DOUBLE_STEP:
-			break;
-		case DOUBLE_STONE_SLAB2:
-			break;
-		case DRAGON_EGG:
-		case DROPPER:
-		case EMERALD_BLOCK:
-		case EMERALD_ORE:
-			return true;
-		case EMPTY_MAP:
-			break;
-		case ENCHANTMENT_TABLE:
-		case ENDER_CHEST:
-		case ENDER_PORTAL:
-		case ENDER_PORTAL_FRAME:
-		case ENDER_STONE:
-		case END_BRICKS:
-			return true;
-		case END_CRYSTAL:
-			break;
-		case END_GATEWAY:
-			break;
-		case END_ROD:
-		case FENCE:
-		case FENCE_GATE:
-		case FROSTED_ICE:
-		case FURNACE:
-		case GLASS:
-			return true;
-		case GLOWING_REDSTONE_ORE:
-			return true;
-		case GLOWSTONE:
-			return true;
-		case GOLD_BARDING:
-			break;
-		case GOLD_BLOCK:
-		case GOLD_ORE:
-		case GRASS:
-		case GRASS_PATH:
-		case GRAVEL:
-		case HARD_CLAY:
-		case HAY_BLOCK:
-		case HOPPER:
-		case HUGE_MUSHROOM_1:
-		case HUGE_MUSHROOM_2:
-		case ICE:
-			return true;
-		case IRON_BARDING:
-			break;
-		case IRON_BLOCK:
-		case IRON_FENCE:
-		case IRON_ORE:
-		case IRON_TRAPDOOR:
-		case ITEM_FRAME:
-		case JACK_O_LANTERN:
-		case JUKEBOX:
-		case JUNGLE_FENCE:
-		case JUNGLE_FENCE_GATE:
-		case JUNGLE_WOOD_STAIRS:
-		case LADDER:
-		case LAPIS_BLOCK:
-		case LAPIS_ORE:
-		case LAVA:
-			return true;
-		case LAVA_BUCKET:
-			return true;
-		case LEAVES:
-		case LEAVES_2:
-		case LEVER:
-			return true;
-		case LOG:
-		case LOG_2:
-            return (block.getData().getData() % 4) == (item.getData().getData() % 4);
-        case LONG_GRASS:
-			break;
-		case MAP:
-			break;
-		case MOB_SPAWNER:
-		case MOSSY_COBBLESTONE:
-		case MYCEL:
-		case NETHERRACK:
-			return true;
-		case NETHER_BRICK:
-			break;
-		case NETHER_BRICK_ITEM:
-			break;
-		case NETHER_BRICK_STAIRS:
-		case NETHER_FENCE:
-			return true;
-		case NETHER_STALK:
-			break;
-		case NETHER_WARTS:
-			break;
-		case NOTE_BLOCK:
-		case OBSIDIAN:
-		case PACKED_ICE:
-		case PAINTING:
-			return true;
-		case PISTON_BASE:
-			break;
-		case PISTON_EXTENSION:
-			break;
-		case PISTON_MOVING_PIECE:
-			break;
-		case PISTON_STICKY_BASE:
-			break;
-		case PORTAL:
-			break;
-		case POTATO:
-			break;
-		case POTATO_ITEM:
-			break;
-		case POWERED_RAIL:
-		case PRISMARINE:
-		case PURPUR_BLOCK:
-			return true;
-		case PURPUR_DOUBLE_SLAB:
-			break;
-		case PURPUR_PILLAR:
-			return true;
-		case PURPUR_SLAB:
-            return (block.getData().getData() % 8) == item.getData().getData();
-        case PURPUR_STAIRS:
-		case QUARTZ_BLOCK:
-		case QUARTZ_ORE:
-		case QUARTZ_STAIRS:
-		case RAILS:
-			return true;
-		case REDSTONE:
-			break;
-		case REDSTONE_BLOCK:
-		case REDSTONE_ORE:
-			return true;
-		case REDSTONE_WIRE:
-			return true;
-		case RED_MUSHROOM:
-		case RED_ROSE:
-			return true;
-		case RED_SANDSTONE:
-            return block.getData().getData() == item.getData().getData();
-        case RED_SANDSTONE_STAIRS:
-		case SAND:
-			return true;
-		case SANDSTONE:
-            return block.getData().getData() == item.getData().getData();
-        case SANDSTONE_STAIRS:
-		case SAPLING:
-		case SEA_LANTERN:
-		case SLIME_BLOCK:
-		case SMOOTH_BRICK:
-		case SMOOTH_STAIRS:
-		case SNOW_BLOCK:
-		case SOIL:
-		case SOUL_SAND:
-		case SPONGE:
-		case SPRUCE_FENCE:
-		case SPRUCE_FENCE_GATE:
-		case SPRUCE_WOOD_STAIRS:
-			return true;
-		case STAINED_CLAY:
-		case STAINED_GLASS:
-		case STAINED_GLASS_PANE:
-            return block.getData().getData() == item.getData().getData();
-        case STANDING_BANNER:
-			break;
-		case STATIONARY_LAVA:
-			break;
-		case STATIONARY_WATER:
-			break;
-		case STEP:
-            return (block.getData().getData() % 8) == item.getData().getData();
-        case STONE:
-            return block.getData().getData() == item.getData().getData();
-        case STONE_BUTTON:
-			return true;
-		case STONE_SLAB2:
-            return (block.getData().getData() % 8) == item.getData().getData();
-        case STRUCTURE_BLOCK:
-		case THIN_GLASS:
-		case TNT:
-		case TORCH:
-		case TRAPPED_CHEST:
-		case TRAP_DOOR:
-		case TRIPWIRE_HOOK:
-		case VINE:
-			return true;
-		case WALL_BANNER:
-			break;
-		case WATER:
-			break;
-		case WATER_LILY:
-		case WEB:
-			return true;
-		case WOOD:
-            return block.getData().getData() == item.getData().getData();
-        case WOOD_BUTTON:
-			return true;
-		case WOOD_DOUBLE_STEP:
-			break;
-		case WOOL:
-            return block.getData().getData() == item.getData().getData();
-        case WORKBENCH:
-		case YELLOW_FLOWER:
-			return true;
-		default:
-			return true;
-		}
-		return false;
+	public static ChatColor getChatColor(DyeColor color){
+        switch(color){
+            case BLACK: return ChatColor.BLACK;
+            case BLUE: return ChatColor.DARK_BLUE;
+            case BROWN: return ChatColor.GOLD;
+            case CYAN: return ChatColor.AQUA;
+            case GRAY: return ChatColor.DARK_GRAY;
+            case GREEN: return ChatColor.DARK_GREEN;
+            case LIGHT_BLUE: return ChatColor.BLUE;
+            case LIGHT_GRAY: return ChatColor.GRAY;
+            case LIME: return ChatColor.GREEN;
+            case MAGENTA: return ChatColor.LIGHT_PURPLE;
+            case ORANGE: return ChatColor.GOLD;
+            case PINK: return ChatColor.LIGHT_PURPLE;
+            case PURPLE: return ChatColor.DARK_PURPLE;
+            case RED: return ChatColor.DARK_RED;
+            case WHITE: return ChatColor.WHITE;
+            case YELLOW: return ChatColor.YELLOW;
+            default:
+                return null;
+        }
 	}
 
-	public static Sound getBreakSoundFromMaterial(Material type) {
-		switch(type){
-		case WOOL:
-			return Sound.BLOCK_CLOTH_BREAK;
-		case SLIME_BLOCK:
-			return Sound.BLOCK_SLIME_BREAK;
-		case SAND:
-			return Sound.BLOCK_SAND_BREAK;
-		case GRAVEL:
-			return Sound.BLOCK_GRAVEL_BREAK;
-		case GRASS:
-			return Sound.BLOCK_GRASS_BREAK;
-		case GLASS: case STAINED_GLASS: case THIN_GLASS: case STAINED_GLASS_PANE:
-			return Sound.BLOCK_GLASS_BREAK;
-		case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
-			return Sound.BLOCK_METAL_BREAK;
-		case SNOW_BLOCK: case SNOW:
-			return Sound.BLOCK_SNOW_BREAK;
-		case LOG: case LOG_2: case WOOD:
-			return Sound.BLOCK_WOOD_BREAK;
-		default:
-			return Sound.BLOCK_STONE_BREAK;
-		}
+    /**
+     * Check if the {@link BlockData} requires any supplies to be built.
+     * @param bd {@link BlockData}
+     * @return {@code true} if supplies are needed, {@code false} otherwise
+     */
+	public static boolean requireSupplies(BlockData bd){
+	    switch(bd.getMaterial()){
+            case AIR:
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if the {@link Material} can match the given {@link BlockData}.
+     * @param block {@link BlockData} to check against
+     * @param item {@link Material} to check
+     * @return {@code true} if the two match, {@code false} otherwise
+     */
+	public static boolean isSameBlock(BlockData block, Material item){
+        if(block.getMaterial() == Material.GRASS_PATH) {
+            switch(item){
+                case GRASS_BLOCK:
+                case DIRT:
+                case COARSE_DIRT:
+                case PODZOL:
+                    return true;
+            }
+            return false;
+        }
+        if(block.getMaterial() == Material.WALL_SIGN && item == Material.SIGN) return true;
+        if(block.getMaterial() == Material.WALL_TORCH && item == Material.TORCH) return true;
+        if(block.getMaterial() == Material.REDSTONE_WIRE && item == Material.REDSTONE) return true;
+        if(block.getMaterial() == Material.REDSTONE_WALL_TORCH && item == Material.REDSTONE_TORCH) return true;
+        if(block.getMaterial() == Material.TRIPWIRE && item == Material.STRING) return true;
+
+        if(block instanceof Slab){
+            Slab slab = (Slab) block;
+            if(slab.getType() == Slab.Type.DOUBLE){
+                if(block.getMaterial() == Material.SANDSTONE_SLAB && item == Material.SANDSTONE) return true;
+                if(block.getMaterial() == Material.ACACIA_SLAB && item == Material.ACACIA_PLANKS) return true;
+                if(block.getMaterial() == Material.BIRCH_SLAB && item == Material.BIRCH_PLANKS) return true;
+                if(block.getMaterial() == Material.BRICK_SLAB && item == Material.BRICKS) return true;
+                if(block.getMaterial() == Material.COBBLESTONE_SLAB && item == Material.COBBLESTONE) return true;
+                if(block.getMaterial() == Material.DARK_OAK_SLAB && item == Material.DARK_OAK_PLANKS) return true;
+                if(block.getMaterial() == Material.DARK_PRISMARINE_SLAB && item == Material.DARK_PRISMARINE) return true;
+                if(block.getMaterial() == Material.JUNGLE_SLAB && item == Material.JUNGLE_PLANKS) return true;
+                if(block.getMaterial() == Material.NETHER_BRICK_SLAB && item == Material.NETHER_BRICKS) return true;
+                if(block.getMaterial() == Material.OAK_SLAB && item == Material.OAK_PLANKS) return true;
+                if(block.getMaterial() == Material.PETRIFIED_OAK_SLAB && item == Material.DIRT) return true;
+                if(block.getMaterial() == Material.PRISMARINE_BRICK_SLAB && item == Material.PRISMARINE_BRICKS) return true;
+                if(block.getMaterial() == Material.PRISMARINE_SLAB && item == Material.PRISMARINE) return true;
+                if(block.getMaterial() == Material.PURPUR_SLAB && item == Material.PURPUR_BLOCK) return true;
+                if(block.getMaterial() == Material.QUARTZ_SLAB && item == Material.QUARTZ_BLOCK) return true;
+                if(block.getMaterial() == Material.RED_SANDSTONE_SLAB && item == Material.RED_SANDSTONE) return true;
+                if(block.getMaterial() == Material.SPRUCE_SLAB && item == Material.SPRUCE_PLANKS) return true;
+                if(block.getMaterial() == Material.STONE_BRICK_SLAB && item == Material.STONE_BRICKS) return true;
+                if(block.getMaterial() == Material.STONE_SLAB && item == Material.STONE) return true;
+            }
+        }
+
+	    return block.getMaterial() == item;
 	}
-	
+
+    /**
+     * Check if the given {@link Material} is a {@code DOOR} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code DOOR}, {@code false} otherwise
+     */
+	public static boolean isDoor(Material type){
+        switch(type){
+            case DARK_OAK_DOOR:
+            case ACACIA_DOOR:
+            case BIRCH_DOOR:
+            case IRON_DOOR:
+            case JUNGLE_DOOR:
+            case OAK_DOOR:
+            case SPRUCE_DOOR:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code TRAPDOOR} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code TRAPDOOR}, {@code false} otherwise
+     */
+    public static boolean isTrapdoor(Material type){
+        switch(type){
+            case DARK_OAK_TRAPDOOR:
+            case ACACIA_TRAPDOOR:
+            case BIRCH_TRAPDOOR:
+            case IRON_TRAPDOOR:
+            case JUNGLE_TRAPDOOR:
+            case OAK_TRAPDOOR:
+            case SPRUCE_TRAPDOOR:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code WOOL} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code WOOL}, {@code false} otherwise
+     */
+	public static boolean isWool(Material type){
+	    switch(type){
+            case WHITE_WOOL:
+            case BLACK_WOOL:
+            case BLUE_WOOL:
+            case BROWN_WOOL:
+            case CYAN_WOOL:
+            case GRAY_WOOL:
+            case GREEN_WOOL:
+            case LIGHT_BLUE_WOOL:
+            case LIGHT_GRAY_WOOL:
+            case LIME_WOOL:
+            case MAGENTA_WOOL:
+            case ORANGE_WOOL:
+            case PINK_WOOL:
+            case PURPLE_WOOL:
+            case RED_WOOL:
+            case YELLOW_WOOL:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code BANNER} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code BANNER}, {@code false} otherwise
+     */
+    public static boolean isBanner(Material type){
+	    switch(type){
+            case BLACK_BANNER:
+            case BLUE_BANNER:
+            case BROWN_BANNER:
+            case CYAN_BANNER:
+            case GRAY_BANNER:
+            case GREEN_BANNER:
+            case LIGHT_BLUE_BANNER:
+            case LIGHT_GRAY_BANNER:
+            case LIME_BANNER:
+            case MAGENTA_BANNER:
+            case ORANGE_BANNER:
+            case PINK_BANNER:
+            case PURPLE_BANNER:
+            case RED_BANNER:
+            case WHITE_BANNER:
+            case YELLOW_BANNER:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code WALL_BANNER} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code WALL_BANNER}, {@code false} otherwise
+     */
+    public static boolean isWallBanner(Material type){
+        switch(type){
+            case BLACK_WALL_BANNER:
+            case BLUE_WALL_BANNER:
+            case BROWN_WALL_BANNER:
+            case CYAN_WALL_BANNER:
+            case GRAY_WALL_BANNER:
+            case GREEN_WALL_BANNER:
+            case LIGHT_BLUE_WALL_BANNER:
+            case LIGHT_GRAY_WALL_BANNER:
+            case LIME_WALL_BANNER:
+            case MAGENTA_WALL_BANNER:
+            case ORANGE_WALL_BANNER:
+            case PINK_WALL_BANNER:
+            case PURPLE_WALL_BANNER:
+            case RED_WALL_BANNER:
+            case WHITE_WALL_BANNER:
+            case YELLOW_WALL_BANNER:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code BED} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code BED}, {@code false} otherwise
+     */
+    public static boolean isBed(Material type){
+        switch(type){
+            case BLACK_BED:
+            case BLUE_BED:
+            case BROWN_BED:
+            case CYAN_BED:
+            case GRAY_BED:
+            case GREEN_BED:
+            case LIGHT_BLUE_BED:
+            case LIGHT_GRAY_BED:
+            case LIME_BED:
+            case MAGENTA_BED:
+            case ORANGE_BED:
+            case PINK_BED:
+            case PURPLE_BED:
+            case RED_BED:
+            case WHITE_BED:
+            case YELLOW_BED:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code GLASS_BLOCK} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code GLASS_BLOCK}, {@code false} otherwise
+     */
+    public static boolean isGlassBlock(Material type){
+	    switch(type){
+            case GLASS:
+            case BLACK_STAINED_GLASS:
+            case BLUE_STAINED_GLASS:
+            case BROWN_STAINED_GLASS:
+            case CYAN_STAINED_GLASS:
+            case GRAY_STAINED_GLASS:
+            case GREEN_STAINED_GLASS:
+            case LIGHT_BLUE_STAINED_GLASS:
+            case LIGHT_GRAY_STAINED_GLASS:
+            case LIME_STAINED_GLASS:
+            case MAGENTA_STAINED_GLASS:
+            case ORANGE_STAINED_GLASS:
+            case PINK_STAINED_GLASS:
+            case PURPLE_STAINED_GLASS:
+            case RED_STAINED_GLASS:
+            case WHITE_STAINED_GLASS:
+            case YELLOW_STAINED_GLASS:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code GLASS_PANE} or its colored variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code GLASS_PANE}, {@code false} otherwise
+     */
+    public static boolean isGlassPane(Material type){
+	    switch(type){
+            case GLASS_PANE:
+            case BLACK_STAINED_GLASS_PANE:
+            case BLUE_STAINED_GLASS_PANE:
+            case BROWN_STAINED_GLASS_PANE:
+            case CYAN_STAINED_GLASS_PANE:
+            case GRAY_STAINED_GLASS_PANE:
+            case GREEN_STAINED_GLASS_PANE:
+            case LIGHT_BLUE_STAINED_GLASS_PANE:
+            case LIGHT_GRAY_STAINED_GLASS_PANE:
+            case LIME_STAINED_GLASS_PANE:
+            case MAGENTA_STAINED_GLASS_PANE:
+            case ORANGE_STAINED_GLASS_PANE:
+            case PINK_STAINED_GLASS_PANE:
+            case PURPLE_STAINED_GLASS_PANE:
+            case RED_STAINED_GLASS_PANE:
+            case WHITE_STAINED_GLASS_PANE:
+            case YELLOW_STAINED_GLASS_PANE:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code LOG} or its variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code LOG}, {@code false} otherwise
+     */
+    public static boolean isLog(Material type){
+        switch(type){
+            case ACACIA_LOG:
+            case BIRCH_LOG:
+            case DARK_OAK_LOG:
+            case JUNGLE_LOG:
+            case OAK_LOG:
+            case SPRUCE_LOG:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given {@link Material} is a {@code STRIPPED_LOG} or its variants.
+     * @param type {@link Material}
+     * @return {@code true} if it is a {@code STRIPPED_LOG}, {@code false} otherwise
+     */
+    public static boolean isStrippedLog(Material type){
+        switch(type){
+            case STRIPPED_ACACIA_LOG:
+            case STRIPPED_BIRCH_LOG:
+            case STRIPPED_DARK_OAK_LOG:
+            case STRIPPED_JUNGLE_LOG:
+            case STRIPPED_OAK_LOG:
+            case STRIPPED_SPRUCE_LOG:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the sound corresponding to the material being broken.
+     * @param type {@link Material}
+     * @return {@link Sound}
+     */
+    public static Sound getBreakSoundFromMaterial(Material type) {
+        if(isWool(type)){
+            return Sound.BLOCK_WOOL_BREAK;
+        } else if(isGlassBlock(type) || isGlassPane(type)){
+            return Sound.BLOCK_GLASS_BREAK;
+        } else if(isLog(type) || isStrippedLog(type)){
+            return Sound.BLOCK_WOOD_BREAK;
+        }
+        switch(type){
+            case SLIME_BLOCK:
+                return Sound.BLOCK_SLIME_BLOCK_BREAK;
+            case SAND:
+                return Sound.BLOCK_SAND_BREAK;
+            case GRAVEL:
+                return Sound.BLOCK_GRAVEL_BREAK;
+            case GRASS_BLOCK:
+                return Sound.BLOCK_GRASS_BREAK;
+            case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
+                return Sound.BLOCK_METAL_BREAK;
+            case SNOW_BLOCK: case SNOW:
+                return Sound.BLOCK_SNOW_BREAK;
+            default:
+                return Sound.BLOCK_STONE_BREAK;
+        }
+    }
+
+    /**
+     * Get the sound corresponding to the material being placed.
+     * @param type {@link Material}
+     * @return {@link Sound}
+     */
 	public static Sound getPlaceSoundFromMaterial(Material type) {
+	    if(isWool(type)){
+            return Sound.BLOCK_WOOL_PLACE;
+        } else if(isGlassBlock(type) || isGlassPane(type)){
+	        return Sound.BLOCK_GLASS_PLACE;
+        } else if(isLog(type) || isStrippedLog(type)){
+	        return Sound.BLOCK_WOOD_PLACE;
+        }
 		switch(type){
-		case WOOL:
-			return Sound.BLOCK_CLOTH_PLACE;
-		case SLIME_BLOCK:
-			return Sound.BLOCK_SLIME_PLACE;
-		case SAND:
-			return Sound.BLOCK_SAND_PLACE;
-		case GRAVEL:
-			return Sound.BLOCK_GRAVEL_PLACE;
-		case GRASS:
-			return Sound.BLOCK_GRASS_PLACE;
-		case GLASS: case STAINED_GLASS: case THIN_GLASS: case STAINED_GLASS_PANE:
-			return Sound.BLOCK_GLASS_PLACE;
-		case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
-			return Sound.BLOCK_METAL_PLACE;
-		case SNOW_BLOCK: case SNOW:
-			return Sound.BLOCK_SNOW_PLACE;
-		case LOG: case LOG_2: case WOOD:
-			return Sound.BLOCK_WOOD_PLACE;
-		default:
-			return Sound.BLOCK_STONE_PLACE;
+            case SLIME_BLOCK:
+                return Sound.BLOCK_SLIME_BLOCK_PLACE;
+            case SAND:
+                return Sound.BLOCK_SAND_PLACE;
+            case GRAVEL:
+                return Sound.BLOCK_GRAVEL_PLACE;
+            case GRASS_BLOCK:
+                return Sound.BLOCK_GRASS_PLACE;
+            case IRON_BLOCK: case GOLD_BLOCK: case DIAMOND_BLOCK:
+                return Sound.BLOCK_METAL_PLACE;
+            case SNOW_BLOCK: case SNOW:
+                return Sound.BLOCK_SNOW_PLACE;
+            default:
+                return Sound.BLOCK_STONE_PLACE;
 		}
 	}
 }

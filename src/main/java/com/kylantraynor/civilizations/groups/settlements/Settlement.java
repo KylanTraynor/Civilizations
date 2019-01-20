@@ -13,6 +13,7 @@ import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -582,16 +583,15 @@ public class Settlement extends Group implements HasBuilder{
 	}
 
 	@Override
-	public ItemStack getSupplies(Material material, short data) {
+	public ItemStack getSupplies(BlockData blockData) {
 		if(!canBuild()) return null;
 		for(Plot p : getPlots()){
 			if(p.getPlotType() == PlotType.WAREHOUSE){
-				HashMap<Integer, ? extends ItemStack> hm = p.getInventory().all(material);
-				if(hm.isEmpty()) continue;
-				for(ItemStack is : hm.values()){
-					if(is.getType() == material && is.getData().getData() == data && is.getAmount() >= 1){
-						return is;
-					}
+				int i =  p.getInventory().first(blockData.getMaterial());
+				if(i == -1) continue;
+				ItemStack is = p.getInventory().getItem(i);
+				if(is.getAmount() >= 1){
+					return is;
 				}
 			}
 		}
@@ -628,18 +628,22 @@ public class Settlement extends Group implements HasBuilder{
 	 * Get supplies and remove it from the warehouses.
 	 */
 	@Override
-	public ItemStack getSuppliesAndRemove(ItemStack supply) {
-        Validate.notNull(supply, "Given supply should not be %s.", null);
-
-		if(!canBuild()) return null;
-		Civilizations.DEBUG("Checking if warehouse contains " + supply.getData().getItemType().toString() + ":" + supply.getData().getData());
+	public boolean removeSupplies(BlockData blockData) {
+		if(!canBuild()) return false;
+		Civilizations.DEBUG("Checking if warehouse contains " + blockData.getMaterial().toString());
 		for(Plot p : getPlots()){
 			if(p.getPlotType() == PlotType.WAREHOUSE){
-				if(p.containsAtLeast(supply, 1)){
-					Civilizations.DEBUG("Found!");
-					p.removeItem(supply);
-					return supply;
-				}/*
+			    for(ItemStack is : p.getInventory().getContents()){
+			        if(is == null) continue;
+			        if(Utils.isSameBlock(blockData, is.getType())){
+			            if(is.getAmount() >= 1){
+			                is.setAmount(is.getAmount() - 1);
+                            Civilizations.DEBUG("Found!");
+			                return true;
+                        }
+                    }
+                }
+				/*
 				HashMap<Integer, ? extends ItemStack> hm = wh.getInventory().all(material);
 				if(hm.isEmpty()) continue;
 				for(ItemStack is : hm.values()){
@@ -658,7 +662,7 @@ public class Settlement extends Group implements HasBuilder{
 			}
 		}
 		Civilizations.DEBUG("Not Found!");
-		return null;
+		return false;
 	}
 
 	@Override

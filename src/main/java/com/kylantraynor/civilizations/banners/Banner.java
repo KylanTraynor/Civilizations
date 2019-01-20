@@ -11,6 +11,7 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Banner {
 	
@@ -18,15 +19,15 @@ public class Banner {
 	
 	List<Pattern> patterns;
 	private org.bukkit.block.Banner banner;
-	private DyeColor baseColor;
-	
-	public static boolean exist(BannerMeta bm){
-		for(Banner b : all){
-			if(b.isSimilar(bm)) return true;
-		}
-		return false;
-	}
-	
+	private Material base;
+
+    public static boolean exist(Material base, BannerMeta meta){
+        for(Banner b : all){
+            if(b.isSimilar(base, meta)) return true;
+        }
+        return false;
+    }
+
 	public static boolean exist(org.bukkit.block.Banner banner){
 		for(Banner b : all){
 			if(b.isSimilar(banner)) return true;
@@ -40,19 +41,19 @@ public class Banner {
 		}
 		return false;
 	}
-	
+
+    public static Banner get(Material material, BannerMeta meta){
+        for(Banner b : all){
+            if(b.isSimilar(material, meta)) return b;
+        }
+        return new Banner(material, meta.getPatterns());
+    }
+
 	public static Banner get(org.bukkit.block.Banner banner){
 		for(Banner b : all){
 			if(b.isSimilar(banner)) return b;
 		}
-		return new Banner(banner.getBaseColor(), banner.getPatterns());
-	}
-	
-	public static Banner get(BannerMeta bm) {
-		for(Banner b : all){
-			if(b.isSimilar(bm)) return b;
-		}
-		return new Banner(bm.getBaseColor(), bm.getPatterns());
+		return new Banner(banner.getType(), banner.getPatterns());
 	}
 	
 	public static void add(Banner banner){
@@ -61,21 +62,20 @@ public class Banner {
 		}
 		all.add(banner);
 	}
-	
-	public boolean isSimilar(BannerMeta banner){
-		if(banner == null) return false;
-		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
-		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
-		for(int i = 0; i < banner.getPatterns().size(); i++){
-			if(!banner.getPatterns().get(i).getPattern().equals(this.getPatterns().get(i).getPattern())) return false;
-			if(!banner.getPatterns().get(i).getColor().equals(this.getPatterns().get(i).getColor())) return false;
-		}
-		return true;
-	}
-	
+
+    public boolean isSimilar(Material material, BannerMeta meta){
+        if(!(material == this.getBase()))return false;
+        if(meta.getPatterns().size() != this.getPatterns().size()) return false;
+        for(int i = 0; i < meta.getPatterns().size(); i++){
+            if(!meta.getPatterns().get(i).getPattern().equals(this.getPatterns().get(i).getPattern())) return false;
+            if(!meta.getPatterns().get(i).getColor().equals(this.getPatterns().get(i).getColor())) return false;
+        }
+        return true;
+    }
+
 	public boolean isSimilar(org.bukkit.block.Banner banner){
 		if(banner == null) return false;
-		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
+		if(!(banner.getType() == this.getBase()))return false;
 		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
 		for(int i = 0; i < banner.getPatterns().size(); i++){
 			if(!banner.getPatterns().get(i).getPattern().equals(this.getPatterns().get(i).getPattern())) return false;
@@ -86,7 +86,7 @@ public class Banner {
 	
 	public boolean isSimilar(Banner banner){
 		if(banner == null) return false;
-		if(!banner.getBaseColor().equals(this.getBaseColor()))return false;
+		if(!(banner.getBase() == this.getBase()))return false;
 		if(banner.getPatterns().size() != this.getPatterns().size()) return false;
 		for(int i = 0; i < banner.getPatterns().size(); i++){
 			if(!banner.getPatterns().get(i).getPattern().equals(this.getPatterns().get(i).getPattern())) return false;
@@ -99,20 +99,19 @@ public class Banner {
 		return patterns;
 	}
 	
-	public DyeColor getBaseColor(){
-		return baseColor;
+	public Material getBase(){
+		return base;
 	}
 	
-	public Banner(DyeColor baseColor, List<Pattern> patterns){
+	public Banner(Material base, List<Pattern> patterns){
 		this.patterns = patterns;
-		this.baseColor = baseColor;
+		this.base = base;
 		Banner.add(this);
 	}
 	
 	public ItemStack getItemStack(){
-		ItemStack is = new ItemStack(Material.BANNER, 1);
+		ItemStack is = new ItemStack(getBase(), 1);
 		BannerMeta bm = (BannerMeta) is.getItemMeta();
-		bm.setBaseColor(getBaseColor());
 		bm.setPatterns(getPatterns());
 		is.setItemMeta(bm);
 		return is;
@@ -120,11 +119,11 @@ public class Banner {
 	
 	public static Banner parse(String s){
 		try{
-			DyeColor baseColor = null;
+			Material base = null;
 			List<Pattern> patterns = new ArrayList<Pattern>();
 			String[] components = s.split(";");
 			if(components.length >= 2){
-				baseColor = DyeColor.valueOf(components[1]);
+				base = Material.valueOf(components[1]);
 			}
 			for(int i = 2; i < components.length; i++){
 				String str = components[i];
@@ -132,11 +131,7 @@ public class Banner {
 				String[] pat = str.split(":");
 				patterns.add(new Pattern(DyeColor.valueOf(pat[1]), PatternType.valueOf(pat[0])));
 			}
-			if(baseColor != null){
-				return new Banner(baseColor, patterns);
-			} else {
-				return null;
-			}
+			return new Banner(base, patterns);
 		} catch (Exception e){
 			e.printStackTrace();
 			return null;
@@ -145,7 +140,7 @@ public class Banner {
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder("BANNER;");
-		sb.append(getBaseColor().toString() + ";");
+		sb.append(getBase().toString() + ";");
 		for(Pattern p : getPatterns()){
 			sb.append("{" + p.getPattern().toString() + ":" + p.getColor().toString() + "};");
 		}

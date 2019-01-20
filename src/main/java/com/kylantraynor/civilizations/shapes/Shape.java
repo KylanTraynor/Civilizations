@@ -151,12 +151,12 @@ public abstract class Shape implements Visualizable{
 	public boolean walkThroughBlock(Block block){
 		if(block.getType() == Material.AIR) return true;
 		if(block.getType() == Material.DIRT) return false;
-		if(block.getType() == Material.LONG_GRASS) return true;
-		if(block.getType() == Material.RAILS) return true;
-		if(block.getType() == Material.CAKE_BLOCK) return true;
+		if(block.getType() == Material.GRASS) return true;
+		if(block.getType() == Material.RAIL) return true;
+		if(block.getType() == Material.CAKE) return true;
 		if(block.getType() == Material.CHEST) return true;
 		if(block.getType() == Material.TRAPPED_CHEST) return true;
-		if(block.getType() == Material.COBBLE_WALL) return true;
+		if(block.getType() == Material.COBBLESTONE_WALL) return true;
 		return false;
 	}
 	

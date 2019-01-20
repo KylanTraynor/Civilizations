@@ -331,8 +331,7 @@ public class TownyTown extends Settlement implements InfluentSite, HasBuilder{
 					}
 				}
 			}
-			
-			Towny.plugin.resetCache();
+			Towny.getPlugin().resetCache();
 		}
 	}
 

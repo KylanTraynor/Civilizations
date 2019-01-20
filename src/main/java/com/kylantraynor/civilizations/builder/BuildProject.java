@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.utils.MaterialAndData;
@@ -26,7 +27,7 @@ public class BuildProject {
 	private int rotation;
 	private int flip;
 	
-	private List<MaterialAndData> skippables = new ArrayList<MaterialAndData>();
+	private List<Material> skippables = new ArrayList<>();
 	
 	public BuildProject(Location l, Blueprint bp, boolean setAir){
 		this.location = l;
@@ -38,16 +39,24 @@ public class BuildProject {
 		rotation = 0;
 		done = false;
 	}
-	
-	public MaterialAndData getNext(){
+
+    /**
+     * Get the next {@link BlockData} pending to be built.
+     * @return {@link BlockData}
+     */
+	public BlockData getNext(){
 		if(done) return null;
 		return blueprint.getDataAt(currentX, currentY, currentZ);
 	}
-	
+
+    /**
+     * Build the next {@link BlockData} and move on to the next one.
+     * @return {@code true} if some material was needed, {@code false} otherwise
+     */
 	public boolean buildNext() {
 		if(done) return false;
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(l.getBlock().getType() == getNext().getMaterial() && l.getBlock().getData() == getNext().getData()){
+		if(l.getBlock().getBlockData().matches(getNext())){
 			increment();
 			return false;
 		} else if(setAir && getNext().getMaterial() == Material.AIR){
@@ -57,8 +66,7 @@ public class BuildProject {
 			return false;
 		} else if(getNext().getMaterial() != Material.AIR) {
 			l.getBlock().breakNaturally();
-			l.getBlock().setType(getNext().getMaterial());
-			l.getBlock().setData(getNext().getData());
+			l.getBlock().setBlockData(getNext());
 			l.getWorld().playSound(l, Utils.getPlaceSoundFromMaterial(getNext().getMaterial()), 1, 1);
 		}
 		
@@ -66,14 +74,17 @@ public class BuildProject {
 		return true;
 	}
 
+    /**
+     * Increment the current indices to target the next block.
+     */
 	private void increment() {
 		if(done) return;
-		currentZ += 1;
-		if(currentZ >= blueprint.getDepth()){
-			currentZ = 0;
-			currentX += 1;
-			if(currentX >= blueprint.getWidth()){
-				currentX = 0;
+		currentX += 1;
+		if(currentX >= blueprint.getWidth()){
+			currentX = 0;
+			currentZ += 1;
+			if(currentX >= blueprint.getDepth()){
+				currentZ = 0;
 				currentY += 1;
 				if(currentY >= blueprint.getHeight()){
 					done = true;
@@ -124,47 +135,73 @@ public class BuildProject {
 		rotation = r % 4;
 	}
 
+    /**
+     * Attempt to skip the next {@link BlockData}.
+     * @return {@code true} if the block was skipped, {@code false} otherwise
+     */
 	public boolean trySkipNext() {
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(l.getBlock().getType() == getNext().getMaterial() && l.getBlock().getData() == getNext().getData()){
+		if(l.getBlock().getBlockData().matches(getNext())){
 			increment();
 			return true;
-		} else if (isSkippable(getNext())){
+		} else if (isSkippable(getNext().getMaterial())){
 			increment();
 			return true;
-		}
-		return false;
-	}
-	
-	public boolean isSkippable(MaterialAndData mad){
-		ItemStack is = mad.toItemStack();
-		for(MaterialAndData m : skippables){
-			if(m.itemIsSimilar(is)) return true;
 		}
 		return false;
 	}
 
-	public List<MaterialAndData> getSkippables() {
+    /**
+     * Can the given {@link Material} be skipped?
+     * @param mat {@link Material}
+     * @return {@code true} if the {@link Material} can be skipped, {@code false} otherwise
+     */
+	public boolean isSkippable(Material mat){
+		for(Material m : skippables){
+			if(mat == m) return true;
+		}
+		return false;
+	}
+
+    /**
+     * Get the list of {@link Material Materials} that will be skipped.
+     * @return List of {@link Material}
+     */
+	public List<Material> getSkippables() {
 		return skippables;
 	}
-	
-	public void skip(MaterialAndData mad){
-		skippables.add(mad);
+
+    /**
+     * Add the given {@link Material} to the list of materials that can be skipped.
+     * @param mat {@link Material} to skip
+     */
+	public void skip(Material mat) {
+		skippables.add(mat);
 	}
 
+    /**
+     * Check if the next {@link BlockData} requires any supplies to be built.
+     * <br/>
+     * For example, if a dirt block needs to be placed, but dirt is already there, this function will return false.
+     * @return {@code true} if supplies are required, {@code false} otherwise
+     */
 	public boolean nextRequiresSupply() {
-		MaterialAndData mad = getNext();
-		if(mad.requiresSupply()){
+		BlockData bd = getNext();
+		if(Utils.requireSupplies(bd)){
 			Location l = location.clone().add(currentX, currentY, currentZ);
-			MaterialAndData block = MaterialAndData.getFrom(l.getBlock());
-			return !block.isSimilar(mad);
+			return !(l.getBlock().getType() == bd.getMaterial());
 		} else return false;
 	}
 
-	public boolean buildInstead(MaterialAndData replacement) {
+    /**
+     * Build the given {@link BlockData} instead of the one from {@link #getNext()}, and move on.
+     * @param replacement {@link BlockData}
+     * @return {@code true} if the replacement required supplies, {@code false} otherwise
+     */
+	public boolean buildInstead(BlockData replacement) {
 		if(done) return false;
 		Location l = location.clone().add(currentX, currentY, currentZ);
-		if(l.getBlock().getType() == replacement.getMaterial() && l.getBlock().getData() == replacement.getData()){
+		if(l.getBlock().getBlockData().matches(replacement)){
 			increment();
 			return false;
 		} else if(setAir && replacement.getMaterial() == Material.AIR){
@@ -174,8 +211,7 @@ public class BuildProject {
 			return false;
 		} else if(replacement.getMaterial() != Material.AIR) {
 			l.getBlock().breakNaturally();
-			l.getBlock().setType(replacement.getMaterial());
-			l.getBlock().setData(replacement.getData());
+			l.getBlock().setBlockData(replacement);
 			l.getWorld().playSound(l, Utils.getPlaceSoundFromMaterial(replacement.getMaterial()), 1, 1);
 		}
 		

@@ -71,15 +71,15 @@ public class CommandGroup implements CommandExecutor {
 						switch(args[2].toUpperCase()){
 						case "SKIP":
 							if(args.length == 4){
-								MaterialAndData mad = new MaterialAndData(Material.getMaterial(args[3]), (byte)0);
+								Material mat = Material.getMaterial(args[3]);
 								for(BuildProject bp : ((HasBuilder) g).getBuilder().getProjects()){
-									if(!bp.getSkippables().contains(mad))bp.skip(mad);
+									if(!bp.getSkippables().contains(mat))bp.skip(mat);
 								}
 								sender.sendMessage(ChatColor.GREEN + "Block skipped!");
 							} else if(args.length == 5){
-								MaterialAndData mad = new MaterialAndData(Material.getMaterial(args[3]), Byte.parseByte(args[4]));
+								Material mat = Material.getMaterial(args[3]);
 								for(BuildProject bp : ((HasBuilder) g).getBuilder().getProjects()){
-									if(!bp.getSkippables().contains(mad))bp.skip(mad);
+									if(!bp.getSkippables().contains(mat))bp.skip(mat);
 								}
 								sender.sendMessage(ChatColor.GREEN + "Block skipped!");
 							} else {

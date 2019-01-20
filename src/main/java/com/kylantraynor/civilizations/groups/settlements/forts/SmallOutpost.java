@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.kylantraynor.civilizations.utils.Identifier;
+import com.kylantraynor.civilizations.utils.Utils;
 import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.Bukkit;
@@ -60,7 +61,7 @@ public class SmallOutpost extends Fort{
 			if(p instanceof Keep){
 				for(Shape shape : p.getShapes()){
 					for(Location b : shape.getBlockLocations()){
-						if(b.getBlock().getType() == Material.BANNER || b.getBlock().getType() == Material.STANDING_BANNER){
+						if(Utils.isBanner(b.getBlock().getType()) || Utils.isWallBanner(b.getBlock().getType())){
 							return true;
 						}
 					}

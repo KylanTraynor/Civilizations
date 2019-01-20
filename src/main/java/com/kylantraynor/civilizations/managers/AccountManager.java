@@ -90,7 +90,10 @@ public class AccountManager {
             s.load(f);
             return new CivilizationsAccount(s);
         } else {
-            throw new IllegalArgumentException();
+            /**
+             * TODO Create an account if the file does not exist.
+             */
+            throw new IllegalArgumentException("Account does not exist.");
         }
     }
 

@@ -28,7 +28,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.eclipse.jetty.server.Server;
 
 import com.kylantraynor.civilizations.commands.CommandAccount;
 import com.kylantraynor.civilizations.commands.CommandAnswer;
@@ -64,7 +63,6 @@ import com.kylantraynor.civilizations.listeners.ProtectionListener;
 import com.kylantraynor.civilizations.listeners.TerritoryListener;
 import com.kylantraynor.civilizations.listeners.VehiclesListener;
 import com.kylantraynor.civilizations.listeners.WebListener;
-import com.kylantraynor.civilizations.players.CivilizationsAccount;
 import com.kylantraynor.civilizations.settings.CivilizationsSettings;
 import com.kylantraynor.civilizations.territories.InfluenceMap;
 import com.kylantraynor.civilizations.utils.MaterialAndData;
@@ -72,8 +70,6 @@ import com.kylantraynor.civilizations.utils.Utils;
 import com.kylantraynor.draggydata.AdvancementAPI;
 import com.kylantraynor.draggydata.AdvancementAPI.FrameType;
 import com.kylantraynor.draggydata.AdvancementAPI.TriggerType;
-
-import fr.rhaz.webservers.WebServers.API;
 
 public class Civilizations extends JavaPlugin{
 	
@@ -132,14 +128,14 @@ public class Civilizations extends JavaPlugin{
 		return currentInstance.getConfig();
 	}
 	
-	private static Server webServer;
+	//private static Server webServer;
 	public static boolean useChat = false;
 	public static boolean useDatabase = false;
 	public static EconomyType economyType = EconomyType.VAULT;
 	
-	public static Server getWebServer(){
+	/*public static Server getWebServer(){
 		return webServer;
-	}
+	}*/
 	/**
 	 * Sends a message to the console with the specified level.
 	 * @param level of the message.
@@ -281,7 +277,7 @@ public class Civilizations extends JavaPlugin{
 		AdvancementAPI civs = new AdvancementAPI(new NamespacedKey(this, "root"))
 		.withTitle("Civilizations")
 		.withDescription("Establish your own civilization!")
-		.withIcon(new ItemStack(Material.BANNER))
+		.withIcon(new ItemStack(Material.RED_BANNER))
 		.withBackground("minecraft:textures/blocks/stone.png")
 		.withCriterias(crit)
 		.withAnnouncement(true)
@@ -296,7 +292,7 @@ public class Civilizations extends JavaPlugin{
 		AdvancementAPI camp = new AdvancementAPI(new NamespacedKey(this, "setup_camp"))
 			.withTitle("Setup Camp!")
 			.withDescription("Create a temporary camp to protect an area.")
-			.withIcon(new ItemStack(Material.BED))
+			.withIcon(new ItemStack(Material.BLUE_BED))
 			.withCriterias(crit)
 			.withAnnouncement(true)
 			.withToast(true)
@@ -311,18 +307,18 @@ public class Civilizations extends JavaPlugin{
 		AchievementManager.registerAchievement(createCamp);*/
 	}
 
-	private void startWebServer(int port) throws Exception {
+	/*private void startWebServer(int port) throws Exception {
 		
 		createServerViews();
 		
 		webServer = API.createServer(port, "Civilizations", "");
 		webServer.start();
 		getServer().getPluginManager().registerEvents(getWebListener(), this);
-	}
+	}*/
 
-	private void createServerViews() {
+	/*private void createServerViews() {
 		
-	}
+	}*/
 
 	private Listener getMenuListener() {
 		return Civilizations.menuListener;
@@ -927,7 +923,7 @@ public class Civilizations extends JavaPlugin{
     }
 	
 	public static Material getSelectionToolMaterial(){
-		return Material.WOOD_SPADE;
+		return Material.WOODEN_SHOVEL;
 	}
 	
 	public static String getSelectionToolName(){

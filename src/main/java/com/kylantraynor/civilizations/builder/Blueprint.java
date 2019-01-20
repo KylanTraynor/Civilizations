@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.kylantraynor.civilizations.utils.BlockDataVolume;
+import com.kylantraynor.civilizations.utils.JSONSerializable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -17,12 +19,32 @@ import com.kylantraynor.civilizations.Civilizations;
 import com.kylantraynor.civilizations.selection.Selection;
 import com.kylantraynor.civilizations.shapes.Shape;
 import com.kylantraynor.civilizations.utils.MaterialAndData;
+import org.bukkit.block.data.BlockData;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-public class Blueprint{
+public class Blueprint implements JSONSerializable {
 	
 	private static Map<UUID, Blueprint> loadedBlueprints = new HashMap<UUID, Blueprint>();
-	
-	public static class Code{
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject result = new JSONObject();
+        result.put("id", id.toString());
+        result.put("name", name);
+        result.put("data", blockData.toJSON());
+        return result;
+    }
+
+    @Override
+    public void load(JSONObject json) {
+        this.id = UUID.fromString((String) json.get("id"));
+        this.name = (String) json.get("name");
+        this.blockData = new BlockDataVolume((JSONObject) json.get("data"));
+    }
+
+    public static class Code{
 		public int material;
 		public byte data;
 		
@@ -37,13 +59,18 @@ public class Blueprint{
 	private int depth = 1;
 	private List<Material> materialCodes = new ArrayList<Material>();
 	private Code[][][] data;
+	private BlockDataVolume blockData;
 	private String name;
 	private UUID id;
 
 	public Blueprint(){
 		this.id = UUID.randomUUID();
 	}
-	
+
+	public Blueprint(JSONObject json){
+	    load(json);
+    }
+
 	public Blueprint(int width, int height, int depth) {
 		data = new Code[width][height][depth];
 		this.width = width;
@@ -53,7 +80,7 @@ public class Blueprint{
 	}
 	
 	public boolean save(File f){
-		StringBuilder sb = new StringBuilder();
+		/*StringBuilder sb = new StringBuilder();
 		// Save list of materials
 		if(name != null)
 			sb.append(name);
@@ -75,9 +102,17 @@ public class Blueprint{
 				}
 				sb.deleteCharAt(sb.lastIndexOf(","));
 			}
-		}
+		}*/
+		if(!f.exists()){
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
 		try {
-			Files.write(sb.subSequence(0, sb.length()), f, Charset.defaultCharset());
+			Files.write(toJSON().toJSONString(), f, Charset.defaultCharset());
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,7 +122,7 @@ public class Blueprint{
 	
 	public static Blueprint load(File f){
 		// load list of materials
-		List<Material> materialCodes = new ArrayList<Material>();
+		/*List<Material> materialCodes = new ArrayList<Material>();
 		String id = f.getName().replace(".bpt", "");
 		String s;
 		try {
@@ -146,8 +181,16 @@ public class Blueprint{
 		if(!name.isEmpty())
 			bp.setName(name);
 		
-		bp.setUniqueId(UUID.fromString(id));
-		return bp;
+		bp.setUniqueId(UUID.fromString(id));*/
+		Blueprint bp = null;
+        try {
+            String s = Files.toString(f, Charset.defaultCharset());
+            JSONObject obj = (JSONObject) (new JSONParser().parse(s));
+            bp = new Blueprint(obj);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return bp;
 	}
 	
 	private void setUniqueId(UUID id) {
@@ -166,9 +209,8 @@ public class Blueprint{
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
-		materialCodes = new ArrayList<Material>();
-		materialCodes.add(Material.AIR);
-		data = new Code[width][height][depth];
+		this.blockData = new BlockDataVolume(width, height, depth);
+
 		Location current = l.clone();
 		for(int x = 0; x < width; x++){
 			current.setX(l.getBlockX() + x);
@@ -176,31 +218,30 @@ public class Blueprint{
 				current.setY(l.getBlockY() + y);
 				for(int z = 0; z < depth; z++){
 					current.setZ(l.getBlockZ() + z);
-					
-					if(current.getBlock().getType() == Material.AIR){
+					blockData.setAt(x,y,z, current.getBlock().getBlockData());
+					/*if(current.getBlock().getType() == Material.AIR){
 						data[x][y][z] = new Code(0, current.getBlock().getData());
 					} else {
 						if(!getMaterialCodes().contains(current.getBlock().getType())){
 							getMaterialCodes().add(current.getBlock().getType());
 						}
 						data[x][y][z] = new Code(getMaterialCodes().indexOf(current.getBlock().getType()), current.getBlock().getData());
-					}
+					}*/
 					
 				}
 			}
 		}
 	}
 
-	public MaterialAndData getDataAt(int x, int y, int z) {
-		if(x < width && y < height && z < depth){
+	public BlockData getDataAt(int x, int y, int z) {
+	    return blockData.getAt(x, y, z);
+		/*if(x < width && y < height && z < depth){
 			Code c = data[x][y][z];
 			Material m = getMaterialCodes().get(c.material);
 			byte data = c.data;
 			return new MaterialAndData(m, data);
-			/*MaterialData md = new MaterialData(m, data);
-			return md.toItemStack(1);*/
 		}
-		return null;
+		return null;*/
 	}
 
 	public int getWidth() {

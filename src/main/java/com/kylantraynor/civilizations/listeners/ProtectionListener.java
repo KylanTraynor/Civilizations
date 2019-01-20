@@ -41,7 +41,7 @@ public class ProtectionListener implements Listener{
 	
 	@EventHandler
 	public void onBlockFade(BlockFadeEvent event){
-		if(event.getBlock().getType() == Material.SOIL){
+		if(event.getBlock().getType() == Material.FARMLAND){
 			Plot plot = Plot.getAt(event.getBlock().getLocation());
 			if(plot != null){
 				if(plot.getPlotType() == PlotType.CROPFIELD){
@@ -71,7 +71,7 @@ public class ProtectionListener implements Listener{
 					if(event.getBlock().getType() == Material.CHEST ||
 						event.getBlock().getType() == Material.TRAPPED_CHEST ||
 						event.getBlock().getType() == Material.SIGN ||
-						event.getBlock().getType() == Material.SIGN_POST){
+						event.getBlock().getType() == Material.WALL_SIGN){
 						if(plot.getSettlement() instanceof TownyTown){
 							HookManager.getTowny().bypassPermsFor(event.getBlock());
 						}
@@ -177,7 +177,7 @@ public class ProtectionListener implements Listener{
 					if(event.getBlock().getType() == Material.CHEST ||
 						event.getBlock().getType() == Material.TRAPPED_CHEST ||
 						event.getBlock().getType() == Material.SIGN ||
-						event.getBlock().getType() == Material.SIGN_POST){
+						event.getBlock().getType() == Material.WALL_SIGN){
 						if(plot.getSettlement() instanceof TownyTown){
 							HookManager.getTowny().bypassPermsFor(event.getBlock());
 						}

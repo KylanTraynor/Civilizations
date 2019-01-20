@@ -38,19 +38,19 @@ public class VehiclesListener implements Listener{
 					Boat boat = (Boat) event.getPlayer().getVehicle();
 					ItemStack item;
 					switch(boat.getWoodType()){
-					case ACACIA: item = new ItemStack(Material.BOAT_ACACIA);
+					case ACACIA: item = new ItemStack(Material.ACACIA_BOAT);
 						break;
-					case BIRCH: item = new ItemStack(Material.BOAT_BIRCH);
+					case BIRCH: item = new ItemStack(Material.BIRCH_BOAT);
 						break;
-					case DARK_OAK: item = new ItemStack(Material.BOAT_DARK_OAK);
+					case DARK_OAK: item = new ItemStack(Material.DARK_OAK_BOAT);
 						break;
-					case GENERIC: item = new ItemStack(Material.BOAT);
+					case GENERIC: item = new ItemStack(Material.OAK_BOAT);
 						break;
-					case JUNGLE: item = new ItemStack(Material.BOAT_JUNGLE);
+					case JUNGLE: item = new ItemStack(Material.JUNGLE_BOAT);
 						break;
-					case REDWOOD: item = new ItemStack(Material.BOAT_SPRUCE);
+					case REDWOOD: item = new ItemStack(Material.SPRUCE_BOAT);
 						break;
-					default: item = new ItemStack(Material.BOAT);
+					default: item = new ItemStack(Material.OAK_BOAT);
 						break;
 					
 					}

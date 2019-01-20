@@ -11,6 +11,7 @@ import mkremins.fanciful.civilizations.FancyMessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylantraynor.civilizations.Civilizations;
@@ -36,9 +37,9 @@ public class Builder {
 		builders.add(this);
 	}
 
-	public ItemStack getSupplies(ItemStack is){
-		if(getOwner() == null) return null;
-		return getOwner().getSuppliesAndRemove(is);
+	public boolean removeSupplies(BlockData data){
+		if(getOwner() == null) return false;
+		return getOwner().removeSupplies(data);
 	}
 	
 	public void update(){
@@ -55,7 +56,7 @@ public class Builder {
 			Civilizations.DEBUG("Project was completed");
 			return;
 		}
-		/* The builder nees to check what block needs to be built.
+		/* The builder needs to check what block needs to be built.
 		 * It will compare the planned block to what is already at the location.
 		 * It will then check the materials available to it.
 		 * It will try to build.
@@ -64,8 +65,8 @@ public class Builder {
 		Civilizations.DEBUG("Trying to build project.");
 		while(true) {
 			// Get the next plan.
-			MaterialAndData plan = currentProject.getNext();
-			// If there is no plan, then the build is likely one or was remove.
+			BlockData plan = currentProject.getNext();
+			// If there is no plan, then the build is likely done or was removed.
 			if (plan == null) {
 				currentProject = null;
 				break;
@@ -79,21 +80,21 @@ public class Builder {
 				continue;
 			} else {
 				Civilizations.DEBUG("Trying to get the supplies for " + plan.toString());
-				ItemStack supply = getSupplies(plan.toItemStack());
-				if (supply == null) {
+				boolean hasSupplies = removeSupplies(plan);
+				/*if (!hasSupplies) {
 					Civilizations.DEBUG("Getting Default supplies.");
-					supply = getSupplies(plan.getDefault().toItemStack());
-				}
-				if (supply == null) {
+					hasSupplies = removeSupplies(plan.getDefault().toItemStack());
+				}*/
+				if (!hasSupplies) {
 					if (!currentProject.trySkipNext()) {
-						if (plan.changeForPaste().getMaterial() == Material.AIR) {
+						/*if (plan.changeForPaste().getMaterial() == Material.AIR) {
 							currentProject.buildInstead(plan.changeForPaste());
 							this.getSettings().setChanged(true);
 							Civilizations.DEBUG("Plan : " + plan.toString());
 							Civilizations.DEBUG("PlanChange: " + plan.changeForPaste().toString());
 							break;
-						}
-						warnLackOfSupplies(plan);
+						}*/
+						warnLackOfSupplies(plan.getMaterial());
 						currentProject = null;
 						break;
 					} else {
@@ -146,15 +147,15 @@ public class Builder {
 	}
 	
 	private Instant lastWarning = Instant.now();
-	private void warnLackOfSupplies(MaterialAndData supply){
+	private void warnLackOfSupplies(Material material){
 		if(getOwner() != null && lastWarning.isBefore(Instant.now().minusSeconds(60))){
 			FancyMessage notification = new FancyMessage(((Group)getOwner()).getChatHeader());
 			notification.then("Warehouses lack of ")
-			.then(Utils.prettifyText(Utils.getMaterialName(supply.getDefault())))
-			.tooltip("Actual block : " + Utils.getMaterialName(supply))
+			.then(Utils.prettifyText(Utils.prettifyText(material.toString())))
+			.tooltip("Actual block : " + material.toString())
 			.color(ChatColor.GOLD)
 			.then("! Click ")
-			.then("HERE").command("/group " + ((Group)getOwner()).getIdentifier().toString() + " builder skip " + supply.getMaterial().toString() + " " + supply.getData())
+			.then("HERE").command("/group " + ((Group)getOwner()).getIdentifier().toString() + " builder skip " + material.toString())
 			.color(ChatColor.GOLD)
 			.then(" to skip this type of block.");
 			((Group)getOwner()).sendMessage(notification, PermissionType.BLUEPRINT_NOTIFICATIONS);

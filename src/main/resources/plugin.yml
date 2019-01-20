@@ -1,6 +1,7 @@
 name: Civilizations
 main: com.kylantraynor.civilizations.Civilizations
 version: ${project.version}-Build ${build.number}
+api-version: 1.13
 softdepend: [dynmap, TitleManager, Towny, Vault, LWC, Quickshop, DraggyRPG]
 
 commands:

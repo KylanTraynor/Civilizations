@@ -65,66 +65,26 @@ public class MaterialAndData {
 	
 	public MaterialAndData getDefault() {
 		switch(material){
-		case GRASS:
-		case GRASS_PATH:
-		case SOIL:
-			return new MaterialAndData(Material.DIRT, (byte) 0);
-		case DAYLIGHT_DETECTOR_INVERTED:
-			return new MaterialAndData(Material.DAYLIGHT_DETECTOR, (byte) 0);
-		case REDSTONE_WIRE:
-			return new MaterialAndData(Material.REDSTONE, (byte) 0);
-		case TRIPWIRE:
-			return new MaterialAndData(Material.STRING, (byte) 0);
-		case SUGAR_CANE_BLOCK:
-			return new MaterialAndData(Material.SUGAR_CANE, (byte) 0);
-		case REDSTONE_TORCH_OFF:
-		case REDSTONE_TORCH_ON:
-			return new MaterialAndData(Material.REDSTONE_TORCH_ON, (byte) 0);
-		case REDSTONE_LAMP_OFF:
-		case REDSTONE_LAMP_ON:
-			return new MaterialAndData(Material.REDSTONE_LAMP_ON, (byte) 0);
-		case BURNING_FURNACE:
-			return new MaterialAndData(Material.FURNACE, (byte) 0);
-		case WALL_SIGN:
-		case SIGN_POST:
-			return new MaterialAndData(Material.SIGN, (byte) 0);
-		case PUMPKIN_STEM:
-			return new MaterialAndData(Material.PUMPKIN_SEEDS, (byte) 0);
-		case MELON_STEM:
-			return new MaterialAndData(Material.MELON_SEEDS, (byte) 0); 
-		case CAKE_BLOCK:
-			return new MaterialAndData(Material.CAKE, (byte) 0);
-		case CROPS:
-			return new MaterialAndData(Material.SEEDS, (byte) 0);
-		case DIODE_BLOCK_ON:
-		case DIODE_BLOCK_OFF:
-			return new MaterialAndData(Material.DIODE, (byte) 0);
-		case REDSTONE_COMPARATOR_ON:
-		case REDSTONE_COMPARATOR_OFF:
-			return new MaterialAndData(Material.REDSTONE_COMPARATOR, (byte) 0);
-		case DOUBLE_STEP:
-			switch(data){
-			case 0: return new MaterialAndData(Material.STONE, (byte) 0);
-			case 1: return new MaterialAndData(Material.SANDSTONE, (byte) 0);
-			case 2:
-				break;
-			case 3: return new MaterialAndData(Material.COBBLESTONE, (byte) 0);
-			case 4: return new MaterialAndData(Material.BRICK, (byte) 0);
-			case 5: return new MaterialAndData(Material.SMOOTH_BRICK, (byte) 0);
-			case 6: return new MaterialAndData(Material.NETHER_BRICK, (byte) 0); 
-			case 7: return new MaterialAndData(Material.QUARTZ_BLOCK, (byte) 0);
-			case 8: return new MaterialAndData(Material.STONE, (byte) 0);
-			case 9: return new MaterialAndData(Material.SANDSTONE, (byte) 0);
-			case 15: return new MaterialAndData(Material.QUARTZ_BLOCK, (byte) 0);
-			}
-		case DOUBLE_STONE_SLAB2:
-			return new MaterialAndData(Material.RED_SANDSTONE, (byte) 0);
-		case WOOD_DOUBLE_STEP:
-			return new MaterialAndData(Material.WOOD, data);
-		case PURPUR_DOUBLE_SLAB:
-			return new MaterialAndData(Material.PURPUR_BLOCK, (byte) 0);
-		default:
-			return this;
+			case GRASS:
+			case GRASS_PATH:
+			case FARMLAND:
+				return new MaterialAndData(Material.DIRT, (byte) 0);
+			case DAYLIGHT_DETECTOR:
+				return new MaterialAndData(Material.DAYLIGHT_DETECTOR, (byte) 0);
+			case REDSTONE_WIRE:
+				return new MaterialAndData(Material.REDSTONE, (byte) 0);
+			case TRIPWIRE:
+				return new MaterialAndData(Material.STRING, (byte) 0);
+			case WALL_SIGN:
+				return new MaterialAndData(Material.SIGN, (byte) 0);
+			case PUMPKIN_STEM:
+				return new MaterialAndData(Material.PUMPKIN_SEEDS, (byte) 0);
+			case MELON_STEM:
+				return new MaterialAndData(Material.MELON_SEEDS, (byte) 0);
+			case WHEAT:
+				return new MaterialAndData(Material.WHEAT_SEEDS, (byte) 0);
+			default:
+				return this;
 		}
 	}
 	
@@ -133,7 +93,8 @@ public class MaterialAndData {
 		MaterialAndData thisDefault = this.getDefault();
 		return ((this.getMaterial() == md.getMaterial()) && (this.data == md.data)) || ((thisDefault.getMaterial() == mdDefault.getMaterial()) && (thisDefault.getData() == mdDefault.getData()));
 	}
-	
+
+	/*
 	public boolean itemIsSimilar(ItemStack item){
 		if(material != item.getType()){
 			switch(material){
@@ -562,13 +523,6 @@ public class MaterialAndData {
             case 6: return new MaterialAndData(material, (byte) 5);
             case 7: return new MaterialAndData(material, (byte) 4);
 			}
-		case ACACIA_FENCE_GATE: case BIRCH_FENCE_GATE: case JUNGLE_FENCE_GATE: case DARK_OAK_FENCE_GATE: case FENCE_GATE: case SPRUCE_FENCE_GATE:
-			/*if(data > 4)
-				return new MaterialAndData(material, (byte) (((data + times) % 4) + 4));
-			else
-				return new MaterialAndData(material, (byte) (data + times % 4));
-				*/
-			break;
 		case ACTIVATOR_RAIL:
 			break;
 		case ANVIL:
@@ -823,7 +777,7 @@ public class MaterialAndData {
 		default:
 			return true;
 		}
-	}
+	}*/
 	
 	public MaterialAndData changeForPaste(){
 		
@@ -894,12 +848,10 @@ public class MaterialAndData {
 	
 	private static void setDefaultReplacementValues() {
 		pasteReplacements.clear();
-		pasteReplacements.put(new MaterialAndData(Material.LONG_GRASS, (byte) 0), MaterialAndData.Air);
+		pasteReplacements.put(new MaterialAndData(Material.GRASS, (byte) 0), MaterialAndData.Air);
 		pasteReplacements.put(new MaterialAndData(Material.WATER, (byte) 0), MaterialAndData.Air);
-		pasteReplacements.put(new MaterialAndData(Material.STATIONARY_WATER, (byte) 0), MaterialAndData.Air);
 		pasteReplacements.put(new MaterialAndData(Material.LAVA, (byte) 0), MaterialAndData.Air);
-		pasteReplacements.put(new MaterialAndData(Material.STATIONARY_LAVA, (byte) 0), MaterialAndData.Air);
-		pasteReplacements.put(new MaterialAndData(Material.GRASS, (byte) 0), MaterialAndData.Dirt);
+		pasteReplacements.put(new MaterialAndData(Material.GRASS_BLOCK, (byte) 0), MaterialAndData.Dirt);
 	}
 
 	public static void saveToConfig(FileConfiguration config){
