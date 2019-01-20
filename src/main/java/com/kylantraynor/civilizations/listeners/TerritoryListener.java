@@ -27,7 +27,7 @@ public class TerritoryListener implements Listener {
 			if(data.getTo().getNation() == null){
 				TitleManagerHook.sendActionBar("Independant Territory", event.getPlayer(), false);
 			} else {
-				color = Utils.getChatColor(data.getTo().getNation().getBanner().getBaseColor());
+				color = Utils.getChatColor(Utils.getColor(data.getTo().getNation().getBanner().getBase()));
 				TitleManagerHook.sendActionBar(color + data.getTo().getNation().getName() + " Nation", event.getPlayer(), false);
 				//data.getTo().getNation().getBanner().getBaseColor();
 			}
